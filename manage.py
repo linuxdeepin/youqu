@@ -120,6 +120,7 @@ class Manage:
             say("unreleased", font=version_font, space=False)
         else:
             say(GlobalConfig.current_tag, font=version_font, space=False)
+        say("Documents: https://mikigo.github.io/youqu-docs/", font="console", space=False)
         say("=" * 50, font="console", space=False)
         logger(GlobalConfig.LOG_LEVEL)
 
@@ -135,7 +136,7 @@ class Manage:
         help_tip = (
                 f"\033[0;32mmanage.py\033[0m 支持 \033[0;32m{[i.value for i in SubCmd]}\033[0m 命令, "
                 "\n您需要传入一个命令,可以使用 \033[0;32m-h\033[0m或\033[0;32m--help\033[0m 查看每个命令参数的详细使用说明,"
-                "\n比如: \033[0;32mpython3 manage.py run -h\033[0m \n"
+                "\n比如: \033[0;32myouqu manage.py run -h\033[0m \n"
             )
         if not cmd_args:
             print(help_tip)

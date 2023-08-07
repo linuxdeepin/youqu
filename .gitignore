@@ -9,3 +9,5 @@ docs/youqu_docs
 apps
 .push
 setting/remote.ini
+Pipfile
+Pipfile.lock
