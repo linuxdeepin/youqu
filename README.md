@@ -5,8 +5,8 @@ YouQu is a Test automation Basic Framework, which is packaged and written based 
 ## Installation
 
 ```sh
-git clone http://gerrit.uniontech.com/autotest-basic-frame
-cd autotest-basic-frame
+git clone https://github.com/linuxdeepin/deepin-autotest-framework.git
+cd deepin-autotest-framework
 ./env.sh
 ```
 
@@ -18,7 +18,7 @@ youqu manage.py run
 
 ## Documentations
 
-- [Documents](http://youqu-dev.uniontech.com/)
+- [Documents](https://mikigo.github.io/youqu-docs/)
 
 ## Getting help
 

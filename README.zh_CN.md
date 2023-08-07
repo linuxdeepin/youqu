@@ -5,8 +5,8 @@
 ## 安装
 
 ```sh
-git clone http://gerrit.uniontech.com/autotest-basic-frame
-cd autotest-basic-frame
+git clone https://github.com/linuxdeepin/deepin-autotest-framework.git
+cd deepin-autotest-framework
 ./env.sh
 ```
 
@@ -18,7 +18,7 @@ youqu manage.py run
 
 ## 文档
 
-- [文档](http://youqu-dev.uniontech.com/)
+- [文档](https://mikigo.github.io/youqu-docs/)
 
 ## 帮助
 

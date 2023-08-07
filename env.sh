@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 
 # SPDX-License-Identifier: GPL-2.0-only
-source ./._env_base.sh
+source ./_env_base.sh
 echo "
  ██╗   ██╗  ██████╗      ███████╗ ███╗   ██╗ ██╗   ██╗
  ╚██╗ ██╔╝ ██╔═══██╗     ██╔════╝ ████╗  ██║ ██║   ██║
@@ -99,7 +99,7 @@ cp -r ./gi/usr/lib/python3/dist-packages/* ${python_virtualenv_path}/lib/python3
 sudo cp -r ./gi/usr/share/doc/* /usr/share/doc/
 cp -r ./pyatspi/usr/lib/python3/dist-packages/* ${python_virtualenv_path}/lib/python3.7/site-packages/
 sudo cp -r ./pyatspi/usr/share/doc/* /usr/share/doc/
-rm -rf gi pyatapi python3*.deb Pipfile
+rm -rf gi pyatspi python3*.deb
 
 pip_array=(
     pycairo==1.16.2
@@ -147,6 +147,7 @@ if [ "${requirements}" != "" ]; then
         pipenv run pip install -r ${requirement}
     done
 fi
+rm -rf Pipfile
 system_env
 echo "pipenv run python \$*" | sudo tee /usr/bin/youqu > /dev/null 2>&1
 cd ${ROOT_DIR};youqu manage.py run -h
