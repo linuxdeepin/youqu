@@ -1,6 +1,10 @@
 # 版本更新记录
 
-## 1.3.1（unreleased）
+## 2.0.0（unreleased）
+
+new
+
+- 我们开源到github了~
 
 fix
 

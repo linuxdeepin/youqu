@@ -13,7 +13,7 @@ cd autotest-basic-frame
 ### 使用
 
 ```sh
-python3 manage.py run
+youqu manage.py run
 ```
 
 ## 文档
