@@ -1,0 +1,14 @@
+[播放按钮]
+direction = left_bottom
+location = 0, 0, 0, 0
+
+# section 是你根据对应的元素按钮命名，你可以任意命名，但最好有具体含义，且能明确表示这个元素按钮的名称；
+
+# direction 是配置该元素的参考系，分别为：
+# left_top 左上
+# left_bottom 左下
+# right_top 右上
+# right_bottom 右下
+
+# location 是该元素按钮的相对与参考系的x, y的距离，及大小(w, h)，这四个数据可以通过 UI 设计图上
+# 获取数据，在编辑模式下，点击 UI 图上的按钮，右侧就会出现该元素按钮的x, y, w, h数据。

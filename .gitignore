@@ -1,0 +1,11 @@
+*.idea
+*__pycycache_
+*__pycache__*
+**.pyc
+.pytest_cache
+.vscode
+report
+docs/youqu_docs
+apps
+.push
+setting/remote.ini

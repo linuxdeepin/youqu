@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=AT-SPI Browser
+Name[en_CA]=AT-SPI Browser
+Name[en_GB]=AT-SPI Browser
+Comment=Browse your Assistive Technology-enabled desktop
+Comment[en_CA]=Browse your Assistive Technology-enabled desktop
+Comment[en_GB]=Browse your Assistive Technology-enabled desktop
+Exec=sniff
+Terminal=false
+Type=Application
+Icon=dogtail-head
+StartupNotify=true
+Categories=Application;Development;
