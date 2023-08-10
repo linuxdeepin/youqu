@@ -21,7 +21,7 @@ for i in SystemPath:
     sys.path.append(i.value)
 
 from setting.globalconfig import GlobalConfig
-from src.start_app import StartApp
+from src.startapp import StartApp
 from src import logger
 from src.pms.pms2csv import Pms2Csv
 from src.rtk._base import SubCmd

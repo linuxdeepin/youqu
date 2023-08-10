@@ -1,7 +1,0 @@
-*.idea
-*__pycycache_
-*__pycache__*
-**.pyc
-.pytest_cache
-.vscode
-/autotest*

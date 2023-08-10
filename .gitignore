@@ -5,9 +5,7 @@
 .pytest_cache
 .vscode
 report
-docs/youqu_docs
-apps
+apps/autotest*
 .push
-setting/remote.ini
 Pipfile
 Pipfile.lock
