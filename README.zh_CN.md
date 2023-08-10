@@ -6,11 +6,32 @@
 
 ## 安装
 
-```sh
-git clone https://github.com/linuxdeepin/deepin-autotest-framework.git
-cd deepin-autotest-framework
-./env.sh
-```
+- 从 PyPI 安装:
+
+  ```shel
+  pip3 install youqu
+  ```
+
+  创建项目:
+
+  ```shell
+  youqu-startproject my_project
+  ```
+
+  安装依赖:
+
+  ```sh
+  cd my_project
+  ./env.sh
+  ```
+
+- 从源码安装:
+
+  ```sh
+  git clone https://github.com/linuxdeepin/deepin-autotest-framework.git my_project
+  cd my_project
+  ./env.sh
+  ```
 
 ### 使用
 

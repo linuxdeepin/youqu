@@ -6,11 +6,32 @@ YouQu is a Test automation Basic Framework, which is packaged and written based 
 
 ## Installation
 
-```sh
-git clone https://github.com/linuxdeepin/deepin-autotest-framework.git
-cd deepin-autotest-framework
-./env.sh
-```
+- Installing from PyPI:
+
+  ```shel
+  pip3 install youqu
+  ```
+
+  create a project:
+
+  ```shell
+  youqu-startproject my_project
+  ```
+
+  Installation dependencies:
+
+  ```sh
+  cd my_project
+  ./env.sh
+  ```
+
+- Install from source code:
+
+  ```sh
+  git clone https://github.com/linuxdeepin/deepin-autotest-framework.git my_project
+  cd my_project
+  ./env.sh
+  ```
 
 ## Usage
 

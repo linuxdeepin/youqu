@@ -29,6 +29,7 @@ class Args(Enum):
     keywords = "keywords"
     tags = "tags"
     reruns = "reruns"
+    record_failed_case = "record_failed_case"
     clean = "clean"
     report_formats = "report_formats"
     max_fail = "max_fail"

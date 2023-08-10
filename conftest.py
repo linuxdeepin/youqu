@@ -129,6 +129,9 @@ def pytest_addoption(parser):
         "--max_fail", action="store", default="", help="最大失败次数"
     )
     parser.addoption(
+        "--record_failed_case", action="store", default="", help="失败录屏从第几次失败开始录制视频"
+    )
+    parser.addoption(
         "--asan", action="store", default="", help="执行安全测试用例"
     )
     parser.addoption(
@@ -544,7 +547,7 @@ def pytest_runtest_setup(item):
         f"{FLAG_FEEL} {current_item_count}"
     )
     try:
-        if item.execution_count >= (int(GlobalConfig.RECORD_FAILED_CASE) + 1):
+        if item.execution_count >= (int(item.config.option.record_failed_case) + 1):
             logger.info("开启录屏")
             item.record = {}
             item.record["object"] = recording_screen(
@@ -613,7 +616,7 @@ def pytest_runtest_makereport(item, call):
             # 只要是需要数据回填（无论是自动还是手动）,都需要写json结果.
             write_case_result(item, report)
     try:
-        if item.execution_count >= (int(GlobalConfig.RECORD_FAILED_CASE) + 1):
+        if item.execution_count >= (int(item.config.option.record_failed_case) + 1):
             if report.when == "call":  # 存放录屏当次测试结果
                 item.record["result"] = report.outcome
                 try:

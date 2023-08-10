@@ -52,6 +52,7 @@ class LocalRunner:
             report_formats=None,
             max_fail=None,
             reruns=None,
+            record_failed_case=None,
             clean=None,
             log_level=None,
             timeout=None,
@@ -87,6 +88,7 @@ class LocalRunner:
             Args.report_formats.value: report_formats or GlobalConfig.REPORT_FORMAT,
             Args.max_fail.value: max_fail or GlobalConfig.MAX_FAIL,
             Args.reruns.value: reruns or GlobalConfig.RERUN,
+            Args.record_failed_case.value: record_failed_case or GlobalConfig.RECORD_FAILED_CASE,
             Args.clean.value: clean or GlobalConfig.CLEAN_ALL,
             Args.log_level.value: log_level or GlobalConfig.LOG_LEVEL,
             Args.timeout.value: timeout or GlobalConfig.CASE_TIME_OUT,
@@ -121,7 +123,7 @@ class LocalRunner:
             screen = Tk()
             x = screen.winfo_screenwidth()
             y = screen.winfo_screenheight()
-            if f"{x}x{y}" != self.default.get(Args.resolution.value):
+            if self.default.get(Args.resolution.value) not in (f"{x}x{y}", "no"):
                 logger.error(f"当前分辨率为：{x}x{y},您配置的分辨率为：{GlobalConfig.RESOLUTION}")
                 raise ValueError
 
@@ -246,6 +248,7 @@ class LocalRunner:
             [
                 f"--max_fail={float(default.get(Args.max_fail.value))}",
                 f"--reruns={default.get(Args.reruns.value)}",
+                f"--record_failed_case={default.get(Args.record_failed_case.value)}",
                 f"--clean={default.get(Args.clean.value)}",
                 f"--log_level={default.get(Args.log_level.value)}",
                 f"--timeout={default.get(Args.timeout.value)}",

@@ -45,6 +45,7 @@ class Manage:
             keywords=None,
             tags=None,
             rerun=None,
+            record_failed_case=None,
             clean=None,
             report_formats=None,
             max_fail=None,
@@ -81,6 +82,7 @@ class Manage:
         self.default_keywords = keywords
         self.default_tags = tags
         self.default_rerun = rerun
+        self.default_record_failed_case = record_failed_case
         self.default_clean = clean
         self.default_report_formats = report_formats
         self.default_max_fail = max_fail
@@ -219,6 +221,9 @@ class Manage:
             "--rerun", default="", help="失败重跑次数"
         )
         sub_parser_run.add_argument(
+            "--record_failed_case", default="", help="失败录屏从第几次失败开始录制视频"
+        )
+        sub_parser_run.add_argument(
             "--clean", choices=["yes", ""], default="",
             help="清理环境"
         )
@@ -306,6 +311,7 @@ class Manage:
             Args.keywords.value: args.keywords or self.default_keywords,
             Args.tags.value: args.tags or self.default_tags,
             Args.reruns.value: args.rerun or self.default_rerun,
+            Args.record_failed_case.value: args.record_failed_case or self.default_record_failed_case,
             Args.clean.value: args.clean or self.default_clean,
             Args.report_formats.value: args.report_formats
                                        or self.default_report_formats,
