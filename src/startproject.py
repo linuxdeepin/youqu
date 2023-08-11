@@ -12,7 +12,7 @@ def cli():
     """Command Line Create Project"""
     args = sys.argv[1:]
     project_name = "youqu"
-    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    root_dir = os.path.dirname(os.path.abspath(__file__))
     if len(args) == 1:
         project_name = args[0]
     elif len(args) > 1:
@@ -24,6 +24,7 @@ def cli():
     os.makedirs(f"/tmp/{project_name}")
     os.system(f"cp -r {root_dir}/. /tmp/{project_name}/")
     os.system(f"mv /tmp/{project_name} .")
+    os.system(f"rm -rf {project_name}/startproject.py")
     for root, dirs, files in os.walk(f"./{project_name}"):
         for d in dirs:
             if d == "__pycache__":

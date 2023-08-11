@@ -15,6 +15,7 @@ rm -rf ${tmp_publish_dir_name}/youqu/pyproject.toml
 rm -rf ${tmp_publish_dir_name}/youqu/publish.sh
 rm -rf ${tmp_publish_dir_name}/youqu/apps/autotest*
 cp deepin-autotest-framework/pyproject.toml ${tmp_publish_dir_name}/
+cp deepin-autotest-framework/src/startproject.py ${tmp_publish_dir_name}/youqu/
 cd ${tmp_publish_dir_name}/
 python3 -m build
 twine upload dist/*
