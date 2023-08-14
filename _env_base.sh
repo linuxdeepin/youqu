@@ -32,24 +32,24 @@ deb https://community-packages.deepin.com/deepin apricot main contrib non-free
 EOF
 }
 
-install_wayland_depends(){
+#install_wayland_depends(){
 # libkf5wayland-dev经常出现依赖关系问题，尝试修复依赖关系，
 # 但此举可能引入兼容性问题。
-/usr/bin/expect << EOF
-set timeout -1
-spawn sudo aptitude install libkf5wayland-dev
-expect {
-        "是否接受该解决方案" { send "N\n"}
-}
-expect {
-        "是否接受该解决方案" { send "Y\n" }
-}
-expect {
-        "您要继续吗" { send "Y\n" }
-}
-expect eof
-EOF
-}
+#/usr/bin/expect << EOF
+#set timeout -1
+#spawn sudo aptitude install libkf5wayland-dev
+#expect {
+#        "是否接受该解决方案" { send "N\n"}
+#}
+#expect {
+#        "是否接受该解决方案" { send "Y\n" }
+#}
+#expect {
+#        "您要继续吗" { send "Y\n" }
+#}
+#expect eof
+#EOF
+#}
 
 check_status(){
     if [ $? = 0 ]; then
@@ -72,12 +72,14 @@ wayland_env(){
         cat /tmp/_yqdebversion.txt | grep "已安装"
     done
     sudo apt install -y libkf5wayland-dev > /tmp/env.log 2>&1
+    check_status libkf5wayland-dev
     # libkf5wayland-dev 可能存在依赖报错，解决方法：
-    # sudo aptitude install libkf5wayland-dev,先输 n,再输 y,再输 y
-    # 此举可能引入兼容性问题。
-    if [ $? != 0 ]; then
-        install_wayland_depends
-    fi
+    # 方案一.添加镜像对应的ppa仓库源，重新执行；
+    # 方案二.sudo aptitude install libkf5wayland-dev,先输 n,再输 y,再输 y
+    # 方案二可能引入兼容性问题，慎用。
+    # if [ $? != 0 ]; then
+    #     install_wayland_depends
+    # fi
     # 编译工具
     cd ${ROOT_DIR}/src/depends/wayland_autotool/
     mkdir -p build && cd build

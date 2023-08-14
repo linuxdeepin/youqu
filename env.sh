@@ -79,7 +79,11 @@ else
     exit 520
 fi
 cd ${ROOT_DIR}/
-pipenv --python 3.7
+pipenv --python 3.7 > /tmp/env.log 2>&1
+if [ $? != 0 ]; then
+    echo -e "AT环境创建失败"
+    exit 521
+fi
 python_virtualenv_path=$(pipenv --venv)
 whitelist_path=`echo "${python_virtualenv_path}" | sed "s/\/home\/$USER\//\//"`
 result=`sudo cat ${whitelist} | grep ${whitelist_path}`
@@ -106,6 +110,11 @@ do
     cp -r ./${pd}/usr/lib/python3/dist-packages/* ${python_virtualenv_path}/lib/python3.7/site-packages/
     rm -rf ${pd} ${pd}*.deb
 done
+
+apt download python3-gi-cairo > /tmp/env.log 2>&1
+dpkg -x python3-gi-cairo*.deb python3-gi-cairo
+cp -r ./python3-gi-cairo//usr/lib/python3/dist-packages/gi/* ${python_virtualenv_path}/lib/python3.7/site-packages/gi/
+
 
 pip_array=(
     pillow==9.5.0

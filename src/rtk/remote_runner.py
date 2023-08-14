@@ -159,11 +159,14 @@ class RemoteRunner:
             ".git",
             "docs",
             "README.md",
+            "README.zh_CN.md",
             "RELEASE.md",
         ]:
             exclude += f"--exclude='{i}' "
         if app_name:
             for i in listdir(GlobalConfig.APPS_PATH):
+                if i == "__init__.py":
+                    continue
                 if app_name.replace("-", "_") not in i:
                     exclude += f"--exclude='{i}' "
         system(
@@ -181,6 +184,10 @@ class RemoteRunner:
         :return:
         """
         logger.info(f"安装环境 - < {user}@{_ip} >")
+        system(
+            f"{self.ssh % password} {user}@{_ip} "
+            f'''"rm -rf ~/.local/share/virtualenvs/{self.server_project_path.split('/')[-1]}*"'''
+        )
         system(
             f"{self.ssh % password} {user}@{_ip} "
             f'"cd ~/{self.server_project_path}/ && bash env.sh"'
@@ -289,6 +296,8 @@ class RemoteRunner:
         cmd.extend([
             f"~/{self.server_project_path}/{real_app_name}",
             "&&",
+            "pipenv",
+            "run",
         ])
         from src.rtk.local_runner import LocalRunner
         lr = LocalRunner(debug=True)

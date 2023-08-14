@@ -4,13 +4,13 @@ build-backend = "hatchling.build"
 
 [project]
 name = "youqu"
-version = "1.4.0"
+version = "1.4.1"
 authors = [
-    { name = "mikigo", email = "1964191531@qq.com" },
+    { name = "mikigo", email = "huangmingqiang@uniontech.com" },
 ]
 
 description = "deepin-autotest-framework"
-readme = "youqu/README.zh_CN.md"
+readme = "youqu/README.md"
 requires-python = ">=3.7"
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -21,11 +21,9 @@ classifiers = [
 dependencies = [
 ]
 
-
 #dynamic = ["version"]
 
 [project.optional-dependencies]
-
 
 [project.scripts]
 youqu-startproject = "youqu.startproject:cli"
