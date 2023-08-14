@@ -26,8 +26,6 @@ env(){
         gir1.2-atspi-2.0
         libatk-adaptor
         at-spi2-core
-        libcairo2-dev
-        libdbus-glib-1-dev
     )
     # 裁剪基础环境
     cd ${ROOT_DIR}/src/utils
@@ -83,7 +81,6 @@ fi
 cd ${ROOT_DIR}/
 pipenv --python 3.7
 python_virtualenv_path=$(pipenv --venv)
-#echo ${python_virtualenv_path}
 whitelist_path=`echo "${python_virtualenv_path}" | sed "s/\/home\/$USER\//\//"`
 result=`sudo cat ${whitelist} | grep ${whitelist_path}`
 if [ -z "$result" ]; then
@@ -92,20 +89,25 @@ if [ -z "$result" ]; then
     sudo systemctl restart deepin-elf-verify.service || true
 fi
 
-apt download python3-gi python3-pyatspi
-dpkg -x python3-gi* gi
-dpkg -x python3-pyatspi* pyatspi
-cp -r ./gi/usr/lib/python3/dist-packages/* ${python_virtualenv_path}/lib/python3.7/site-packages/
-sudo cp -r ./gi/usr/share/doc/* /usr/share/doc/
-cp -r ./pyatspi/usr/lib/python3/dist-packages/* ${python_virtualenv_path}/lib/python3.7/site-packages/
-sudo cp -r ./pyatspi/usr/share/doc/* /usr/share/doc/
-rm -rf gi pyatspi python3*.deb
+py_debs=(
+    python3-gi
+    python3-pyatspi
+    python3-dbus
+    python3-cairo
+)
+for pd in ${py_debs[*]}
+do
+    apt download ${pd} > /tmp/env.log 2>&1
+    if [ $? != 0 ]; then
+        echo "${pd} download failed"
+        exit 520
+    fi
+    dpkg -x ${pd}*.deb ${pd}
+    cp -r ./${pd}/usr/lib/python3/dist-packages/* ${python_virtualenv_path}/lib/python3.7/site-packages/
+    rm -rf ${pd} ${pd}*.deb
+done
 
 pip_array=(
-    pycairo==1.16.2
-    pygobject==3.30.4
-    dbus-python==1.3.2
-    xlib==0.21
     pillow==9.5.0
     pyscreeze==0.1.28
     PyAutoGUI==0.9.53

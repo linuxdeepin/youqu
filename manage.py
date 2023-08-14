@@ -122,7 +122,7 @@ class Manage:
             say("unreleased", font=version_font, space=False)
         else:
             say(GlobalConfig.current_tag, font=version_font, space=False)
-        say("Documents: https://mikigo.github.io/youqu-docs/", font="console", space=False)
+        say("Documents: \033[0;32mhttps://mikigo.github.io/youqu-docs/\033[0m", font="console", space=False)
         say("=" * 50, font="console", space=False)
         logger(GlobalConfig.LOG_LEVEL)
 

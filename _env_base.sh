@@ -71,8 +71,7 @@ wayland_env(){
         apt policy ${deb} > /tmp/_yqdebversion.txt 2>&1
         cat /tmp/_yqdebversion.txt | grep "已安装"
     done
-    sudo apt install -y libkf5wayland-dev
-
+    sudo apt install -y libkf5wayland-dev > /tmp/env.log 2>&1
     # libkf5wayland-dev 可能存在依赖报错，解决方法：
     # sudo aptitude install libkf5wayland-dev,先输 n,再输 y,再输 y
     # 此举可能引入兼容性问题。
