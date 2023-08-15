@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "youqu"
-version = "1.4.2"
+version = "2.0.0"
 authors = [
     { name = "mikigo", email = "huangmingqiang@uniontech.com" },
 ]
@@ -14,7 +14,7 @@ readme = "youqu/README.md"
 requires-python = ">=3.7"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: Apache Software License",
+    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
     "Operating System :: OS Independent",
 ]
 
