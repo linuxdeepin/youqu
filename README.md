@@ -9,7 +9,7 @@ YouQu is a Test automation Basic Framework, which is packaged and written based 
 - Installing from PyPI:
 
   ```shel
-  pip3 install youqu
+  sudo pip3 install youqu
   ```
 
   create a project:
@@ -22,7 +22,7 @@ YouQu is a Test automation Basic Framework, which is packaged and written based 
 
   ```sh
   cd my_project
-  ./env.sh
+  bash env.sh
   ```
 
 - Install from source code:
@@ -30,7 +30,7 @@ YouQu is a Test automation Basic Framework, which is packaged and written based 
   ```sh
   git clone https://github.com/linuxdeepin/deepin-autotest-framework.git my_project
   cd my_project
-  ./env.sh
+  bash env.sh
   ```
 
 ## Usage

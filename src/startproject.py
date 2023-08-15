@@ -25,6 +25,7 @@ def cli():
     os.system(f"cp -r {root_dir}/. /tmp/{project_name}/")
     os.system(f"mv /tmp/{project_name} .")
     os.system(f"rm -rf {project_name}/startproject.py")
+    os.system(f"rm -rf {project_name}/.gitignore")
     for root, dirs, files in os.walk(f"./{project_name}"):
         for d in dirs:
             if d == "__pycache__":

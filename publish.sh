@@ -9,11 +9,16 @@ rm -rf ${tmp_publish_dir_name}
 mkdir -p ${tmp_publish_dir_name}/youqu
 cp -r deepin-autotest-framework/. ${tmp_publish_dir_name}/youqu/
 rm -rf ${tmp_publish_dir_name}/youqu/.idea
+rm -rf ${tmp_publish_dir_name}/youqu/.vscode
 rm -rf ${tmp_publish_dir_name}/youqu/.reuse
-rm -rf ${tmp_publish_dir_name}/youqu/.gitignore
+#rm -rf ${tmp_publish_dir_name}/youqu/.gitignore
 rm -rf ${tmp_publish_dir_name}/youqu/pyproject.toml
 rm -rf ${tmp_publish_dir_name}/youqu/publish.sh
+rm -rf ${tmp_publish_dir_name}/youqu/report
 rm -rf ${tmp_publish_dir_name}/youqu/apps/autotest*
+rm -rf ${tmp_publish_dir_name}/youqu/Pipfile
+rm -rf ${tmp_publish_dir_name}/youqu/Pipfile.lock
+rm -rf ${tmp_publish_dir_name}/youqu/ci_result.json
 cp deepin-autotest-framework/pyproject.toml ${tmp_publish_dir_name}/
 cp deepin-autotest-framework/src/startproject.py ${tmp_publish_dir_name}/youqu/
 cd ${tmp_publish_dir_name}/

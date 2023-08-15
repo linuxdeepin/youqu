@@ -9,7 +9,7 @@
 - 从 PyPI 安装:
 
   ```shel
-  pip3 install youqu
+  sudo pip3 install youqu
   ```
 
   创建项目:
@@ -22,7 +22,7 @@
 
   ```sh
   cd my_project
-  ./env.sh
+  bash env.sh
   ```
 
 - 从源码安装:
@@ -30,7 +30,7 @@
   ```sh
   git clone https://github.com/linuxdeepin/deepin-autotest-framework.git my_project
   cd my_project
-  ./env.sh
+  bash env.sh
   ```
 
 ### 使用
