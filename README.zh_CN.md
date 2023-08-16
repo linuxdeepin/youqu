@@ -1,5 +1,13 @@
 # 有趣
 
+> 有趣，是一个使用简单且功能强大的自动化测试基础框架。
+
+![PyPI](https://img.shields.io/pypi/v/youqu?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu%2F)
+![PyPI - License](https://img.shields.io/pypi/l/youqu)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/youqu)
+![PyPI - Wheel](https://img.shields.io/pypi/wheel/youqu)
+![PyPI - Implementation](https://img.shields.io/pypi/implementation/youqu)
+
 [English](README.md) | 简体中文
 
 有趣（YouQu） 是一个自动化测试基础框架（AutoTest Basic Frame），基于业内流行的自动化测试框架 Pytest 进行封装编写，支持对用例进行方便的编写、组织、执行，核心库包括：OpenCV、Dogtail、OCR 等、及多个自研自动化测试组件，提供灵活的执行配置、用例标签化管理等特色功能。

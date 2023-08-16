@@ -1,5 +1,13 @@
 # YouQu
 
+> YouQu, a simple and powerful autotest framework.
+
+![PyPI](https://img.shields.io/pypi/v/youqu?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu%2F)
+![PyPI - License](https://img.shields.io/pypi/l/youqu)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/youqu)
+![PyPI - Wheel](https://img.shields.io/pypi/wheel/youqu)
+![PyPI - Implementation](https://img.shields.io/pypi/implementation/youqu)
+
 English | [简体中文](README.zh_CN.md) 
 
 YouQu is a Test automation Basic Framework, which is packaged and written based on the popular Test harness Pytest in the industry. It supports convenient writing, organization and execution of use cases. The core library includes OpenCV, Dogtail, OCR, etc., and multiple self-developed Test automation components, providing flexible execution configuration, case labeling management and other features.
