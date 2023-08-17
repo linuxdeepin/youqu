@@ -98,6 +98,8 @@ py_debs=(
     python3-pyatspi
     python3-dbus
     python3-cairo
+    python3-pil
+    python3-pexpect
 )
 for pd in ${py_debs[*]}
 do
@@ -114,10 +116,9 @@ done
 apt download python3-gi-cairo > /tmp/env.log 2>&1
 dpkg -x python3-gi-cairo*.deb python3-gi-cairo
 cp -r ./python3-gi-cairo//usr/lib/python3/dist-packages/gi/* ${python_virtualenv_path}/lib/python3.7/site-packages/gi/
-
+rm -rf python3-gi-cairo*
 
 pip_array=(
-    pillow==9.5.0
     pyscreeze==0.1.28
     PyAutoGUI==0.9.53
     pytest==6.2.5
