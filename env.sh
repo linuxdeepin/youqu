@@ -99,7 +99,9 @@ py_debs=(
     python3-dbus
     python3-cairo
     python3-pil
+    python3-ptyprocess
     python3-pexpect
+#    python3-numpy
 )
 for pd in ${py_debs[*]}
 do
@@ -160,6 +162,8 @@ if [ "${requirements}" != "" ]; then
     done
 fi
 rm -rf Pipfile
+echo "${python_virtualenv_path}"
+pipenv run pip list
 system_env
 echo "pipenv run python \$*" | sudo tee /usr/bin/youqu > /dev/null 2>&1
 cd ${ROOT_DIR};youqu manage.py run -h
