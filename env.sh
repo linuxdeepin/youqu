@@ -26,6 +26,7 @@ env(){
         gir1.2-atspi-2.0
         libatk-adaptor
         at-spi2-core
+        python3-opencv
     )
     # 裁剪基础环境
     cd ${ROOT_DIR}/src/utils
@@ -101,7 +102,8 @@ py_debs=(
     python3-pil
     python3-ptyprocess
     python3-pexpect
-#    python3-numpy
+    python3-numpy
+    python3-opencv
 )
 for pd in ${py_debs[*]}
 do

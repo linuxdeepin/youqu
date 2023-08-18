@@ -78,7 +78,7 @@ class _GlobalConfig:
     runner_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "runner")
     RERUN = runner_cfg.get("RERUN", default=1)
     RECORD_FAILED_CASE = runner_cfg.get("RECORD_FAILED_CASE", default=1)
-    MAX_FAIL = runner_cfg.get("MAX_FAIL", default=0.5)
+    MAX_FAIL = runner_cfg.get("MAX_FAIL", default=1)
     CASE_TIME_OUT = runner_cfg.get("CASE_TIME_OUT", default=200)
     CLEAN_ALL = runner_cfg.get("CLEAN_ALL", default="yes")
     RESOLUTION = runner_cfg.get("RESOLUTION", default="1920x1080")
@@ -116,9 +116,7 @@ class _GlobalConfig:
     TMPDIR = global_cfg.get("TMPDIR", default="/tmp/tmpdir")
     SYS_THEME = global_cfg.get("SYS_THEME", default="deepin")
     OCR_SERVER_HOST = global_cfg.get("OCR_SERVER_HOST", default="localhost")
-    OPENCV_SERVER_HOST = global_cfg.get(
-        "OPENCV_SERVER_HOST", default="http://localhost:8889"
-    )
+    OPENCV_SERVER_HOST = global_cfg.get("OPENCV_SERVER_HOST", default="http://localhost")
 
     # [pms]
     pms_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "pms")
@@ -155,6 +153,7 @@ class _GlobalConfig:
         arm = "aarch64"
         mips = "mips64"
         longxin = "loongarch64"
+        sw = "sw_64"
 
     class ReportFormat:
         ALLURE = "allure"
