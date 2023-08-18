@@ -9,7 +9,7 @@ import subprocess
 import os
 
 from src.custom_exception import ShellExecutionFailed
-from src  import logger
+from src import logger
 
 
 class CmdCtl:
@@ -23,8 +23,7 @@ class CmdCtl:
         "asan",
         "tee",
         "ffmpeg",
-        "dde-calendar-service",
-        "dmanHelper",
+        "youqu",
     )
 
     @staticmethod
@@ -91,12 +90,14 @@ class CmdCtl:
         return out
 
     @classmethod
-    def monitor_process(cls, app_name):
+    def monitor_process(cls, app_name, grep_list: str = None):
         """
          监控进程状态
         :param app_name: 应用包名
         :return: 进程 ID，进程名，
         """
+        if grep_list:
+            cls.GREP_LIST = grep_list
         cmd = ""
         for i in cls.GREP_LIST:
             cmd += f"grep -v {i} | "
@@ -128,12 +129,14 @@ class CmdCtl:
         return p_id, p_name, p_name_suffix
 
     @classmethod
-    def get_process_status(cls, app: str) -> bool:
+    def get_process_status(cls, app: str, grep_list: str = None) -> bool:
         """
          获取进程状态
         :param app: 应用包名
         :return: Boolean
         """
+        if grep_list:
+            cls.GREP_LIST = grep_list
         cmd = ""
         for i in cls.GREP_LIST:
             cmd += f"grep -v {i} | "
@@ -148,12 +151,14 @@ class CmdCtl:
         return False
 
     @classmethod
-    def get_daemon_process_status(cls, app) -> bool:
+    def get_daemon_process_status(cls, app, grep_list: str = None) -> bool:
         """
          获取有守护进程的应用进程状态
         :param app: 应用包名
         :return: Boolean
         """
+        if grep_list:
+            cls.GREP_LIST = grep_list
         cmd = ""
         for i in cls.GREP_LIST:
             cmd += f"grep -v {i} | "
@@ -166,12 +171,14 @@ class CmdCtl:
         return bool(result)
 
     @classmethod
-    def get_daemon_process_num(cls, app) -> int:
+    def get_daemon_process_num(cls, app, grep_list: str = None) -> int:
         """
          获取有守护进程的应用进程数量
         :param app:
         :return: int
         """
+        if grep_list:
+            cls.GREP_LIST = grep_list
         cmd = ""
         for i in cls.GREP_LIST:
             cmd += f"grep -v {i} | "
@@ -214,12 +221,14 @@ class CmdCtl:
         )
 
     @classmethod
-    def kill_process(cls, process):
+    def kill_process(cls, process, grep_list: str = None):
         """
          杀进程
         :param process: 进程名
         """
         # 杀进程要过滤的进程
+        if grep_list:
+            cls.GREP_LIST = grep_list
         cmd = ""
         for i in cls.GREP_LIST:
             cmd += f"grep -v {i} | "
