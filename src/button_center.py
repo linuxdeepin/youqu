@@ -7,18 +7,18 @@
 # pylint: disable=C0114
 import re
 from configparser import ConfigParser
-from threading import Thread
 from time import sleep
 
 import dbus
 
 from setting.globalconfig import GlobalConfig
-from src  import logger
+from src import logger
 from src.cmdctl import CmdCtl
 from src.custom_exception import ApplicationStartError
 from src.custom_exception import GetWindowInformation
 from src.custom_exception import NoSetReferencePoint
-from src.mouse_key import MouseKey
+from src.shortcut import ShortCut
+from src.wayland_wininfo import WaylandWindowINfo
 
 
 class ButtonCenter:
@@ -41,7 +41,7 @@ class ButtonCenter:
         self.pause = pause
         self.config_path = config_path
 
-    def window_info(self) -> [str, dbus.Dictionary]:
+    def window_info(self):
         """
          窗口信息
         :return:  窗口的基本信息，左上角坐标，窗口宽高等
@@ -68,27 +68,13 @@ class ButtonCenter:
                 raise ApplicationStartError(f"{self.app_name, exc}") from exc
 
         elif GlobalConfig.IS_WAYLAND:
-
-            def click():
-                sleep(1)
-                MouseKey.click()
-
             # 移动到当前窗口
             proxy_object = dbus.SessionBus().get_object("org.kde.KWin", "/dde")
             # 移动鼠标到目标窗口
             dbus.Interface(proxy_object, "org.kde.KWin").WindowMove()
-            # 鼠标为激活状态，无法进行下一步，点击一下，释放窗口
-            click()
-            # KWin 获取窗口信息的接口
-            proxy_object = dbus.SessionBus().get_object("org.kde.KWin", "/KWin")
-            # 使用子线程进行点击
-            task = Thread(target=click, args=())
-            task.start()
-            # 获取窗口信息的接口，鼠标为十字，阻塞状态，需要点击对应窗口才能返回窗口信息
-            info = dbus.Interface(proxy_object, "org.kde.KWin").queryWindowInfo()
-            sleep(0.5)
-            click()
-            return info
+            sleep(self.pause)
+            ShortCut.esc()
+            return WaylandWindowINfo().window_info()
         return None
 
     def window_location_and_sizes(self):
@@ -113,10 +99,10 @@ class ButtonCenter:
                 window_x, window_y = result
             # wayland
             else:
-                window_width = int(app_window_info.get("width"))
-                window_height = int(app_window_info.get("height"))
-                window_x = int(app_window_info.get("x"))
-                window_y = int(app_window_info.get("y"))
+                name = app_window_info.get("name")
+                if name != self.app_name:
+                    raise ValueError(f"您想要获取的窗口为：{self.app_name}, 但实际获取的窗口为：{name}")
+                window_x, window_y, window_width, window_height = app_window_info.get("wininfo")
             logger.debug(
                 f"窗口左上角坐标 {window_x, window_y},获取窗口大小 {window_width}*{window_height}"
             )
@@ -139,8 +125,7 @@ class ButtonCenter:
                     result = re.findall(re_pattern, self.window_info())
                 window_x, window_y = result
             else:
-                window_x = int(app_window_info.get("x"))
-                window_y = int(app_window_info.get("y"))
+                window_x, window_y, window_width, window_height = app_window_info.get("wininfo")
             logger.debug(f"窗口左上角坐标 {window_x, window_y}")
             return int(window_x), int(window_y)
         except (ValueError, KeyError) as exc:
@@ -157,8 +142,7 @@ class ButtonCenter:
                 window_width = re.findall(r"Width.*:\s(\d+)", app_window_info)[0]
                 window_height = re.findall(r"Height.*:\s(\d+)", app_window_info)[0]
             else:
-                window_width = int(app_window_info.get("width"))
-                window_height = int(app_window_info.get("height"))
+                window_x, window_y, window_width, window_height = app_window_info.get("wininfo")
             logger.debug(f"获取窗口大小 {window_width}*{window_height}")
             return int(window_width), int(window_height)
         except (IndexError, KeyError) as exc:

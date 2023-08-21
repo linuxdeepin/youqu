@@ -122,8 +122,10 @@ class Manage:
             say("unreleased", font=version_font, space=False)
         else:
             say(GlobalConfig.current_tag, font=version_font, space=False)
-        say("Documents: \033[0;32mhttps://mikigo.github.io/youqu-docs/\033[0m", font="console", space=False)
-        say("=" * 50, font="console", space=False)
+        say(f"Github: \033[0;32m{GlobalConfig.GITHUB_URL}\033[0m", font="console", space=False)
+        say(f"Docs  : \033[0;32m{GlobalConfig.DOCS_URL}\033[0m", font="console", space=False)
+        say(f"PyPI  : \033[0;32m{GlobalConfig.PyPI_URL}\033[0m", font="console", space=False)
+        say("=" * 60, font="console", space=False)
         logger(GlobalConfig.LOG_LEVEL)
 
         cmd_args = sys.argv[1:]

@@ -114,9 +114,6 @@ wayland_env(){
     fi
 
     nohup wayland_autotool > /dev/null 2>&1 &
-    ps -aux | grep -v grep | grep wayland_autotool
-    [ $? = 0 ] && tool_status="成功 √" || tool_status="失败 ×"
-    echo -e "wayland_autotool 服务器启动${tool_status}"
 }
 
 env_retry=false

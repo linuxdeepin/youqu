@@ -75,7 +75,6 @@ if [ $? = 0 ]; then
     echo -e "pipenv\t安装成功 √"
 else
     echo -e "pipenv\t安装失败 ×"
-    env_retry=true
     cat /tmp/env.log
     exit 520
 fi
@@ -107,14 +106,15 @@ py_debs=(
 )
 for pd in ${py_debs[*]}
 do
+    rm -rf ${pd}*
     apt download ${pd} > /tmp/env.log 2>&1
     if [ $? != 0 ]; then
-        echo "${pd} download failed"
+        cat /tmp/env.log
         exit 520
     fi
     dpkg -x ${pd}*.deb ${pd}
     cp -r ./${pd}/usr/lib/python3/dist-packages/* ${python_virtualenv_path}/lib/python3.7/site-packages/
-    rm -rf ${pd} ${pd}*.deb
+    rm -rf ${pd}*
 done
 
 apt download python3-gi-cairo > /tmp/env.log 2>&1
