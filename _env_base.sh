@@ -133,11 +133,8 @@ system_env(){
     source $HOME/.bashrc
 
     sudo rm -rf /usr/local/lib/python3.7/dist-packages/*.pth
-    echo "${ROOT_DIR}" | sudo tee /usr/local/lib/python3.7/dist-packages/youqu.pth > /dev/null 2>&1
     echo "cd ${ROOT_DIR}/src/depends/sniff/;python3 sniff" | sudo tee /usr/bin/sniff > /dev/null 2>&1
-    echo "cd ${ROOT_DIR}/;python3 manage.py \$*" | sudo tee /usr/bin/youqu > /dev/null 2>&1
     sudo chmod +x /usr/bin/sniff
-    sudo chmod +x /usr/bin/youqu
 
     gsettings set org.gnome.desktop.interface toolkit-accessibility true  > /dev/null 2>&1
     sudo systemctl enable ssh  > /dev/null 2>&1

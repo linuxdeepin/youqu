@@ -122,14 +122,13 @@ class Manage:
             say("unreleased", font=version_font, space=False)
         else:
             say(GlobalConfig.current_tag, font=version_font, space=False)
-        say(f"Github: \033[0;32m{GlobalConfig.GITHUB_URL}\033[0m", font="console", space=False)
-        say(f"Docs  : \033[0;32m{GlobalConfig.DOCS_URL}\033[0m", font="console", space=False)
-        say(f"PyPI  : \033[0;32m{GlobalConfig.PyPI_URL}\033[0m", font="console", space=False)
+        say(f"Code: \033[0;32m{GlobalConfig.GITHUB_URL}\033[0m", font="console", space=False)
+        say(f"Docs: \033[0;32m{GlobalConfig.DOCS_URL}\033[0m", font="console", space=False)
+        say(f"PyPI: \033[0;32m{GlobalConfig.PyPI_URL}\033[0m", font="console", space=False)
         say("=" * 60, font="console", space=False)
         logger(GlobalConfig.LOG_LEVEL)
 
         cmd_args = sys.argv[1:]
-
         parser = ArgumentParser(epilog=self.__author__)
         subparsers = parser.add_subparsers(help="子命令")
         sub_parser_remote = subparsers.add_parser(SubCmd.remote.value)

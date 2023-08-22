@@ -6,6 +6,8 @@
 # SPDX-License-Identifier: GPL-2.0-only
 import sys
 import os
+from configparser import ConfigParser
+from configparser import NoSectionError
 
 
 def cli():
@@ -30,7 +32,13 @@ def cli():
         for d in dirs:
             if d == "__pycache__":
                 os.system(f"rm -rf {root}/{d}")
-    print(f"The project has been created: \033[0;32m{project_name}\033[0m")
+    conf = ConfigParser()
+    try:
+        conf.read(f"{root_dir}/CURRENT")
+        youqu_version = conf.get("current", "tag")
+    except NoSectionError:
+        youqu_version = None
+    print(f"The project: [\033[0;32m{project_name}\033[0m],has been created by youqu{f'-{youqu_version}' if youqu_version else ''}.")
 
 
 if __name__ == '__main__':
