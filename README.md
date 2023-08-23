@@ -7,6 +7,9 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/youqu)
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/youqu)
 ![PyPI - Implementation](https://img.shields.io/pypi/implementation/youqu)
+[![Downloads](https://static.pepy.tech/badge/youqu)](https://pepy.tech/project/youqu)
+[![Downloads](https://static.pepy.tech/badge/youqu/month)](https://pepy.tech/project/youqu)
+[![Downloads](https://static.pepy.tech/badge/youqu/week)](https://pepy.tech/project/youqu)
 
 English | [简体中文](README.zh_CN.md) 
 

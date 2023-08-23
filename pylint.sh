@@ -37,7 +37,6 @@ if [ -d "${abs_check_path}" ] || [ -f "${abs_check_path}" ]; then
     pylint --rcfile=setting/pylintrc.cfg ${abs_check_path} | \
     pylint-json2html -o ${report_file}
     echo -e "请查看扫描报告：\033[32m ${report_file}\033[0m\n"
-#    nohup browser ${report_file} >/dev/null 2>&1 &
 else
     echo -e "\033[41;30m <${abs_check_path}> 目录不存在 \033[0m\n"
 fi

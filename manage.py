@@ -381,7 +381,7 @@ class Manage:
             start.rewrite()
 
     def export_csv(self, parser=None, sub_parser_export_csv=None):
-        """e导出 csv"""
+        """导出 csv"""
         sub_parser_export_csv.add_argument(
             "-a", "--app", default="", help="应用名称：deepin-music"
         )

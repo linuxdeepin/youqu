@@ -116,7 +116,7 @@ class _GlobalConfig:
     TMPDIR = global_cfg.get("TMPDIR", default="/tmp/tmpdir")
     SYS_THEME = global_cfg.get("SYS_THEME", default="deepin")
     OCR_SERVER_HOST = global_cfg.get("OCR_SERVER_HOST", default="localhost")
-    OPENCV_SERVER_HOST = global_cfg.get("OPENCV_SERVER_HOST", default="http://localhost")
+    OPENCV_SERVER_HOST = global_cfg.get("OPENCV_SERVER_HOST", default="localhost")
 
     # [pms]
     pms_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "pms")
