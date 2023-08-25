@@ -4,9 +4,8 @@
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 
 # SPDX-License-Identifier: GPL-2.0-only
-# pylint: disable=C0114
 # pylint: disable=C0301,R0912,C0413,R0914,W0212,R1702,R0915
-# pylint: disable=W0621,C0411,C0412,R1706,E0401
+# pylint: disable=C0114,W0621,C0411,C0412,R1706,E0401
 import sys
 from os import environ
 
