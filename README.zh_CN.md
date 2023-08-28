@@ -11,12 +11,11 @@
 [![Downloads](https://static.pepy.tech/badge/youqu/week)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu/month)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu)](https://pepy.tech/project/youqu)
-
 ![GitHub repo size](https://img.shields.io/github/repo-size/linuxdeepin/deepin-autotest-framework)
 
 [English](README.md) | 简体中文
 
-有趣（YouQu） 是一个自动化测试基础框架（AutoTest Basic Frame），基于业内流行的自动化测试框架 Pytest 进行封装编写，支持对用例进行方便的编写、组织、执行，核心库包括：OpenCV、Dogtail、OCR 等、及多个自研自动化测试组件，提供灵活的执行配置、用例标签化管理等特色功能。
+有趣（YouQu）是深度科技设计和开发的一个自动化测试基础框架，采用结构分层的设计理念，支持多元化元素定位和断言、用例标签化管理和执行、强大的日志和报告输出等特色功能，同时完美兼容X11、Wayland显示协议，环境部署简单，操作易上手。
 
 ## 安装
 
