@@ -12,6 +12,8 @@
 [![Downloads](https://static.pepy.tech/badge/youqu/month)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu)](https://pepy.tech/project/youqu)
 
+![GitHub repo size](https://img.shields.io/github/repo-size/linuxdeepin/deepin-autotest-framework)
+
 English | [简体中文](README.zh_CN.md) 
 
 YouQu is a Test automation Basic Framework, which is packaged and written based on the popular Test harness Pytest in the industry. It supports convenient writing, organization and execution of use cases. The core library includes OpenCV, Dogtail, OCR, etc., and multiple self-developed Test automation components, providing flexible execution configuration, case labeling management and other features.

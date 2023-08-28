@@ -6,13 +6,15 @@
 # SPDX-License-Identifier: GPL-2.0-only
 import os
 
+from setting.globalconfig import GlobalConfig
 # wayland PATH
-os.environ["QT_WAYLAND_SHELL_INTEGRATION"] = "kwayland-shell"
-os.environ["XDG_SESSION_DESKTOP"] = "Wayland"
-os.environ["XDG_SESSION_TYPE"] = "wayland"
-os.environ["WAYLAND_DISPLAY"] = "wayland-0"
-os.environ["GDMSESSION"] = "Wayland"
-os.environ["DBUS_SESSION_BUS_ADDRESS"] = "unix:path=/run/user/1000/bus"
+if GlobalConfig.IS_WAYLAND:
+    os.environ["QT_WAYLAND_SHELL_INTEGRATION"] = "kwayland-shell"
+    os.environ["XDG_SESSION_DESKTOP"] = "Wayland"
+    os.environ["XDG_SESSION_TYPE"] = "wayland"
+    os.environ["WAYLAND_DISPLAY"] = "wayland-0"
+    os.environ["GDMSESSION"] = "Wayland"
+    os.environ["DBUS_SESSION_BUS_ADDRESS"] = "unix:path=/run/user/1000/bus"
 
 from platform import machine
 import ctypes
