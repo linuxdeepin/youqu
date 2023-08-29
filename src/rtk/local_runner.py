@@ -22,14 +22,20 @@ from tkinter import Tk
 
 import pytest
 from allure_custom import AllureCustom
-from allure_custom.conf import setting
+from allure_custom.conf import setting as al_setting
 
 from setting.globalconfig import GetCfg
 from setting.globalconfig import GlobalConfig
 
-setting.html_title = GlobalConfig.REPORT_TITLE
-setting.report_name = GlobalConfig.REPORT_NAME
-setting.report_language = GlobalConfig.REPORT_LANGUAGE
+al_setting.html_title = GlobalConfig.REPORT_TITLE
+al_setting.report_name = GlobalConfig.REPORT_NAME
+al_setting.report_language = GlobalConfig.REPORT_LANGUAGE
+
+from letmego import register_autostart_service
+from letmego.conf import setting as letmego_setting
+
+letmego_setting.RUNNING_MAN_FILE = f"{GlobalConfig.REPORT_PATH}/_running_man.txt"
+letmego_setting.PROJECT_NAME = GlobalConfig.PASSWORD
 
 from src import logger
 from src.rtk._base import Args
@@ -77,6 +83,7 @@ class LocalRunner:
             build_location=None,
             line=None,
             exportcsv=None,
+            autostart=None,
             **kwargs,
     ):
         logger("INFO")
@@ -112,6 +119,7 @@ class LocalRunner:
             if not pms_info_file
             else None,
             Args.pms_info_file.value: pms_info_file,
+            Args.autostart.value: autostart or GlobalConfig.AUTOSTART,
         }
         self.lastfailed = lastfailed
         self.project_name = project_name
@@ -258,6 +266,8 @@ class LocalRunner:
             cmd.append("--duringfail")
         if default.get(Args.top.value):
             cmd.extend(["--top", default.get(Args.top.value)])
+        if default.get(Args.autostart.value):
+            cmd.extend(["--autostart", default.get(Args.autostart.value)])
         if default.get(Args.repeat.value):
             cmd.extend(["--repeat", default.get(Args.repeat.value)])
         if self.line:
@@ -335,6 +345,14 @@ class LocalRunner:
             system(f"mv {allure_report_path}/* {allure_report_back_path}/")
 
         run_test_cmd = " ".join(run_test_cmd_list)
+
+        if self.default.get(Args.autostart.value):
+            register_autostart_service(
+                user=GlobalConfig.USERNAME,
+                working_directory=GlobalConfig.ROOT_DIR,
+                cmd=run_test_cmd
+            )
+
         if not self.default.get(Args.pms_info_file.value):
             print(f"Running: \n{run_test_cmd}")
         if self.default.get(Args.debug.value):

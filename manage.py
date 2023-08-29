@@ -77,6 +77,7 @@ class Manage:
             build_env=None,
             client_password=None,
             parallel=None,
+            autostart=None,
     ):
         self.default_app = app
         self.default_keywords = keywords
@@ -114,6 +115,7 @@ class Manage:
         self.default_build_env = build_env
         self.default_client_password = client_password
         self.default_parallel = parallel
+        self.default_autostart = autostart
 
         say(GlobalConfig.PROJECT_NAME)
         version_font = "slick"
@@ -137,10 +139,10 @@ class Manage:
         sub_parser_export_csv = subparsers.add_parser(SubCmd.exportcsv.value)
 
         help_tip = (
-                f"\033[0;32mmanage.py\033[0m 支持 \033[0;32m{[i.value for i in SubCmd]}\033[0m 命令, "
-                "\n您需要传入一个命令,可以使用 \033[0;32m-h\033[0m或\033[0;32m--help\033[0m 查看每个命令参数的详细使用说明,"
-                "\n比如: \033[0;32myouqu manage.py run -h\033[0m \n"
-            )
+            f"\033[0;32mmanage.py\033[0m 支持 \033[0;32m{[i.value for i in SubCmd]}\033[0m 命令, "
+            "\n您需要传入一个命令,可以使用 \033[0;32m-h\033[0m或\033[0;32m--help\033[0m 查看每个命令参数的详细使用说明,"
+            "\n比如: \033[0;32myouqu manage.py run -h\033[0m \n"
+        )
         if not cmd_args:
             print(help_tip)
             sys.exit(1)
@@ -306,6 +308,9 @@ class Manage:
         sub_parser_run.add_argument(
             "--line", default="", help="执行的业务线（写入json文件）"
         )
+        sub_parser_run.add_argument(
+            "--autostart", default="", help="用例执行程序注册到开机自启服务"
+        )
         args = parser.parse_args()
         local_kwargs = {
             Args.app_name.value: args.app or self.default_app,
@@ -339,6 +344,7 @@ class Manage:
             Args.project_name.value: args.project_name or self.default_project_name,
             Args.build_location.value: args.build_location or self.default_build_location,
             Args.line.value: args.line or self.default_line,
+            Args.autostart.value: args.autostart or self.default_autostart,
         }
         return local_kwargs, args
 

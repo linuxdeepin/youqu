@@ -61,6 +61,7 @@ class Args(Enum):
     build_env = "build_env"
     client_password = "client_password"
     parallel = "parallel"
+    autostart = "autostart"
 
 
 def transform_app_name(real_app_name):

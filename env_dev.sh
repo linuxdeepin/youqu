@@ -72,6 +72,7 @@ pip_array=(
     allure-custom
     funnylog
     image-center
+    letmego
 )
 # 裁剪基础环境
 if [ "${ENV_CUT_FLAG}" = "cut" ]; then

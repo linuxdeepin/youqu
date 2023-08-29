@@ -48,6 +48,9 @@ log_setting.CLASS_NAME_STARTSWITH = GlobalConfig.CLASS_NAME_STARTSWITH
 log_setting.CLASS_NAME_ENDSWITH = GlobalConfig.CLASS_NAME_ENDSWITH
 log_setting.CLASS_NAME_CONTAIN = GlobalConfig.CLASS_NAME_CONTAIN
 
+from letmego import write_testcase_running_status
+from letmego import read_testcase_running_status
+
 from setting import skipif
 from setting.globalconfig import ConfStr
 from setting.globalconfig import FixedCsvTitle
@@ -158,13 +161,16 @@ def pytest_addoption(parser):
         "--duringfail", action="store_true", dest="duringfail", default=False, help="出现错误时立即显示"
     )
     parser.addoption(
-        '--repeat', action='store', default=1, type=int, help='用例重复执行的次数'
+        '--repeat', action='store', default=1, type=int, help="用例重复执行的次数"
     )
     parser.addoption(
-        '--exportcsv', action='store', default="", help='导出测试用例文件'
+        '--exportcsv', action='store', default="", help="导出测试用例文件"
     )
     parser.addoption(
-        '--line', action='store', default="", help='业务线(CI)'
+        '--line', action='store', default="", help="业务线(CI)"
+    )
+    parser.addoption(
+        '--autostart', action='store', default="", help="用例执行程序注册到开机自启服务"
     )
 
 
@@ -457,6 +463,13 @@ def pytest_collection_modifyitems(session):
                     # 批量执行时，不执行没有ID的用例。
                     logger.error(f"<{item.name}> csv文件中未标记,强制跳过")
                     session.items.remove(item)
+
+    if session.config.option.autostart:
+        for item in session.items[::-1]:
+            _letmego = read_testcase_running_status(item)
+            if _letmego:
+                session.items.remove(item)
+
     if (suite_id or task_id) and session.items:
         print("\n即将执行的用例:")
         for item in session.items:
@@ -614,6 +627,9 @@ def pytest_runtest_makereport(item, call):
         if write_json(item.session):
             # 只要是需要数据回填（无论是自动还是手动）,都需要写json结果.
             write_case_result(item, report)
+
+        if item.config.option.autostart:
+            write_testcase_running_status(item)
     try:
         if item.execution_count >= (int(item.config.option.record_failed_case) + 1):
             if report.when == "call":  # 存放录屏当次测试结果

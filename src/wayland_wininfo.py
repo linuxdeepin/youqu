@@ -72,7 +72,3 @@ class WaylandWindowINfo:
                 window_info.height
             ),
         }
-
-
-if __name__ == '__main__':
-    WaylandWindowINfo().window_info()

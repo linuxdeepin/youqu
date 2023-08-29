@@ -18,7 +18,6 @@ if sys.version_info[0] == 2 or sys.version_info[0:2] in ((3, 1), (3, 7)):
 # the mouse.
 MINIMUM_DURATION = 0.1
 # If sleep_amount is less than MINIMUM_DURATION, sleep() will be a no-op and the mouse cursor moves there instantly.
-# TODO: This value should vary with the platform. http://stackoverflow.com/q/1133857
 MINIMUM_SLEEP = 0.05
 STEP_SLEEP = 10
 
@@ -377,7 +376,7 @@ def size():
     return Size(posx, posy)
 
 
-def moveTo(x=None, y=None, duration=0.0, tween=linear, logScreenshot=False, _pause=True):
+def moveTo(x=None, y=None, duration=0.0, tween=linear, _pause=True):
     startx, starty = position()
 
     x = int(x) if x is not None else startx
@@ -399,13 +398,10 @@ def moveTo(x=None, y=None, duration=0.0, tween=linear, logScreenshot=False, _pau
         if sleep_amount < MINIMUM_SLEEP:
             num_steps = int(duration / MINIMUM_SLEEP)
             sleep_amount = duration / num_steps
-        # print(str(startx) + "," + str(starty))
-        # print(str(x) + "," + str(y))
         steps = [getPointOnLine(startx, starty, x, y, tween(n / num_steps)) for n in range(num_steps)]
         # Making sure the last position is the actual destination.
         # print(steps)
         steps.append((x, y))
-    # print(steps)
     for tweenX, tweenY in steps:
         if len(steps) > 1:
             # A single step does not require tweening.
@@ -417,30 +413,49 @@ def moveTo(x=None, y=None, duration=0.0, tween=linear, logScreenshot=False, _pau
             f"{dbus_cmd}.moveTo int32:{str(tweenX)} int32:{str(tweenY)}"
         )
 
+def moveRel(
+        xOffset=0, yOffset=0, duration=0.0, tween=linear, _pause=True,
+):
+    if xOffset is None:
+        xOffset = 0
+    if yOffset is None:
+        yOffset = 0
 
-def mouseDown(x=None, y=None, button=PRIMARY, duration=0.0, tween=linear, logScreenshot=None, _pause=True):
+    if type(xOffset) in (tuple, list):
+        xOffset, yOffset = xOffset[0], xOffset[1]
+
+    if xOffset == 0 and yOffset == 0:
+        return  # no-op case
+
+    mousex, mousey = position()
+    mousex = mousex + xOffset
+    mousey = mousey + yOffset
+    moveTo(mousex, mousey, duration, tween)
+
+move = moveRel
+
+def mouseDown(x=None, y=None, button=PRIMARY, duration=0.0, tween=linear, _pause=True):
     x, y = _normalizeXYArgs(x, y)
-    moveTo(x, y, duration, tween, logScreenshot, _pause)
+    moveTo(x, y, duration, tween, _pause)
     system(
         f"{dbus_cmd}.mouseDown string:{button}"
     )
     sleep(0.3)
 
 
-def mouseUp(x=None, y=None, button=PRIMARY, duration=0.0, tween=linear, logScreenshot=None, _pause=True):
+def mouseUp(x=None, y=None, button=PRIMARY, duration=0.0, tween=linear, _pause=True):
     x, y = _normalizeXYArgs(x, y)
-    moveTo(x, y, duration, tween, logScreenshot, _pause)
+    moveTo(x, y, duration, tween, _pause)
     system(
         f"{dbus_cmd}.mouseUp string:{button}"
     )
 
 
 def click(
-        x=None, y=None, clicks=1, interval=0.0, button=PRIMARY, duration=0.0, tween=linear, logScreenshot=None,
-        _pause=True
+        x=None, y=None, clicks=1, interval=0.0, button=PRIMARY, duration=0.0, tween=linear, _pause=True
 ):
     x, y = _normalizeXYArgs(x, y)
-    moveTo(x, y, duration, tween, logScreenshot, _pause)
+    moveTo(x, y, duration, tween, _pause)
     for i in range(clicks):
         if button in (LEFT, MIDDLE, RIGHT):
             system(
@@ -449,35 +464,35 @@ def click(
         sleep(interval)
 
 
-def leftClick(x=None, y=None, interval=0.0, duration=0.0, tween=linear, logScreenshot=None, _pause=True):
-    click(x, y, 1, interval, LEFT, duration, tween, logScreenshot, _pause=_pause)
+def leftClick(x=None, y=None, interval=0.0, duration=0.0, tween=linear, _pause=True):
+    click(x, y, 1, interval, LEFT, duration, tween, _pause=_pause)
 
 
-def rightClick(x=None, y=None, interval=0.0, duration=0.0, tween=linear, logScreenshot=None, _pause=True):
-    click(x, y, 1, interval, RIGHT, duration, tween, logScreenshot, _pause=_pause)
+def rightClick(x=None, y=None, interval=0.0, duration=0.0, tween=linear, _pause=True):
+    click(x, y, 1, interval, RIGHT, duration, tween, _pause=_pause)
 
 
-def middleClick(x=None, y=None, interval=0.0, duration=0.0, tween=linear, logScreenshot=None, _pause=True):
-    click(x, y, 1, interval, MIDDLE, duration, tween, logScreenshot, _pause=_pause)
+def middleClick(x=None, y=None, interval=0.0, duration=0.0, tween=linear, _pause=True):
+    click(x, y, 1, interval, MIDDLE, duration, tween, _pause=_pause)
 
 
-def doubleClick(x=None, y=None, interval=0.0, button=LEFT, duration=0.0, tween=linear, logScreenshot=None, _pause=True):
-    click(x, y, 2, interval, button, duration, tween, logScreenshot, _pause=False)
+def doubleClick(x=None, y=None, interval=0.0, button=LEFT, duration=0.0, tween=linear, _pause=True):
+    click(x, y, 2, interval, button, duration, tween, _pause=False)
 
 
-def tripleClick(x=None, y=None, interval=0.0, button=LEFT, duration=0.0, tween=linear, logScreenshot=None, _pause=True):
-    click(x, y, 3, interval, button, duration, tween, logScreenshot, _pause=False)
+def tripleClick(x=None, y=None, interval=0.0, button=LEFT, duration=0.0, tween=linear, _pause=True):
+    click(x, y, 3, interval, button, duration, tween, _pause=False)
 
 
-def scroll(clicks, x=None, y=None, logScreenshot=None, _pause=True):
+def scroll(clicks, x=None, y=None, _pause=True):
     if type(x) in (tuple, list):
         x, y = x[0], x[1]
     x, y = position(x, y)
     moveTo(x, y)
-    vscroll(clicks, x, y, logScreenshot, _pause)
+    vscroll(clicks, x, y, _pause)
 
 
-def hscroll(clicks, x=None, y=None, logScreenshot=None, _pause=True):
+def hscroll(clicks, x=None, y=None, _pause=True):
     if type(x) in (tuple, list):
         x, y = x[0], x[1]
     x, y = position(x, y)
@@ -490,7 +505,7 @@ def hscroll(clicks, x=None, y=None, logScreenshot=None, _pause=True):
         sleep(0.05)
 
 
-def vscroll(clicks, x=None, y=None, logScreenshot=None, _pause=True):
+def vscroll(clicks, x=None, y=None, _pause=True):
     if type(x) in (tuple, list):
         x, y = x[0], x[1]
     x, y = position(x, y)
@@ -504,18 +519,18 @@ def vscroll(clicks, x=None, y=None, logScreenshot=None, _pause=True):
 
 
 def dragTo(
-        x=None, y=None, duration=0.0, tween=linear, button=PRIMARY, logScreenshot=None, _pause=True, mouseDownUp=True
+        x=None, y=None, duration=0.0, tween=linear, button=PRIMARY, _pause=True, mouseDownUp=True
 ):
     x, y = _normalizeXYArgs(x, y)
     if mouseDownUp:
-        mouseDown(button=button, logScreenshot=False, _pause=False)
+        mouseDown(button=button, _pause=False)
     moveTo(x, y, duration, tween)
     if mouseDownUp:
-        mouseUp(button=button, logScreenshot=False, _pause=False)
+        mouseUp(button=button, _pause=False)
 
 
 def dragRel(
-        xOffset=0, yOffset=0, duration=0.0, tween=linear, button=PRIMARY, logScreenshot=None, _pause=True,
+        xOffset=0, yOffset=0, duration=0.0, tween=linear, button=PRIMARY, _pause=True,
         mouseDownUp=True
 ):
     if xOffset is None:
@@ -531,15 +546,15 @@ def dragRel(
 
     mousex, mousey = position()
     mousex = mousex + xOffset
-    mousey = mousey + mousey
+    mousey = mousey + yOffset
     if mouseDownUp:
-        mouseDown(button=button, logScreenshot=False, _pause=False)
+        mouseDown(button=button, _pause=False)
     moveTo(mousex, mousey, duration, tween)
     if mouseDownUp:
-        mouseUp(button=button, logScreenshot=False, _pause=False)
+        mouseUp(button=button, _pause=False)
 
 
-def keyDown(key, logScreenshot=None, _pause=True):
+def keyDown(key, _pause=True):
     global bshift
     try:
         if len(key) > 1:
@@ -555,7 +570,7 @@ def keyDown(key, logScreenshot=None, _pause=True):
         pass
 
 
-def keyUp(key, logScreenshot=None, _pause=True):
+def keyUp(key, _pause=True):
     global bshift
     try:
         if len(key) > 1:
@@ -573,7 +588,7 @@ def keyUp(key, logScreenshot=None, _pause=True):
         pass
 
 
-def press(keys, presses=1, interval=0.0, logScreenshot=None, _pause=True):
+def press(keys, presses=1, interval=0.0, _pause=True):
     if type(keys) == str:
         if len(keys) > 1:
             keys = keys.lower()
@@ -594,7 +609,7 @@ def press(keys, presses=1, interval=0.0, logScreenshot=None, _pause=True):
         sleep(interval)
 
 
-def typewrite(message, interval=0.0, logScreenshot=None, _pause=True):
+def typewrite(message, interval=0.0, _pause=True):
     interval = float(interval)  # TODO - this should be taken out.
 
     for c in message:
@@ -645,5 +660,7 @@ def screenshot():
     if image_path != "":
         image = Image.open(image_path)
         return image
-    else:
-        return None
+    return None
+
+if __name__ == '__main__':
+    moveRel(10, 10)

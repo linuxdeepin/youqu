@@ -133,6 +133,7 @@ pip_array=(
     pdocr-rpc
     image-center
     allure-custom
+    letmego
 )
 
 if [ "${ENV_CUT_FLAG}" = "cut" ]; then

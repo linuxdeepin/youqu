@@ -360,6 +360,17 @@ class MouseKey:
             sleep(0.03)
 
     @classmethod
+    def move_to_and_click(cls, _x, _y):
+        """
+         移动到某个位置点击
+        :param _x: 移动到的位置 x
+        :param _y: 移动到的位置 y
+        :return:
+        """
+        cls.move_to(_x, _y)
+        cls.click()
+
+    @classmethod
     def move_to_and_right_click(cls, _x, _y):
         """
          移动到某个位置点击右键
@@ -371,15 +382,15 @@ class MouseKey:
         cls.right_click()
 
     @classmethod
-    def move_to_and_click(cls, _x, _y):
+    def move_to_and_double_click(cls, _x, _y):
         """
-         移动到某个位置点击左键
-        :param _x: 移动到的位置x
-        :param _y: 移动到的位置y
+         移动到某个位置点击双击
+        :param _x: 移动到的位置 x
+        :param _y: 移动到的位置 y
         :return:
         """
-        cls.move_to(int(_x), int(_y))
-        cls.click()
+        cls.move_to(_x, _y)
+        cls.double_click()
 
     @classmethod
     def move_on_and_drag_to(cls, start: tuple, end: tuple):

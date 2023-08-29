@@ -85,6 +85,7 @@ class _GlobalConfig:
     NOSKIP = runner_cfg.get_bool("NOSKIP", default=False)
     IFIXED = runner_cfg.get_bool("IFIXED", default=False)
     DURING_FAIL = runner_cfg.get_bool("DURING_FAIL", default=False)
+    AUTOSTART = runner_cfg.get_bool("AUTOSTART", default=False)
     TOP = runner_cfg.get("TOP", default="")
     REPEAT = runner_cfg.get("REPEAT", default="")
     DEB_PATH = runner_cfg.get("DEB_PATH", default="~/Downloads/")
