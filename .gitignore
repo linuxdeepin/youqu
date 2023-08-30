@@ -9,3 +9,4 @@ apps/autotest*
 .push
 Pipfile
 Pipfile.lock
+site

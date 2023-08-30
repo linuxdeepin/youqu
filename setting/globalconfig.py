@@ -200,7 +200,7 @@ class _GlobalConfig:
         log_cli.get("CLASS_NAME_CONTAIN", default="ShortCut").replace(" ", "").split(",")
     )
     GITHUB_URL = "https://github.com/linuxdeepin/deepin-autotest-framework"
-    DOCS_URL = "https://mikigo.github.io/youqu-docs"
+    DOCS_URL = "https://linuxdeepin.github.io/deepin-autotest-framework"
     PyPI_URL = "https://pypi.org/project/youqu"
 
 

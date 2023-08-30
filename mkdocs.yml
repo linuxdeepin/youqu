@@ -1,0 +1,91 @@
+site_name: YouQu Docs
+copyright: Copyright © 2023 UnionTech Software Technology Co. All Rights Reserved.
+theme:
+  name: material
+  language: zh
+  # 评论系统
+  custom_dir: docs/overrides
+  palette:
+    # 自动亮/暗模式
+    - media: '(prefers-color-scheme: light)'
+      # 配色方案
+      scheme: default
+      # 原色
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/lightbulb
+        name: Switch to light mode
+    - media: '(prefers-color-scheme: dark)'
+      scheme: slate
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to dark mode
+  features:
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+
+  logo: "https://raw.githubusercontent.com/mikigo/pic/main/logo.png"
+#  favicon: img/favicon.ico
+  icon:
+    repo: fontawesome/brands/github
+
+# 右上角
+repo_name: deepin-autotest-framework
+repo_url: "https://github.com/linuxdeepin/deepin-autotest-framework"
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - admonition
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - attr_list
+  - tables
+  - def_list
+
+plugins:
+  - search
+  - mike
+
+extra:
+  generator: false
+  version:
+    provider: mike
+
+extra_javascript:
+  - '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js'
+
+nav:
+  - 首页: index.md
+  - 框架功能介绍.md
+  - 版本更新记录: RELEASE.md
+  - 自动化测试架构设计v1.0.md
+  - AT基础框架设计方案.md
+  - AT应用库设计方案.md
+  - AT开发规范.md
+  - AT经验总结.md
+  - AT用例筛选指北.md
+  - AT执行器使用指北.md
+  - 智能化功能测试.md
+  - 智能化性能测试.md
+  - 博客文章: https://funny-dream.github.io/funny-docs
+  - 定级工具: http://youqu-dev.uniontech.com/tool

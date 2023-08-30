@@ -1,0 +1,8 @@
+-i https://pypi.tuna.tsinghua.edu.cn/simple
+
+mike
+mkdocs
+mkdocs-material
+mkdocs-markdownextradata-plugin
+mkdocs-pymdownx-material-extras
+mkdocs-mermaid2-plugin
