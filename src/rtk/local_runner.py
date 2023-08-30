@@ -31,11 +31,10 @@ al_setting.html_title = GlobalConfig.REPORT_TITLE
 al_setting.report_name = GlobalConfig.REPORT_NAME
 al_setting.report_language = GlobalConfig.REPORT_LANGUAGE
 
-from letmego import register_autostart_service
-from letmego.conf import setting as letmego_setting
+import letmego
 
-letmego_setting.RUNNING_MAN_FILE = f"{GlobalConfig.REPORT_PATH}/_running_man.txt"
-letmego_setting.PROJECT_NAME = GlobalConfig.PASSWORD
+letmego.conf.setting.PASSWORD = GlobalConfig.PASSWORD
+letmego.conf.setting.RUNNING_MAN_FILE = f"{GlobalConfig.REPORT_PATH}/_running_man.log"
 
 from src import logger
 from src.rtk._base import Args
@@ -333,25 +332,19 @@ class LocalRunner:
          执行用例
         :return:
         """
+        if not self.default.get(Args.autostart.value):
+            # 备份 allure 报告
+            allure_report_path = join(GlobalConfig.ALLURE_REPORT_PATH, "allure")
+            allure_report_back_path = join(
+                GlobalConfig.ALLURE_REPORT_PATH, "allure_back", GlobalConfig.TIME_STRING
+            )
+            if exists(allure_report_path) and listdir(allure_report_path):
+                makedirs(allure_report_back_path)
+                system(f"mv {allure_report_path}/* {allure_report_back_path}/")
+
         app_dir = self.change_working_dir()
         run_test_cmd_list = self.create_pytest_cmd(app_dir)
-        # 备份 allure 报告
-        allure_report_path = join(GlobalConfig.ALLURE_REPORT_PATH, "allure")
-        allure_report_back_path = join(
-            GlobalConfig.ALLURE_REPORT_PATH, "allure_back", GlobalConfig.TIME_STRING
-        )
-        if exists(allure_report_path) and listdir(allure_report_path):
-            makedirs(allure_report_back_path)
-            system(f"mv {allure_report_path}/* {allure_report_back_path}/")
-
         run_test_cmd = " ".join(run_test_cmd_list)
-
-        if self.default.get(Args.autostart.value):
-            register_autostart_service(
-                user=GlobalConfig.USERNAME,
-                working_directory=GlobalConfig.ROOT_DIR,
-                cmd=run_test_cmd
-            )
 
         if not self.default.get(Args.pms_info_file.value):
             print(f"Running: \n{run_test_cmd}")
@@ -398,9 +391,9 @@ class LocalRunner:
                         f"result_{self.default.get(Args.app_name.value)}_{GlobalConfig.TIME_STRING}_{GlobalConfig.HOST_IP.replace('.', '')}.json"
                     )
 
-                # print(
-                #     f"{'=' * 25} 终端执行命令: allure open {allure_html_report_path} 查看报告 {'=' * 25} "
-                # )
+        if exists(letmego.conf.setting.RUNNING_MAN_FILE):
+            letmego.unregister_autostart_service()
+            letmego.clean_running_man()
 
     @staticmethod
     def get_result():

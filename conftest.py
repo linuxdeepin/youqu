@@ -35,6 +35,7 @@ from concurrent.futures import wait
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import ALL_COMPLETED
 
+import letmego
 import allure
 import pytest
 from _pytest.mark import Mark
@@ -47,9 +48,6 @@ log_setting.LOG_FILE_PATH = GlobalConfig.REPORT_PATH
 log_setting.CLASS_NAME_STARTSWITH = GlobalConfig.CLASS_NAME_STARTSWITH
 log_setting.CLASS_NAME_ENDSWITH = GlobalConfig.CLASS_NAME_ENDSWITH
 log_setting.CLASS_NAME_CONTAIN = GlobalConfig.CLASS_NAME_CONTAIN
-
-from letmego import write_testcase_running_status
-from letmego import read_testcase_running_status
 
 from setting import skipif
 from setting.globalconfig import ConfStr
@@ -466,8 +464,7 @@ def pytest_collection_modifyitems(session):
 
     if session.config.option.autostart:
         for item in session.items[::-1]:
-            _letmego = read_testcase_running_status(item)
-            if _letmego:
+            if letmego.read_testcase_running_status(item):
                 session.items.remove(item)
 
     if (suite_id or task_id) and session.items:
@@ -629,7 +626,7 @@ def pytest_runtest_makereport(item, call):
             write_case_result(item, report)
 
         if item.config.option.autostart:
-            write_testcase_running_status(item)
+            letmego.write_testcase_running_status(item)
     try:
         if item.execution_count >= (int(item.config.option.record_failed_case) + 1):
             if report.when == "call":  # 存放录屏当次测试结果

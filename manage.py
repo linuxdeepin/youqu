@@ -5,13 +5,13 @@
 
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
+# pylint: disable=wrong-import-position
 import os
 import sys
 import traceback
 from argparse import ArgumentParser
 
 os.environ["DISPLAY"] = ":0"
-# pylint: disable=wrong-import-position
 
 from setting.globalconfig import SystemPath
 
@@ -130,7 +130,7 @@ class Manage:
         say("=" * 60, font="console", space=False)
         logger(GlobalConfig.LOG_LEVEL)
 
-        cmd_args = sys.argv[1:]
+        self.cmd_args = sys.argv[1:]
         parser = ArgumentParser(epilog=self.__author__)
         subparsers = parser.add_subparsers(help="子命令")
         sub_parser_remote = subparsers.add_parser(SubCmd.remote.value)
@@ -143,28 +143,28 @@ class Manage:
             "\n您需要传入一个命令,可以使用 \033[0;32m-h\033[0m或\033[0;32m--help\033[0m 查看每个命令参数的详细使用说明,"
             "\n比如: \033[0;32myouqu manage.py run -h\033[0m \n"
         )
-        if not cmd_args:
+        if not self.cmd_args:
             print(help_tip)
             sys.exit(1)
-        if cmd_args[0] == SubCmd.remote.value:
+        if self.cmd_args[0] == SubCmd.remote.value:
             remote_kwargs = self.remote_runner(parser, sub_parser_remote)
             RemoteRunner(**remote_kwargs).remote_run()
-        elif cmd_args[0] == SubCmd.run.value:
+        elif self.cmd_args[0] == SubCmd.run.value:
             _local_kwargs, _ = self.local_runner(parser, sub_parser_run)
             LocalRunner(**_local_kwargs).local_run()
-        elif cmd_args[0] == SubCmd.pms.value:
+        elif self.cmd_args[0] == SubCmd.pms.value:
             self.pms_control(parser, sub_parser_pms)
-        elif cmd_args[0] == SubCmd.exportcsv.value:
+        elif self.cmd_args[0] == SubCmd.exportcsv.value:
             self.export_csv(parser, sub_parser_export_csv)
-        elif cmd_args[0] == SubCmd.startapp.value:
+        elif self.cmd_args[0] == SubCmd.startapp.value:
             try:
-                self.start_app(cmd_args[1])
+                self.start_app(self.cmd_args[1])
             except IndexError:
                 print(f"参数异常 {SubCmd.startapp.value} 后面需要跟参数")
-        elif cmd_args[0] in ["-h", "--help"]:
+        elif self.cmd_args[0] in ["-h", "--help"]:
             print(help_tip)
         else:
-            print(f"参数异常 \033[0;31m{cmd_args}\033[0m!\n{help_tip}")
+            print(f"参数异常 \033[0;31m{self.cmd_args}\033[0m!\n{help_tip}")
 
     def remote_runner(self, parser, sub_parser_remote):
         """远程执行"""
@@ -346,6 +346,14 @@ class Manage:
             Args.line.value: args.line or self.default_line,
             Args.autostart.value: args.autostart or self.default_autostart,
         }
+        if local_kwargs.get(Args.autostart.value) or GlobalConfig.AUTOSTART:
+            import letmego
+            letmego.conf.setting.PASSWORD = GlobalConfig.PASSWORD
+            letmego.register_autostart_service(
+                user=GlobalConfig.USERNAME,
+                working_directory=GlobalConfig.ROOT_DIR,
+                cmd=f"youqu manage.py {' '.join(self.cmd_args)}"
+            )
         return local_kwargs, args
 
     def pms_control(self, parser=None, sub_parser_pms=None):
