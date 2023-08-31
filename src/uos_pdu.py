@@ -4,7 +4,6 @@
 # Author:       Xietian
 # Date:         2023/8/31
 import requests
-from auto_uos.basic_functions import json_to_dict
 import json
 
 class Pdu():
