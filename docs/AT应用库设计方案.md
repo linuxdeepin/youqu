@@ -19,7 +19,7 @@ AT 应用库改造是基于自动化测试基础框架进行用例方法和业�
 
 整体仍然遵循 PO 设计理念，根据业务需要，将文管业务层进行 3 层划分：
 
-![](https://cdn.jsdelivr.net/gh/mikigo/pic@1.0dfm_frame.png)
+![](https://pic.imgdb.cn/item/64f054c3661c6c8e54ff47db.png)
 
 ### 2、目录结构
 
@@ -85,11 +85,11 @@ class BaseWidget(Src):
 
   右键菜单：暂时不考虑为单独的模块，考虑以图像识别的定位方案做成公共库。
 
-  ![](https://cdn.jsdelivr.net/gh/mikigo/pic@1.0dfm.png)
+  ![](https://pic.imgdb.cn/item/64f054c3661c6c8e54ff4806.png)
 
-  ![](https://cdn.jsdelivr.net/gh/mikigo/pic@1.0pop1.png)
+  ![](https://pic.imgdb.cn/item/64f054c8661c6c8e54ff4d1b.png)
 
-  ![](https://cdn.jsdelivr.net/gh/mikigo/pic@1.0pop2.png)
+  ![](https://pic.imgdb.cn/item/64f054c9661c6c8e54ff4d5a.png)
 
 - 各个模块只继承基类
 

@@ -1,5 +1,5 @@
 comments: true
-![](https://cdn.jsdelivr.net/gh/mikigo/pic@1.0/logo.png)
+![](https://pic.imgdb.cn/item/64f05326661c6c8e54fe9bf4.png)
 
 有趣（YouQu）
 ================

@@ -233,7 +233,7 @@ class TestMusic(BaseCase):
 
   举例，`PMS` 用例：
 
-![](https://cdn.jsdelivr.net/gh/mikigo/pic@1.0/pms_case.png)
+![](https://pic.imgdb.cn/item/64f054c8661c6c8e54ff4c71.png)
   
   直接选中用例内容，复制下来，然后粘贴到自动化用例脚本中：
   

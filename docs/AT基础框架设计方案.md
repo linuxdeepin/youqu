@@ -44,11 +44,11 @@
 
 整体的框架设计在《自动化测试架构设计》文档里面已经有详细描述了，这里贴一下整体的架构图：
 
-![](https://cdn.jsdelivr.net/gh/mikigo/pic@1.0/frame_after.png)
+![](https://pic.imgdb.cn/item/64f054c4661c6c8e54ff4948.png)
 
 为了突显本文的重点，抽取其中重要功能模块，如下图：
 
-![](https://cdn.jsdelivr.net/gh/mikigo/pic@1.0/basic_frame.png)
+![](https://pic.imgdb.cn/item/64f054c2661c6c8e54ff4770.png)
 
 ### 3、目录结构
 

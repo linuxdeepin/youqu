@@ -16,6 +16,7 @@ rm -rf ${tmp_publish_dir_name}/youqu/.reuse
 rm -rf ${tmp_publish_dir_name}/youqu/pyproject.toml
 rm -rf ${tmp_publish_dir_name}/youqu/publish.sh
 rm -rf ${tmp_publish_dir_name}/youqu/report
+rm -rf ${tmp_publish_dir_name}/youqu/site
 rm -rf ${tmp_publish_dir_name}/youqu/docs
 rm -rf ${tmp_publish_dir_name}/youqu/mkdocs.yml
 rm -rf ${tmp_publish_dir_name}/youqu/requirements*.txt
