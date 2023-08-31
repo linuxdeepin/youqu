@@ -1,5 +1,5 @@
 comments: true
-![](https://raw.githubusercontent.com/mikigo/pic/main/logo.png)
+![](https://cdn.jsdelivr.net/gh/mikigo/pic@1.0/logo.png)
 
 有趣（YouQu）
 ================

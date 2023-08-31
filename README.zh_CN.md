@@ -1,3 +1,5 @@
+![](https://raw.githubusercontent.com/mikigo/pic/main/logo.png)
+
 # 有趣
 
 > 有趣，是一个使用简单且功能强大的自动化测试基础框架。
@@ -7,6 +9,8 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/youqu)
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/youqu)
 ![PyPI - Implementation](https://img.shields.io/pypi/implementation/youqu)
+![Static Badge](https://img.shields.io/badge/UOS%2FDeepin-Platform?style=flat-square&label=OS)
+![Static Badge](https://img.shields.io/badge/Linux-Platform?style=flat-square&label=Platform)
 
 [![Downloads](https://static.pepy.tech/badge/youqu/week)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu/month)](https://pepy.tech/project/youqu)
@@ -54,7 +58,7 @@ youqu manage.py run
 
 ## 文档
 
-- [文档](https://mikigo.github.io/youqu-docs/)
+- [文档](https://linuxdeepin.github.io/deepin-autotest-framework/)
 
 ## 帮助
 

@@ -1,3 +1,5 @@
+![](https://raw.githubusercontent.com/mikigo/pic/main/logo.png)
+
 # YouQu
 
 > YouQu, a simple and powerful autotest framework.
@@ -7,6 +9,8 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/youqu)
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/youqu)
 ![PyPI - Implementation](https://img.shields.io/pypi/implementation/youqu)
+![Static Badge](https://img.shields.io/badge/UOS%2FDeepin-Platform?style=flat-square&label=OS)
+![Static Badge](https://img.shields.io/badge/Linux-Platform?style=flat-square&label=Platform)
 
 [![Downloads](https://static.pepy.tech/badge/youqu/week)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu/month)](https://pepy.tech/project/youqu)
@@ -54,7 +58,7 @@ youqu manage.py run
 
 ## Documentations
 
-- [Documents](https://mikigo.github.io/youqu-docs/)
+- [Documents](https://linuxdeepin.github.io/deepin-autotest-framework/)
 
 ## Getting help
 

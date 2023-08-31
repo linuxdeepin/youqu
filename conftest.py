@@ -464,7 +464,10 @@ def pytest_collection_modifyitems(session):
 
     if session.config.option.autostart:
         for item in session.items[::-1]:
-            if letmego.read_testcase_running_status(item):
+            _reruns = None
+            if hasattr(session.config.option, "reruns"):
+                _reruns = session.config.option.reruns
+            if letmego.read_testcase_running_status(item, reruns=_reruns):
                 session.items.remove(item)
 
     if (suite_id or task_id) and session.items:
@@ -540,6 +543,9 @@ def pytest_collection_finish(session):
 
 def pytest_runtest_setup(item):
     """pytest_runtest_setup"""
+    if hasattr(item, "execution_count"):
+        letmego.conf.setting.EXECUTION_COUNT = item.execution_count
+
     print()  # 处理首行日志换行的问题
     current_item_count = (
         f"[{item.session.items.index(item) + 1}/{item.session.item_count}]"
