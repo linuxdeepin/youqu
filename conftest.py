@@ -632,7 +632,7 @@ def pytest_runtest_makereport(item, call):
             write_case_result(item, report)
 
         if item.config.option.autostart:
-            letmego.write_testcase_running_status(item)
+            letmego.write_testcase_running_status(item, report)
     try:
         if item.execution_count >= (int(item.config.option.record_failed_case) + 1):
             if report.when == "call":  # 存放录屏当次测试结果

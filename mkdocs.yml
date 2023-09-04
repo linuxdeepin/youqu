@@ -28,7 +28,7 @@ theme:
     - search.highlight
     - content.tabs.link
 
-  logo: "https://raw.githubusercontent.com/mikigo/pic/main/logo.png"
+  logo: "https://pic.imgdb.cn/item/64f05326661c6c8e54fe9bf4.png"
 #  favicon: img/favicon.ico
   icon:
     repo: fontawesome/brands/github

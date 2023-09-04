@@ -1,11 +1,26 @@
 # 版本更新记录
 
+## 2.1.5（2023/8/31）
+
+new
+
+- 将有趣的文档系统迁移到 [linuxdeepin](https://github.com/linuxdeepin/deepin-autotest-framework) ，剥离文档中的图片资源，采用 `CDN` 加速方式加载；
+
+- 尝试合入一个有趣的功能；
+
+fix
+
+- 修复了 Wayland 键鼠工具没有鼠标相对移动方法 moveRel 的问题； 
+- 修复了 Wayland 下获取窗口信息功能模块中环境变量的问题；
+- 优化了 startproject 功能的一些信息输出；
+- 修复了特殊场景下 env_dev.sh 开发环境部署是可能影响到正式环境 env.sh 的问题；
+
 ## 2.1.2（2023/8/22）
 
 new
 
 - 增加 OCR 识别自动重试机制，默认重试 2 次，支持动态传入重试次数；
-- 使用窗管最新提供的二进制接口，优化基于 `UI` 的元素定位方案在 `Wayland` 下获取窗口信息的方法；感谢桌面测试部 **@何权 @孙翠** 、窗管研发 @黄泽铭 的大力支持。
+- 使用窗管最新提供的二进制接口，优化基于 `UI` 的元素定位方案在 `Wayland` 下获取窗口信息的方法；感谢桌面测试部 **@何权 @孙翠** 、窗管研发 **@黄泽铭** 的大力支持。
 - 扩充 `skipif` 条件跳过的功能函数：
   - `skipif_xdg_type` 支持 `x11` 或 `wayland` 上跳过；
   - `skipif_cpu_name` 支持不同 `cpu` 上跳过，比如：`skipif_cpu_name-KLVVW5821`；
@@ -106,7 +121,7 @@ youqu manage.py run
 
 **4、新的文档地址**
 
-过去咱们 YouQu 的在线文档是部署在公司内网的，现在开源到 github 了，外部开发者肯定访问不到内网的文档，因此需要将文档部署到公网【[公网文档](https://mikigo.github.io/youqu-docs/)】；
+过去咱们 YouQu 的在线文档是部署在公司内网的，现在开源到 github 了，外部开发者肯定访问不到内网的文档，因此需要将文档部署到公网【[公网文档](https://linuxdeepin.github.io/deepin-autotest-framework/)】；
 
 公网文档使用的是 github pages（白嫖怪一顿狂喜~~），但可能会出现文档速度慢的问题（代理下就好了），不过没关系，咱们【[内网文档](http://youqu-dev.uniontech.com/)】仍然保留，文档内容一样，访问速度更快。
 

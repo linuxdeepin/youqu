@@ -21,8 +21,6 @@ classifiers = [
 dependencies = [
 ]
 
-#dynamic = ["version"]
-
 [project.optional-dependencies]
 
 [project.scripts]
@@ -35,4 +33,4 @@ packages = [
 
 [project.urls]
 Source = "https://github.com/linuxdeepin/deepin-autotest-framework"
-Documentation = "https://mikigo.github.io/youqu-docs"
+Documentation = "https://linuxdeepin.github.io/deepin-autotest-framework"

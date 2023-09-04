@@ -352,7 +352,7 @@ class Manage:
             letmego.register_autostart_service(
                 user=GlobalConfig.USERNAME,
                 working_directory=GlobalConfig.ROOT_DIR,
-                cmd=f"youqu manage.py {' '.join(self.cmd_args)}"
+                cmd=f"pipenv run python manage.py {' '.join(self.cmd_args)}"
             )
         return local_kwargs, args
 
