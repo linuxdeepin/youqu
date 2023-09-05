@@ -145,8 +145,11 @@ KEYWORDS =
 
 ;执行包含用例标签的用例
 TAGS =
-;1、KEYWORDS 和 TAGS 都为空表示执行 APP_NAME 的所有用例
-;2、KEYWORDS 和 TAGS 都支持逻辑组合，即 and/or/not 的表达式, e.g. TAGS = L1 or smoke
+;-----------------------------------------------
+;1.KEYWORDS 和 TAGS 都为空表示执行 APP_NAME 的所有用例
+;2.KEYWORDS 和 TAGS 都支持逻辑组合，即 and/or/not 的表达式
+;e.g. TAGS = L1 or smoke
+;-----------------------------------------------
 
 ;本地文件测试套，将要执行的用例写入指定的 csv 文件
 ;默认为空，从基础框架根目录开始：e.g. CASE_FILE = case_list.txt
@@ -156,33 +159,34 @@ CASE_FILE =
 ;=============================== RUNNER CONFIG ===================================
 [runner]
 ;最大失败用例数量的占比
-;比如：总执行用例数为100, 若 MAX_FAIL = 0.5,则失败用例数达到50就会终止测试。
-MAX_FAIL = 0.5
+;比如：总执行用例数为 100, 若 MAX_FAIL = 0.5,则失败用例数达到 50 就会终止测试。
+MAX_FAIL = 1
 
 ;单条用例的超时时间，如果一条用例的执行时间超时，这条用例会被停止，后续用例继续执行。
 ;单位为秒
-; 这是一个全局统一配置，如果某条用例需要单独配置超时时间，可以在用例中这样写：
+;这是一个全局统一配置，如果某条用例需要单独配置超时时间，可以在用例中这样写：
 ;@pytest.mark.timeout(500)
 ;def test_xxx_001():
 ;    ...
-;会话（所有用例执行的）超时是根据全局超时配置和用例单独超时配置自动计算的；
+;会话超时（所有用例执行的超时时间）是根据全局超时配置和用例单独超时配置自动计算的。
 CASE_TIME_OUT = 200
 
 ;失败用例重跑次数
+;注意，RERUN = 1 表示重跑 1 次，即第一次用例执行失败会自动重跑 1 次，总共执行 2 次；
+;如果第 2 次执行成功，结果成功，失败亦为失败。
 RERUN = 1
 
-;失败录屏从第几次开始录制视频。
-;比如 RECORD_FAILED_CASE = 1 ，表示用例第1次执行失败之后开始录屏。
-;注意，用例失败重跑的次数不能小于失败录屏次数，即 RERUN >= RECORD_FAILED_CASE
+;失败录屏从第几次失败开始录制视频。
+;比如 RECORD_FAILED_CASE = 1 ，表示用例第 1 次执行失败之后开始录屏，RERUN >= RECORD_FAILED_CASE。
+;1.关闭录屏：RECORD_FAILED_CASE > RERUN
+;2.每条用例都录屏：RECORD_FAILED_CASE = 0
 RECORD_FAILED_CASE = 1
-
-;批量执行时，终端输出的日志级别 DEBUG/INFO/ERROR
-LOG_LEVEL = INFO
 
 ;yes 每条用例执行之后进行环境清理
 CLEAN_ALL = yes
 
-;检查测试机分辨率
+;检查测试机分辨率, 比如：1920x1080
+;no: 表示不做分辨率校验
 RESOLUTION = 1920x1080
 
 ;不跳过用例，csv文件里面标记了 skip-xxx的用例不跳过
@@ -210,8 +214,33 @@ REPEAT =
 ;yes, 测试过程中立即显示报错
 DURING_FAIL = no
 
+;注册自启服务
+AUTOSTART = no
+
 ;=============================== REPORT CONFIG ===================================
 [report]
+;测试报告的title
+REPORT_TITLE = YouQu Report
+
+;测试报告的name
+REPORT_NAME = YouQu Report
+
+;测试报告的默认语言
+;en:English
+;ru:Русский
+;zh:中文
+;de:Deutsch
+;nl:Nederlands
+;he:Hebrew
+;br:Brazil
+;pl:Polski
+;ja:日本語
+;es:Español
+;kr:한국어
+;fr:Français
+;az:Azərbaycanca
+REPORT_LANGUAGE = zh
+
 ;用例执行完后生成的测试报告格式
 ;目前支持 allure, xml, json （支持同时生成）
 REPORT_FORMAT = allure, xml, json
@@ -245,10 +274,10 @@ TMPDIR = /tmp/tmpdir
 SYS_THEME = deepin
 
 ;OCR服务端地址（不可随意修改）
-OCR_SERVER_HOST = http://youqu-dev.uniontech.com:8890
+OCR_SERVER_HOST = youqu-dev.uniontech.com
 
 ;OpenCV服务端地址
-OPENCV_SERVER_HOST = http://youqu-dev.uniontech.com:8889
+OPENCV_SERVER_HOST = youqu-dev.uniontech.com
 
 ;=============================== PMS CONFIG ===================================
 ;PMS相关配置，包含以下几个方面：
@@ -256,7 +285,7 @@ OPENCV_SERVER_HOST = http://youqu-dev.uniontech.com:8889
 ;2.自动从PMS爬取数据并同步本地CSV文件
 ;3.PMS数据回填
 [pms]
-;PMS的用户名: ut001234
+;PMS的用户名,如: ut001234
 PMS_USER =
 
 ;PMS的密码
@@ -303,13 +332,28 @@ CASE_FROM = caselib
 ;如果你的应用分了很多模块,只需要将对应的信息依次配置好就行了。
 music =
 
-
 [export_csv]
 ;导出的csv文件名称，默认 case_list.csv
 CSV_FILE = case_list.csv
 
 ;exportcsv 命令导出 case_list.csv 文件时配置的字段名，用例名称默认存在第一列，无需添加
 CSV_HEARD = 用例级别,用例类型,测试级别,是否跳过
+
+[log_cli]
+;日志相关配置（不打印构造函数和魔法函数的功能说明）
+;批量执行时，终端输出的日志级别 DEBUG/INFO/ERROR
+LOG_LEVEL = DEBUG
+
+# ============= 自动输出日志的配置 ================
+;支持类名以 xxx 开头的，自动将函数说明打印为日志, 多个参数以逗号隔开
+CLASS_NAME_STARTSWITH = Assert
+
+;支持类名以 xxx 结尾的，自动将函数说明打印为日志，多个参数以逗号隔开
+CLASS_NAME_ENDSWITH = Widget
+
+;支持类名包含 xxx 的，自动将函数说明打印为日志，多个参数以逗号隔开
+CLASS_NAME_CONTAIN = ShortCut
+# ==============================================
 ```
 
 配置完成之后，直接在命令行执行 `manage.py` 就好了。
@@ -325,12 +369,15 @@ youqu manage.py run
 以下为 `youqu manage.py run` 提供的一些参数选项：
 
 ```coffeescript
+  -h, --help            show this help message and exit
   -a APP, --app APP     应用名称：deepin-music 或 autotest_deepin_music 或
                         apps/autotest_deepin_music
   -k KEYWORDS, --keywords KEYWORDS
                         用例的关键词,支持and/or/not逻辑组合
   -t TAGS, --tags TAGS  用例的标签,支持and/or/not逻辑组合
   --rerun RERUN         失败重跑次数
+  --record_failed_case RECORD_FAILED_CASE
+                        失败录屏从第几次失败开始录制视频
   --clean {yes,}        清理环境
   --report_formats REPORT_FORMATS
                         测试报告格式
@@ -366,6 +413,7 @@ youqu manage.py run
   --build_location BUILD_LOCATION
                         构建地区（写入json文件）
   --line LINE           执行的业务线（写入json文件）
+  --autostart AUTOSTART 用例执行程序注册到开机自启服务
 ```
 
 在一些 CI 环境下使用命令行参数会更加方便：
@@ -380,9 +428,19 @@ youqu manage.py run --app deepin-music --keywords "xxx" --tags "xxx"
 
 #### 2.2. 远程执行
 
+远程执行就是用本地作为服务端控制远程机器执行，远程机器执行的用例相同；
+
+使用 `remote` 命令：
+
 ```shell
 youqu manage.py remote
 ```
+
+##### 2.2.1. 远程多机器分布式异步执行
+
+![](https://pic.imgdb.cn/item/64f6d3c0661c6c8e549f8ca5.png)
+
+多机器分布式异步执行就是由本地 YouQu 作为服务端，控制远程 N 台机器执行相同的用例，执行完之后所有测试机的测试结果会返回给服务端 report 目录下；
 
 远程执行同样通过配置文件 `setting/globalconfig.ini` 进行用例相关配置；
 
@@ -411,7 +469,7 @@ user = uos
 ip = 10.8.11.xx
 ```
 
-有多少台机器就像这样挨着写就行了。
+有多少台机器就像这样参考上面的格式写就行了。
 
 然后在命令行：
 
@@ -426,37 +484,21 @@ youqu manage.py remote
 以下为 `python3 manage.py remote` 提供的一些参数选项：
 
 ```coffeescript
-  -a APP, --app APP     应用名称：deepin-music 或 autotest_deepin_music 或
-                        apps/autotest_deepin_music
+  -h, --help            show this help message and exit
   -c CLIENTS, --clients CLIENTS
-                        远程机器的user@ip:password,多个机器用'/'连接,如果password不传入,默认取
-                        setting/remote.ini 中 CLIENT_PASSWORD
-                        的值,比如：uos@10.8.13.33:1 或 uos@10.8.13.33
-  -k KEYWORDS, --keywords KEYWORDS
-                        用例的关键词,支持and/or/not逻辑组合
-  -t TAGS, --tags TAGS  用例的标签,支持and/or/not逻辑组合
-  -s {yes,no,}, --send_code {yes,no,}
-                        发送代码到测试机（不含report目录）
+                        远程机器的user@ip:password,多个机器用'/'连接,如果password不传入,默认取sett
+                        ing/remote.ini中CLIENT_PASSWORD的值,比如: uos@10.8.13.33:1
+                        或 uos@10.8.13.33
+  -s, --send_code       发送代码到测试机（不含report目录）
   -e, --build_env       搭建测试环境,如果为yes，不管send_code是否为yes都会发送代码到测试机.
   -p CLIENT_PASSWORD, --client_password CLIENT_PASSWORD
                         测试机密码（全局）
   -y PARALLEL, --parallel PARALLEL
-                        yes:表示所有测试机并行跑，执行相同的测试用例，no
-                        :表示测试机分布式执行，服务端会根据收集到的测试用例自动分配给各个测试机执行。
-  --rerun RERUN         失败重跑次数
-  --clean {yes,}        清理环境
-  --report_formats REPORT_FORMATS
-                        测试报告格式
-  --log_level LOG_LEVEL
-                        日志输出级别
-  --timeout TIMEOUT     单条用例超时时间
-  --debug DEBUG         调试模式
-  --noskip {yes,}       csv文件里面标记了skip跳过的用例不生效
-  --ifixed {yes,}       fixed不生效，仅通过skip跳过用例
-  --send_pms SEND_PMS   数据回填
-  --task_id TASK_ID     测试单ID
-  --deb_path DEB_PATH   需要安装deb包的本地路径
+                        yes:表示所有测试机并行跑，执行相同的测试用例;no:表示测试机分布式执行，服务端会根据收集到的测试用例自
+                        动分配给各个测试机执行。
 ```
+
+除了这些特有参数以外，它同样支持本地执行的所有参数；
 
 在命令行这样运行：
 
@@ -466,7 +508,36 @@ youqu manage.py remote -a deepin-music -c uos@10.8.13.33/uos@10.8.13.34 -k "xxx"
 
 所有用例执行完之后会在 `report` 目录下回收各个测试机执行的测试报告。
 
+注意，如果远程机器没有搭建自动化测试环境，记得加上参数 `-e` ：
+
+```shell
+youqu manage.py remote -a deepin-music -c uos@10.8.13.33/uos@10.8.13.34 -k "xxx" -t "xxx" -e
+```
+
+执行前确保远程机器已经开启了 ssh 服务，否则会提示无法连接，如果没有开启，请手动开启：
+
+```shell
+sudo systemctl restart ssh
+sudo systemctl enable ssh
+```
+
 配置文件其他相关配置项详细说明，请查看配置文件中的注释内容。
+
+##### 2.2.2. 远程多机器分布式异步负载均衡执行
+
+多机器分布式异步负载均衡执行也是用本地作为服务端控制远程机器执行，但远程机器执行的用例不同，而是所有远程机器执行的用例之和，为你想要执行的用例集；
+
+似乎有点难以理解，我用大白话举例描述下就是，服务端想要执行 10 条用例，现在远程机器有 5 台；
+
+然后服务端就先拿着第 1 条用例给远程 1 号机执行，拿第 2 条用例给远程 2 号机执行...，如此循环直到所有用例执行完，这就是负载均衡执行。
+
+![](https://pic.imgdb.cn/item/64f6d694661c6c8e54a1025b.png)
+
+使用方法和前面一样，只是需要增加一个参数：
+
+```shell
+youqu manage.py remote -a deepin-music -c uos@10.8.13.33/uos@10.8.13.34 -k "xxx" -t "xxx" --parallel no
+```
 
 #### 2.3. PMS 数据回填
 

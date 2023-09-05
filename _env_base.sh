@@ -110,6 +110,8 @@ wayland_env(){
     fi
 
     if [ ! -f "$HOME/.Xauthority" ]; then
+        echo -e "I'm not sure why the $HOME/.Xauthority file is not available on this device.\nWe're trying to create an empty .Xauthority file to ensure the program runs properly,\nbut Xlib may have some warning prompts.
+        "
         touch $HOME/.Xauthority
     fi
 
