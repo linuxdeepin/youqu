@@ -134,6 +134,7 @@ class _GlobalConfig:
     # [csvctl]
     csv_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "csvctl")
     PY_ID_TO_CSV = csv_cfg.get_bool("PY_ID_TO_CSV", default=False)
+    EXPORT_CSV_FILE = csv_cfg.get("EXPORT_CSV_FILE", default="")
     EXPORT_CSV_HEARD = csv_cfg.get("EXPORT_CSV_HEARD", default="用例级别,用例类型,测试级别,是否跳过").replace(" ", "")
 
     # [log_cli]

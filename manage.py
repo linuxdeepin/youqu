@@ -466,10 +466,13 @@ class Manage:
         if csv_kwargs.get(Args.pyid2csv.value) or GlobalConfig.PY_ID_TO_CSV:
             from src.csvctl import CsvControl
             CsvControl(csv_kwargs.get(Args.app_name.value)).delete_mark_in_csv_if_not_exists_py()
-        if csv_kwargs.get(Args.pyid2csv.value) or csv_kwargs.get(Args.export_csv_file.value):
+        if (csv_kwargs.get(Args.pyid2csv.value) or GlobalConfig.PY_ID_TO_CSV) or (csv_kwargs.get(Args.export_csv_file.value) or GlobalConfig.EXPORT_CSV_FILE):
             LocalRunner(**csv_kwargs).local_run()
         else:
-            logger.error("需要传递一些参数，您可以使用 -h 或 --help 查看支持的参数")
+            logger.error(
+                f"需要传递一些有用参数或配置项：{Args.pyid2csv.value} 或 {Args.export_csv_file.value}"
+                "，您可以使用 -h 或 --help 查看支持的参数"
+            )
 
 if __name__ == "__main__":
     try:
