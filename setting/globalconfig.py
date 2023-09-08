@@ -68,28 +68,38 @@ class _GlobalConfig:
     # ====================== GLOBAL CONFIG INI ======================
     # Get config file object
     GLOBAL_CONFIG_FILE_PATH = join(SETTING_PATH, "globalconfig.ini")
-    # [case]
-    case_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "case")
-    APP_NAME = case_cfg.get("APP_NAME", default="")
-    KEYWORDS = case_cfg.get("KEYWORDS", default="")
-    TAGS = case_cfg.get("TAGS", default="")
-    CASE_FILE = case_cfg.get("CASE_FILE", default="")
-    # [runner]
-    runner_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "runner")
-    RERUN = runner_cfg.get("RERUN", default=1)
-    RECORD_FAILED_CASE = runner_cfg.get("RECORD_FAILED_CASE", default=1)
-    MAX_FAIL = runner_cfg.get("MAX_FAIL", default=1)
-    CASE_TIME_OUT = runner_cfg.get("CASE_TIME_OUT", default=200)
-    CLEAN_ALL = runner_cfg.get("CLEAN_ALL", default="yes")
-    RESOLUTION = runner_cfg.get("RESOLUTION", default="1920x1080")
-    NOSKIP = runner_cfg.get_bool("NOSKIP", default=False)
-    IFIXED = runner_cfg.get_bool("IFIXED", default=False)
-    DURING_FAIL = runner_cfg.get_bool("DURING_FAIL", default=False)
-    AUTOSTART = runner_cfg.get_bool("AUTOSTART", default=False)
-    TOP = runner_cfg.get("TOP", default="")
-    REPEAT = runner_cfg.get("REPEAT", default="")
-    DEB_PATH = runner_cfg.get("DEB_PATH", default="~/Downloads/")
-    DEBUG = runner_cfg.get_bool("DEBUG", default=False)
+    # [run]
+    run_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "run")
+    APP_NAME = run_cfg.get("APP_NAME", default="")
+    KEYWORDS = run_cfg.get("KEYWORDS", default="")
+    TAGS = run_cfg.get("TAGS", default="")
+    CASE_FILE = run_cfg.get("CASE_FILE", default="")
+    RERUN = run_cfg.get("RERUN", default=1)
+    RECORD_FAILED_CASE = run_cfg.get("RECORD_FAILED_CASE", default=1)
+    MAX_FAIL = run_cfg.get("MAX_FAIL", default=1)
+    CASE_TIME_OUT = run_cfg.get("CASE_TIME_OUT", default=200)
+    CLEAN_ALL = run_cfg.get("CLEAN_ALL", default="yes")
+    RESOLUTION = run_cfg.get("RESOLUTION", default="1920x1080")
+    NOSKIP = run_cfg.get_bool("NOSKIP", default=False)
+    IFIXED = run_cfg.get_bool("IFIXED", default=False)
+    DURING_FAIL = run_cfg.get_bool("DURING_FAIL", default=False)
+    AUTOSTART = run_cfg.get_bool("AUTOSTART", default=False)
+    TOP = run_cfg.get("TOP", default="")
+    REPEAT = run_cfg.get("REPEAT", default="")
+    DEB_PATH = run_cfg.get("DEB_PATH", default="~/Downloads/")
+    DEBUG = run_cfg.get_bool("DEBUG", default=False)
+    PASSWORD = run_cfg.get("PASSWORD", default="1")
+    if not PASSWORD:
+        raise ValueError("测试机密码不能未空")
+    IMAGE_MATCH_NUMBER = run_cfg.get("IMAGE_MATCH_NUMBER", default=1)
+    IMAGE_MATCH_WAIT_TIME = run_cfg.get("IMAGE_MATCH_WAIT_TIME", default=1)
+    IMAGE_RATE = run_cfg.get("IMAGE_RATE", default=0.9)
+    SCREEN_CACHE = run_cfg.get("SCREEN_CACHE", default="/tmp/screen.png")
+    TMPDIR = run_cfg.get("TMPDIR", default="/tmp/tmpdir")
+    SYS_THEME = run_cfg.get("SYS_THEME", default="deepin")
+    OCR_SERVER_HOST = run_cfg.get("OCR_SERVER_HOST", default="localhost")
+    OPENCV_SERVER_HOST = run_cfg.get("OPENCV_SERVER_HOST", default="localhost")
+
     # [report]
     report_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "report")
     REPORT_TITLE = report_cfg.get("REPORT_TITLE", default="YouQu Report")
@@ -105,22 +115,9 @@ class _GlobalConfig:
     JSON_REPORT_PATH = join(
         ROOT_DIR, report_cfg.get("JSON_REPORT_PATH", default="report/")
     )
-    # [globalconfig]
-    global_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "globalconfig")
-    PASSWORD = global_cfg.get("PASSWORD", default="1")
-    if not PASSWORD:
-        raise ValueError("测试机密码不能未空")
-    IMAGE_MATCH_NUMBER = global_cfg.get("IMAGE_MATCH_NUMBER", default=1)
-    IMAGE_MATCH_WAIT_TIME = global_cfg.get("IMAGE_MATCH_WAIT_TIME", default=1)
-    IMAGE_RATE = global_cfg.get("IMAGE_RATE", default=0.9)
-    SCREEN_CACHE = global_cfg.get("SCREEN_CACHE", default="/tmp/screen.png")
-    TMPDIR = global_cfg.get("TMPDIR", default="/tmp/tmpdir")
-    SYS_THEME = global_cfg.get("SYS_THEME", default="deepin")
-    OCR_SERVER_HOST = global_cfg.get("OCR_SERVER_HOST", default="localhost")
-    OPENCV_SERVER_HOST = global_cfg.get("OPENCV_SERVER_HOST", default="localhost")
 
-    # [pms]
-    pms_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "pms")
+    # [pmsctl]
+    pms_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "pmsctl")
     PMS_USER = pms_cfg.get("PMS_USER", default="")
     PMS_PASSWORD = pms_cfg.get("PMS_PASSWORD", default="")
     SUITE_ID = pms_cfg.get("SUITE_ID", default="")
@@ -132,6 +129,26 @@ class _GlobalConfig:
     if TRIGGER not in ("auto", "hand"):
         raise ValueError
     SEND_PMS_RETRY_NUMBER = pms_cfg.get("SEND_PMS_RETRY_NUMBER", default=2)
+    CASE_FROM = pms_cfg.get("CASE_FROM", default="caselib")
+
+    # [csvctl]
+    csv_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "csvctl")
+    PY_ID_TO_CSV = csv_cfg.get_bool("PY_ID_TO_CSV", default=False)
+    EXPORT_CSV_HEARD = csv_cfg.get("EXPORT_CSV_HEARD", default="用例级别,用例类型,测试级别,是否跳过").replace(" ", "")
+
+    # [log_cli]
+    log_cli = GetCfg(GLOBAL_CONFIG_FILE_PATH, "log_cli")
+    LOG_LEVEL = log_cli.get("LOG_LEVEL", default="INFO")
+    CLASS_NAME_STARTSWITH = tuple(
+        log_cli.get("CLASS_NAME_STARTSWITH", default="Assert").replace(" ", "").split(",")
+    )
+    CLASS_NAME_ENDSWITH = tuple(
+        log_cli.get("CLASS_NAME_ENDSWITH", default="Widget").replace(" ", "").split(",")
+    )
+    CLASS_NAME_CONTAIN = tuple(
+        log_cli.get("CLASS_NAME_CONTAIN", default="ShortCut").replace(" ", "").split(",")
+    )
+
     # ====================== 动态获取变量 ======================
     # username
     USERNAME = getuser()
@@ -183,22 +200,6 @@ class _GlobalConfig:
 
     top_cmd = "top -b -d 3 -w 512"
 
-    # [export_csv]
-    export_csv = GetCfg(GLOBAL_CONFIG_FILE_PATH, "export_csv")
-    CSV_FILE = export_csv.get("CSV_FILE", default="case_list.csv")
-    CSV_HEARD = export_csv.get("CSV_HEARD", default="用例级别,用例类型,测试级别,是否跳过").replace(" ", "")
-    # [log_cli]
-    log_cli = GetCfg(GLOBAL_CONFIG_FILE_PATH, "log_cli")
-    LOG_LEVEL = log_cli.get("LOG_LEVEL", default="INFO")
-    CLASS_NAME_STARTSWITH = tuple(
-        log_cli.get("CLASS_NAME_STARTSWITH", default="Assert").replace(" ", "").split(",")
-    )
-    CLASS_NAME_ENDSWITH = tuple(
-        log_cli.get("CLASS_NAME_ENDSWITH", default="Widget").replace(" ", "").split(",")
-    )
-    CLASS_NAME_CONTAIN = tuple(
-        log_cli.get("CLASS_NAME_CONTAIN", default="ShortCut").replace(" ", "").split(",")
-    )
     GITHUB_URL = "https://github.com/linuxdeepin/deepin-autotest-framework"
     DOCS_URL = "https://linuxdeepin.github.io/deepin-autotest-framework"
     PyPI_URL = "https://pypi.org/project/youqu"
@@ -228,11 +229,17 @@ class ConfStr(Enum):
 
 @unique
 class FixedCsvTitle(Enum):
+    case_id = "脚本ID"
+    pms_case_id = "PMS用例ID"
+    case_level = "用例级别"
+    case_type = "用例类型"
+    device_type = "设备类型"
+    case_from = "用例来源"
+    online_obj = "上线对象"
+    test_level = "测试级别"
     skip_reason = "跳过原因"
     fixed = "确认修复"
     removed = "废弃用例"
-    pms_case_id = "PMS用例ID"
-    case_level = "用例级别"
 
 
 @unique

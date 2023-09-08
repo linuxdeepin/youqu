@@ -8,23 +8,17 @@
 # pylint: disable=C0301,C0115,R0903,C0103,C0201,R1710,R0914,W1514,R0914,R1702
 import json
 import os
-import re
 from configparser import ConfigParser
 from os.path import splitext
-from time import strftime
-from pprint import pprint
 
+from setting.globalconfig import FixedCsvTitle
 from setting.globalconfig import GetCfg
 from setting.globalconfig import GlobalConfig
-from src  import logger
+from src import logger
 from src.pms._base import MAX_CASE_NUMBER
 from src.pms._base import _Base
 from src.pms._base import _unicode_to_cn
-
-
-class CsvTitle:
-    case_id = "PMS用例ID"
-    case_level = "用例级别"
+from src.rtk._base import transform_app_name
 
 
 class Pms2Csv(_Base):
@@ -32,33 +26,51 @@ class Pms2Csv(_Base):
 
     __author__ = "huangmingqiang@uniontech.com"
 
-    def __init__(self):
-        super().__init__()
-        self.APP_NAME = GlobalConfig.APP_NAME
-        self.project_dir = f"autotest_{self.APP_NAME.replace('-', '_')}"
-        if not os.path.exists(f"{GlobalConfig.APPS_PATH}/{self.project_dir}"):
-            logger.error(f"{self.project_dir} 似乎不存在 !")
-            raise ValueError
+    config_error_log = "请检查您传递的 '命令行参数' 或 setting/globalconfig.ini 里的配置项"
 
-        self.PMS_USER = GlobalConfig.PMS_USER
-        self.PMS_PASSWORD = GlobalConfig.PMS_PASSWORD
+    def __init__(self, app_name=None, user=None, password=None, pms_link_csv=None):
+        super().__init__(user=user, password=password)
+        self.walk_dir = (
+            f"{GlobalConfig.APPS_PATH}/{transform_app_name(app_name)}"
+            if app_name
+            else GlobalConfig.APPS_PATH
+        )
 
         conf = ConfigParser()
         conf.read(GlobalConfig.GLOBAL_CONFIG_FILE_PATH)
-        self.csv_names = conf.options("csv_link_pms_id")
-        self.csv_link_cfg = GetCfg(
-            GlobalConfig.GLOBAL_CONFIG_FILE_PATH, "csv_link_pms_id"
+        ini_csv_names = conf.options("pmsctl-pms_link_csv")
+        ini_csv_pms_map = GetCfg(
+            GlobalConfig.GLOBAL_CONFIG_FILE_PATH, "pmsctl-pms_link_csv"
         )
-        csv_link_lib_cfg = GetCfg(
-            GlobalConfig.GLOBAL_CONFIG_FILE_PATH, "csv_link_pms_lib"
-        )
-        self.CASE_FROM = csv_link_lib_cfg.get("CASE_FROM", default="caselib")
+        cli_csv_pms_map = {}
+        cli_csv_names = []
+        if pms_link_csv:
+            _cli_csv_names = pms_link_csv.split("/")
+            for i in _cli_csv_names:
+                pls = i.split(":")
+                if len(pls) != 2:
+                    raise ValueError("--pms_link_csv 参数的值可能有问题")
+                csv_name, pms_product_id = pls
+                cli_csv_names.append(csv_name.strip())
+                cli_csv_pms_map[csv_name.strip()] = pms_product_id.strip()
 
-    def get_data(self, app_case_id):
+        self.csv_names = cli_csv_names or ini_csv_names
+        self.csv_link_cfg = cli_csv_pms_map or ini_csv_pms_map
+
+        if not self.csv_names:
+            raise ValueError(self.config_error_log)
+
+        self.pms_mark = GetCfg(
+            f"{GlobalConfig.SETTING_PATH}/pmsmark.ini", "pms-mark-to-csv-mark"
+        )
+
+    def get_data_from_pms(self, app_case_id):
         """获取pms上数据"""
+        if not app_case_id:
+            raise ValueError(self.config_error_log)
         case_url = (
-            f"https://pms.uniontech.com/{self.CASE_FROM}-browse-"
-            f'{app_case_id}-{"-" if self.CASE_FROM == "testcase" else ""}all-0-id_desc-0-{MAX_CASE_NUMBER}.json'
+            f"https://pms.uniontech.com/{GlobalConfig.CASE_FROM}-browse-"
+            f'{app_case_id}-{"-" if GlobalConfig.CASE_FROM == "testcase" else ""}all-0-id_desc-0-{MAX_CASE_NUMBER}.json'
         )
         res = self.rx.open_url(case_url)
         res_str = _unicode_to_cn(res)
@@ -66,149 +78,142 @@ class Pms2Csv(_Base):
         try:
             res_dict = json.loads(res_str)
         except json.decoder.JSONDecodeError:
-            logger.error(f"爬取pms数据失败, 请检查模块 id 是否为: {app_case_id}")
+            logger.error(f"获取pms数据失败, {self.config_error_log}")
             return
 
         cases = res_dict.get("data").get("cases")
         res_data = {}
         for i in cases:
-            case_id = cases.get(i).get("id")
-            case_level = cases.get(i).get("pri")
-            case_title = cases.get(i).get("title")
-            # 从用例标题中取出自动化用例id [001]
-            at_case_id = re.findall(r"\[(\d{3})\]", case_title)
-            # 如果id存在，并且之前没有出现过
-            # 如果出现相同的id，只取第一个
-            if at_case_id and at_case_id[0] not in res_data.keys():
-                # 组装成一个字典
-                res_data[at_case_id[0]] = {
-                    "case_id": case_id,  # 用例在PMS上ID
-                    "case_level": case_level,  # 用例级别
-                    "case_title": case_title,  # 用例标题
+            case = cases.get(i)
+            case_id = case.get("id")
+            case_level = case.get("pri")
+            case_type = self.pms_mark.get(case.get("type"))
+            if case_type:
+                res_data[case_id] = {
+                    "case_level": f"L{case_level}",
+                    "case_type": case_type,
                 }
         if not res_data:
-            logger.error("未从pms获取到数据, 请检查配置")
+            logger.error(f"未从pms获取到数据, {self.config_error_log}")
             raise ValueError
         return res_data
 
     def read_csv(self):
         """读取本地csv文件数据"""
         csv_path_dict = {}
-        # 默认的csv文件备份路径
-        csv_bak_path = f"{GlobalConfig.REPORT_PATH}/csv_back"
+        csv_bak_path = f"{GlobalConfig.REPORT_PATH}/pms2csv_back"
         if not os.path.exists(csv_bak_path):
             os.makedirs(csv_bak_path)
-        for root, _, files in os.walk(f"{GlobalConfig.APPS_PATH}/{self.project_dir}"):
+        for root, _, files in os.walk(self.walk_dir):
             for file in files:
-                # 必须是标签csv文件，排除一些ddt的csv文件
                 if file.endswith(".csv") and splitext(file)[0] in self.csv_names:
                     csv_path_dict[splitext(file)[0]] = f"{root}/{file}"
-                    # 备份csv文件
                     os.system(
-                        f"cp {root}/{file} {csv_bak_path}/{strftime('%Y%m%d%H%M%S')}_{file}"
+                        f"cp {root}/{file} {csv_bak_path}/{GlobalConfig.TIME_STRING}_{file}"
                     )
         if not csv_path_dict:
-            logger.error(f"{self.APP_NAME} 目录下未找到csv文件")
-            raise ValueError
+            raise ValueError(f"{self.walk_dir} 目录下未找到csv文件")
 
-        pms_id_index = None
-        level_index = None
         res_tags = {}
-        csv_title_dict = {}
+        csv_heads_dict = {}
         for csv_name in csv_path_dict:
-            with open(csv_path_dict.get(csv_name), "r") as f:
+            with open(csv_path_dict.get(csv_name), "r", encoding="utf-8") as f:
                 txt_list = f.readlines()
-            csv_titles = txt_list[0].strip().split(",")
-            for index, title in enumerate(csv_titles):
-                # 找到在表头中对应的索引
-                if title.strip() == CsvTitle.case_id:
-                    pms_id_index = index - 1
-                elif title.strip() == CsvTitle.case_level:
-                    level_index = index - 1
+            csv_heads = txt_list[0].strip().split(",")
 
-            # 读取到所有的标签
+            csv_head_index_map = {}
+            for index, title in enumerate(csv_heads):
+                for i in FixedCsvTitle:
+                    if i.value == title.strip():
+                        csv_head_index_map[i.name] = {
+                            "head_name": i.value,
+                            "head_index": index,
+                        }
+
             taglines = [txt.strip().split(",") for txt in txt_list[1:]]
-            id_tags_dict = {f"{int(i[0]):0>3}": i[1:] for i in taglines if i[0]}
+            id_tags_dict = {i[0]: i for i in taglines if i[0]}
             res_tags[csv_name] = id_tags_dict
-            # csv文件的表头
-            csv_title_dict[csv_name] = csv_titles
-        # 将这些数据无情的返回, 其实可以进一步将这些返回数据整合一下, 但是累了, 就这样吧
-        return pms_id_index, level_index, res_tags, csv_path_dict, csv_title_dict
+            csv_heads_dict[csv_name] = csv_head_index_map
+        return res_tags, csv_heads_dict, csv_path_dict
 
     def compare_pms_to_csv(self):
         """对比pms上数据和本地csv文件数据"""
-        # 接收csv文件里面的值
-        (
-            pms_id_index,
-            level_index,
-            _res_tags,
-            csv_path_dict,
-            csv_title_dict,
-        ) = self.read_csv()
-        # 将csv文件里面的数据和pms上爬取的数据进行对比
-        new_csv_tags_map = {}
-        for csv_name in _res_tags:
-            # 每个csv文件处理一次
-            pms_tags_dict = self.get_data(self.csv_link_cfg.get(csv_name))
-            # 如果pms上没有爬取到，继续处理下一个csv文件
+        (res_tags, csv_heads_dict, csv_path_dict) = self.read_csv()
+        new_csv_file_tags = {}
+        for csv_name in res_tags:
+            product_id = self.csv_link_cfg.get(csv_name)
+            pms_tags_dict = self.get_data_from_pms(product_id)
             if pms_tags_dict is None:
                 continue
-            csv_tags_dict = _res_tags.get(csv_name)
-            new_csv_tags = {}
-            for csv_tag_id in csv_tags_dict:
-                csv_tags = csv_tags_dict.get(csv_tag_id)
-                # 拿着csv里面的id去和pms上的id匹配
-                for pms_tag_id in pms_tags_dict:
-                    if pms_tag_id == csv_tag_id:
-                        pms_tags = pms_tags_dict.get(pms_tag_id)
-                        case_id = pms_tags.get("case_id")
+            csv_tags_dict = res_tags.get(csv_name)
+            csv_head_dict = csv_heads_dict.get(csv_name)
+
+            pms_case_id_index = case_level_index = case_type_index = None
+
+            pms_case_id_name = csv_head_dict.get(FixedCsvTitle.pms_case_id.name)
+            if pms_case_id_name:
+                pms_case_id_index = pms_case_id_name.get("head_index")
+            case_level_name = csv_head_dict.get(FixedCsvTitle.case_level.name)
+            if case_level_name:
+                case_level_index = case_level_name.get("head_index")
+            case_type_name = csv_head_dict.get(FixedCsvTitle.case_type.name)
+            if case_type_name:
+                case_type_index = case_type_name.get("head_index")
+
+            new_csv_tags = []
+            new_csv_tags.append(
+                [i.get("head_name") for i in list(csv_head_dict.values())]
+            )
+            for csv_case_id in csv_tags_dict:
+                for pms_case_id in pms_tags_dict:
+                    if pms_case_id == csv_case_id:
+                        pms_tags = pms_tags_dict.get(pms_case_id)
                         case_level = pms_tags.get("case_level")
-                        case_level = f"L{case_level}"
-                        # 循环处理每个字段
-                        for target_index, value, title_name in [
-                            [pms_id_index, case_id, CsvTitle.case_id],
-                            [level_index, case_level, CsvTitle.case_level],
-                        ]:
-                            # 如果没有索引，说明原来csv文件中没有这一列，直接添加到最后一列
-                            if target_index is None:
-                                csv_tags.append(value)
-                                if CsvTitle.case_id not in csv_title_dict.get(csv_name):
-                                    csv_title_dict[csv_name].append(title_name)
-                            else:
-                                # 如果有索引，直接修改原来的数据
-                                csv_tags[target_index] = value
+                        case_type = pms_tags.get("case_type")
+                        flag = False
+                        if (
+                                pms_case_id_index
+                                and csv_tags_dict[csv_case_id][pms_case_id_index]
+                                != pms_case_id
+                        ):
+                            csv_tags_dict[csv_case_id][pms_case_id_index] = pms_case_id
+                            flag = True
+                        if (
+                                case_level_index
+                                and csv_tags_dict[csv_case_id][case_level_index]
+                                != case_level
+                        ):
+                            csv_tags_dict[csv_case_id][case_level_index] = case_level
+                            flag = True
+                        if (
+                                case_type_index
+                                and csv_tags_dict[csv_case_id][case_type_index] != case_type
+                        ):
+                            csv_tags_dict[csv_case_id][case_type_index] = case_type
+                            flag = True
+
+                        new_tags = csv_tags_dict[csv_case_id]
+                        if flag:
+                            logger.info(
+                                f"pms case id: {pms_case_id}, new tags:{new_tags}"
+                            )
+                        new_csv_tags.append(new_tags)
                         break
                 else:
-                    # 如果此AT id没有找到对应的，那需要将csv此行补位空字符串
-                    for target_index in [pms_id_index, level_index]:
-                        # 如果没有索引，说明原来csv文件中没有这一列，
-                        # 添加一个空字符串到最后一列
-                        if target_index is None:
-                            csv_tags.append("")
-                new_csv_tags[csv_tag_id] = csv_tags
-            new_csv_tags_map[csv_name] = new_csv_tags
+                    new_csv_tags.append(csv_tags_dict[csv_case_id])
 
-        return new_csv_tags_map, csv_path_dict, csv_title_dict
+            new_csv_file_tags[csv_path_dict.get(csv_name)] = new_csv_tags
+        return new_csv_file_tags
 
     def write_new_csv(self):
         """写新的csv文件"""
-        new_csv_tags_map, csv_path_dict, csv_title_dict = self.compare_pms_to_csv()
-        # 将 new_csv_tags_map 里面的数据写成一个新的csv文件
-        for csv_name in new_csv_tags_map:
-            csv_path = csv_path_dict.get(csv_name)
-            new_csv_tags = new_csv_tags_map.get(csv_name)
-            new_csv_tags_list = []
-            # 先把表头放进去
-            new_csv_tags_list.append(",".join(csv_title_dict.get(csv_name)) + "\n")
-            # 组装成一行行的数据
-            for _id in new_csv_tags:
-                new_csv_list = new_csv_tags.get(_id)
-                new_csv_list.insert(0, _id)
-                new_csv_tags_list.append(",".join(new_csv_list) + "\n")
-            with open(csv_path, "w+", encoding="utf-8") as f:
-                f.writelines(new_csv_tags_list)
-            pprint(new_csv_tags_list, indent=4)
-        logger.info("同步完成")
+        new_csv_file_tags = self.compare_pms_to_csv()
+        for csv_file in new_csv_file_tags:
+            new_csv_tags = new_csv_file_tags.get(csv_file)
+            with open(csv_file, "w+", encoding="utf-8") as f:
+                for tags in new_csv_tags:
+                    f.write(",".join(tags) + "\n")
+            logger.info(f"同步完成: {csv_file}")
 
 
 if __name__ == "__main__":

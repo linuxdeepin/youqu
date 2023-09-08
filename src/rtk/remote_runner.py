@@ -96,7 +96,7 @@ class RemoteRunner:
         if not cli_client_dict and not self.ini_client_dict:
             raise ValueError(
                 "未获取到测试机信息,请检查 setting/remote.ini 中 CLIENT LIST 是否配置，"
-                "或通过命令行 python3 manage.py remote -c user@ip:password 传入。"
+                "或通过命令行 remote -c user@ip:password 传入。"
             )
 
         self.default = {

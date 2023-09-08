@@ -14,9 +14,9 @@ from os import listdir
 from os import makedirs
 from os import system
 from os.path import exists
+from os.path import expanduser
 from os.path import isfile
 from os.path import join
-from os.path import expanduser
 from time import sleep
 from tkinter import Tk
 
@@ -81,8 +81,10 @@ class LocalRunner:
             project_name=None,
             build_location=None,
             line=None,
-            exportcsv=None,
+            collection_only=None,
             autostart=None,
+            pyid2csv=None,
+            export_csv_file=None,
             **kwargs,
     ):
         logger("INFO")
@@ -124,9 +126,11 @@ class LocalRunner:
         self.project_name = project_name
         self.build_location = build_location
         self.line = line
-        self.exportcsv = exportcsv
+        self.collection_only = collection_only
+        self.pyid2csv = pyid2csv or GlobalConfig.PY_ID_TO_CSV
+        self.export_csv_file = export_csv_file or GlobalConfig.EXPORT_CSV_FILE
 
-        if not self.default.get(Args.debug.value) and not self.exportcsv:
+        if not self.default.get(Args.debug.value) and not self.collection_only:
             screen = Tk()
             x = screen.winfo_screenwidth()
             y = screen.winfo_screenheight()
@@ -231,8 +235,13 @@ class LocalRunner:
                 cmd.extend(["-k", f"'{default.get(Args.keywords.value)}'"])
             if default.get(Args.tags.value):
                 cmd.extend(["-m", f"'{default.get(Args.tags.value)}'"])
-
-        if self.exportcsv:
+        if app_dir and app_dir != GlobalConfig.APPS_PATH:
+            cmd.extend(["--app_name", app_dir])
+        if self.pyid2csv:
+            cmd.extend(["--pyid2csv", "--verbosity=-1"])
+        if self.export_csv_file:
+            cmd.extend(["--export_csv_file", self.export_csv_file])
+        if self.collection_only:
             cmd.append("--co")
             return cmd
 
@@ -305,7 +314,6 @@ class LocalRunner:
                 self.make_dir(
                     join(GlobalConfig.REPORT_PATH, GlobalConfig.ReportFormat.JSON)
                 )
-
         return cmd
 
     def change_working_dir(self):
@@ -324,7 +332,7 @@ class LocalRunner:
                     print(f"WorkSpace: \n{case_path}")
                     chdir(case_path)
                     return working_dir
-            raise EnvironmentError(f"apps目录下未找到指定的{app_name}")
+            raise EnvironmentError(f"apps目录下未找到指定的 {app_name}")
         return GlobalConfig.APPS_PATH
 
     def local_run(self):
@@ -353,7 +361,7 @@ class LocalRunner:
             return
         pytest.main([i.strip("'") for i in run_test_cmd_list[1:]])
 
-        if self.exportcsv:
+        if self.collection_only:
             return
         if self.project_name and self.build_location and self.line:
             self.write_json(
@@ -393,7 +401,9 @@ class LocalRunner:
 
         if exists(letmego.conf.setting.RUNNING_MAN_FILE):
             letmego.unregister_autostart_service()
-            letmego.clean_running_man()
+            letmego.clean_running_man(
+                copy_to=f"{GlobalConfig.REPORT_PATH}/_running_man_{GlobalConfig.TIME_STRING}.log"
+            )
 
     @staticmethod
     def get_result():
@@ -406,7 +416,7 @@ class LocalRunner:
         res = Counter([results_dict.get(i).get("result") for i in results_dict])
         total = sum(res.values())
         skiped = res.get("skip", 0)
-        total = total - skiped  # 剔除skip的用例
+        total = total - skiped
         passed = res.get("pass", 0)
         failed = total - passed
         pass_rate = f"{round((passed / total) * 100, 1)}%" if passed else "0%"

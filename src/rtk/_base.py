@@ -17,9 +17,9 @@ class SubCmd(Enum):
     """SubCmd"""
     run = "run"
     remote = "remote"
-    pms = "pms"
+    pmsctl = "pmsctl"
     startapp = "startapp"
-    exportcsv = "exportcsv"
+    csvctl = "csvctl"
 
 
 @unique
@@ -62,9 +62,14 @@ class Args(Enum):
     client_password = "client_password"
     parallel = "parallel"
     autostart = "autostart"
+    pyid2csv = "pyid2csv"
+    export_csv_file = "export_csv_file"
+    pms2csv = "pms2csv"
+    pms_link_csv = "pms_link_csv"
+    send2task = "send2task"
 
 
-def transform_app_name(real_app_name):
+def  transform_app_name(real_app_name):
     """转换 app_name"""
     if not real_app_name:
         return None

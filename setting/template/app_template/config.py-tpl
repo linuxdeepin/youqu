@@ -65,7 +65,12 @@
 ##    basic_frame_tag = dep_cfg.get("autotest-basic-frame")
 
 ##    if _GlobalConfig.current_tag != basic_frame_tag:
-##        logger.error("应用库与基础框架对应版本不一致！")
+##        logger.error(
+##            "应用库与基础框架对应版本不一致!"
+##            f"YouQu版本为:{_GlobalConfig.current_tag}，应用库版本为:{basic_frame_tag}"
+##            "如需如果您确认当前使用的YouQu版本正确，请检查您的应用工程根目录下control文件"
+##            "记录的依赖的YouQu版本是否一致~"
+##        )
 
 
 ##Config = _Config()

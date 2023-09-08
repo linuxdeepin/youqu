@@ -12,6 +12,7 @@ from time import strftime
 from configparser import ConfigParser
 
 from setting.globalconfig import GlobalConfig
+from setting.globalconfig import FixedCsvTitle
 
 
 class StartApp:
@@ -53,7 +54,7 @@ class StartApp:
                     shutil.move(f"{root}/{file}", f"{root}/{new_file}")
                     file = new_file
 
-                if ".py" in file:
+                if ".py" in file or ".csv" in file:
                     with open(f"{root}/{file}", "r") as f:
                         codes = f.readlines()
                     new_codes = []
@@ -78,6 +79,10 @@ class StartApp:
                             code = re.sub(r"\${DATE}", strftime("%Y/%m/%d"), code)
                         if "${TIME}" in code:
                             code = re.sub(r"\${TIME}", strftime("%H:%M:%S"), code)
+                        if "${FIXEDCSVTITLE}" in code:
+                            code = re.sub(
+                                r"\${FIXEDCSVTITLE}", ",".join([i.value for i in FixedCsvTitle]), code
+                            )
                         new_codes.append(code)
                     with open(f"{root}/{file}", "w") as f:
                         f.writelines([i for i in new_codes])

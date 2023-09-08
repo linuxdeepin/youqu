@@ -78,6 +78,11 @@ class Manage:
             client_password=None,
             parallel=None,
             autostart=None,
+            pyid2csv=None,
+            export_csv_file=None,
+            pms2csv=None,
+            pms_link_csv=None,
+            send2task=None,
     ):
         self.default_app = app
         self.default_keywords = keywords
@@ -116,6 +121,11 @@ class Manage:
         self.default_client_password = client_password
         self.default_parallel = parallel
         self.default_autostart = autostart
+        self.default_pyid2csv = pyid2csv
+        self.default_export_csv_file = export_csv_file
+        self.default_pms2csv = pms2csv
+        self.default_pms_link_csv = pms_link_csv
+        self.default_send2task = send2task
 
         say(GlobalConfig.PROJECT_NAME)
         version_font = "slick"
@@ -135,8 +145,8 @@ class Manage:
         subparsers = parser.add_subparsers(help="子命令")
         sub_parser_remote = subparsers.add_parser(SubCmd.remote.value)
         sub_parser_run = subparsers.add_parser(SubCmd.run.value)
-        sub_parser_pms = subparsers.add_parser(SubCmd.pms.value)
-        sub_parser_export_csv = subparsers.add_parser(SubCmd.exportcsv.value)
+        sub_parser_pms = subparsers.add_parser(SubCmd.pmsctl.value)
+        sub_parser_csv = subparsers.add_parser(SubCmd.csvctl.value)
 
         help_tip = (
             f"\033[0;32mmanage.py\033[0m 支持 \033[0;32m{[i.value for i in SubCmd]}\033[0m 命令, "
@@ -152,15 +162,19 @@ class Manage:
         elif self.cmd_args[0] == SubCmd.run.value:
             _local_kwargs, _ = self.local_runner(parser, sub_parser_run)
             LocalRunner(**_local_kwargs).local_run()
-        elif self.cmd_args[0] == SubCmd.pms.value:
+        elif self.cmd_args[0] == SubCmd.pmsctl.value:
             self.pms_control(parser, sub_parser_pms)
-        elif self.cmd_args[0] == SubCmd.exportcsv.value:
-            self.export_csv(parser, sub_parser_export_csv)
+        elif self.cmd_args[0] == SubCmd.csvctl.value:
+            self.csv_control(parser, sub_parser_csv)
         elif self.cmd_args[0] == SubCmd.startapp.value:
+            start_config_log = f"{SubCmd.startapp.value} 后面直接加工程名称,工程名称以 'autotest_' 开头"
             try:
+                if self.cmd_args[1] in ("-h", "--help"):
+                    print(start_config_log)
+                    sys.exit(0)
                 self.start_app(self.cmd_args[1])
             except IndexError:
-                print(f"参数异常 {SubCmd.startapp.value} 后面需要跟参数")
+                logger.error(f"参数异常: {start_config_log}")
         elif self.cmd_args[0] in ["-h", "--help"]:
             print(help_tip)
         else:
@@ -185,7 +199,7 @@ class Manage:
             help="搭建测试环境,如果为yes，不管send_code是否为yes都会发送代码到测试机."
         )
         sub_parser_remote.add_argument(
-            "-p", "--client_password", default="", help="测试机密码（全局）"
+            "-cp", "--client_password", default="", help="测试机密码（全局）"
         )
         sub_parser_remote.add_argument(
             "-y", "--parallel", default="",
@@ -274,10 +288,10 @@ class Manage:
             "--deb_path", default="", help="需要安装deb包的本地路径"
         )
         sub_parser_run.add_argument(
-            "--pms_user", default="", help="pms 用户名"
+            "-u", "--pms_user", default="", help="pms 用户名"
         )
         sub_parser_run.add_argument(
-            "--pms_password", default="", help="pms 密码"
+            "-p", "--pms_password", default="", help="pms 密码"
         )
         sub_parser_run.add_argument(
             "--suite_id", default="", help="pms 测试套ID"
@@ -309,7 +323,7 @@ class Manage:
             "--line", default="", help="执行的业务线（写入json文件）"
         )
         sub_parser_run.add_argument(
-            "--autostart", default="", help="用例执行程序注册到开机自启服务"
+            "--autostart", default="", help="重启类场景开启letmego执行方案"
         )
         args = parser.parse_args()
         local_kwargs = {
@@ -359,7 +373,22 @@ class Manage:
     def pms_control(self, parser=None, sub_parser_pms=None):
         """pms相关功能命令行参数"""
         sub_parser_pms.add_argument(
-            "--pms2csv", choices=["yes", ""], default="", help="爬取数据到csv"
+            "-a", "--app", default="", help="应用名称：deepin-music"
+        )
+
+        sub_parser_pms.add_argument(
+            "-u", "--pms_user", default="", help="pms 用户名"
+        )
+        sub_parser_pms.add_argument(
+            "-p", "--pms_password", default="", help="pms 密码"
+        )
+        sub_parser_pms.add_argument(
+            "-pls", "--pms_link_csv", default="",
+            help="pms 和 csv 的映射关系，比如：music:81/album:82，多个配置使用'/'分隔"
+        )
+        sub_parser_pms.add_argument(
+            "-p2c", "--pms2csv", action='store_const', const=True, default=False,
+            help="从PMS爬取用例标签到csv文件"
         )
         sub_parser_pms.add_argument(
             "--send2task",
@@ -374,16 +403,29 @@ class Manage:
             help="触发者"
         )
         args = parser.parse_args()
-        csv = args.pms2csv
-        send_to_task = args.send2task
-        task_id = args.task_id if args.task_id else GlobalConfig.TASK_ID
-        trigger = args.trigger if args.trigger else GlobalConfig.TRIGGER
-        if csv:
-            Pms2Csv().write_new_csv()
-        elif send_to_task and task_id and trigger == "hand":
+        pms_kwargs = {
+            Args.app_name.value: args.app or self.default_app,
+            Args.pms_user.value: args.pms_user or self.default_pms_user,
+            Args.pms_password.value: args.pms_password or self.default_pms_password,
+            Args.pms2csv.value: args.pms2csv or self.default_pms2csv,
+            Args.pms_link_csv.value: args.pms_link_csv or self.default_pms_link_csv,
+            Args.send2task.value: args.send2task or self.default_send2task,
+            Args.task_id.value: args.task_id or GlobalConfig.TASK_ID,
+            Args.trigger.value: args.trigger or GlobalConfig.TRIGGER,
+        }
+        if pms_kwargs.get(Args.pms2csv.value):
+            Pms2Csv(
+                app_name=pms_kwargs.get(Args.app_name.value),
+                user=pms_kwargs.get(Args.pms_user.value) or GlobalConfig.PMS_USER,
+                password=pms_kwargs.get(Args.pms_password.value) or GlobalConfig.PMS_PASSWORD,
+                pms_link_csv=pms_kwargs.get(Args.pms_link_csv.value),
+            ).write_new_csv()
+        elif pms_kwargs.get(Args.send2task.value) \
+                and pms_kwargs.get(Args.task_id.value) \
+                and pms_kwargs.get(Args.trigger.value) == "hand":
             Send2Pms().send2pms(
-                Send2Pms.case_res_path(task_id),
-                Send2Pms.data_send_result_csv(task_id)
+                Send2Pms.case_res_path(pms_kwargs.get(Args.task_id.value)),
+                Send2Pms.data_send_result_csv(pms_kwargs.get(Args.trigger.value))
             )
 
     @staticmethod
@@ -394,26 +436,40 @@ class Manage:
             start.copy_template_to_apps()
             start.rewrite()
 
-    def export_csv(self, parser=None, sub_parser_export_csv=None):
-        """导出 csv"""
-        sub_parser_export_csv.add_argument(
+    def csv_control(self, parser=None, sub_parser_csv=None):
+        """csv相关功能命令参数"""
+        sub_parser_csv.add_argument(
             "-a", "--app", default="", help="应用名称：deepin-music"
         )
-        sub_parser_export_csv.add_argument(
+        sub_parser_csv.add_argument(
             "-k", "--keywords", default="", help="用例的关键词"
         )
-        sub_parser_export_csv.add_argument(
+        sub_parser_csv.add_argument(
             "-t", "--tags", default="", help="用例的标签"
         )
+        sub_parser_csv.add_argument(
+            "-p2c", "--pyid2csv", action='store_const', const=True, default=False,
+            help="将用例py文件的case id同步到对应的csv文件中"
+        )
+        sub_parser_csv.add_argument(
+            "-ec", "--export_csv_file", default="",help="导出csv文件名称，比如：case_list.csv"
+        )
         args = parser.parse_args()
-        export_kwargs = {
+        csv_kwargs = {
             Args.app_name.value: args.app or self.default_app,
             Args.keywords.value: args.keywords or self.default_keywords,
             Args.tags.value: args.tags or self.default_tags,
-            "exportcsv": True
+            Args.pyid2csv.value: args.pyid2csv or self.default_pyid2csv,
+            Args.export_csv_file.value: args.export_csv_file or self.default_export_csv_file,
+            "collection_only": True
         }
-        LocalRunner(**export_kwargs).local_run()
-
+        if csv_kwargs.get(Args.pyid2csv.value) or GlobalConfig.PY_ID_TO_CSV:
+            from src.csvctl import CsvControl
+            CsvControl(csv_kwargs.get(Args.app_name.value)).delete_mark_in_csv_if_not_exists_py()
+        if csv_kwargs.get(Args.pyid2csv.value) or csv_kwargs.get(Args.export_csv_file.value):
+            LocalRunner(**csv_kwargs).local_run()
+        else:
+            logger.error("需要传递一些参数，您可以使用 -h 或 --help 查看支持的参数")
 
 if __name__ == "__main__":
     try:

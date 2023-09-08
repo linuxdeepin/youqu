@@ -9,6 +9,7 @@ new
 fix
 
 - 对 docs 里面细化了远程执行章节的描述；
+- 多 docs 里面优化了标签化管理章节的描述；
 
 ## 2.1.5（2023/8/31）
 
@@ -369,7 +370,7 @@ new
 
     ```python
     @pytest.mark.count(2)
-    def test_music_001():
+    def test_music_679537():
         pass
     ```
 
@@ -382,7 +383,7 @@ new
 - ​	image_utils 增加函数 save_temporary_picture，支持指定屏幕区域截图并返回图片存放的本地路径，后续使用 assert_image_exist 进行断言
 
   - ```Python
-    def test_music_001(self):
+    def test_music_679537(self):
         pic_path = DeepinMusicWidget.save_temporary_picture(x, y, width, height)
         ...... # 中间操作
         self.assert_image_exit(pic_path)
@@ -391,7 +392,7 @@ new
 - button_center 新增 btn_size 获取控件左上角坐标及长宽，用于动态的截取元素的图片，可用于定位断言
 
   - ```python
-    def test_music_001(self):
+    def test_music_679537(self):
         pic_path = DeepinMusicWidget.save_temporary_picture(*DeepinMusicWidget().ui.btn_size("所有音乐按钮"))
         ...... # 中间操作
         self.assert_image_exit(pic_path)

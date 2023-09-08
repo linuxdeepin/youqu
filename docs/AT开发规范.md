@@ -29,9 +29,9 @@ AT 开发规范是根据自动化测试运行两年多来，遇到问题解决�
   举例：
 
   ```python
-  # test_music_001.py
+  # test_music_679537.py
   
-  def test_music_001():
+  def test_music_679537():
       """用例标题"""
       pass
   ```
@@ -45,9 +45,9 @@ AT 开发规范是根据自动化测试运行两年多来，遇到问题解决�
   如果你将上例写成了这样:
 
   ```python
-  # test_music_001.py
+  # test_music_679537.py
   
-  def test_movie_001():
+  def test_movie_679537():
       """用例标题"""
       pass
   ```
@@ -191,7 +191,7 @@ class TitleWidget(BaseWidget):
 class TestMusic(BaseCase):
     """音乐用例"""
     
-    def test_music_001(self):
+    def test_music_679537(self):
         """音乐启动"""
 ```
 
@@ -209,13 +209,13 @@ class TestMusic(BaseCase):
   class TestMusic(BaseCase):
       """音乐用例"""
       
-      def test_music_001_1(self):
+      def test_music_679537_1(self):
           """任务栏启动音乐"""
           
-      def test_music_001_2(self):
+      def test_music_679537_2(self):
           """启动器启动音乐"""    
           
-      def test_music_001_3(self):
+      def test_music_679537_3(self):
           """桌面启动音乐"""
   ```
 
@@ -223,7 +223,7 @@ class TestMusic(BaseCase):
 
 - 用例函数以 test 开头，遵循蛇形命名规范，中间为用例的模块名称，后面加用例 ID，最后加测试点序号，即 `test_${module}_${case_id}[_${index}]` ；
 
-  比如：`test_music_001_1`，index 从 1 开始。
+  比如：`test_music_679537_1`，index 从 1 开始。
 
 - 函数功能说明里面写用例标题，直接复制 PMS 上用例标题即可，注意用三对双引号，不要用其他注释，更不要用井号注释写用例标题；
 
@@ -241,7 +241,7 @@ class TestMusic(BaseCase):
   class TestMusic(BaseCase):
       """音乐用例"""
   
-      def test_music_182(self):
+      def test_music_679537(self):
           """演唱者-平铺视图下进入演唱者详情页"""
   
           # 1
@@ -258,7 +258,7 @@ class TestMusic(BaseCase):
   class TestMusic(BaseCase):
       """音乐用例"""
       
-      def test_music_182(self):
+      def test_music_679537(self):
           """演唱者-平铺视图下进入演唱者详情页"""
           music = DeepinMusicWidget()
           music.click_singer_btn_in_music_by_ui()
