@@ -5,12 +5,14 @@
 
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
+import letmego
+
 from src import sleep, log
 from src import Src
 from src.custom_exception import ElementNotFound
 from public.dde_launcher_public_widget.config import Config
 
-
+@letmego.mark
 @log
 # pylint: disable=too-many-ancestors
 class DdeLauncherPublicWidget(Src):

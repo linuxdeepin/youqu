@@ -7,6 +7,8 @@
 from functools import wraps
 from time import sleep
 
+import letmego
+
 from public.dde_dock_public_widget.config import Config
 from setting.globalconfig import GlobalConfig
 from src import ApplicationError, TemplateElementNotFound
@@ -398,7 +400,7 @@ class BaseWidget(Src):
         logger.info("任务栏右键“新建窗口“")
         sleep(0.5)
 
-
+@letmego.mark
 @log
 # pylint: disable=too-many-public-methods
 class DdeDockPublicWidget(BaseWidget):

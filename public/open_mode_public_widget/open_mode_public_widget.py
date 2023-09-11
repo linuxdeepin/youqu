@@ -5,11 +5,13 @@
 
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
+import letmego
+
 from src import logger, log
 from src import Src
 from public.open_mode_public_widget.config import Config
 
-
+@letmego.mark
 @log
 # pylint: disable=too-many-ancestors
 class OpenModePublicWidget(Src):

@@ -15,6 +15,7 @@ from configparser import ConfigParser
 from configparser import NoOptionError
 
 import dbus
+import letmego
 
 from src.custom_exception import TemplateElementNotFound, ElementNotFound
 from src.custom_exception import NoIconOfThisSize
@@ -43,6 +44,7 @@ def dfm_warning(func):
 
 
 # pylint: disable=too-many-ancestors
+@letmego.mark
 @log
 class _DdeDesktopPublicBaseWidget(Src, RightMenuPublicWidget):
     """

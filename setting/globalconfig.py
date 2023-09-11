@@ -205,6 +205,8 @@ class _GlobalConfig:
     DOCS_URL = "https://linuxdeepin.github.io/deepin-autotest-framework"
     PyPI_URL = "https://pypi.org/project/youqu"
 
+    LETMEGO_DEBUG = True
+
 
 GlobalConfig = _GlobalConfig()
 

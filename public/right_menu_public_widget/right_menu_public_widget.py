@@ -5,13 +5,15 @@
 
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
+import letmego
+
 from src.image_utils import ImageUtils
 from src import sleep, log
 from src import logger
 from src import ShortCut
 from public.right_menu_public_widget.config import Config
 
-
+@letmego.mark
 @log
 # pylint: disable=too-many-public-methods
 class RightMenuPublicWidget(ImageUtils, ShortCut):

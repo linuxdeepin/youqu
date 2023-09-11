@@ -44,6 +44,10 @@ from funnylog.conf import setting as log_setting
 
 from setting.globalconfig import GlobalConfig
 
+letmego.conf.setting.PASSWORD = GlobalConfig.PASSWORD
+letmego.conf.setting.RUNNING_MAN_FILE = f"{GlobalConfig.REPORT_PATH}/_running_man.log"
+letmego.conf.setting.DEBUG = GlobalConfig.LETMEGO_DEBUG
+
 log_setting.LOG_FILE_PATH = GlobalConfig.REPORT_PATH
 log_setting.CLASS_NAME_STARTSWITH = GlobalConfig.CLASS_NAME_STARTSWITH
 log_setting.CLASS_NAME_ENDSWITH = GlobalConfig.CLASS_NAME_ENDSWITH

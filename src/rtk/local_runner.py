@@ -23,6 +23,7 @@ from tkinter import Tk
 import pytest
 from allure_custom import AllureCustom
 from allure_custom.conf import setting as al_setting
+
 from setting.globalconfig import GetCfg
 from setting.globalconfig import GlobalConfig
 
@@ -32,8 +33,7 @@ al_setting.report_language = GlobalConfig.REPORT_LANGUAGE
 
 import letmego
 
-letmego.conf.setting.PASSWORD = GlobalConfig.PASSWORD
-letmego.conf.setting.RUNNING_MAN_FILE = f"{GlobalConfig.REPORT_PATH}/_running_man.log"
+GlobalConfig.LETMEGO_DEBUG = False
 
 from src import logger
 from src.rtk._base import Args

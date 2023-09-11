@@ -5,13 +5,15 @@
 
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
+import letmego
+
 from src import Src, log
 from public.right_menu_public_widget.right_menu_public_widget import (
     RightMenuPublicWidget,
 )
 from public.other_public_widget.config import Config
 
-
+@letmego.mark
 @log
 # pylint: disable=too-many-ancestors
 class DeepinManualPublicWidget(Src, RightMenuPublicWidget):
