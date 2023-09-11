@@ -34,7 +34,7 @@ comments: true
 
 有趣（YouQu）是深度科技设计和开发的一个自动化测试基础框架，采用结构分层的设计理念，支持多元化元素定位和断言、用例标签化管理和执行、强大的日志和报告输出等特色功能，同时完美兼容X11、Wayland显示协议，环境部署简单，操作易上手。
 
-### 爱上 “有趣” 的 17 个理由
+### 爱上 “有趣” 的 18 个理由
 
 1. 核心库提供了统一的接口，编写方法时只需要导入一个包就可以使用到核心库提供的所有功能；
 2. 公共库封装了很多常用模块的相关方法，比如：任务栏的操作、桌面的操作、右键菜单的操作等等；
@@ -45,22 +45,21 @@ comments: true
 7. 提供了功能强大的执行器入口，让你可以方便的在本地执行任何用例集的用例，其丰富的自定义配置项，满足你对执行器所有的幻想；
 8. 提供远程执行的功能，可以控制多台机器并行跑，或者分布式跑，这种付费功能现在免费给你用；
 9. 提供自动输出日志的功能，你再也不用为每个方法单独写输出日志的代码，一切我们给你搞定了，日志输出不仅内容丰富，颜值也绝对在线，我们还自己设计了一款终端输出主题叫《五彩斑斓的黑》；
-10. 提供了一键部署自动化测试环境的功能，连代码编辑器都给你装好了，让你再也不用为环境部署而烦恼；
-11. 提供了自动生成多种报告的功能，你想输出什么报告形式都行，而且我们在报告中还加入了失败录屏和失败截图的功能；
+10. 提供一键部署自动化测试环境的功能，让你再也不用为环境部署而烦恼；
+11. 提供自动生成多种报告的功能，你想输出什么报告形式都行，而且我们在报告中还加入了失败录屏和失败截图的功能；
 12. 对断言进行了二次封装，提供更友好化的错误提示，让定位问题精准高效；
 13. 不仅支持单条用例超时控制，而且还支持动态控制用例批量执行的总时间，确保 `CI` 环境下能顺畅运行；
 14. 支持本地文件测试套执行、`PMS` 测试套执行、标签化执行方案，满足你各种场景下的执行需求；
 15. 支持基于深度学习的 `OCR` 功能，可定位可断言，中文识别的天花板；
 16. 完美兼容 `Wayland`  和 `X11`，真正做到一套代码，随处执行；
 17. 支持多种方式的数据回填功能，其中异步回填的方案，完美解决了数据回填的耗时问题；
+18. 支持重启交互场景用例的执行，使用方法优雅简洁；
 
 【[视频介绍](https://doc.uniontech.com/file/gXqmeOpjg4uGpRqo)】
 
 
 二、安装使用
 -------
-
-基础框架：https://github.com/linuxdeepin/deepin-autotest-framework
 
 从 PyPI 安装:
 
@@ -71,49 +70,87 @@ sudo pip3 install youqu
 创建项目:
 
 ```shell
-youqu-startproject youqu
+youqu-startproject my_project
 ```
+
+如果 `youqu-startproject` 后面不加参数，默认的项目名称为：`youqu` ；
 
 安装依赖:
 
 ```sh
-cd youqu
+cd my_project
 bash env.sh
 ```
 
 > 注意，如果你的测试机密码不是 1 ，那你需要在全局配置文件 `globalconfig.ini` 里面将 `PASSWORD` 配置项修改为当前测试机的密码。
 
-应用库：`https://gerrit.uniontech.com/admin/repos/autotest_ +  app_name`
+-------------------------------
 
-链接后面的应用名称中间以下划线连接，比如音乐：https://gerrit.uniontech.com/admin/repos/autotest_deepin_music
+**【APP工程】**
 
-```shell
-cd apps/
-```
-
-将应用库拉到基础框架下 `apps` 目录下，像这样：
+如果您已经有一个可用的 `APP` 工程，将应用库放到基础框架下 `apps` 目录下，像这样：
 
 ```shell
-youqu
+my_project
 ├── apps
 │   ├── autotest_deepin_music  # 应用库
 ...
 ```
 
-**应用库的名称不可以修改**。
+`APP` 工程名称应该以 `autotest_` 开头，请不要随意修改 `APP` 工程名称；
 
-三、运行
+如果您还没有 `APP` 工程，建议使用框架提供的脚手架功能创建一个全新的 `APP` 工程。
+
+## 三、创建工程
+
+创建一个 APP 工程：
+
+```shell
+youqu manage.py startapp autotest_deepin_some  
+```
+
+这样在 `apps` 目录下会创建一个子项目工程 `autotest_deepin_some`，同时新建好工程模板目录和模板文件：
+
+```shell
+apps
+└── autotest_deepin_some
+    ├── case
+    │   ├── assert_res
+    │   │   └── readme
+    │   ├── base_case.py
+    │   └── __init__.py
+    ├── config.ini
+    ├── config.py
+    ├── conftest.py
+    ├── control
+    ├── deepin_some_assert.py
+    ├── deepin_some.csv
+    ├── __init__.py
+    └── widget
+        ├── base_widget.py
+        ├── case_res
+        │   └── readme
+        ├── deepin_some_widget.py
+        ├── __init__.py
+        ├── other.ini
+        ├── other_widget.py
+        ├── pic_res
+        │   └── readme
+        └── ui.ini
+```
+
+`autotest_deepin_some` 是你的工程名称，比如：`autotest_deepin_music` ；
+
+在此基础上，你可以快速的开始你的 AT 项目，更重要的是确保创建工程的规范性。
+
+四、运行
 -------
 
 ### 1. 工作空间
 
-基础框架工程目录建议放在 `~` 目录下，放在其他目录也可以运行，但是在自动化用例执行过程中可能需要做环境清理，放在其他目录存在代码被删除的风险。
-
-如果你的机器上不同目录下存在多个 `YouQu` 工程，那么在运行之前，请先执行 `env.sh` 校正相关环境。
-
 在项目根目录下有一个 `manage.py` ，它是一个执行器入口，提供了本地执行、远程执行等的功能。
 
-使用系统命令 `youqu` 来执行：
+使用系统命令 `youqu` 来驱动执行：
 
 ```shell
 youqu manage.py run -a deepin-music
@@ -488,12 +525,12 @@ youqu manage.py remote
                         动分配给各个测试机执行。
 ```
 
-除了这些特有参数以外，它同样支持本地执行的所有参数；
+**除了这些特有参数以外，它同样支持本地执行的所有参数；**
 
 在命令行这样运行：
 
 ```shell
-youqu manage.py remote -a deepin-music -c uos@10.8.13.33/uos@10.8.13.34 -k "xxx" -t "xxx"
+youqu manage.py remote -a deepin-music -c uos@10.8.13.x3/uos@10.8.13.x4 -k "xxx" -t "xxx"
 ```
 
 所有用例执行完之后会在 `report` 目录下回收各个测试机执行的测试报告。
@@ -501,7 +538,7 @@ youqu manage.py remote -a deepin-music -c uos@10.8.13.33/uos@10.8.13.34 -k "xxx"
 注意，如果远程机器没有搭建自动化测试环境，记得加上参数 `-e` ：
 
 ```shell
-youqu manage.py remote -a deepin-music -c uos@10.8.13.33/uos@10.8.13.34 -k "xxx" -t "xxx" -e
+youqu manage.py remote -a ... -e
 ```
 
 执行前确保远程机器已经开启了 ssh 服务，否则会提示无法连接，如果没有开启，请手动开启：
@@ -526,51 +563,10 @@ sudo systemctl enable ssh
 使用方法和前面一样，只是需要增加一个参数 `--parallel`：
 
 ```shell
-youqu manage.py remote -a deepin-music -c uos@10.8.13.33/uos@10.8.13.34 -k "xxx" -t "xxx" --parallel no
+youqu manage.py remote -a ... --parallel no
 ```
 
-## 四、脚手架创建工程
+----------------------------
 
-创建一个 APP 工程：
+更多内容请查看【详细功能介绍】
 
-```shell
-youqu manage.py startapp autotest_deepin_some  
-```
-
-这样在 `apps` 目录下会创建一个子项目工程 `autotest_deepin_some`，同时新建好工程模板目录和模板文件：
-
-```shell
-apps
-└── autotest_deepin_some
-    ├── case
-    │   ├── assert_res
-    │   │   └── readme
-    │   ├── base_case.py
-    │   └── __init__.py
-    ├── config.ini
-    ├── config.py
-    ├── conftest.py
-    ├── control
-    ├── deepin_some_assert.py
-    ├── deepin_some.csv
-    ├── __init__.py
-    └── widget
-        ├── base_widget.py
-        ├── case_res
-        │   └── readme
-        ├── deepin_some_widget.py
-        ├── __init__.py
-        ├── other.ini
-        ├── other_widget.py
-        ├── pic_res
-        │   └── readme
-        └── ui.ini
-```
-
-`autotest_deepin_some` 是你的工程名称，比如：`autotest_deepin_music` ；
-
-在此基础上，你可以快速的开始你的 AT 项目，更重要的是确保创建工程的规范性。
-
----------------------------
-
-更多内容请查看【框架功能介绍】

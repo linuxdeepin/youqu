@@ -1,16 +1,12 @@
 site_name: YouQu Docs
-copyright: Copyright © 2023 UnionTech Software Technology Co. All Rights Reserved.
+copyright: Copyright © 2023 UnionTech Software Technology Co., Ltd. All Rights Reserved.
 theme:
   name: material
   language: zh
-  # 评论系统
   custom_dir: docs/overrides
   palette:
-    # 自动亮/暗模式
     - media: '(prefers-color-scheme: light)'
-      # 配色方案
       scheme: default
-      # 原色
       primary: teal
       accent: amber
       toggle:
@@ -24,6 +20,9 @@ theme:
         icon: material/lightbulb-outline
         name: Switch to dark mode
   features:
+    - navigation.instant
+    - navigation.top
+    - navigation.sections
     - search.suggest
     - search.highlight
     - content.tabs.link
@@ -33,7 +32,6 @@ theme:
   icon:
     repo: fontawesome/brands/github
 
-# 右上角
 repo_name: deepin-autotest-framework
 repo_url: "https://github.com/linuxdeepin/deepin-autotest-framework"
 
@@ -75,17 +73,21 @@ extra_javascript:
   - '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js'
 
 nav:
-  - 首页: index.md
-  - 框架功能介绍.md
-  - 版本更新记录: RELEASE.md
-  - 自动化测试架构设计v1.0.md
-  - AT基础框架设计方案.md
-  - AT应用库设计方案.md
-  - AT开发规范.md
-  - AT经验总结.md
-  - AT用例筛选指北.md
-  - AT执行器使用指北.md
-  - 智能化功能测试.md
-  - 智能化性能测试.md
-  - 博客文章: https://funny-dream.github.io/funny-docs
-  - 定级工具: http://youqu-dev.uniontech.com/tool
+  - 快速开始: index.md
+  - 详细功能介绍: 框架功能介绍.md
+  - 框架设计:
+    - 自动化测试架构设计v1.0.md
+    - AT基础框架设计方案.md
+    - AT应用库设计方案.md
+  - 操作规范&指引:
+    - AT开发规范.md
+    - AT经验总结.md
+    - AT用例筛选指北.md
+    - AT执行器使用指北.md
+  - 其他:
+    - 智能化功能测试.md
+    - 智能化性能测试.md
+    - 博客文章: https://funny-dream.github.io/funny-docs
+    - 定级工具: http://youqu-dev.uniontech.com/tool
+  - 版本更新:
+    - RELEASE.md

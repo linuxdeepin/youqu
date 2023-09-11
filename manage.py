@@ -187,7 +187,7 @@ class Manage:
             help=(
                 "远程机器的user@ip:password,多个机器用'/'连接,"
                 "如果password不传入,默认取setting/remote.ini中CLIENT_PASSWORD的值,"
-                "比如: uos@10.8.13.33:1 或 uos@10.8.13.33"
+                "比如: uos@10.8.13.xx:1 或 uos@10.8.13.xx"
             )
         )
         sub_parser_remote.add_argument(
@@ -373,7 +373,8 @@ class Manage:
     def pms_control(self, parser=None, sub_parser_pms=None):
         """pms相关功能命令行参数"""
         sub_parser_pms.add_argument(
-            "-a", "--app", default="", help="应用名称：deepin-music"
+            "-a", "--app", default="",
+            help="应用名称：deepin-music 或 autotest_deepin_music 或 apps/autotest_deepin_music"
         )
 
         sub_parser_pms.add_argument(
@@ -420,9 +421,11 @@ class Manage:
                 password=pms_kwargs.get(Args.pms_password.value) or GlobalConfig.PMS_PASSWORD,
                 pms_link_csv=pms_kwargs.get(Args.pms_link_csv.value),
             ).write_new_csv()
-        elif pms_kwargs.get(Args.send2task.value) \
-                and pms_kwargs.get(Args.task_id.value) \
-                and pms_kwargs.get(Args.trigger.value) == "hand":
+        elif (
+                pms_kwargs.get(Args.send2task.value)
+                and pms_kwargs.get(Args.task_id.value)
+                and pms_kwargs.get(Args.trigger.value) == "hand"
+        ):
             Send2Pms().send2pms(
                 Send2Pms.case_res_path(pms_kwargs.get(Args.task_id.value)),
                 Send2Pms.data_send_result_csv(pms_kwargs.get(Args.trigger.value))
@@ -439,7 +442,8 @@ class Manage:
     def csv_control(self, parser=None, sub_parser_csv=None):
         """csv相关功能命令参数"""
         sub_parser_csv.add_argument(
-            "-a", "--app", default="", help="应用名称：deepin-music"
+            "-a", "--app", default="",
+            help="应用名称：deepin-music 或 autotest_deepin_music 或 apps/autotest_deepin_music"
         )
         sub_parser_csv.add_argument(
             "-k", "--keywords", default="", help="用例的关键词"
@@ -452,7 +456,7 @@ class Manage:
             help="将用例py文件的case id同步到对应的csv文件中"
         )
         sub_parser_csv.add_argument(
-            "-ec", "--export_csv_file", default="",help="导出csv文件名称，比如：case_list.csv"
+            "-ec", "--export_csv_file", default="", help="导出csv文件名称，比如：case_list.csv"
         )
         args = parser.parse_args()
         csv_kwargs = {
@@ -473,6 +477,7 @@ class Manage:
                 f"需要传递一些有用参数或配置项：{Args.pyid2csv.value} 或 {Args.export_csv_file.value}"
                 "，您可以使用 -h 或 --help 查看支持的参数"
             )
+
 
 if __name__ == "__main__":
     try:

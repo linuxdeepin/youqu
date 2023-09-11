@@ -9,7 +9,6 @@
 import json
 import os
 from configparser import ConfigParser
-from os.path import splitext
 
 from setting.globalconfig import FixedCsvTitle
 from setting.globalconfig import GetCfg
@@ -22,7 +21,7 @@ from src.rtk._base import transform_app_name
 
 
 class Pms2Csv(_Base):
-    """爬取pms数据同步到本地csv文件"""
+    """获取pms数据同步到本地csv文件"""
 
     __author__ = "huangmingqiang@uniontech.com"
 
@@ -88,10 +87,18 @@ class Pms2Csv(_Base):
             case_id = case.get("id")
             case_level = case.get("pri")
             case_type = self.pms_mark.get(case.get("type"))
+            case_from = case.get("caseSource")
+            device_type = case.get("deviceType")
+            online_obj = case.get("lineCD")
             if case_type:
                 res_data[case_id] = {
                     "case_level": f"L{case_level}",
                     "case_type": case_type,
+                    "case_from": "BUG" if case_from == "BUG" else "",
+                    "device_type": device_type.split("(")[0]
+                    if device_type or device_type != "null"
+                    else "",
+                    "online_obj": "CICD" if online_obj == "是" else "",
                 }
         if not res_data:
             logger.error(f"未从pms获取到数据, {self.config_error_log}")
@@ -106,8 +113,11 @@ class Pms2Csv(_Base):
             os.makedirs(csv_bak_path)
         for root, _, files in os.walk(self.walk_dir):
             for file in files:
-                if file.endswith(".csv") and splitext(file)[0] in self.csv_names:
-                    csv_path_dict[splitext(file)[0]] = f"{root}/{file}"
+                if (
+                    file.endswith(".csv")
+                    and os.path.splitext(file)[0] in self.csv_names
+                ):
+                    csv_path_dict[os.path.splitext(file)[0]] = f"{root}/{file}"
                     os.system(
                         f"cp {root}/{file} {csv_bak_path}/{GlobalConfig.TIME_STRING}_{file}"
                     )
@@ -145,20 +155,37 @@ class Pms2Csv(_Base):
             pms_tags_dict = self.get_data_from_pms(product_id)
             if pms_tags_dict is None:
                 continue
+            logger.info(f"csv_name: {csv_name}")
+            logger.info(f"product_id: {product_id}")
             csv_tags_dict = res_tags.get(csv_name)
             csv_head_dict = csv_heads_dict.get(csv_name)
 
             pms_case_id_index = case_level_index = case_type_index = None
+            case_from_index = device_type_index = online_obj_index = None
 
             pms_case_id_name = csv_head_dict.get(FixedCsvTitle.pms_case_id.name)
             if pms_case_id_name:
                 pms_case_id_index = pms_case_id_name.get("head_index")
+
             case_level_name = csv_head_dict.get(FixedCsvTitle.case_level.name)
             if case_level_name:
                 case_level_index = case_level_name.get("head_index")
+
             case_type_name = csv_head_dict.get(FixedCsvTitle.case_type.name)
             if case_type_name:
                 case_type_index = case_type_name.get("head_index")
+
+            case_from_name = csv_head_dict.get(FixedCsvTitle.case_from.name)
+            if case_from_name:
+                case_from_index = case_from_name.get("head_index")
+
+            device_type_name = csv_head_dict.get(FixedCsvTitle.device_type.name)
+            if device_type_name:
+                device_type_index = device_type_name.get("head_index")
+
+            online_obj_name = csv_head_dict.get(FixedCsvTitle.online_obj.name)
+            if online_obj_name:
+                online_obj_index = online_obj_name.get("head_index")
 
             new_csv_tags = []
             new_csv_tags.append(
@@ -170,26 +197,49 @@ class Pms2Csv(_Base):
                         pms_tags = pms_tags_dict.get(pms_case_id)
                         case_level = pms_tags.get("case_level")
                         case_type = pms_tags.get("case_type")
+                        case_from = pms_tags.get("case_from")
+                        device_type = pms_tags.get("device_type")
+                        online_obj = pms_tags.get("online_obj")
                         flag = False
                         if (
-                                pms_case_id_index
-                                and csv_tags_dict[csv_case_id][pms_case_id_index]
-                                != pms_case_id
+                            pms_case_id_index
+                            and csv_tags_dict[csv_case_id][pms_case_id_index]
+                            != pms_case_id
                         ):
                             csv_tags_dict[csv_case_id][pms_case_id_index] = pms_case_id
                             flag = True
                         if (
-                                case_level_index
-                                and csv_tags_dict[csv_case_id][case_level_index]
-                                != case_level
+                            case_level_index
+                            and csv_tags_dict[csv_case_id][case_level_index]
+                            != case_level
                         ):
                             csv_tags_dict[csv_case_id][case_level_index] = case_level
                             flag = True
                         if (
-                                case_type_index
-                                and csv_tags_dict[csv_case_id][case_type_index] != case_type
+                            case_type_index
+                            and csv_tags_dict[csv_case_id][case_type_index] != case_type
                         ):
                             csv_tags_dict[csv_case_id][case_type_index] = case_type
+                            flag = True
+                        if (
+                            case_from_index
+                            and csv_tags_dict[csv_case_id][case_from_index] != case_from
+                        ):
+                            csv_tags_dict[csv_case_id][case_from_index] = case_from
+                            flag = True
+                        if (
+                            device_type_index
+                            and csv_tags_dict[csv_case_id][device_type_index]
+                            != device_type
+                        ):
+                            csv_tags_dict[csv_case_id][device_type_index] = device_type
+                            flag = True
+                        if (
+                            online_obj_index
+                            and csv_tags_dict[csv_case_id][online_obj_index]
+                            != online_obj
+                        ):
+                            csv_tags_dict[csv_case_id][online_obj_index] = online_obj
                             flag = True
 
                         new_tags = csv_tags_dict[csv_case_id]
