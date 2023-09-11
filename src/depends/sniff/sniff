@@ -14,7 +14,7 @@ Data display is handled by the SniffController class.
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
-import sys
+
 from src.depends.dogtail.config import config
 from setting.globalconfig import GlobalConfig
 if config.checkForA11y:

@@ -7,7 +7,7 @@
 import os
 import re
 
-from setting.globalconfig import GlobalConfig
+from setting.globalconfig import GlobalConfig, FixedCsvTitle
 from src.rtk._base import transform_app_name
 
 
@@ -20,7 +20,7 @@ class CsvControl:
             if app_name
             else GlobalConfig.APPS_PATH
         )
-        print(1)
+        self.csv_path_dict, self.py_path_dict = self.scan_csv_and_py()
 
     def scan_csv_and_py(self):
         """scan csv and case py"""
@@ -44,8 +44,10 @@ class CsvControl:
                                     case_name.append(i)
                     py_files.append([f"{root}/{file}", case_name[-1]])
                     py_path_dict[case_name[0]] = py_files
-        if not (csv_path_dict and py_path_dict):
-            return None
+
+        for i in py_path_dict:
+            # py_path_dict[i].sort()
+            py_path_dict[i] = sorted(py_path_dict[i], key=lambda x: int(x[-1]))
         return csv_path_dict, py_path_dict
 
     def delete_mark_in_csv_if_not_exists_py(self):
@@ -54,6 +56,7 @@ class CsvControl:
         if res is None:
             return
         csv_path_dict, py_path_dict = res
+        flag = False
         for csv_name in csv_path_dict:
             for case_name in py_path_dict:
                 if csv_name == case_name:
@@ -87,7 +90,56 @@ class CsvControl:
                         ]
                         with open(csv_path, "w+", encoding="utf-8") as f:
                             f.writelines(new_csv_list)
+                        flag = True
+        if flag:
+            print("The corresponding script ID no longer exists in the CSV file after deletion")
+
+    def async_mark_to_csv(self):
+        """async_mark_to_csv"""
+        self.csv_path_dict, self.py_path_dict = self.scan_csv_and_py()
+        for case_name in self.py_path_dict:
+            py_paths = self.py_path_dict.get(case_name)
+            for py_path, case_id in py_paths:
+                if not self.csv_path_dict or not self.csv_path_dict.get(case_name):
+                    _dir_name = os.path.dirname(os.path.abspath(py_path))
+
+                    if str(_dir_name).endswith("case"):
+                        dir_name = _dir_name.rstrip("/case")
+                    else:
+                        dir_name = _dir_name.replace("/case/", "/tag/")
+                    if not os.path.exists(dir_name):
+                        os.makedirs(dir_name)
+
+                    csv_path = f"{dir_name}/{case_name}.csv"
+                    with open(csv_path, "w+", encoding="utf-8") as f:
+                        f.write(",".join([i.value for i in FixedCsvTitle]) + "\n")
+
+                    self.csv_path_dict, self.py_path_dict = self.scan_csv_and_py()
+
+                csv_path = self.csv_path_dict.get(case_name)
+                with open(csv_path, "r", encoding="utf-8") as f:
+                    csv_txt_list = f.readlines()
+                    try:
+                        csv_head = csv_txt_list[0]
+                        comma_num = csv_head.count(",")
+                    except IndexError:
+                        with open(csv_path, "w+", encoding="utf-8") as f:
+                            f.write(",".join([i.value for i in FixedCsvTitle]) + "\n")
+                        comma_num = len(FixedCsvTitle) - 1
+                csv_taglines = [txt.strip().split(",") for txt in csv_txt_list[1:]]
+                if not csv_taglines:
+                    with open(csv_path, "a+", encoding="utf-8") as f:
+                        f.write(f"{case_id}{comma_num * ','}" + "\n")
+                else:
+                    for i in csv_taglines:
+                        if i[0] == case_id or int(i[0]) == int(case_id):
+                            break
+                    else:
+                        with open(csv_path, "a+", encoding="utf-8") as f:
+                            f.write(f"{case_id}{comma_num * ','}" + "\n")
+        print("Complete synchronization of automated test script id to csv file")
 
 
 if __name__ == "__main__":
     CsvControl().delete_mark_in_csv_if_not_exists_py()
+    CsvControl().async_mark_to_csv()

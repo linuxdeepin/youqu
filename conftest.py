@@ -112,43 +112,64 @@ def finish_send(session):
 
 def pytest_addoption(parser):
     """pytest_cmdline_main"""
-    parser.addoption("--clean", action="store", default="no", help="是否清理环境&杀进程")
+    parser.addoption(
+        "--clean", action="store", default="no", help="是否清理环境&杀进程"
+    )
     parser.addoption(
         "--log_level", action="store", default=GlobalConfig.LOG_LEVEL, help="终端日志输出级别"
     )
-    parser.addoption("--noskip", action="store", default="", help="skip-xxx标签不生效")
-    parser.addoption("--ifixed", action="store", default="", help="fixed-xxx标签不生效")
-    parser.addoption("--max_fail", action="store", default="", help="最大失败次数")
     parser.addoption(
-        "--record_failed_case", action="store", default="", help="失败录屏从第几次失败开始录制视频"
+        "--noskip", action="store", default="", help="skip-xxx标签不生效"
     )
-    parser.addoption("--send_pms", action="store", default="", help="用例数据回填")
-    parser.addoption("--task_id", action="store", default="", help="测试单id")
-    parser.addoption("--trigger", action="store", default="", help="数据回填的触发者")
-    parser.addoption("--suite_id", action="store", default="", help="pms的测试套件ID")
-    parser.addoption("--pms_user", action="store", default="", help="登录pms的账号")
-    parser.addoption("--pms_password", action="store", default="", help="登录pms的密码")
-    parser.addoption("--top", action="store", default="", help="过程中记录top命令中的值")
     parser.addoption(
-        "--duringfail",
-        action="store_true",
-        dest="duringfail",
-        default=False,
+        "--ifixed", action="store", default="", help="fixed-xxx标签不生效"
+    )
+    parser.addoption(
+        "--max_fail", action="store", default="", help="最大失败次数"
+    )
+    parser.addoption(
+        "--record_failed_case", action="store", default="",
+        help="失败录屏从第几次失败开始录制视频"
+    )
+    parser.addoption(
+        "--send_pms", action="store", default="", help="用例数据回填"
+    )
+    parser.addoption(
+        "--task_id", action="store", default="", help="测试单id"
+    )
+    parser.addoption(
+        "--trigger", action="store", default="", help="数据回填的触发者"
+    )
+    parser.addoption(
+        "--suite_id", action="store", default="", help="pms的测试套件ID"
+    )
+    parser.addoption(
+        "--pms_user", action="store", default="", help="登录pms的账号"
+    )
+    parser.addoption(
+        "--pms_password", action="store", default="", help="登录pms的密码"
+    )
+    parser.addoption(
+        "--top", action="store", default="", help="过程中记录top命令中的值"
+    )
+    parser.addoption(
+        "--duringfail", action="store_true", dest="duringfail", default=False,
         help="出现错误时立即显示",
     )
-    parser.addoption("--repeat", action="store", default=1, type=int, help="用例重复执行的次数")
-    parser.addoption("--export_csv_file", action="store", default="", help="导出csv文件")
-    parser.addoption("--line", action="store", default="", help="业务线(CI)")
-    parser.addoption("--app_name", action="store", default="", help="执行的应用名称")
     parser.addoption(
-        "--autostart", action="store", default="", help="重启类场景开启letmego执行方案"
+        "--repeat", action="store", default=1, type=int, help="用例重复执行的次数"
     )
     parser.addoption(
-        "--pyid2csv",
-        action="store_true",
-        dest="pyid2csv",
-        default=False,
-        help="将用例py文件的case id同步到对应的csv文件中",
+        "--export_csv_file", action="store", default="", help="导出csv文件"
+    )
+    parser.addoption(
+        "--line", action="store", default="", help="业务线(CI)"
+    )
+    parser.addoption(
+        "--app_name", action="store", default="", help="执行的应用名称"
+    )
+    parser.addoption(
+        "--autostart", action="store", default="", help="重启类场景开启letmego执行方案"
     )
 
 
@@ -184,13 +205,13 @@ def pytest_sessionstart(session):
     """pytest_sessionstart"""
     # 批量执行之前修改主题
     if (
-        CmdCtl.run_cmd(
-            "gsettings get com.deepin.dde.appearance gtk-theme",
-            interrupt=False,
-            out_debug_flag=False,
-            command_log=False,
-        ).strip("'")
-        != GlobalConfig.SYS_THEME
+            CmdCtl.run_cmd(
+                "gsettings get com.deepin.dde.appearance gtk-theme",
+                interrupt=False,
+                out_debug_flag=False,
+                command_log=False,
+            ).strip("'")
+            != GlobalConfig.SYS_THEME
     ):
         CmdCtl.run_cmd(
             f"gsettings set com.deepin.dde.appearance gtk-theme {GlobalConfig.SYS_THEME}",
@@ -269,49 +290,6 @@ def pytest_collection_modifyitems(session):
     )
     csv_path_dict, no_youqu_mark = walk_apps(walk_dir)
 
-    if session.config.option.collectonly and session.config.option.pyid2csv:
-        for item in session.items:
-            _case_id = findall(r"test_.*?_(\d+)", item.fspath.purebasename)
-            case_id = _case_id[0] if _case_id else "No match found for case id"
-            _csv_name = findall(r"test_(.*?)_\d+", item.fspath.purebasename)
-            csv_name = _csv_name[0] if _csv_name else None
-
-            csv_path = csv_path_dict.get(csv_name)
-            if not csv_path_dict or not csv_path_dict.get(csv_name):
-                _dir_name = item.fspath.dirname
-                if str(_dir_name).endswith("case"):
-                    dir_name = _dir_name.rstrip("/case")
-                else:
-                    dir_name = _dir_name.replace("/case/", "/tag/")
-                if not exists(dir_name):
-                    makedirs(dir_name)
-                csv_path = f"{dir_name}/{csv_name}.csv"
-                with open(csv_path, "w+", encoding="utf-8") as f:
-                    f.write(",".join([i.value for i in FixedCsvTitle]) + LN)
-
-                csv_path_dict, no_youqu_mark = walk_apps(walk_dir)
-
-            with open(csv_path, "r", encoding="utf-8") as f:
-                csv_txt_list = f.readlines()
-                try:
-                    csv_head = csv_txt_list[0]
-                    comma_num = csv_head.count(",")
-                except IndexError:
-                    with open(csv_path, "w+", encoding="utf-8") as f:
-                        f.write(",".join([i.value for i in FixedCsvTitle]) + LN)
-                    comma_num = len(FixedCsvTitle) - 1
-            csv_taglines = [txt.strip().split(",") for txt in csv_txt_list[1:]]
-            if not csv_taglines:
-                with open(csv_path, "a+", encoding="utf-8") as f:
-                    f.write(f"{case_id}{comma_num * ','}" + LN)
-            else:
-                for i in csv_taglines:
-                    if i[0] == case_id or int(i[0]) == int(case_id):
-                        break
-                else:
-                    with open(csv_path, "a+", encoding="utf-8") as f:
-                        f.write(f"{case_id}{comma_num * ','}" + LN)
-
     if not csv_path_dict:
         return
 
@@ -364,11 +342,11 @@ def pytest_collection_modifyitems(session):
             if _id != _case_id:
                 raise ValueError
         except IndexError:
-            skip_text = f"\n用例名称缺少用例id,跳过处理:[{item.nodeid}]"
+            skip_text = f"\n用例函数名称缺少用例id:[{item.nodeid}]"
             logger.error(skip_text)
             add_mark(item, ConfStr.SKIP.value, (skip_text,), {})
         except ValueError:
-            skip_text = f"\n用例py文件的id和用例函数的id不一致,跳过处理:[{item.nodeid}]"
+            skip_text = f"\n用例py文件的id与用例函数的id不一致:[{item.nodeid}]"
             logger.error(skip_text)
             add_mark(item, ConfStr.SKIP.value, (skip_text,), {})
         else:
@@ -437,25 +415,25 @@ def pytest_collection_modifyitems(session):
                         if index == containers[csv_path][ConfStr.SKIP_INDEX.value]:
                             # 标签是以 “skip-” 开头, noskip 用于解除所有的skip
                             if not session.config.option.noskip and tag.startswith(
-                                f"{ConfStr.SKIP.value}-"
+                                    f"{ConfStr.SKIP.value}-"
                             ):
                                 # 标签以 “fixed-” 开头, ifixed表示ignore fixed, 用于忽略所有的fixed
                                 # 1. 不给ifixed参数时，只要标记了fixed的用例，即使标记了skip-，也会执行；
                                 # 2. 给ifixed 参数时(--ifixed yes)，fixed不生效，仅通过skip跳过用例；
                                 try:
                                     if (
-                                        not session.config.option.ifixed
-                                        and containers[csv_path][
+                                            not session.config.option.ifixed
+                                            and containers[csv_path][
+                                        ConfStr.FIXED_INDEX.value
+                                    ]
+                                            is not None
+                                            and tags[
+                                        containers[csv_path][
                                             ConfStr.FIXED_INDEX.value
                                         ]
-                                        is not None
-                                        and tags[
-                                            containers[csv_path][
-                                                ConfStr.FIXED_INDEX.value
-                                            ]
-                                        ]
-                                        .strip('"')
-                                        .startswith(f"{ConfStr.FIXED.value}-")
+                                    ]
+                                            .strip('"')
+                                            .startswith(f"{ConfStr.FIXED.value}-")
                                     ):
                                         continue
                                 except IndexError:
@@ -483,8 +461,8 @@ def pytest_collection_modifyitems(session):
                         else:  # 非跳过列
                             # 处理 pms id
                             if (
-                                containers[csv_path][ConfStr.PMS_ID_INDEX.value]
-                                == index
+                                    containers[csv_path][ConfStr.PMS_ID_INDEX.value]
+                                    == index
                             ):
                                 if suite_runs_ids:
                                     if tag not in suit_id_deque:
@@ -536,6 +514,7 @@ def pytest_collection_modifyitems(session):
 
 
 def walk_apps(walk_dir):
+    """walk_apps"""
     no_youqu_mark = {}
     csv_path_dict = {}
     for root, _, files in walk(walk_dir):
@@ -580,15 +559,14 @@ def pytest_collection_finish(session):
                     items_timeout += item_timeout
                     break
         session.sessiontimeout = (
-            (session.item_count - _n) * session.config.option.timeout
-        ) + items_timeout
+                                         (session.item_count - _n) * session.config.option.timeout
+                                 ) + items_timeout
         _min, sec = divmod(int(session.sessiontimeout), 60)
         hour, _min = divmod(_min, 60)
         print(
             f"会话超时时间:\t{session.sessiontimeout}s ({hour}{'小时' if hour else ''}{_min}{'分' if _min else ''}{sec}秒)"
         )
 
-    # 生成 case_list.csv
     if session.config.option.collectonly and session.config.option.export_csv_file:
         execute = []
         execute.append("用例名称," + GlobalConfig.EXPORT_CSV_HEARD + LN)
@@ -603,17 +581,15 @@ def pytest_collection_finish(session):
                 except (ValueError, IndexError):
                     continue
                 case_info[index] = mark.name
-            # else:
             execute.append(",".join(case_info) + LN)
-        # 去重，不改变原有顺序
         execute2 = list(set(execute))
         execute2.sort(key=execute.index)
         if not exists(GlobalConfig.REPORT_PATH):
             makedirs(GlobalConfig.REPORT_PATH)
         with open(
-            f"{GlobalConfig.REPORT_PATH}/{session.config.option.export_csv_file}",
-            "w+",
-            encoding="utf-8",
+                f"{GlobalConfig.REPORT_PATH}/{session.config.option.export_csv_file}",
+                "w+",
+                encoding="utf-8",
         ) as _f:
             _f.writelines(execute2)
 
@@ -842,15 +818,15 @@ def pytest_sessionfinish(session):
                         default_result["result"] = "fail"
                     item_name = item.nodeid.split("[")[0]
                     if not execute.get(item_name) or (
-                        item.outcome != ConfStr.PASSED.value
-                        and execute.get(item_name).get("result") == "pass"
+                            item.outcome != ConfStr.PASSED.value
+                            and execute.get(item_name).get("result") == "pass"
                     ):
                         execute[item_name] = default_result
                 except AttributeError:
                     pass
         if execute:
             with open(
-                f"{GlobalConfig.ROOT_DIR}/ci_result.json", "w", encoding="utf-8"
+                    f"{GlobalConfig.ROOT_DIR}/ci_result.json", "w", encoding="utf-8"
             ) as _f:
                 _f.write(dumps(execute, indent=2, ensure_ascii=False))
 

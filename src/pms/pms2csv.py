@@ -112,7 +112,7 @@ class Pms2Csv(_Base):
                         f"cp {root}/{file} {csv_bak_path}/{GlobalConfig.TIME_STRING}_{file}"
                     )
         if not csv_path_dict:
-            raise ValueError(f"{self.walk_dir} 目录下未找到csv文件")
+            raise ValueError(f"{self.walk_dir} 目录下未找对应的到csv文件，{self.config_error_log}")
 
         res_tags = {}
         csv_heads_dict = {}

@@ -383,7 +383,7 @@ class Manage:
             "-p", "--pms_password", default="", help="pms 密码"
         )
         sub_parser_pms.add_argument(
-            "-pls", "--pms_link_csv", default="",
+            "-plc", "--pms_link_csv", default="",
             help="pms 和 csv 的映射关系，比如：music:81/album:82，多个配置使用'/'分隔"
         )
         sub_parser_pms.add_argument(
@@ -459,15 +459,15 @@ class Manage:
             Args.app_name.value: args.app or self.default_app,
             Args.keywords.value: args.keywords or self.default_keywords,
             Args.tags.value: args.tags or self.default_tags,
-            Args.pyid2csv.value: args.pyid2csv or self.default_pyid2csv,
+            Args.pyid2csv.value: args.pyid2csv or self.default_pyid2csv or GlobalConfig.PY_ID_TO_CSV,
             Args.export_csv_file.value: args.export_csv_file or self.default_export_csv_file,
             "collection_only": True
         }
         if csv_kwargs.get(Args.pyid2csv.value) or GlobalConfig.PY_ID_TO_CSV:
             from src.csvctl import CsvControl
-            CsvControl(csv_kwargs.get(Args.app_name.value)).delete_mark_in_csv_if_not_exists_py()
-        if (csv_kwargs.get(Args.pyid2csv.value) or GlobalConfig.PY_ID_TO_CSV) or (csv_kwargs.get(Args.export_csv_file.value) or GlobalConfig.EXPORT_CSV_FILE):
-            LocalRunner(**csv_kwargs).local_run()
+            _csv = CsvControl(csv_kwargs.get(Args.app_name.value))
+            _csv.delete_mark_in_csv_if_not_exists_py()
+            _csv.async_mark_to_csv()
         else:
             logger.error(
                 f"需要传递一些有用参数或配置项：{Args.pyid2csv.value} 或 {Args.export_csv_file.value}"

@@ -185,8 +185,6 @@ youqu manage.py run
 youqu manage.py run --app deepin-music --keywords "xxx" --tags "xxx"
 ```
 
-**命令行参数优先级是高于配置文件的，也就是说通过命令行参数指定了对应的参数，配置文件中不管是否配置均不生效。**
-
 --app 入参还支持 `autotest_xxx` 和 `apps/autotest_xxx` 两种写法，方便在输入命令的过程中使用补全，下面的远程执行功能同样支持。
 
 #### 2.2. 配置文件

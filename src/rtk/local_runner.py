@@ -23,7 +23,6 @@ from tkinter import Tk
 import pytest
 from allure_custom import AllureCustom
 from allure_custom.conf import setting as al_setting
-
 from setting.globalconfig import GetCfg
 from setting.globalconfig import GlobalConfig
 
@@ -45,7 +44,7 @@ environ["DISPLAY"] = ":0"
 
 class LocalRunner:
     """
-    本地执行工具
+    本地执行器
     """
     __author__ = "Mikigo <huangmingqiang@uniontech.com>"
 
@@ -83,7 +82,6 @@ class LocalRunner:
             line=None,
             collection_only=None,
             autostart=None,
-            pyid2csv=None,
             export_csv_file=None,
             **kwargs,
     ):
@@ -127,7 +125,6 @@ class LocalRunner:
         self.build_location = build_location
         self.line = line
         self.collection_only = collection_only
-        self.pyid2csv = pyid2csv or GlobalConfig.PY_ID_TO_CSV
         self.export_csv_file = export_csv_file or GlobalConfig.EXPORT_CSV_FILE
 
         if not self.default.get(Args.debug.value) and not self.collection_only:
@@ -237,10 +234,8 @@ class LocalRunner:
                 cmd.extend(["-m", f"'{default.get(Args.tags.value)}'"])
         if app_dir and app_dir != GlobalConfig.APPS_PATH:
             cmd.extend(["--app_name", app_dir])
-        if self.pyid2csv:
-            cmd.extend(["--pyid2csv", "--verbosity=-1"])
         if self.export_csv_file:
-            cmd.extend(["--export_csv_file", self.export_csv_file])
+            cmd.extend(["--export_csv_file", self.export_csv_file, "--verbosity=-1"])
         if self.collection_only:
             cmd.append("--co")
             return cmd
