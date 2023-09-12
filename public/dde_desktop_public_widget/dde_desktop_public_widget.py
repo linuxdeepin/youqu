@@ -44,7 +44,6 @@ def dfm_warning(func):
 
 
 # pylint: disable=too-many-ancestors
-@letmego.mark
 @log
 class _DdeDesktopPublicBaseWidget(Src, RightMenuPublicWidget):
     """
@@ -335,6 +334,7 @@ class _DdeDesktopPublicBaseWidget(Src, RightMenuPublicWidget):
 
 
 # pylint: disable=too-many-ancestors,too-many-public-methods
+@letmego.mark
 class DdeDesktopPublicWidget(_DdeDesktopPublicBaseWidget):
     """
     系统桌面业务层

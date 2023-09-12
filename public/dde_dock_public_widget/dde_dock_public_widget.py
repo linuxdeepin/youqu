@@ -12,10 +12,10 @@ import letmego
 from public.dde_dock_public_widget.config import Config
 from setting.globalconfig import GlobalConfig
 from src import ApplicationError, TemplateElementNotFound
-from src.cmdctl import CmdCtl
 from src import Src
 from src import log
 from src import logger
+from src.cmdctl import CmdCtl
 
 APPS = {
     "文件管理器": {"package": "dde-file-manager", "dock_btn": "Btn_文件管理器"},
@@ -399,6 +399,11 @@ class BaseWidget(Src):
         self.select_menu(2)
         logger.info("任务栏右键“新建窗口“")
         sleep(0.5)
+
+    def right_click_element_in_dock_by_attr(self, btn):
+        """在dock上右键某个元素"""
+        self.dog.element_click(btn, button=3)
+
 
 @letmego.mark
 @log
@@ -1399,7 +1404,3 @@ class DdeDockPublicWidget(BaseWidget):
         """
         self.close_app("五子棋")
         sleep(0.5)
-
-
-if __name__ == '__main__':
-    DdeDockPublicWidget().click_launcher_in_dock_by_attr()

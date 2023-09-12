@@ -33,8 +33,6 @@ al_setting.report_language = GlobalConfig.REPORT_LANGUAGE
 
 import letmego
 
-GlobalConfig.LETMEGO_DEBUG = False
-
 from src import logger
 from src.rtk._base import Args
 from src.rtk._base import transform_app_name
@@ -270,6 +268,7 @@ class LocalRunner:
         if default.get(Args.top.value):
             cmd.extend(["--top", default.get(Args.top.value)])
         if default.get(Args.autostart.value):
+            GlobalConfig.LETMEGO_DEBUG = False
             cmd.extend(["--autostart", default.get(Args.autostart.value)])
         if default.get(Args.repeat.value):
             cmd.extend(["--repeat", default.get(Args.repeat.value)])
