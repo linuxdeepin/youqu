@@ -8,7 +8,7 @@ comments: true
 # =============================================
 # Attribution : Chengdu Test Department
 # Time        : 2022/4/1
-# Author      : Mikigo
+# Author      : mikigo
 # =============================================
 ```
 
@@ -149,12 +149,6 @@ apps
 ### 1. 工作空间
 
 在项目根目录下有一个 `manage.py` ，它是一个执行器入口，提供了本地执行、远程执行等的功能。
-
-使用系统命令 `youqu` 来驱动执行：
-
-```shell
-youqu manage.py run -a deepin-music
-```
 
 ### 2. 本地执行
 

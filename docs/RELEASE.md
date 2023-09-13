@@ -1,5 +1,17 @@
 # 版本更新记录
 
+## 2.2.1（2023/9/13）
+
+new
+
+- 新增用例脚本 py 文件 id 自动同步到 csv 文件功能；
+- 新增自动从 pms 上获取用例相关标签的功能；
+
+fix
+
+- 修复了 letmego 在开发调试时也会记录执行过程的问题；
+- 优化了在线文档内容和排版；
+
 ## 2.2.0（2023/9/5）
 
 new
@@ -15,7 +27,7 @@ fix
 
 new
 
-- 将有趣的文档系统迁移到 [linuxdeepin](https://github.com/linuxdeepin/deepin-autotest-framework) ，剥离文档中的图片资源，采用 `CDN` 加速方式加载；
+- 将有趣的文档系统迁移到 [linuxdeepin](https://github.com/linuxdeepin/deepin-autotest-framework) ，剥离文档中的图片资源，采用 `CDN` 网络加速方式加载；
 
 - 尝试合入一个有趣的功能；
 

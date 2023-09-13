@@ -106,7 +106,7 @@ class CsvControl:
                     if str(_dir_name).endswith("case"):
                         dir_name = _dir_name.rstrip("/case")
                     else:
-                        dir_name = _dir_name.replace("/case/", "/tag/")
+                        dir_name = os.path.dirname(_dir_name.replace("/case/", "/tag/"))
                     if not os.path.exists(dir_name):
                         os.makedirs(dir_name)
 

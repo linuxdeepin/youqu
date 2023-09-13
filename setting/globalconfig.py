@@ -6,8 +6,8 @@
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
 from configparser import RawConfigParser  # 解决读取log报错
-from enum import unique
 from enum import Enum
+from enum import unique
 from getpass import getuser
 from os import popen
 from os.path import abspath
@@ -237,7 +237,7 @@ class FixedCsvTitle(Enum):
     case_level = "用例级别"
     case_type = "用例类型"
     device_type = "设备类型"
-    case_from = "用例来源"
+    case_from = "一二级bug自动化"
     online_obj = "上线对象"
     test_level = "测试级别"
     skip_reason = "跳过原因"
@@ -248,5 +248,5 @@ class FixedCsvTitle(Enum):
 @unique
 class SystemPath(Enum):
     SRC_PATH = join(GlobalConfig.ROOT_DIR, "src")
-    DEPENDS_PATH = join(SRC_PATH, "depends")
+    DEPENDS_PATH = join(GlobalConfig.ROOT_DIR, "src/depends")
     APPS_PATH = GlobalConfig.APPS_PATH

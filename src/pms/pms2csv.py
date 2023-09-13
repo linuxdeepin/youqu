@@ -94,7 +94,7 @@ class Pms2Csv(_Base):
                 res_data[case_id] = {
                     "case_level": f"L{case_level}",
                     "case_type": case_type,
-                    "case_from": "BUG" if case_from == "BUG" else "",
+                    "case_from": "BUG" if case_from == "是" else "",
                     "device_type": device_type.split("(")[0]
                     if device_type or device_type != "null"
                     else "",
