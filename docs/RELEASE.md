@@ -250,11 +250,11 @@ new
 
 ​		后两种入参方式可以很方便在输入命令的过程中使用补全。
 
-- remote 远程执行新增从命令行传入测试机信息，远程机器的`user@ip:password`,多个机器用'/'连接,如果 `password` 不传入,默认取 `setting/remote.ini` 中 `CLIENT_PASSWORD` 的值,比如：`uos@10.8.13.33:1` 或 `uos@10.8.13.33` ；
+- remote 远程执行新增从命令行传入测试机信息，远程机器的`user@ip:password`,多个机器用'/'连接,如果 `password` 不传入,默认取 `setting/remote.ini` 中 `CLIENT_PASSWORD` 的值,比如：`uos@10.8.13.xx:1` 或 `uos@10.8.13.xx` ；
 
   ```shell
-  python3 manage.py remote -c uos@10.8.13.33/uos@10.8.13.34
-  python3 manage.py remote -c uos@10.8.13.33:1/uos@10.8.13.34:2
+  python3 manage.py remote -c uos@10.8.13.xx/uos@10.8.13.xx
+  python3 manage.py remote -c uos@10.8.13.xx:1/uos@10.8.13.xx:2
   ```
 
 fix

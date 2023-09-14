@@ -16,11 +16,11 @@ for i in SystemPath:
     if i.value not in sys.path:
         sys.path.append(i.value)
 
-from os import walk
 from os import popen
 from os import system
 from os import remove
 from os import makedirs
+from os import walk
 from os.path import exists
 from os.path import splitext
 from enum import Enum
@@ -228,7 +228,7 @@ def pytest_sessionstart(session):
         if GlobalConfig.IS_WAYLAND
         else GlobalConfig.DisplayServer.x11
     )
-    logger.info(f"当前系统显示协议为 {_display.title()}.")
+    logger.info(f"当前系统显示协议为 {_display.title()}")
     # 设置任务栏方向
     popen("gsettings set com.deepin.dde.dock position bottom")
     # 记录执行开始时间
@@ -265,7 +265,7 @@ def pytest_sessionstart(session):
 
 @pytest.hookimpl(trylast=True)
 def pytest_generate_tests(metafunc):
-    """pytest_generate_tests"""
+    """pytest generate tests"""
     repeat = metafunc.config.option.repeat
     marks = metafunc.definition.get_closest_marker("repeat")
     if marks is not None:
@@ -285,7 +285,7 @@ def pytest_generate_tests(metafunc):
 
 
 def pytest_collection_modifyitems(session):
-    """pytest_collection_modifyitems"""
+    """pytest collection modifyitems"""
 
     walk_dir = (
         f"{GlobalConfig.APPS_PATH}/{session.config.option.app_name}"
@@ -517,22 +517,8 @@ def pytest_collection_modifyitems(session):
         print()  # 处理日志换行
 
 
-def walk_apps(walk_dir):
-    """walk_apps"""
-    no_youqu_mark = {}
-    csv_path_dict = {}
-    for root, _, files in walk(walk_dir):
-        if "NOYOUQUMARK" in files and not no_youqu_mark.get(root):
-            no_youqu_mark[root] = True
-            continue
-        for file in files:
-            if file.endswith(".csv") and file != "case_list.csv":
-                csv_path_dict[splitext(file)[0]] = f"{root}/{file}"
-    return csv_path_dict, no_youqu_mark
-
-
 def pytest_collection_finish(session):
-    """pytest_collection_finish"""
+    """pytest collection finish"""
     session.item_count = len(session.items)
     print(f"用例收集数量:\t{session.item_count}")
     if session.config.option.reruns and not session.config.option.collectonly:
@@ -599,7 +585,7 @@ def pytest_collection_finish(session):
 
 
 def pytest_runtest_setup(item):
-    """pytest_runtest_setup"""
+    """pytest runtest setup"""
     if hasattr(item, "execution_count"):
         letmego.conf.setting.EXECUTION_COUNT = item.execution_count
 
@@ -647,19 +633,21 @@ def pytest_runtest_setup(item):
 
 # pylint: disable=unused-argument
 def pytest_runtest_call(item):
-    """pytest_runtest_call"""
+    """pytest runtest call"""
     logger.info(f"{FLAG_FEEL} case body {FLAG_FEEL}")
 
 
 def pytest_runtest_teardown(item):
-    """pytest_runtest_teardown"""
+    """pytest runtest teardown"""
     logger.info(f"{FLAG_FEEL} teardown {FLAG_FEEL}")
     sessiontimeout = item.session.sessiontimeout
     if sessiontimeout:
         duration = datetime.now() - item.session.config.option.start_time
         if duration.seconds > int(sessiontimeout):
-            _min, sec = divmod(duration.seconds, 60)  # 处理时间秒为 XX分XX秒
-            hour, _min = divmod(_min, 60)  # 处理时间分为 XX小时xx分xx秒
+            # 处理时间秒为 XX分XX秒
+            _min, sec = divmod(duration.seconds, 60)
+            # 处理时间分为 XX小时xx分xx秒
+            hour, _min = divmod(_min, 60)
             raise item.session.Interrupted(f"会话超时（{hour}小时{_min}分{sec}秒）,用例强制终止!")
 
 
@@ -770,7 +758,7 @@ def pytest_runtest_makereport(item, call):
 
 
 def pytest_report_teststatus(report, config):
-    """pytest_report_teststatus"""
+    """pytest report teststatus"""
     # 在 setup 和 teardown 阶段处理 error 和 skip
     if report.when in ("setup", "teardown"):
         if report.failed:
@@ -803,7 +791,7 @@ def pytest_report_teststatus(report, config):
 
 
 def pytest_sessionfinish(session):
-    """pytest_sessionfinish"""
+    """pytest session finish"""
     if session.config.option.allure_report_dir:
         AllureReportExtend.environment_info(session)
         terminalreporter = session.config.pluginmanager.get_plugin("terminalreporter")
@@ -934,14 +922,14 @@ class DuringfailingTerminalReporter(TerminalReporter):
             self.print_failure(report)
 
     def summary_failures(self):
-        """summary_failures"""
+        """summary failures"""
         # 防止显示错误摘要，因为我们已经错误发生后立即显示错误。
 
     def summary_errors(self):
-        """summary_errors"""
+        """summary errors"""
 
     def print_failure(self, report):
-        """print_failure"""
+        """print failure"""
         if self.config.option.tbstyle != "no":
             if self.config.option.tbstyle == "line":
                 line = self._getcrashline(report)
@@ -960,7 +948,7 @@ class DuringfailingTerminalReporter(TerminalReporter):
 
 
 def get_runs_id_deque(user, password, class_obj, func, _id):
-    """get_runs_id_deque"""
+    """get runs id deque"""
     if not (user and password):
         raise ValueError("缺少PMS用户名或密码")
     runs_ids = getattr(class_obj(user, password), f"get_{func}_data")(_id)
@@ -974,7 +962,7 @@ def get_runs_id_deque(user, password, class_obj, func, _id):
 
 
 def add_run_case_id(session, item, tag, runs_ids):
-    """add_run_case_id"""
+    """add run case id"""
     if auto_send(session):
         # 需要回填数据的时候才做
         for i in runs_ids:
@@ -989,9 +977,23 @@ def add_run_case_id(session, item, tag, runs_ids):
 
 @pytest.fixture
 def __pytest_repeat_step_number(request):
-    """__pytest_repeat_step_number"""
+    """pytest repeat step number"""
     marker = request.node.get_closest_marker("repeat")
     repeat = marker and marker.args[0] or request.config.option.repeat
     if repeat > 1:
         return request.param
     return None
+
+
+def walk_apps(walk_dir):
+    """walk apps"""
+    no_youqu_mark = {}
+    csv_path_dict = {}
+    for root, _, files in walk(walk_dir):
+        if "NOYOUQUMARK" in files and not no_youqu_mark.get(root):
+            no_youqu_mark[root] = True
+            continue
+        for file in files:
+            if file.endswith(".csv") and file != "case_list.csv":
+                csv_path_dict[splitext(file)[0]] = f"{root}/{file}"
+    return csv_path_dict, no_youqu_mark

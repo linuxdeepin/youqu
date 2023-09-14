@@ -499,8 +499,8 @@ youqu manage.py remote
   -h, --help            show this help message and exit
   -c CLIENTS, --clients CLIENTS
                         远程机器的user@ip:password,多个机器用'/'连接,如果password不传入,默认取sett
-                        ing/remote.ini中CLIENT_PASSWORD的值,比如: uos@10.8.13.33:1
-                        或 uos@10.8.13.33
+                        ing/remote.ini中CLIENT_PASSWORD的值,比如: uos@10.8.13.xx:1
+                        或 uos@10.8.13.xx
   -s, --send_code       发送代码到测试机（不含report目录）
   -e, --build_env       搭建测试环境,如果为yes，不管send_code是否为yes都会发送代码到测试机.
   -p CLIENT_PASSWORD, --client_password CLIENT_PASSWORD
