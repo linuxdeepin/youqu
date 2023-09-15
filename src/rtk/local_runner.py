@@ -125,13 +125,12 @@ class LocalRunner:
         self.collection_only = collection_only
         self.export_csv_file = export_csv_file or GlobalConfig.EXPORT_CSV_FILE
 
-        if not self.default.get(Args.debug.value) and not self.collection_only:
+        if not (self.default.get(Args.debug.value) or self.collection_only):
             screen = Tk()
             x = screen.winfo_screenwidth()
             y = screen.winfo_screenheight()
             if self.default.get(Args.resolution.value) not in (f"{x}x{y}", "no"):
-                logger.error(f"当前分辨率为：{x}x{y},您配置的分辨率为：{GlobalConfig.RESOLUTION}")
-                raise ValueError
+                raise ValueError(f"当前分辨率为：{x}x{y},您配置的分辨率为：{GlobalConfig.RESOLUTION}")
 
     @property
     def export_default(self):

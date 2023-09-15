@@ -289,7 +289,7 @@ def pytest_collection_modifyitems(session):
 
     walk_dir = (
         f"{GlobalConfig.APPS_PATH}/{session.config.option.app_name}"
-        if session.config.option.app_name
+        if session.config.option.app_name and exists(f"{GlobalConfig.APPS_PATH}/{session.config.option.app_name}")
         else GlobalConfig.APPS_PATH
     )
     csv_path_dict, no_youqu_mark = walk_apps(walk_dir)

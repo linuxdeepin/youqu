@@ -271,7 +271,6 @@ class RemoteRunner:
         :return:
         """
         # pylint: disable=too-many-branches
-        real_app_name = ""
         cmd = [
             self.ssh % password,
             f"{user}@{_ip}",
@@ -304,7 +303,7 @@ class RemoteRunner:
         lr_args = {k:v for k, v in lr.export_default.items() if v}
         rr_args = {k:v for k, v in self.local_kwargs.items() if v}
         lr_args.update(rr_args)
-        pytest_cmd = lr.create_pytest_cmd(real_app_name, default=lr_args, proj_path=f"/home/{user}/{self.server_project_path}")
+        pytest_cmd = lr.create_pytest_cmd(real_app_name.replace("apps/", ""), default=lr_args, proj_path=f"/home/{user}/{self.server_project_path}")
 
         cmd.extend(pytest_cmd)
         cmd.append('"')
