@@ -20,19 +20,36 @@ theme:
         icon: material/lightbulb-outline
         name: Switch to dark mode
   features:
-    - navigation.instant
-    - navigation.top
+    - announce.dismiss
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
+    - content.code.copy
+    # - content.code.select
+    # - content.tabs.link
+    - content.tooltips
+    # - header.autohide
+    # - navigation.expand
+    - navigation.footer
+    - navigation.indexes
+    # - navigation.instant
+    # - navigation.prune
     - navigation.sections
-    - search.suggest
+    # - navigation.tabs
+    # - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
     - search.highlight
-    - content.tabs.link
+    - search.share
+    - search.suggest
+    - toc.follow
 
   logo: "https://pic.imgdb.cn/item/64f05326661c6c8e54fe9bf4.png"
-#  favicon: img/favicon.ico
+  favicon: https://pic.imgdb.cn/item/650bbbe1c458853aefaae69c.png
   icon:
     repo: fontawesome/brands/github
 
-repo_name: deepin-autotest-framework
+repo_name: youqu
 repo_url: "https://github.com/linuxdeepin/deepin-autotest-framework"
 
 markdown_extensions:
@@ -74,7 +91,24 @@ extra_javascript:
 
 nav:
   - 快速开始: index.md
-  - 详细功能介绍: 框架功能介绍.md
+  - 详细功能介绍:
+    - 框架功能介绍/执行管理器.md
+    - 框架功能介绍/环境部署.md
+    - 框架功能介绍/标签化管理.md
+    - 框架功能介绍/标签自动同步.md
+    - 框架功能介绍/图像识别.md
+    - 框架功能介绍/属性定位.md
+    - 框架功能介绍/OCR识别.md
+    - 框架功能介绍/基于UI的元素定位方案.md
+    - 框架功能介绍/测试报告.md
+    - 框架功能介绍/键鼠操作.md
+    - 框架功能介绍/日志系统.md
+    - 框架功能介绍/静态代码扫描.md
+    - 框架功能介绍/失败录屏.md
+    - 框架功能介绍/重启类场景.md
+    - 框架功能介绍/PMS数据回填.md
+    - 框架功能介绍/Wayland适配.md
+    - 框架功能介绍/常见问题.md
   - 框架设计:
     - 自动化测试架构设计v1.0.md
     - AT基础框架设计方案.md

@@ -8,7 +8,6 @@
 ![PyPI - License](https://img.shields.io/pypi/l/youqu)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/youqu)
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/youqu)
-![PyPI - Implementation](https://img.shields.io/pypi/implementation/youqu)
 ![Static Badge](https://img.shields.io/badge/UOS%2FDeepin-Platform?style=flat-square&label=OS)
 ![Static Badge](https://img.shields.io/badge/Linux-Platform?style=flat-square&label=Platform)
 
