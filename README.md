@@ -1,20 +1,22 @@
-![](https://raw.githubusercontent.com/mikigo/pic/main/logo.png)
-
 <p align="center">
-    <em>有趣，是一个使用简单且功能强大的自动化测试基础框架。</em>
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+  <a href="https://linuxdeepin.github.io/deepin-autotest-framework/">
+    <img src="https://pic.imgdb.cn/item/64f05326661c6c8e54fe9bf4.png" width="520" alt="YouQu">
+  </a>
 </p>
 
-![PyPI](https://img.shields.io/pypi/v/youqu?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu%2F)
-![PyPI - License](https://img.shields.io/pypi/l/youqu)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/youqu)
-![PyPI - Wheel](https://img.shields.io/pypi/wheel/youqu)
-![Static Badge](https://img.shields.io/badge/UOS%2FDeepin-Platform?style=flat-square&label=OS)
-![Static Badge](https://img.shields.io/badge/Linux-Platform?style=flat-square&label=Platform)
+<p align="center">
+    <em>有趣，一个使用简单且功能强大的自动化测试基础框架。</em>
+</p>
+![PyPI](https://img.shields.io/pypi/v/youqu?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu%2F&color=%2344CC11)
+![PyPI - License](https://img.shields.io/pypi/l/youqu?color=blue&color=%2344CC11)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/youqu?color=%2344CC11)
+![Static Badge](https://img.shields.io/badge/UOS%2FDeepin/Ubuntu/Debian-Platform?style=flat&label=OS)
+![Static Badge](https://img.shields.io/badge/Linux-Platform?style=flat&label=Platform)
 
 [![Downloads](https://static.pepy.tech/badge/youqu/week)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu/month)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu)](https://pepy.tech/project/youqu)
-![GitHub repo size](https://img.shields.io/github/repo-size/linuxdeepin/deepin-autotest-framework)
 
 ---
 
@@ -47,7 +49,11 @@
 17. 支持多种方式的数据回填功能，其中异步回填的方案，完美解决了数据回填的耗时问题；
 18. 支持重启交互场景用例的执行，使用方法优雅简洁；
 
+------------------------
+
 【[视频介绍](https://doc.uniontech.com/file/gXqmeOpjg4uGpRqo)】
+
+统信公司内网还可以访问【[内网文档](http://youqu-dev.uniontech.com/)】，文档内容一样，访问速度更快哦~~
 
 ## 安装使用
 

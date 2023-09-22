@@ -155,31 +155,8 @@ class _DdeDesktopPublicBaseWidget(Src, RightMenuPublicWidget):
         :param name: 文件名称
         :return: 坐标
         """
-        # 不同图标大小的高宽 y，x
-        num = [(102, 62), (118, 92), (148, 120), (172, 174), (207, 242)]
-        conf = ConfigParser()
-        if not os.path.exists(Config.DESKTOP_CONFIG):
-            os.system("cd ~/Desktop;touch .test_desktop;sleep 1;rm -rf .test_desktop")
-        try:
-            conf.read(os.path.expanduser(Config.DESKTOP_CONFIG))
-            level = int(conf.get("GeneralConfig", "IconLevel", fallback=1))
-        except NoOptionError as exc:
-            raise EnvironmentError(f"{Config.DESKTOP_CONFIG} 可能不存在") from exc
-        for _x, _y in dict(conf["SingleScreen"]).items():
-            frame = re.sub(
-                r"\\x[0-9a-fA-F]{2,4}",
-                lambda i: chr(int(i.group().replace(r"\x", ""), 16)),
-                _y,
-            )
-            if frame.endswith(name):
-                axes = _x.split("_")[::-1]
-                _y, _x = map(
-                    lambda i: int(i[0]) * int(i[1]) + int(i[1]) / 2,
-                    zip(axes, num[level]),
-                )
-                logger.info(f"{name}坐标为{str(_x)},{str(_x)}")
-                return int(_x), int(_y)
-        raise ValueError(f"{name} 未找到")
+        from src.desktop import get_desktop_file_location_by_config
+        return get_desktop_file_location_by_config(name)
 
     def click_file_in_desktop_by_config(self, file_name):
         """

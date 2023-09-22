@@ -1,20 +1,23 @@
-![](https://raw.githubusercontent.com/mikigo/pic/main/logo.png)
+<p align="center">
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+  <a href="https://linuxdeepin.github.io/deepin-autotest-framework/">
+    <img src="https://pic.imgdb.cn/item/64f05326661c6c8e54fe9bf4.png" width="520" alt="YouQu">
+  </a>
+</p>
 
 # YouQu
 
 > YouQu, a simple and powerful autotest framework.
 
-![PyPI](https://img.shields.io/pypi/v/youqu?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu%2F)
-![PyPI - License](https://img.shields.io/pypi/l/youqu)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/youqu)
-![PyPI - Wheel](https://img.shields.io/pypi/wheel/youqu)
-![Static Badge](https://img.shields.io/badge/UOS%2FDeepin-Platform?style=flat-square&label=OS)
-![Static Badge](https://img.shields.io/badge/Linux-Platform?style=flat-square&label=Platform)
+![PyPI](https://img.shields.io/pypi/v/youqu?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu%2F&color=%2344CC11)
+![PyPI - License](https://img.shields.io/pypi/l/youqu?color=blue&color=%2344CC11)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/youqu?color=%2344CC11)
+![Static Badge](https://img.shields.io/badge/UOS%2FDeepin/Ubuntu/Debian-Platform?style=flat&label=OS)
+![Static Badge](https://img.shields.io/badge/Linux-Platform?style=flat&label=Platform)
 
 [![Downloads](https://static.pepy.tech/badge/youqu/week)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu/month)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu)](https://pepy.tech/project/youqu)
-![GitHub repo size](https://img.shields.io/github/repo-size/linuxdeepin/deepin-autotest-framework)
 
 English | [简体中文](README.md) 
 
