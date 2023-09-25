@@ -8,7 +8,7 @@ theme:
     - media: '(prefers-color-scheme: light)'
       scheme: default
       primary: teal
-      accent: amber
+      accent: deep orange
       toggle:
         icon: material/lightbulb
         name: Switch to light mode
@@ -37,7 +37,7 @@ theme:
     - search.share
     - search.suggest
     - toc.follow
-    - header.autohide
+#    - header.autohide
 
   logo: "https://pic.imgdb.cn/item/64f05326661c6c8e54fe9bf4.png"
   icon:
@@ -75,7 +75,6 @@ plugins:
   - git-revision-date-localized:
       locale: zh
   - git-authors:
-      locale: zh
   - search
   - mike
 
@@ -88,6 +87,7 @@ extra:
       link: https://github.com/linuxdeepin
     - icon: fontawesome/brands/python
       link: https://pypi.org/project/youqu
+  homepage: https://linuxdeepin.github.io/deepin-autotest-framework
 
 extra_javascript:
   - '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js'
@@ -98,14 +98,15 @@ extra_css:
 nav:
   - 快速开始: index.md
   - 详细功能介绍:
-    - 框架功能介绍/执行管理器.md
     - 框架功能介绍/环境部署.md
+    - 框架功能介绍/执行管理器.md
     - 框架功能介绍/标签化管理.md
     - 框架功能介绍/标签自动同步.md
     - 框架功能介绍/图像识别.md
     - 框架功能介绍/属性定位.md
     - 框架功能介绍/OCR识别.md
-    - 框架功能介绍/基于UI的元素定位方案.md
+    - 框架功能介绍/相对坐标定位.md
+    - 框架功能介绍/去干扰识别.md
     - 框架功能介绍/测试报告.md
     - 框架功能介绍/键鼠操作.md
     - 框架功能介绍/日志系统.md
@@ -115,6 +116,8 @@ nav:
     - 框架功能介绍/PMS数据回填.md
     - 框架功能介绍/Wayland适配.md
     - 框架功能介绍/常见问题.md
+  - 版本更新:
+    - RELEASE.md
   - 框架设计:
     - 自动化测试架构设计v1.0.md
     - AT基础框架设计方案.md
@@ -127,7 +130,5 @@ nav:
   - 其他:
     - 智能化功能测试.md
     - 智能化性能测试.md
-    - 博客文章: https://mikigo.github.io/funny-docs
     - 定级工具: http://youqu-dev.uniontech.com/tool
-  - 版本更新:
-    - RELEASE.md
+    - 博客文章: https://mikigo.github.io/funny-docs

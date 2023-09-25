@@ -1,5 +1,27 @@
 # 版本更新记录
 
+## 2.2.4（unreleased）
+
+new
+
+- 新增导入全局配置对象：
+
+  ```py
+  from setting import conf
+  ```
+
+  这种写法和之前的写法效果是一样的：
+
+  ```py
+  from setting.globalconfig import GlobalConfig
+  ```
+
+  主要为了简化代码。
+
+- 继续尝试将一些功能模块拆分为独立构件；
+
+- 增加了在线文档的显示宽度；
+
 ## 2.2.3（2023/9/15）
 
 new
@@ -8,31 +30,31 @@ new
 
 fix
 
-- 修复了远程执行传入app_name无法收集到用例的问题；
-- 优化了docs文档内容及排版；
+- 修复了远程执行传入 `app_name` 无法收集到用例的问题； 
+- 优化了 `docs` 文档内容及排版；
 
 ## 2.2.1（2023/9/13）
 
 new
 
-- 新增用例脚本 py 文件 id 自动同步到 csv 文件功能；
-- 新增自动从 pms 上获取用例相关标签的功能；
+- 新增用例脚本 `py` 文件 `id` 自动同步到 `csv` 文件功能；
+- 新增自动从 `pms` 上获取用例相关标签的功能；
 
 fix
 
-- 修复了 letmego 在开发调试时也会记录执行过程的问题；
+- 修复了 `letmego` 在开发调试时也会记录执行过程的问题；
 - 优化了在线文档内容和排版；
 
 ## 2.2.0（2023/9/5）
 
 new
 
-- 正式启用 letmego 技术方案；
+- 正式启用 `letmego` 技术方案；
 
 fix
 
-- 对 docs 里面细化了远程执行章节的描述；
-- 多 docs 里面优化了标签化管理章节的描述；
+- 对 `docs` 里面细化了远程执行章节的描述；
+- 多 `docs` 里面优化了标签化管理章节的描述；
 
 ## 2.1.5（2023/8/31）
 
@@ -98,11 +120,11 @@ sudo pip3 install youqu==2.0.0
 
 - 推荐使用 `sudo pip3` （加 sudo）进行安装；
 
-  如果不加 sudo 有些机器可能 `$HOME/.local/bin` 不在系统 PATH 环境目录下，在不添加环境变量的情况下，会出现 YouQu 的初始化工程命令（youqu-startproject）无法使用的问题；
+  如果不加 sudo 有些机器可能 `$HOME/.local/bin` 不在系统 PATH 环境目录下，在不添加环境变量的情况下，会出现 `YouQu` 的初始化工程命令（youqu-startproject）无法使用的问题；
 
   当然，将上述路径添加到环境变量之后也是可以用的，所以我这里是推荐加 sudo，不加 sudo 也是可以的，只是需要关注下环境变量的问题。
 
-- 推荐指定版本号（youqu==2.0.0）安装，如果不指定版本号默认是安装最新发布的 YouQu 版本，你可以在 [PyPI](https://pypi.org/project/youqu/) 上的 Release history 里面查看有哪些版本。
+- 推荐指定版本号（`youqu==2.0.0`）安装，如果不指定版本号默认是安装最新发布的 YouQu 版本，你可以在 [PyPI](https://pypi.org/project/youqu/) 上的 Release history 里面查看有哪些版本。
 
 安装之后会自动生成一个系统命令 youqu-startproject，使用它可以初始化工程，这里以音乐举例；
 
@@ -123,7 +145,7 @@ youqu-startproject autotest_deepin_music
 为了解决以下问题：
 
 - 过去一段时间咱们经常出现的，不同的AT项目在同一台机器上部署环境时依赖版本冲突的问题，新方案不同的项目会动态生成自己的虚拟环境，相互之间不影响；
-- 业内为了解决版本冲突问题一般都会使用Python虚拟环境的工具，但是都有个问题，无法管理 deb 包形式发布的 Python 包，本次我们解决了这个问题，能够完全管理常规的Python包，也能管理到 deb 包形式发布的 Python 三方包；
+- 业内为了解决版本冲突问题一般都会使用 `Python` 虚拟环境的工具，但是都有个问题，无法管理 deb 包形式发布的 Python 包，本次我们解决了这个问题，能够完全管理常规的 `Python` 包，也能管理到 deb 包形式发布的 Python 三方包；
 
 虚拟化环境部署使用方法：
 
@@ -133,7 +155,7 @@ bash env.sh
 
 可以看出来和原来使用方法没有变化，也就是说从使用的角度是完全没有区别的，只是内部做了不同的事情。
 
-值得一提的是，本机部署的功能仍然保留 env_dev.sh，可以作为开发时的环境部署。
+值得一提的是，本机部署的功能仍然保留 `env_dev.sh`，可以作为开发时的环境部署。
 
 **3、新的驱动命令**
 
@@ -155,7 +177,7 @@ youqu manage.py run
 
 **4、新的文档地址**
 
-过去咱们 YouQu 的在线文档是部署在公司内网的，现在开源到 github 了，外部开发者肯定访问不到内网的文档，因此需要将文档部署到公网【[公网文档](https://linuxdeepin.github.io/deepin-autotest-framework/)】；
+过去咱们 `YouQu` 的在线文档是部署在公司内网的，现在开源到 github 了，外部开发者肯定访问不到内网的文档，因此需要将文档部署到公网【[公网文档](https://linuxdeepin.github.io/deepin-autotest-framework/)】；
 
 公网文档使用的是 github pages（白嫖怪一顿狂喜~~），但可能会出现文档速度慢的问题（代理下就好了），不过没关系，咱们【[内网文档](http://youqu-dev.uniontech.com/)】仍然保留，文档内容一样，访问速度更快。
 

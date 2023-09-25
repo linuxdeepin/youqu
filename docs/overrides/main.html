@@ -6,7 +6,7 @@
 {% if git_page_authors %}
 <div class="md-source-date">
     <small>
-        作者: {{ git_site_authors | default('enable mkdocs-git-authors-plugin') }}
+        作者: {{ git_page_authors | default('enable mkdocs-git-authors-plugin') }}
     </small>
 </div>
 {% endif %}
