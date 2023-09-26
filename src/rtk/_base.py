@@ -5,8 +5,10 @@
 
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
+import os
 from enum import Enum
 from enum import unique
+from setting import conf
 
 
 # pylint: disable=C0103
@@ -69,12 +71,15 @@ class Args(Enum):
     send2task = "send2task"
 
 
-def  transform_app_name(real_app_name):
+def  transform_app_name(app_name):
     """转换 app_name"""
-    if not real_app_name:
+    if not app_name:
         return None
-    if real_app_name.startswith("apps/autotest_"):
-        real_app_name = real_app_name.replace("apps/autotest_", "").replace("_", "-").strip("/")
-    elif real_app_name.startswith("autotest_"):
-        real_app_name = real_app_name.replace("autotest_", "").replace("_", "-").strip("/")
-    return real_app_name
+    if "-" in app_name:
+        raise ValueError(f"{app_name} 中存在 ['-'] 符号")
+    if app_name.startswith("apps/"):
+        app_name = app_name.replace("apps/", "").strip("/")
+    for dir_name in os.listdir(conf.APPS_PATH):
+        if dir_name == app_name:
+            return app_name
+    raise NotADirectoryError(f"{app_name} 目录不存在")

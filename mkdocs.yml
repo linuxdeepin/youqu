@@ -37,7 +37,6 @@ theme:
     - search.share
     - search.suggest
     - toc.follow
-#    - header.autohide
 
   logo: "https://pic.imgdb.cn/item/64f05326661c6c8e54fe9bf4.png"
   icon:
@@ -99,6 +98,7 @@ nav:
   - 快速开始: index.md
   - 详细功能介绍:
     - 框架功能介绍/环境部署.md
+    - 框架功能介绍/全局配置.md
     - 框架功能介绍/执行管理器.md
     - 框架功能介绍/标签化管理.md
     - 框架功能介绍/标签自动同步.md
@@ -110,12 +110,11 @@ nav:
     - 框架功能介绍/测试报告.md
     - 框架功能介绍/键鼠操作.md
     - 框架功能介绍/日志系统.md
-    - 框架功能介绍/静态代码扫描.md
     - 框架功能介绍/失败录屏.md
     - 框架功能介绍/重启类场景.md
     - 框架功能介绍/PMS数据回填.md
     - 框架功能介绍/Wayland适配.md
-    - 框架功能介绍/常见问题.md
+    - 框架功能介绍/静态代码扫描.md
   - 版本更新:
     - RELEASE.md
   - 框架设计:
@@ -127,8 +126,14 @@ nav:
     - AT经验总结.md
     - AT用例筛选指北.md
     - AT执行器使用指北.md
+  - 框架生态:
+    - letmego: https://linuxdeepin.github.io/letmego
+#    - pdocr-rpc
+#    - funnylog
+#    - image-center
   - 其他:
     - 智能化功能测试.md
     - 智能化性能测试.md
     - 定级工具: http://youqu-dev.uniontech.com/tool
     - 博客文章: https://mikigo.github.io/funny-docs
+  - 常见问题: 常见问题.md

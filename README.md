@@ -161,8 +161,8 @@ youqu manage.py run
 
 ```coffeescript
   -h, --help            show this help message and exit
-  -a APP, --app APP     应用名称：deepin-music 或 autotest_deepin_music 或
-                        apps/autotest_deepin_music
+  -a APP, --app APP     应用名称：apps/autotest_deepin_music 或
+                        autotest_deepin_music
   -k KEYWORDS, --keywords KEYWORDS
                         用例的关键词,支持and/or/not逻辑组合
   -t TAGS, --tags TAGS  用例的标签,支持and/or/not逻辑组合
@@ -189,8 +189,9 @@ youqu manage.py run
   -f CASE_FILE, --case_file CASE_FILE
                         根据文件执行用例
   --deb_path DEB_PATH   需要安装deb包的本地路径
-  --pms_user PMS_USER   pms 用户名
-  --pms_password PMS_PASSWORD
+  -u PMS_USER, --pms_user PMS_USER
+                        pms 用户名
+  -p PMS_PASSWORD, --pms_password PMS_PASSWORD
                         pms 密码
   --suite_id SUITE_ID   pms 测试套ID
   --pms_info_file PMS_INFO_FILE
@@ -204,13 +205,14 @@ youqu manage.py run
   --build_location BUILD_LOCATION
                         构建地区（写入json文件）
   --line LINE           执行的业务线（写入json文件）
-  --autostart AUTOSTART 用例执行程序注册到开机自启服务
+  --autostart AUTOSTART
+                        重启类场景开启letmego执行方案
 ```
 
 在一些 CI 环境下使用命令行参数会更加方便：
 
 ```shell
-youqu manage.py run --app deepin-music --keywords "xxx" --tags "xxx"
+youqu manage.py run --app apps/autotest_deepin_music --keywords "xxx" --tags "xxx"
 ```
 
 --app 入参还支持 `autotest_xxx` 和 `apps/autotest_xxx` 两种写法，方便在输入命令的过程中使用补全，下面的远程执行功能同样支持。
@@ -521,7 +523,7 @@ youqu manage.py remote
 在命令行这样运行：
 
 ```shell
-youqu manage.py remote -a deepin-music -c uos@10.8.13.x3/uos@10.8.13.x4 -k "xxx" -t "xxx"
+youqu manage.py remote -a apps/autotest_deepin_music -c uos@10.8.13.x3/uos@10.8.13.x4 -k "xxx" -t "xxx"
 ```
 
 所有用例执行完之后会在 `report` 目录下回收各个测试机执行的测试报告。

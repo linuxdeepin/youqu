@@ -16,7 +16,7 @@ class CsvControl:
 
     def __init__(self, app_name=None):
         self.walk_dir = (
-            f"{GlobalConfig.APPS_PATH}/autotest_{transform_app_name(app_name).replace('-', '_')}"
+            f"{GlobalConfig.APPS_PATH}/{transform_app_name(app_name)}"
             if app_name
             else GlobalConfig.APPS_PATH
         )

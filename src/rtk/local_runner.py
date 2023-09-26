@@ -166,7 +166,7 @@ class LocalRunner:
         report_name = (
             case_file.replace("/", "_").replace(".", "_")
             if case_file
-            else (app_dir if app_dir.startswith("autotest_") else "")
+            else app_dir
         )
         cmd.append(
             f"--junit-xml={xml_report_path}/{report_name}{'-' if report_name else ''}{GlobalConfig.TIME_STRING}.xml"
@@ -247,9 +247,7 @@ class LocalRunner:
             cmd.extend(["--suite_id", default.get(Args.suite_id.value)])
         if default.get(Args.task_id.value):
             cmd.extend(["--task_id", default.get(Args.task_id.value)])
-        if default.get(Args.send_pms.value) and default.get(
-                Args.trigger.value
-        ):
+        if default.get(Args.send_pms.value) and default.get(Args.trigger.value):
             cmd.extend(["--trigger", default.get(Args.trigger.value)])
 
         cmd.extend(
@@ -317,15 +315,14 @@ class LocalRunner:
         """
         app_name: str = self.default.get(Args.app_name.value)
         if app_name:
-            real_app_name = app_name.replace("-", "_")
             applications = listdir(GlobalConfig.APPS_PATH)
             for working_dir in applications:
-                if working_dir.endswith(real_app_name):
+                if working_dir == app_name:
                     case_path = f"{GlobalConfig.APPS_PATH}/{working_dir}"
                     print(f"WorkSpace: \n{case_path}")
                     chdir(case_path)
                     return working_dir
-            raise EnvironmentError(f"apps目录下未找到指定的 {app_name}")
+            raise NotADirectoryError(f"apps 目录下未找到指定的 {app_name}")
         return GlobalConfig.APPS_PATH
 
     def local_run(self):

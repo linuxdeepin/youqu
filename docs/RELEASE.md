@@ -4,6 +4,22 @@
 
 new
 
+- 解除子项目的工程名称以 `autotest_` 开头的限制，子项目工程名称可以为任意名称；
+
+  配置文件 `globalconfig.ini` 中的 `APP_NAME` 和命令行参数 `-a/--app` 仅支持传入工程名称的全称：
+
+  ```shell
+  youqu manage.py run -a autotest_deepin_music
+  ```
+
+  或
+
+  ```shell
+  youqu manage.py run -a apps/autotest_deepin_music
+  ```
+
+  从 `apps` 开头可以获得命令行补全，使用更加便捷。
+
 - 新增导入全局配置对象：
 
   ```py

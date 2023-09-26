@@ -167,7 +167,7 @@ class RemoteRunner:
             for i in listdir(GlobalConfig.APPS_PATH):
                 if i == "__init__.py":
                     continue
-                if app_name.replace("-", "_") not in i:
+                if app_name.replace("-", "_") != i:
                     exclude += f"--exclude='{i}' "
         system(
             f"{self.rsync % (password,)} {exclude} {GlobalConfig.ROOT_DIR}/* "
@@ -288,7 +288,7 @@ class RemoteRunner:
             i[0] = f"--{i[0]}"
             i[1] = f"'{i[1]}'"
             if i[0] == "--app_name":
-                real_app_name = f"apps/autotest_{self.default.get(Args.app_name.value).replace('-', '_')}"
+                real_app_name = f"apps/{self.default.get(Args.app_name.value)}"
                 continue
 
             _tmp_args.extend(i)
@@ -321,7 +321,7 @@ class RemoteRunner:
         :return:
         """
         app_dir = (
-            f"autotest_{self.default.get(Args.app_name.value).replace('-', '_')}"
+            self.default.get(Args.app_name.value)
             if self.default.get(Args.app_name.value)
             else ""
         )

@@ -36,7 +36,7 @@ from src.pms.send2pms import Send2Pms
 class Manage:
     """执行器"""
 
-    __author__ = "huangmingqiang@uniontech.com"
+    __author__ = "mikigo<huangmingqiang@uniontech.com>"
 
     # pylint: disable=too-many-arguments,too-many-locals,too-many-statements
     def __init__(
@@ -226,7 +226,7 @@ class Manage:
         """本地执行"""
         sub_parser_run.add_argument(
             "-a", "--app", default="",
-            help="应用名称：deepin-music 或 autotest_deepin_music 或 apps/autotest_deepin_music"
+            help="应用名称：apps/autotest_deepin_music 或 autotest_deepin_music"
         )
         sub_parser_run.add_argument(
             "-k", "--keywords", default="", help="用例的关键词,支持and/or/not逻辑组合"

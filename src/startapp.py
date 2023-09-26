@@ -20,6 +20,7 @@ class StartApp:
         self.app_name = app_name.strip("/")
 
     def copy_template_to_apps(self):
+        """copy_template_to_apps"""
         app_name_path = f"{GlobalConfig.APPS_PATH}/{self.app_name}"
         if os.path.exists(app_name_path) and os.listdir(app_name_path):
             if input(
@@ -37,10 +38,11 @@ class StartApp:
         )
 
     def rewrite(self):
+        """rewrite"""
         for root, dirs, files in os.walk(f"{GlobalConfig.APPS_PATH}/{self.app_name}"):
             for file in files:
-                app_name = None
-                if "autotest_" in self.app_name:
+                app_name = self.app_name
+                if self.app_name.startswith("autotest_"):
                     app_name = re.sub(r"autotest_", "", self.app_name)
 
                 if file.endswith("-tpl"):
