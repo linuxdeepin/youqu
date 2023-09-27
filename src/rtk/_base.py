@@ -67,8 +67,10 @@ class Args(Enum):
     pyid2csv = "pyid2csv"
     export_csv_file = "export_csv_file"
     pms2csv = "pms2csv"
+    csv2pms = "csv2pms"
     pms_link_csv = "pms_link_csv"
     send2task = "send2task"
+    csv_name = "csv_name"
 
 
 def  transform_app_name(app_name):

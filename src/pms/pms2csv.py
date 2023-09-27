@@ -23,7 +23,7 @@ from src.rtk._base import transform_app_name
 class Pms2Csv(_Base):
     """获取pms数据同步到本地csv文件"""
 
-    __author__ = "huangmingqiang@uniontech.com"
+    __author__ = "mikigo<huangmingqiang@uniontech.com>"
 
     config_error_log = "请检查您传递的 '命令行参数' 或 setting/globalconfig.ini 里的配置项"
 
@@ -96,7 +96,7 @@ class Pms2Csv(_Base):
                     "case_type": case_type,
                     "case_from": "BUG" if case_from == "是" else "",
                     "device_type": device_type.split("(")[0]
-                    if device_type or device_type != "null"
+                    if device_type and device_type != "null"
                     else "",
                     "online_obj": "CICD" if online_obj == "是" else "",
                 }

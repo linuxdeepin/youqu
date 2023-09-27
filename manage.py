@@ -24,6 +24,7 @@ from setting.globalconfig import GlobalConfig
 from src.startapp import StartApp
 from src import logger
 from src.pms.pms2csv import Pms2Csv
+from src.pms.csv2pms import Csv2Pms
 from src.rtk._base import SubCmd
 from src.rtk._base import Args
 from src.rtk.local_runner import LocalRunner
@@ -81,6 +82,8 @@ class Manage:
             pyid2csv=None,
             export_csv_file=None,
             pms2csv=None,
+            csv2pms=None,
+            csv_name=None,
             pms_link_csv=None,
             send2task=None,
     ):
@@ -124,6 +127,8 @@ class Manage:
         self.default_pyid2csv = pyid2csv
         self.default_export_csv_file = export_csv_file
         self.default_pms2csv = pms2csv
+        self.default_csv2pms = csv2pms
+        self.default_csv_name = csv_name
         self.default_pms_link_csv = pms_link_csv
         self.default_send2task = send2task
 
@@ -374,9 +379,8 @@ class Manage:
         """pms相关功能命令行参数"""
         sub_parser_pms.add_argument(
             "-a", "--app", default="",
-            help="应用名称：deepin-music 或 autotest_deepin_music 或 apps/autotest_deepin_music"
+            help="应用名称：apps/autotest_deepin_music 或 autotest_deepin_music"
         )
-
         sub_parser_pms.add_argument(
             "-u", "--pms_user", default="", help="pms 用户名"
         )
@@ -390,6 +394,14 @@ class Manage:
         sub_parser_pms.add_argument(
             "-p2c", "--pms2csv", action='store_const', const=True, default=False,
             help="从PMS爬取用例标签到csv文件"
+        )
+        sub_parser_pms.add_argument(
+            "-c2p", "--csv2pms", action='store_const', const=True, default=False,
+            help="将csv文件里面的标签同步到PMS"
+        )
+        sub_parser_pms.add_argument(
+            "-c", "--csv_name", default="",
+            help="将csv文件里面的标签同步到PMS时csv文件的名称"
         )
         sub_parser_pms.add_argument(
             "--send2task",
@@ -409,6 +421,8 @@ class Manage:
             Args.pms_user.value: args.pms_user or self.default_pms_user,
             Args.pms_password.value: args.pms_password or self.default_pms_password,
             Args.pms2csv.value: args.pms2csv or self.default_pms2csv,
+            Args.csv2pms.value: args.csv2pms or self.default_csv2pms,
+            Args.csv_name.value: args.csv_name or self.default_csv_name,
             Args.pms_link_csv.value: args.pms_link_csv or self.default_pms_link_csv,
             Args.send2task.value: args.send2task or self.default_send2task,
             Args.task_id.value: args.task_id or GlobalConfig.TASK_ID,
@@ -421,6 +435,13 @@ class Manage:
                 password=pms_kwargs.get(Args.pms_password.value) or GlobalConfig.PMS_PASSWORD,
                 pms_link_csv=pms_kwargs.get(Args.pms_link_csv.value),
             ).write_new_csv()
+        elif pms_kwargs.get(Args.csv2pms.value):
+            Csv2Pms(
+                app_name=pms_kwargs.get(Args.app_name.value),
+                user=pms_kwargs.get(Args.pms_user.value) or GlobalConfig.PMS_USER,
+                password=pms_kwargs.get(Args.pms_password.value) or GlobalConfig.PMS_PASSWORD,
+                csv_name=pms_kwargs.get(Args.csv_name.value),
+            ).post_to_pms()
         elif (
                 pms_kwargs.get(Args.send2task.value)
                 and pms_kwargs.get(Args.task_id.value)
@@ -430,6 +451,8 @@ class Manage:
                 Send2Pms.case_res_path(pms_kwargs.get(Args.task_id.value)),
                 Send2Pms.data_send_result_csv(pms_kwargs.get(Args.trigger.value))
             )
+        else:
+            raise ValueError
 
     @staticmethod
     def start_app(startapp=None):
@@ -443,7 +466,7 @@ class Manage:
         """csv相关功能命令参数"""
         sub_parser_csv.add_argument(
             "-a", "--app", default="",
-            help="应用名称：deepin-music 或 autotest_deepin_music 或 apps/autotest_deepin_music"
+            help="应用名称：apps/autotest_deepin_music 或 autotest_deepin_music"
         )
         sub_parser_csv.add_argument(
             "-k", "--keywords", default="", help="用例的关键词"

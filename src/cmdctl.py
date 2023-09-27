@@ -221,7 +221,7 @@ class CmdCtl:
         )
 
     @classmethod
-    def kill_process(cls, process, grep_list: str = None):
+    def kill_process(cls, process, grep_list: [list, tuple] = None):
         """
          杀进程
         :param process: 进程名

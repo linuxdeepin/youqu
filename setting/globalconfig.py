@@ -136,6 +136,7 @@ class _GlobalConfig:
     PY_ID_TO_CSV = csv_cfg.get_bool("PY_ID_TO_CSV", default=False)
     EXPORT_CSV_FILE = csv_cfg.get("EXPORT_CSV_FILE", default="")
     EXPORT_CSV_HEARD = csv_cfg.get("EXPORT_CSV_HEARD", default="用例级别,用例类型,测试级别,是否跳过").replace(" ", "")
+    CSV_NAME_TO_PMS = csv_cfg.get("CSV_NAME_TO_PMS", default="")
 
     # [log_cli]
     log_cli = GetCfg(GLOBAL_CONFIG_FILE_PATH, "log_cli")
