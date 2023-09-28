@@ -128,9 +128,9 @@ nav:
     - AT执行器使用指北.md
   - 框架生态:
     - letmego: https://linuxdeepin.github.io/letmego
-#    - pdocr-rpc
-#    - funnylog
-#    - image-center
+    - funnylog: https://linuxdeepin.github.io/funnylog
+    - pdocr-rpc: https://linuxdeepin.github.io/pdocr-rpc
+    - image-center: https://linuxdeepin.github.io/image-center
   - 其他:
     - 智能化功能测试.md
     - 智能化性能测试.md
