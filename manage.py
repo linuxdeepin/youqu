@@ -495,6 +495,8 @@ class Manage:
             _csv = CsvControl(csv_kwargs.get(Args.app_name.value))
             _csv.delete_mark_in_csv_if_not_exists_py()
             _csv.async_mark_to_csv()
+        elif csv_kwargs.get(Args.export_csv_file.value):
+            LocalRunner(**csv_kwargs).local_run()
         else:
             logger.error(
                 f"需要传递一些有用参数或配置项：{Args.pyid2csv.value} 或 {Args.export_csv_file.value}"
