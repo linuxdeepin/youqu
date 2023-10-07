@@ -155,58 +155,10 @@ youqu manage.py run
 
 #### 2.1. 命令行参数
 
-通过命令行参数配置参数
+通过命令行参数配置参数，使用 `-h` 或 `--help` 可以查看所有支持的命令行参数：
 
-以下为 `youqu manage.py run` 提供的一些常用的参数选项：
-
-```coffeescript
-  -h, --help            show this help message and exit
-  -a APP, --app APP     应用名称：apps/autotest_deepin_music 或
-                        autotest_deepin_music
-  -k KEYWORDS, --keywords KEYWORDS
-                        用例的关键词,支持and/or/not逻辑组合
-  -t TAGS, --tags TAGS  用例的标签,支持and/or/not逻辑组合
-  --rerun RERUN         失败重跑次数
-  --record_failed_case RECORD_FAILED_CASE
-                        失败录屏从第几次失败开始录制视频
-  --clean {yes,}        清理环境
-  --report_formats REPORT_FORMATS
-                        测试报告格式
-  --max_fail MAX_FAIL   最大失败率
-  --log_level LOG_LEVEL
-                        日志输出级别
-  --timeout TIMEOUT     单条用例超时时间
-  --resolution RESOLUTION
-                        检查分辨率
-  --debug DEBUG         调试模式
-  --noskip {yes,}       csv文件里面标记了skip跳过的用例不生效
-  --ifixed {yes,}       fixed不生效，仅通过skip跳过用例
-  --send_pms {,async,finish}
-                        数据回填
-  --task_id TASK_ID     测试单ID
-  --trigger {,auto,hand}
-                        触发者
-  -f CASE_FILE, --case_file CASE_FILE
-                        根据文件执行用例
-  --deb_path DEB_PATH   需要安装deb包的本地路径
-  -u PMS_USER, --pms_user PMS_USER
-                        pms 用户名
-  -p PMS_PASSWORD, --pms_password PMS_PASSWORD
-                        pms 密码
-  --suite_id SUITE_ID   pms 测试套ID
-  --pms_info_file PMS_INFO_FILE
-                        pms 信息文件
-  --top TOP             过程中记录top命令中的值
-  --lastfailed          仅执行上次失败用例
-  --duringfail          测试过程中立即显示报错
-  --repeat REPEAT       指定用例执行次数
-  --project_name PROJECT_NAME
-                        工程名称（写入json文件）
-  --build_location BUILD_LOCATION
-                        构建地区（写入json文件）
-  --line LINE           执行的业务线（写入json文件）
-  --autostart AUTOSTART
-                        重启类场景开启letmego执行方案
+```shell
+youqu manage.py run -h
 ```
 
 在一些 CI 环境下使用命令行参数会更加方便：
@@ -215,236 +167,15 @@ youqu manage.py run
 youqu manage.py run --app apps/autotest_deepin_music --keywords "xxx" --tags "xxx"
 ```
 
---app 入参还支持 `autotest_xxx` 和 `apps/autotest_xxx` 两种写法，方便在输入命令的过程中使用补全，下面的远程执行功能同样支持。
+更多参数请查看【[命令行参数](https://linuxdeepin.github.io/deepin-autotest-framework/%E6%A1%86%E6%9E%B6%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D/%E6%89%A7%E8%A1%8C%E7%AE%A1%E7%90%86%E5%99%A8/#21)】
 
 #### 2.2. 配置文件
 
 通过配置文件配置参数
 
-在配置文件 `setting/globalconfig.ini` 里面支持配置对执行的一些参数进行配置，常用的如：
+在配置文件 `setting/globalconfig.ini` 里面支持配置对执行的一些参数进行配置，配置完成之后，直接在命令行执行 `manage.py` 就好了。
 
-```ini
-;=============================== RUN CONFIG ===================================
-[run]
-;执行的应用名称
-;为空表示执行 apps/ 目录下所有应用的用例
-APP_NAME =
-
-;执行包含关键词的用例
-KEYWORDS =
-
-;执行包含用例标签的用例
-;-----------------------------------------------------------
-;1.KEYWORDS 和 TAGS 都为空表示执行 APP_NAME 的所有用例
-;2.KEYWORDS 和 TAGS 都支持逻辑组合，即 and/or/not 的表达式
-;比如：TAGS = L1 or smoke ,表示执行标签带有 L1 或 somke 标签的用例；
-;这两个参数也可以同时使用，可以组合出任意的用例集合，只有想不到没有办不到。
-;-----------------------------------------------------------
-TAGS =
-
-;本地文件测试套，将要执行的用例写入指定的 csv 文件
-;默认为空，从基础框架根目录开始：e.g. CASE_FILE = case_list.txt
-;如果这里有值，APP_NAME KEYWORDS TAGS 的配置均不生效
-CASE_FILE =
-
-;最大失败用例数量的占比
-;比如：总执行用例数为 100, 若 MAX_FAIL = 0.5,则失败用例数达到 50 就会终止测试。
-MAX_FAIL = 1
-
-;单条用例的超时时间，如果一条用例的执行时间超时，这条用例会被停止，后续用例继续执行。
-;单位为秒
-;这是一个全局统一配置，如果某条用例需要单独配置超时时间，可以在用例中这样写：
-;@pytest.mark.timeout(500)
-;def test_xxx_001():
-;    ...
-;会话超时（所有用例执行的超时时间）是根据全局超时配置和用例单独超时配置自动计算的。
-CASE_TIME_OUT = 200
-
-;失败用例重跑次数
-;注意，RERUN = 1 表示重跑 1 次，即第一次用例执行失败会自动重跑 1 次，总共执行 2 次；
-;如果第 2 次执行成功，结果成功，失败亦为失败。
-RERUN = 1
-
-;失败录屏从第几次失败开始录制视频。
-;比如 RECORD_FAILED_CASE = 1 ，表示用例第 1 次执行失败之后开始录屏，RERUN >= RECORD_FAILED_CASE。
-;1.关闭录屏：RECORD_FAILED_CASE > RERUN
-;2.每条用例都录屏：RECORD_FAILED_CASE = 0
-RECORD_FAILED_CASE = 1
-
-;yes 每条用例执行之后进行环境清理
-CLEAN_ALL = yes
-
-;检查测试机分辨率, 比如：1920x1080
-;no: 表示不做分辨率校验
-RESOLUTION = 1920x1080
-
-;不跳过用例，csv文件里面标记了 skip-xxx的用例不跳过
-NOSKIP = no
-
-;ignore fixed
-;no，只要标记了fixed的用例，即使标记了skip-，也会执行；
-;yes，fixed不生效，仅通过skip跳过用例；
-IFIXED = no
-
-;要安装deb包的路径
-;e.g : ~/Downloads/ 安装下载目录下的deb包，如果是远程执行，会自动拷贝到远程并安装。
-DEB_PATH =
-
-;DEBUG 模式执行用例，只收集不执行用例，也不做设备分辨率的检查。
-DEBUG = no
-
-;记录top命令查询的系统资源占用情况，TOP = 3 表示记录前3个进程。
-TOP =
-
-;指定用例执行次数
-REPEAT =
-
-;默认在所有测试完成之后输出报错信息.
-;yes, 测试过程中立即显示报错
-DURING_FAIL = no
-
-;注册自启服务
-AUTOSTART = no
-
-;测试机的密码
-PASSWORD = 1
-
-;图像识别重试次数
-IMAGE_MATCH_NUMBER = 1
-
-;图像识别重试每次间隔等待时间
-IMAGE_MATCH_WAIT_TIME = 1
-
-;图像识别匹配度
-IMAGE_RATE = 0.9
-
-;截取当前屏幕实时图像保存路径，用于图像识别坐标
-SCREEN_CACHE = /tmp/screen.png
-
-;截取屏幕上指定区域图片，保存临时图片的路径
-TMPDIR = /tmp/tmpdir
-
-;系统主题
-SYS_THEME = deepin
-
-;OCR服务端地址（不可随意修改）
-OCR_SERVER_HOST = youqu-dev.uniontech.com
-
-;OpenCV服务端地址
-OPENCV_SERVER_HOST = youqu-dev.uniontech.com
-
-;=============================== REPORT CONFIG ===================================
-[report]
-;测试报告的title
-REPORT_TITLE = YouQu Report
-
-;测试报告的name
-REPORT_NAME = YouQu Report
-
-;测试报告的默认语言
-;en:English
-;ru:Русский
-;zh:中文
-;de:Deutsch
-;nl:Nederlands
-;he:Hebrew
-;br:Brazil
-;pl:Polski
-;ja:日本語
-;es:Español
-;kr:한국어
-;fr:Français
-;az:Azərbaycanca
-REPORT_LANGUAGE = zh
-
-;用例执行完后生成的测试报告格式
-;目前支持 allure, xml, json （支持同时生成）
-REPORT_FORMAT = allure, xml, json
-
-;指定报告生成的路径（相对项目根目录下）
-ALLURE_REPORT_PATH = report/
-XML_REPORT_PATH = report/
-JSON_REPORT_PATH = report/
-
-;=============================== PMS CONFIG ===================================
-;PMS相关配置，包含以下几个方面：
-;1.PMS测试套执行
-;2.自动从PMS爬取数据并同步本地CSV文件
-;3.PMS数据回填
-[pmsctl]
-;PMS的用户名,如: ut001234
-PMS_USER =
-
-;PMS的密码
-PMS_PASSWORD =
-
-;PMS测试套的ID
-;在PMS上查看用例“套件”链接: https://pms.uniontech.com/testsuite-view-495.html
-;测试套ID为: 495
-SUITE_ID =
-
-;数据回填必须关联PMS测试单
-;在PMS上查看测试单链接: https://pms.uniontech.com/testtask-cases-20747.html
-;测试单ID为: 20747
-TASK_ID =
-
-;将测试结果数据回填到PMS
-;为空: 表示不回填,不会在每条用例执行完之后生成json结果文件;
-;async: 表示逐条异步回填,后面一条执行开始时通过子线程对前一条用例的执行结果进行回填，如此实现时间效率最大化;
-;finish: 表示所有用例执行完成之后逐个回填(PMS不支持并发);
-SEND_PMS =
-
-;数据回填的触发者
-;auto: 框架自动回填,配合SEND_PMS配置使用,你可以选择在不同的阶段进行数据回填;
-;hand: 手动回填,每条用例仍然会生成json文件,但框架不会进行数据回填,需要你可以在你想要发送的时间点手动触发回填;
-TRIGGER = auto
-
-;PMS回填的重试次数
-;如果接口请求失败,会进行重试
-SEND_PMS_RETRY_NUMBER = 2
-
-;caselib: 用例库
-;testcase: 产品库用例
-CASE_FROM = caselib
-
-[pmsctl-pms_link_csv]
-;同步PMS数据到本地CSV文件，必须要配置的配置项
-;key是本地CSV文件的文件名称;
-;value是对应PMS上的模块ID;
-;比如要同步音乐的数据, 首先需要将配置 APP_NAME = deepin-music，
-;CSV文件名称为music.csv，其在PMS上的音乐用例库的URL为: https://pms.uniontech.com/caselib-browse-81.html
-;因此应该配置为: music = 81
-;这样才能将PMS与本地CSV文件建立联系。
-;如果你的应用分了很多模块,只需要将对应的信息依次配置好就行了。
-music =
-
-[csvctl]
-;将py文件的case id同步到csv文件
-;yes, 开启同步
-PY_ID_TO_CSV = no
-
-;导出 case_list.csv 文件时配置的字段名，用例名称默认存在第一列，无需添加
-EXPORT_CSV_HEARD = 用例级别,用例类型,测试级别,是否跳过
-
-
-[log_cli]
-;日志相关配置（不打印构造函数和魔法函数的功能说明）
-;批量执行时，终端输出的日志级别 DEBUG/INFO/ERROR
-LOG_LEVEL = DEBUG
-
-# ============= 自动输出日志的配置 ================
-;支持类名以 xxx 开头的，自动将函数说明打印为日志, 多个参数以逗号隔开
-CLASS_NAME_STARTSWITH = Assert
-
-;支持类名以 xxx 结尾的，自动将函数说明打印为日志，多个参数以逗号隔开
-CLASS_NAME_ENDSWITH = Widget
-
-;支持类名包含 xxx 的，自动将函数说明打印为日志，多个参数以逗号隔开
-CLASS_NAME_CONTAIN = ShortCut
-# ==============================================
-```
-
-配置完成之后，直接在命令行执行 `manage.py` 就好了。
+详细配置项请查看【[配置项](https://linuxdeepin.github.io/deepin-autotest-framework/%E6%A1%86%E6%9E%B6%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D/%E6%89%A7%E8%A1%8C%E7%AE%A1%E7%90%86%E5%99%A8/#22)】
 
 ### 3. 远程执行
 
@@ -547,9 +278,9 @@ sudo systemctl enable ssh
 
 多机器分布式异步负载均衡执行也是用本地作为服务端控制远程机器执行，但远程机器执行的用例不同，而是所有远程机器执行的用例之和，为你想要执行的用例集；
 
-似乎有点难以理解，我用大白话举例描述下就是，服务端想要执行 10 条用例，现在远程机器有 5 台；
+似乎有点难以理解，我用大白话举例描述下：
 
-然后服务端就先拿着第 1 条用例给远程 1 号机执行，拿第 2 条用例给远程 2 号机执行...，如此循环直到所有用例执行完，这就是负载均衡执行。
+服务端想要执行 10 条用例，现在远程机器有 5 台，然后服务端就先拿着第 1 条用例给远程 1 号机执行，拿第 2 条用例给远程 2 号机执行...，如此循环直到所有用例执行完，这就是负载均衡执行。
 
 ![](https://pic.imgdb.cn/item/64f6d694661c6c8e54a1025b.png)
 

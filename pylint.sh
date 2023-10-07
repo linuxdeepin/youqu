@@ -3,7 +3,6 @@
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 
 # SPDX-License-Identifier: GPL-2.0-only
-# pylint: disable=C0114
 echo -e "\n====================== youqu pylint 代码扫描 ========================"
 config_pwd=$(cat ./setting/globalconfig.ini | grep "PASSWORD = ")
 PASSWORD=$(echo "${config_pwd}" | cut -d "=" -f2 | python3 -c "s=input();print(s.strip())")
