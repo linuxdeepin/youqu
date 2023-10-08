@@ -11,20 +11,20 @@ YouQu 在 `Wayland` 下兼容适配，`env.sh` 在 `Wayland` 下执行时会安�
 因为 `Wayland` 下有些应用的界面显示和功能本身存在一些差异，用例层可能需要对这部分用例做逻辑判断，使用全局配置里面的常量进行逻辑编写即可：
 
 ```python
-from setting.globalconfig import GlobalConfig
+from setting import conf
 
 # GlobalConfig.IS_WAYLAND 获取到当前的显示服务器（bool）
 # 应用库 Config 继承 GlobalConfig
-if Config.IS_WAYLAND:
+if conf.IS_WAYLAND:
     pass
-if Config.IS_X11:
+if conf.IS_X11:
     pass
 ```
 
 比如用例里面如果断言的图片不同：
 
 ```python
-if Config.IS_WAYLAND:
+if conf.IS_WAYLAND:
     self.assert_image_exist("wayland_XXX")
 else:
     self.assert_image_exist("x11_XXX")
