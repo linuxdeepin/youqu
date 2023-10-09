@@ -182,6 +182,7 @@ KEY_NAMES = {
     'print': 210,
     'right': 106,
     'scrolllock': 70,
+    'printscreen': 210,
     'shift': 42,
     'shiftleft': 42,
     'shiftright': 54,
