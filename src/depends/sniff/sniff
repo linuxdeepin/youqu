@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, print_function, unicode_literals
+
 """
 http://en.wikipedia.org/wiki/Model-view-controller
 
@@ -10,25 +11,32 @@ Data storage is handled by the SniffModel class.
 There is no SniffView class; we just use a GtkTreeView.
 Data display is handled by the SniffController class.
 """
+from sys import path as sys_path
+from os.path import abspath
+from os.path import dirname as dn
 
 import gi
+
 gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
 
+# 在某些机型上可能出现环境变量未加载的问题，这里强制将其注册到环境变量中；
+sys_path.append(dn(dn(dn(dn(abspath(__file__))))))
+
 from src.depends.dogtail.config import config
 from setting.globalconfig import GlobalConfig
+
 if config.checkForA11y:
     from src.depends.dogtail.utils import checkForA11yInteractively
+
     checkForA11yInteractively()
 
 config.logDebugToFile = False
 config.childrenLimit = 100000
 
 import pyatspi
-import Accessibility
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import Gio
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
 from gi.repository import GLib
@@ -63,8 +71,9 @@ class SniffApp(object):
             if path is '/':
                 path = '/usr'
             try:
-                self.app.set_icon_from_file(os.path.join(path, f'{GlobalConfig.ROOT_DIR}/src/depends/dogtail/icons/dogtail-head.svg'))
-            except Exception: # fallback for wierd installations, when sniff is neither in /bin or /usr/bin
+                self.app.set_icon_from_file(
+                    os.path.join(path, f'{GlobalConfig.ROOT_DIR}/src/depends/dogtail/icons/dogtail-head.svg'))
+            except Exception:  # fallback for wierd installations, when sniff is neither in /bin or /usr/bin
                 self.app.set_icon_from_file(f'{GlobalConfig.ROOT_DIR}/src/depends/dogtail/icons/dogtail-head.svg')
                 ...
         self.setUpWidgets()
@@ -191,7 +200,7 @@ class SniffController(object):
         self.treeView.show()
         path = 0
         self.treeView.expand_all()
-        #self.rowExpanded(self.treeView, self.treeModel.get_iter(path), path)
+        # self.rowExpanded(self.treeView, self.treeModel.get_iter(path), path)
 
     def changeRoot(self, menuItem, toSelected=True, *args):
         if toSelected:
@@ -408,7 +417,7 @@ class SniffModel(Gtk.TreeStore):
 
     def __init__(self):
         self.builder = builder
-        #self.autorefresh = self.builder.get_object('autorefresh')
+        # self.autorefresh = self.builder.get_object('autorefresh')
         Gtk.TreeStore.__init__(self, GObject.TYPE_PYOBJECT, GObject.TYPE_STRING, GdkPixbuf.Pixbuf)
         root = pyatspi.Registry.getDesktop(0)
         self.rootNode = self.initialRootNode = root
@@ -544,7 +553,7 @@ class SniffModel(Gtk.TreeStore):
             # print "I smell a bug in %s..." % node.getApplication()
             return None
 
-        #self.cache[node] = Gtk.TreeRowReference(self, path)
+        # self.cache[node] = Gtk.TreeRowReference(self, path)
         return path
 
     def processEvents(self):
@@ -660,10 +669,11 @@ def loadIcon(iconName):
         path = os.path.abspath(
             os.path.join(__file__, os.path.pardir, os.path.pardir))
         if path == '/':
-                path = '/usr'
+            path = '/usr'
         iconName = os.path.join(path, f'{GlobalConfig.ROOT_DIR}/src/depends/dogtail/icons/', iconName)
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(iconName)
     return pixbuf
+
 
 button_xpm = loadIcon("button.xpm")
 checkbutton_xpm = loadIcon("checkbutton.xpm")
@@ -785,6 +795,7 @@ def main():
     except OSError:
         pass
     sniff = SniffApp()
+
 
 if __name__ == '__main__':
     main()
