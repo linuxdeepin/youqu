@@ -437,7 +437,7 @@ class AssertCommon:
                     f"{pic if pic else GlobalConfig.SCREEN_CACHE}",
                 )
             )
-        elif isinstance(res, dict) and False in res.values():
+        elif isinstance(res, dict) and True in res.values():
             res = filter(lambda x: x[1] is not False, res.items())
             raise AssertionError(
                 (

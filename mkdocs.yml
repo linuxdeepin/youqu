@@ -82,10 +82,15 @@ extra:
   version:
     provider: mike
   social:
+    - icon: fontawesome/brands/slack
+      link: https://mikigo.github.io/funny-docs
+      name: funny-docs
     - icon: fontawesome/brands/github
       link: https://github.com/linuxdeepin
+      name: linuxdeepin
     - icon: fontawesome/brands/python
       link: https://pypi.org/project/youqu
+      name: pypi
   homepage: https://linuxdeepin.github.io/deepin-autotest-framework
 
 extra_javascript:
@@ -136,5 +141,4 @@ nav:
     - 智能化功能测试.md
     - 智能化性能测试.md
     - 定级工具: http://youqu-dev.uniontech.com/tool
-    - 博客文章: https://mikigo.github.io/funny-docs
   - 常见问题: 常见问题.md

@@ -96,7 +96,7 @@ class DdeLauncherPublicWidget(Src):
         """
         self.click_app_in_lancher_by_attr("音乐")
 
-    def click_open_file_manager_in_launcher_by_image(self):
+    def click_open_file_manager_in_launcher_by_attr(self):
         """
          在启动器中点击文管
         :return:
@@ -112,7 +112,7 @@ class DdeLauncherPublicWidget(Src):
         self.click_and_input_search_edit_in_launcher_by_attr("截图录屏")
         self.click_app_in_lancher_by_attr("截图录屏")
 
-    def send_file_manager_to_desktop_in_launcher_by_image(self):
+    def send_file_manager_to_desktop_in_launcher_by_attr(self):
         """
          在launcher中发送到桌面
         :return:
