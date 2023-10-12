@@ -6,7 +6,7 @@
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
 import re
-from configparser import ConfigParser
+from configparser import ConfigParser, NoSectionError
 from time import sleep
 
 import dbus
@@ -428,7 +428,10 @@ class ButtonCenter:
             conf.read(self.config_path)
         else:
             raise ValueError
-        direction = conf.get(btn_name, "direction")
+        try:
+            direction = conf.get(btn_name, "direction")
+        except NoSectionError:
+            raise NoSectionError(f"在 [{self.config_path}] 文件中没有配置 '{btn_name}'")
         position = [int(i.strip()) for i in conf.get(btn_name, "location").split(",")]
         default_point = ("left_bottom", "left_top", "right_top", "right_bottom")
         default_boundary_point = (

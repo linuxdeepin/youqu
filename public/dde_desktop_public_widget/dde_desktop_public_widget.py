@@ -3,33 +3,31 @@
 
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 
+import os
+import re
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114# pylint: disable=C0114
 import shutil
-import re
-import os
-from threading import Thread
 from functools import wraps
 from time import sleep
-from configparser import ConfigParser
-from configparser import NoOptionError
 
 import dbus
 import letmego
 
-from src.custom_exception import TemplateElementNotFound, ElementNotFound
-from src.custom_exception import NoIconOfThisSize
-from src.custom_exception import GetWindowInformation
-from src.custom_exception import ApplicationStartError
-from src import logger, log, MouseKey
-from src import Src
-from src import DbusUtils
+from public.dde_desktop_public_widget.config import Config
 from public.right_menu_public_widget.right_menu_public_widget import (
     RightMenuPublicWidget,
 )
-from public.dde_desktop_public_widget.config import Config
 # from public.dbus_common_widget import DbusCommonWidget
 from setting.globalconfig import GlobalConfig
+from src import DbusUtils
+from src import Src
+from src import logger, log, ShortCut
+from src.custom_exception import ApplicationStartError
+from src.custom_exception import GetWindowInformation
+from src.custom_exception import NoIconOfThisSize
+from src.custom_exception import TemplateElementNotFound, ElementNotFound
+from src.wayland_wininfo import WaylandWindowINfo
 
 
 def dfm_warning(func):
@@ -104,27 +102,13 @@ class _DdeDesktopPublicBaseWidget(Src, RightMenuPublicWidget):
             except ElementNotFound as exc:
                 raise ApplicationStartError(f"{self.APP_NAME, exc}") from exc
         elif GlobalConfig.IS_WAYLAND:
-
-            def click():
-                sleep(1)
-                MouseKey.click()
-
             # 移动到当前窗口
             proxy_object = dbus.SessionBus().get_object("org.kde.KWin", "/dde")
             # 移动鼠标到目标窗口
             dbus.Interface(proxy_object, "org.kde.KWin").WindowMove()
-            # 鼠标为激活状态，无法进行下一步，点击一下，释放窗口
-            click()
-            # KWin 获取窗口信息的接口
-            proxy_object = dbus.SessionBus().get_object("org.kde.KWin", "/KWin")
-            # 使用子线程进行点击
-            _t2 = Thread(target=click, args=())
-            _t2.start()
-            # 获取窗口信息的接口，鼠标为十字，阻塞状态，需要点击对应窗口才能返回窗口信息
-            info = dbus.Interface(proxy_object, "org.kde.KWin").queryWindowInfo()
-            sleep(0.5)
-            click()
-            return info
+            sleep(1)
+            ShortCut.esc()
+            return WaylandWindowINfo().window_info()
         return None
 
     @classmethod
