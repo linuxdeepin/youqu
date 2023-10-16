@@ -207,7 +207,6 @@ def pytest_configure(config):
 
 def pytest_sessionstart(session):
     """pytest_sessionstart"""
-    # 批量执行之前修改主题
     if (
             CmdCtl.run_cmd(
                 "gsettings get com.deepin.dde.appearance gtk-theme",
@@ -229,9 +228,7 @@ def pytest_sessionstart(session):
         else GlobalConfig.DisplayServer.x11
     )
     logger.info(f"当前系统显示协议为 {_display.title()}")
-    # 设置任务栏方向
     popen("gsettings set com.deepin.dde.dock position bottom")
-    # 记录执行开始时间
     session.config.option.start_time = datetime.now()
 
     user = session.config.option.pms_user
@@ -521,6 +518,7 @@ def pytest_collection_finish(session):
     """pytest collection finish"""
     session.item_count = len(session.items)
     print(f"用例收集数量:\t{session.item_count}")
+    print(f"用例文件数量:\t{len(set([item.fspath for item in session.items]))}")
     if session.config.option.reruns and not session.config.option.collectonly:
         print(f"失败重跑次数:\t{session.config.option.reruns}")
     if session.config.option.max_fail and not session.config.option.collectonly:

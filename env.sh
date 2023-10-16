@@ -61,7 +61,6 @@ if [ "${env_retry}" = "true" ]; then
     fi
     sudo mv /etc/apt/sources.list /etc/apt/sources.list.bak
     sudo cp sources.list /etc/apt/sources.list && rm -rf sources.list
-    # 替换源之后再执行
     env
     sudo mv /etc/apt/sources.list.bak /etc/apt/sources.list
 fi
@@ -151,7 +150,7 @@ for p in ${pip_array[*]}
 do
     pipenv run pip install ${p} -i ${pypi_mirror} > /tmp/env.log 2>&1
     check_status ${p}
-    pip3 list | grep -v grep | grep ${p}
+    pipenv run pip list | grep -v grep | grep ${p}
 done
 echo "${PASSWORD}" | sudo -S su > /dev/null 2>&1
 cd ${ROOT_DIR}/src/utils/
