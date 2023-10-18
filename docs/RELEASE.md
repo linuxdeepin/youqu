@@ -5,7 +5,7 @@
 **Fix**
 
 - 修复 `youqu` 命令无法接受带空格的参数的问题；感谢 **[@禄烨](https://github.com/lu-xianseng)** ；
-- `OCR` 检测模型升级到 `V4` 之后，在识别某些文本情况下出现不能的问题，暂时先回滚到 `V3` ；
+- `OCR` 检测模型升级到 `V4` 之后，在识别某些文本情况下出现不能识别的问题，暂时先回滚到 `V3` ；
 
 -----------------------
 
@@ -19,7 +19,7 @@
 
 - 解除子项目的工程名称以 `autotest_` 开头的限制，子项目工程名称可以为任意名称；
 
-  - 配置文件 `globalconfig.ini` 中的 `APP_NAME` 和命令行参数 `-a/--app` 仅支持传入工程名称的全称：
+    配置文件 `globalconfig.ini` 中的 `APP_NAME` 和命令行参数 `-a/--app` 仅支持传入工程名称的全称：
 
     ```shell
     youqu manage.py run -a apps/autotest_deepin_music
