@@ -1,7 +1,6 @@
 <p align="center">
-&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
   <a href="https://linuxdeepin.github.io/deepin-autotest-framework/">
-    <img src="https://pic.imgdb.cn/item/64f05326661c6c8e54fe9bf4.png" width="520" alt="YouQu">
+    <img src="https://pic.imgdb.cn/item/653095b5c458853aef397f4e.png" width="520" alt="YouQu">
   </a>
 </p>
 

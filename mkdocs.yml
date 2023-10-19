@@ -7,14 +7,14 @@ theme:
   palette:
     - media: '(prefers-color-scheme: light)'
       scheme: default
-      primary: teal
+      primary: custom
       accent: deep orange
       toggle:
         icon: material/lightbulb
         name: Switch to light mode
     - media: '(prefers-color-scheme: dark)'
       scheme: slate
-      primary: teal
+      primary: custom
       accent: amber
       toggle:
         icon: material/lightbulb-outline
@@ -38,7 +38,7 @@ theme:
     - search.suggest
     - toc.follow
 
-  logo: "https://pic.imgdb.cn/item/64f05326661c6c8e54fe9bf4.png"
+  logo: "https://pic.imgdb.cn/item/653095b5c458853aef397f4e.png"
   icon:
     repo: fontawesome/brands/github
 
