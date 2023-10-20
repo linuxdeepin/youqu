@@ -6,6 +6,7 @@
 # SPDX-License-Identifier: GPL-2.0-only
 import os
 import re
+from collections import Counter
 
 from setting.globalconfig import GlobalConfig, FixedCsvTitle
 from src.rtk._base import transform_app_name
@@ -42,11 +43,16 @@ class CsvControl:
                             for i in _case_name:
                                 if i:
                                     case_name.append(i)
-                    py_files.append([f"{root}/{file}", case_name[-1]])
-                    py_path_dict[case_name[0]] = py_files
+
+                    if py_path_dict.get(case_name[0]):
+                        tmp_py_list = py_path_dict.get(case_name[0])
+                        tmp_py_list.append([f"{root}/{file}", root, case_name[-1]])
+                        py_path_dict[case_name[0]] = tmp_py_list
+                    else:
+                        py_files.append([f"{root}/{file}", root, case_name[-1]])
+                        py_path_dict[case_name[0]] = py_files
 
         for i in py_path_dict:
-            # py_path_dict[i].sort()
             py_path_dict[i] = sorted(py_path_dict[i], key=lambda x: int(x[-1]))
         return csv_path_dict, py_path_dict
 
@@ -99,14 +105,18 @@ class CsvControl:
         self.csv_path_dict, self.py_path_dict = self.scan_csv_and_py()
         for case_name in self.py_path_dict:
             py_paths = self.py_path_dict.get(case_name)
-            for py_path, case_id in py_paths:
+            py_count = Counter([i[1] for i in py_paths])
+            is_one = len(py_paths) == 1 or len(py_count) == 1
+            for py_path, py_dirpath, case_id in py_paths:
                 if not self.csv_path_dict or not self.csv_path_dict.get(case_name):
                     _dir_name = os.path.dirname(os.path.abspath(py_path))
-
-                    if str(_dir_name).endswith("case"):
-                        dir_name = _dir_name.rstrip("/case")
+                    if is_one:
+                        if str(_dir_name).endswith("case"):
+                            dir_name = self.walk_dir
+                        else:
+                            dir_name = os.path.dirname(_dir_name.replace("/case/", "/tag/"))
                     else:
-                        dir_name = os.path.dirname(_dir_name.replace("/case/", "/tag/"))
+                        dir_name = self.walk_dir
                     if not os.path.exists(dir_name):
                         os.makedirs(dir_name)
 
