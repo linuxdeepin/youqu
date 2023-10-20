@@ -35,6 +35,7 @@ import letmego
 
 from src import logger
 from src.rtk._base import Args
+from src.requestx import RequestX
 from src.rtk._base import transform_app_name
 
 environ["DISPLAY"] = ":0"
@@ -84,7 +85,17 @@ class LocalRunner:
             **kwargs,
     ):
         logger("INFO")
-
+        try:
+            github_tags = RequestX().open_url(
+                f"https://api.github.com/repos/linuxdeepin/deepin-autotest-framework/tags",
+                timeout=1
+            )
+            latest_tag = json.loads(github_tags)[0].get("name")
+            if GlobalConfig.current_tag != latest_tag:
+                print(f"YouQu最新版本为: {latest_tag}，当前使用版本为: {GlobalConfig.current_tag}")
+                print(f"建议使用：sudo pip3 install youqu=={latest_tag} 升级版本。")
+        except Exception:
+            pass
         self.default = {
             Args.app_name.value: transform_app_name(app_name if app_name or case_file else GlobalConfig.APP_NAME),
             Args.keywords.value: keywords or GlobalConfig.KEYWORDS,

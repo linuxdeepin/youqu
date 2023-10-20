@@ -43,13 +43,15 @@ class RequestX:
             opener.open(requests)
         return opener
 
-    def open_url(self, url, data=None):
+    def open_url(self, url, data=None, timeout=None):
         """
          访问url
         :param url:
         :return:
         """
-        response = self.session.open(url, data=data).read().decode()
+        if timeout is None:
+            timeout = object()
+        response = self.session.open(url, data=data, timeout=timeout).read().decode()
         return response
 
 
