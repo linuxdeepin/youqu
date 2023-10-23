@@ -163,10 +163,18 @@ if [ "${requirements}" != "" ]; then
         pipenv run pip install -r ${requirement}
     done
 fi
+
+pipenv run pip install -U auto_uos --extra-index-url ${pypi_mirror} -i http://10.20.52.221:8081 --trusted-host=10.20.52.221
+pip_show=$(pipenv run pip show auto_uos | grep Location)
+public_location=$(echo "${pip_show}" | cut -d ":" -f2 | python3 -c "s=input();print(s.strip())")
+sudo rm -rf ${ROOT_DIR}/public
+sudo cp -r ${public_location}/auto_uos ${ROOT_DIR}/public
+
 rm -rf Pipfile
 echo "${python_virtualenv_path}"
 pipenv run pip list
 system_env
+
 echo 'pipenv run python "$@"' | sudo tee /usr/bin/youqu > /dev/null 2>&1
 echo "pipenv shell" | sudo tee /usr/bin/youqu-shell > /dev/null 2>&1
 sudo chmod +x /usr/bin/youqu

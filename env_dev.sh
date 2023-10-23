@@ -110,5 +110,12 @@ if [ "${requirements}" != "" ]; then
         sudo pip3 install -r ${requirement}
     done
 fi
+
+sudo pip3 install -U auto_uos --extra-index-url ${pypi_mirror} -i http://10.20.52.221:8081 --trusted-host=10.20.52.221
+pip_show=$(pip3 show auto_uos | grep Location)
+public_location=$(echo "${pip_show}" | cut -d ":" -f2 | python3 -c "s=input();print(s.strip())")
+sudo rm -rf ${ROOT_DIR}/public
+sudo cp -r ${public_location}/auto_uos ${ROOT_DIR}/public
+
 system_env
 cd ${ROOT_DIR};python3 manage.py run -h
