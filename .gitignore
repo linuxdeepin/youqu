@@ -10,3 +10,4 @@ apps/autotest*
 Pipfile
 Pipfile.lock
 site
+public
