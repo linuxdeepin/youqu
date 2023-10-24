@@ -401,7 +401,7 @@ class Manage:
         )
         sub_parser_pms.add_argument(
             "-c", "--csv_name", default="",
-            help="将csv文件里面的标签同步到PMS时csv文件的名称"
+            help="将csv文件里面的标签同步到PMS时csv文件的名称（不加后缀）"
         )
         sub_parser_pms.add_argument(
             "--send2task",

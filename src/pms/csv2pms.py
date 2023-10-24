@@ -5,6 +5,9 @@
 
 # SPDX-License-Identifier: GPL-2.0-only
 import os
+from concurrent.futures import ALL_COMPLETED
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import wait
 from urllib.parse import urlencode
 
 from setting import conf
@@ -70,18 +73,7 @@ class Csv2Pms(_Base):
         def csv_map(x):
             return csv_head_index_map.get(x).get('head_index')
 
-        for i in taglines:
-            case_id = i[csv_map(FixedCsvTitle.case_id.name)]
-            edit_url = f"{self.base_url}/testcase-edit-{case_id}.html"
-            data = {
-                'isAutomation': '是',
-            }
-            if i[csv_map(FixedCsvTitle.device_type.name)] in ("PPL", "COL"):
-                data["deviceType"] = i[csv_map(FixedCsvTitle.device_type.name)]
-            if i[csv_map(FixedCsvTitle.case_from.name)] == "是":
-                data["caseSource"] = "是"
-            if i[csv_map(FixedCsvTitle.online_obj.name)] == "CICD":
-                data["lineCD"] = "是"
+        def push(edit_url, data, case_id):
             bytes_data = urlencode(data).encode("utf-8")
             res = self.rx.session.open(
                 fullurl=edit_url,
@@ -89,3 +81,30 @@ class Csv2Pms(_Base):
                 timeout=10
             )
             print(f"{case_id}-{data}—{res.status}")
+
+        tasks = []
+        executor = ThreadPoolExecutor()
+        for i in taglines:
+            case_id = i[csv_map(FixedCsvTitle.case_id.name)]
+            edit_url = f"{self.base_url}/testcase-edit-{case_id}.html"
+            data = {
+                'isAutomation': '是',
+            }
+            try:
+                if i[csv_map(FixedCsvTitle.device_type.name)] in ("PPL", "COL"):
+                    data["deviceType"] = i[csv_map(FixedCsvTitle.device_type.name)]
+            except AttributeError:
+                pass
+            try:
+                if i[csv_map(FixedCsvTitle.case_from.name)] == "是":
+                    data["caseSource"] = "是"
+            except AttributeError:
+                pass
+            try:
+                if i[csv_map(FixedCsvTitle.online_obj.name)] == "CICD":
+                    data["lineCD"] = "是"
+            except AttributeError:
+                pass
+            t = executor.submit(push, edit_url, data, case_id)
+            tasks.append(t)
+        wait(tasks, return_when=ALL_COMPLETED)
