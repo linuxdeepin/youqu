@@ -160,7 +160,7 @@ if [ "${requirements}" != "" ]; then
     for requirement in ${requirements[*]}
     do
         echo -e "${flag_feel}安装应用库依赖: ${requirement}"
-        pipenv run pip install -r ${requirement}
+        pipenv run pip install -r ${requirement} -i ${pypi_mirror}
     done
 fi
 
