@@ -74,6 +74,7 @@ class ButtonCenter:
             dbus.Interface(proxy_object, "org.kde.KWin").WindowMove()
             sleep(self.pause)
             ShortCut.esc()
+            # Wayland下使用窗管提供的接口获取窗口信息
             return WaylandWindowINfo().window_info()
         return None
 

@@ -110,9 +110,8 @@ autotest-basic-frame = 0.9.5
 
 ## 1. 基础框架
 
-- 自动化测试基础框架仓库：https://gerrit.uniontech.com/admin/repos/autotest-basic-frame
+- 自动化测试基础框架仓库：https://github.com/linuxdeepin/deepin-autotest-framework
 
-  基础框架不允许匿名访问，如果你登录 `gerrit` 之后仍然无法访问以上链接，则需要申请访问权限；
 
 ## 2. 应用仓库
 
@@ -206,6 +205,8 @@ class TestMusic(BaseCase):
 - 一个类里面可以有多个用例函数，这取决这条用例有多少个测试点：
 
   ```python
+  # test_music_679537.py
+  
   class TestMusic(BaseCase):
       """音乐用例"""
       
@@ -234,10 +235,12 @@ class TestMusic(BaseCase):
   举例，`PMS` 用例：
 
 ![](https://pic.imgdb.cn/item/64f054c8661c6c8e54ff4c71.png)
-  
+
   直接选中用例内容，复制下来，然后粘贴到自动化用例脚本中：
-  
+
   ```python
+  # test_music_679537.py
+  
   class TestMusic(BaseCase):
       """音乐用例"""
   
@@ -251,10 +254,12 @@ class TestMusic(BaseCase):
           # 双击任意演唱者封面
           # 进入演唱者详情页面
   ```
-  
+
   上例中井号注释部分就是直接从 `PMS` 上复制过来的，在此基础上写用例：
-  
+
   ```python
+  # test_music_679537.py
+  
   class TestMusic(BaseCase):
       """音乐用例"""
       
@@ -272,7 +277,7 @@ class TestMusic(BaseCase):
           # 进入演唱者详情页面
           self.assert_xxx
   ```
-  
+
   你看，非常清楚每一步在做什么，重点是省去了写注释的时间，真的炒鸡方便。
 
 - 不写 `if __name__ == '__main__':`，不写多余的代码；

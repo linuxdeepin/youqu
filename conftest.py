@@ -196,11 +196,9 @@ def pytest_configure(config):
     """pytest_configure"""
     if hasattr(config, "workerinput"):
         return  # xdist worker
-    # 获取终端报告器插件
     reporter = config.pluginmanager.getplugin("terminalreporter")
     if config.option.duringfail and reporter:
         custom_reporter = DuringfailingTerminalReporter(reporter)
-        # 替换成我们自己的报告插件
         config.pluginmanager.unregister(custom_reporter)
         config.pluginmanager.register(custom_reporter)
 
