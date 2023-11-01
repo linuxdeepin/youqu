@@ -86,7 +86,7 @@ if [ "${ENV_CUT_FLAG}" = "cut" ]; then
     )
 fi
 echo -e "${flag_feel}安装 pip 包\n"
-
+sudo pip3 install -U pip > /tmp/env.log 2>&1
 sudo pip3 config set global.timeout 10000 > /tmp/env.log 2>&1
 sudo pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple > /tmp/env.log 2>&1
 sudo pip3 config set global.extra-index-url https://it.uniontech.com/nexus/repository/pypi-public/simple
@@ -111,7 +111,8 @@ if [ "${requirements}" != "" ]; then
     done
 fi
 
-sudo pip3 install -U auto_uos --extra-index-url ${pypi_mirror} -i http://10.20.52.221:8081 --trusted-host=10.20.52.221 > /tmp/env.log 2>&1
+sudo pip3 install -U auto_uos --extra-index-url ${pypi_mirror} \
+-i http://10.20.52.221:8081 --trusted-host=10.20.52.221 > /tmp/env.log 2>&1
 check_status auto_uos
 pip_show=$(pip3 show auto_uos | grep Location)
 public_location=$(echo "${pip_show}" | cut -d ":" -f2 | python3 -c "s=input();print(s.strip())")
