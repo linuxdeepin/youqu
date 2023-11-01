@@ -855,40 +855,36 @@ def pytest_sessionfinish(session):
 # pylint: disable=unused-argument
 def pytest_emoji_passed(config, head_line):
     """pytest_emoji_passed"""
-    # 笑脸
     return (
-        f"【 {datetime.now()} {head_line} || 😃 】\n",
-        f"【 {datetime.now()} {head_line} || PASSED 😃 】\n",
+        f"【 {datetime.now()} {head_line} || ✔ 】\n",
+        f"【 {datetime.now()} {head_line} || PASSED ✔ 】\n",
     )
 
 
 # pylint: disable=unused-argument
 def pytest_emoji_failed(config, head_line):
     """pytest_emoji_failed"""
-    # 哭笑不得
     return (
-        f"【 {datetime.now()} {head_line} || 😰 】\n",
-        f"【 {datetime.now()} {head_line} || FAILED 😰 】\n",
+        f"【 {datetime.now()} {head_line} || ✘ 】\n",
+        f"【 {datetime.now()} {head_line} || FAILED ✘ 】\n",
     )
 
 
 # pylint: disable=unused-argument
 def pytest_emoji_skipped(config, head_line):
     """pytest_emoji_skipped"""
-    # 翻白眼儿
     return (
-        f"【 {datetime.now()} {head_line} || 🙄 】\n",
-        f"【 {datetime.now()} {head_line} || SKIPPED 🙄 】\n",
+        f"【 {datetime.now()} {head_line} || 🙄☛ 】\n",
+        f"【 {datetime.now()} {head_line} || SKIPPED 🙄☞ 】\n",
     )
 
 
 # pylint: disable=unused-argument
 def pytest_emoji_error(config, head_line):
     """pytest_emoji_error"""
-    # 哭哭
     return (
-        f"【 {datetime.now()} {head_line} || 😡 】\n",
-        f"【 {datetime.now()} {head_line} || ERROR 😡 】\n",
+        f"【 {datetime.now()} {head_line} || ☹ 】\n",
+        f"【 {datetime.now()} {head_line} || ERROR ☹ 】\n",
     )
 
 
