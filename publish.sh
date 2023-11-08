@@ -9,6 +9,7 @@ rm -rf ${tmp_publish_dir_name}
 mkdir -p ${tmp_publish_dir_name}/youqu/apps/
 ls deepin-autotest-framework | grep -v apps | grep -v public | grep -v report | xargs -i cp -r deepin-autotest-framework/{} ${tmp_publish_dir_name}/youqu/
 cp deepin-autotest-framework/apps/__init__.py ${tmp_publish_dir_name}/youqu/apps/
+cp deepin-autotest-framework/.env ${tmp_publish_dir_name}/youqu/
 rm -rf ${tmp_publish_dir_name}/youqu/.idea
 rm -rf ${tmp_publish_dir_name}/youqu/.vscode
 rm -rf ${tmp_publish_dir_name}/youqu/.pytest_cache
