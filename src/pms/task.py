@@ -21,7 +21,7 @@ class Task(_Base):
 
     def get_task_data(self, task_id):
         task_json_url = f"https://pms.uniontech.com/testtask-cases-{task_id}-all-0-id_desc-4-{MAX_CASE_NUMBER}-1.json"
-        res = self.rx.open_url(task_json_url)
+        res = self.rx.open_url(task_json_url, timeout=10)
         res_str = _unicode_to_cn(res)
         try:
             res_dict = json.loads(res_str)

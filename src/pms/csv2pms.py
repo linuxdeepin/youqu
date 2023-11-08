@@ -4,10 +4,12 @@
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 
 # SPDX-License-Identifier: GPL-2.0-only
+import json
 import os
 from concurrent.futures import ALL_COMPLETED
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import wait
+from time import sleep
 from urllib.parse import urlencode
 
 from setting import conf
@@ -73,38 +75,47 @@ class Csv2Pms(_Base):
         def csv_map(x):
             return csv_head_index_map.get(x).get('head_index')
 
-        def push(edit_url, data, case_id):
+        def push(value, index):
+            sleep(1)
+            case_id = value[csv_map(FixedCsvTitle.pms_case_id.name)]
+            case_url = f"{self.base_url}/testcase-view-{case_id}.json"
+            case_res = json.loads(self.rx.open_url(case_url, timeout=10))
+            case_data = json.loads(case_res.get("data"))
+            case_title = case_data.get("title")
+            rel_case_title = case_title.split(case_id)[-1].rstrip(f"{case_data.get('libName')}").strip(" - ").strip(" ")
+
+            edit_url = f"{self.base_url}/testcase-edit-{case_id}.html"
+            data = {
+                'title': rel_case_title,
+                'isAutomation': '是',
+            }
+            try:
+                if value[csv_map(FixedCsvTitle.device_type.name)] in ("PPL", "COL"):
+                    data["deviceType"] = value[csv_map(FixedCsvTitle.device_type.name)]
+            except AttributeError:
+                pass
+            try:
+                if value[csv_map(FixedCsvTitle.case_from.name)] == "是":
+                    data["caseSource"] = "是"
+            except AttributeError:
+                pass
+            try:
+                if value[csv_map(FixedCsvTitle.online_obj.name)] == "CICD":
+                    data["lineCD"] = "是"
+            except AttributeError:
+                pass
             bytes_data = urlencode(data).encode("utf-8")
             res = self.rx.session.open(
                 fullurl=edit_url,
                 data=bytes_data,
                 timeout=10
             )
-            print(f"{case_id}-{data}—{res.status}")
+            print(f"({index}) {case_id} {data} {res.status}")
 
         tasks = []
         executor = ThreadPoolExecutor()
-        for i in taglines:
-            case_id = i[csv_map(FixedCsvTitle.case_id.name)]
-            edit_url = f"{self.base_url}/testcase-edit-{case_id}.html"
-            data = {
-                'isAutomation': '是',
-            }
-            try:
-                if i[csv_map(FixedCsvTitle.device_type.name)] in ("PPL", "COL"):
-                    data["deviceType"] = i[csv_map(FixedCsvTitle.device_type.name)]
-            except AttributeError:
-                pass
-            try:
-                if i[csv_map(FixedCsvTitle.case_from.name)] == "是":
-                    data["caseSource"] = "是"
-            except AttributeError:
-                pass
-            try:
-                if i[csv_map(FixedCsvTitle.online_obj.name)] == "CICD":
-                    data["lineCD"] = "是"
-            except AttributeError:
-                pass
-            t = executor.submit(push, edit_url, data, case_id)
+        for index, value in enumerate(taglines):
+            # push(value, index)
+            t = executor.submit(push, value, index)
             tasks.append(t)
         wait(tasks, return_when=ALL_COMPLETED)

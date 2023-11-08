@@ -27,11 +27,11 @@ class Send2Pms(_Base):
         base_url = "https://pms.uniontech.com/testtask-runCase"
         # 每次请求时，获取steps_id
         run_case_html_url = f"{base_url}-{run_case_id}.html"
-        res = self.rx.open_url(run_case_html_url)
+        res = self.rx.open_url(run_case_html_url, timeout=10)
         if res == "":
             # 测试套件回填时地址不一样
             run_case_html_url = f"{base_url}-0-{run_case_id}-1.html"
-            res = self.rx.open_url(run_case_html_url)
+            res = self.rx.open_url(run_case_html_url, timeout=10)
         steps_id = re.findall(r"name='steps\[(\d+)\]'", res)
         if steps_id and steps_id[0]:
             steps_id = steps_id[0]

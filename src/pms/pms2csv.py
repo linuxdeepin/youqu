@@ -71,7 +71,7 @@ class Pms2Csv(_Base):
             f"https://pms.uniontech.com/{GlobalConfig.CASE_FROM}-browse-"
             f'{app_case_id}-{"-" if GlobalConfig.CASE_FROM == "testcase" else ""}all-0-id_desc-0-{MAX_CASE_NUMBER}.json'
         )
-        res = self.rx.open_url(case_url)
+        res = self.rx.open_url(case_url, timeout=10)
         res_str = _unicode_to_cn(res)
 
         try:

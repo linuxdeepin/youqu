@@ -8,7 +8,7 @@
 import os
 from time import sleep
 
-from src  import logger
+from src import logger
 from src.cmdctl import CmdCtl
 
 os.environ["DISPLAY"] = ":0"
@@ -292,7 +292,7 @@ class MouseKey:
         sleep(1)
 
     @classmethod
-    def press_key(cls, key: str, interval=0.0):
+    def press_key(cls, key: str, interval=0.0, _ydotool: bool = False):
         """
          键盘上指定的按键
         :param key: 键盘按键
@@ -300,8 +300,12 @@ class MouseKey:
         :return:
         """
         logger.debug(f"点击键盘上指定的按键<{key}>, 间隔<{interval}>")
-        pyautogui.press(key, interval=interval)
-        sleep(0.1)
+        if _ydotool:
+            from src import ydotool
+            ydotool.press(key)
+        else:
+            pyautogui.press(key, interval=interval)
+            sleep(0.1)
 
     @classmethod
     def press_key_down(cls, key: str):

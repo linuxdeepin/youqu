@@ -23,7 +23,7 @@ class Suite(_Base):
 
     def get_suite_data(self, suite_id):
         url = f"https://pms.uniontech.com/testsuite-view-{suite_id}-id_desc-1-{MAX_CASE_NUMBER}-1.json"
-        self.res = self.rx.open_url(url)
+        self.res = self.rx.open_url(url, timeout=10)
         res_str = _unicode_to_cn(self.res)
         try:
             res_dict = json.loads(res_str)
