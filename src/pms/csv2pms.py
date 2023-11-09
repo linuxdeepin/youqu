@@ -90,8 +90,13 @@ class Csv2Pms(_Base):
                 'isAutomation': '是',
             }
             try:
-                if value[csv_map(FixedCsvTitle.device_type.name)] in ("PPL", "COL"):
-                    data["deviceType"] = value[csv_map(FixedCsvTitle.device_type.name)]
+                if value[csv_map(FixedCsvTitle.device_type.name)] == "PPL":
+                    data["deviceType"] = "PPL(外设)"
+            except AttributeError:
+                pass
+            try:
+                if value[csv_map(FixedCsvTitle.device_type.name)] == "COL":
+                    data["deviceType"] = "COL(主控)"
             except AttributeError:
                 pass
             try:

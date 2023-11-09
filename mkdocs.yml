@@ -83,7 +83,7 @@ extra:
     provider: mike
   social:
     - icon: fontawesome/brands/slack
-      link: https://mikigo.github.io/funny-docs
+      link: https://mikigo.gitee.io/funny-docs
       name: funny-docs
     - icon: fontawesome/brands/github
       link: https://github.com/linuxdeepin
