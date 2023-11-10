@@ -337,17 +337,22 @@ def pytest_collection_modifyitems(session):
 
         try:
             csv_name, _id = findall(r"test_(.*?)_(\d+)", item.name)[0]
-            _case_id = findall(r"test_.*?_(\d+)", item.fspath.purebasename)[0]
+            _case_name, _case_id = findall(r"test_(.*?)_(\d+)", item.fspath.purebasename)[0]
             if _id != _case_id:
                 raise ValueError
+            if _case_name != csv_name:
+                raise FileNotFoundError
         except IndexError:
-            skip_text = f"\n用例函数名称缺少用例id:[{item.nodeid}]"
+            skip_text = f"用例函数名称缺少用例id:[{item.nodeid}]"
             logger.error(skip_text)
             add_mark(item, ConfStr.SKIP.value, (skip_text,), {})
         except ValueError:
-            skip_text = f"\n用例py文件的id与用例函数的id不一致:[{item.nodeid}]"
+            skip_text = f"用例py文件的id与用例函数的id不一致:[{item.nodeid}]"
             logger.error(skip_text)
             add_mark(item, ConfStr.SKIP.value, (skip_text,), {})
+        except FileNotFoundError:
+            logger.error(f"用例py文件的名称与用例函数的名称不一致:[{item.nodeid}]")
+            session.items.remove(item)
         else:
             csv_path = csv_path_dict.get(csv_name)
             if not csv_path:

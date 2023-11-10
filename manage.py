@@ -396,14 +396,6 @@ class Manage:
             help="从PMS爬取用例标签到csv文件"
         )
         sub_parser_pms.add_argument(
-            "-c2p", "--csv2pms", action='store_const', const=True, default=False,
-            help="将csv文件里面的标签同步到PMS"
-        )
-        sub_parser_pms.add_argument(
-            "-c", "--csv_name", default="",
-            help="将csv文件里面的标签同步到PMS时csv文件的名称（不加后缀）"
-        )
-        sub_parser_pms.add_argument(
             "--send2task",
             choices=["yes", ""],
             default="", help="回填数据到pms测试单"
@@ -421,8 +413,6 @@ class Manage:
             Args.pms_user.value: args.pms_user or self.default_pms_user,
             Args.pms_password.value: args.pms_password or self.default_pms_password,
             Args.pms2csv.value: args.pms2csv or self.default_pms2csv,
-            Args.csv2pms.value: args.csv2pms or self.default_csv2pms,
-            Args.csv_name.value: args.csv_name or self.default_csv_name,
             Args.pms_link_csv.value: args.pms_link_csv or self.default_pms_link_csv,
             Args.send2task.value: args.send2task or self.default_send2task,
             Args.task_id.value: args.task_id or GlobalConfig.TASK_ID,
@@ -435,13 +425,6 @@ class Manage:
                 password=pms_kwargs.get(Args.pms_password.value) or GlobalConfig.PMS_PASSWORD,
                 pms_link_csv=pms_kwargs.get(Args.pms_link_csv.value),
             ).write_new_csv()
-        elif pms_kwargs.get(Args.csv2pms.value):
-            Csv2Pms(
-                app_name=pms_kwargs.get(Args.app_name.value),
-                user=pms_kwargs.get(Args.pms_user.value) or GlobalConfig.PMS_USER,
-                password=pms_kwargs.get(Args.pms_password.value) or GlobalConfig.PMS_PASSWORD,
-                csv_name=pms_kwargs.get(Args.csv_name.value),
-            ).post_to_pms()
         elif (
                 pms_kwargs.get(Args.send2task.value)
                 and pms_kwargs.get(Args.task_id.value)

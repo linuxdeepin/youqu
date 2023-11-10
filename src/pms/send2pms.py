@@ -13,7 +13,7 @@ from os.path import exists
 from urllib.parse import urlencode
 
 from setting.globalconfig import GlobalConfig
-from src  import logger
+from src import logger
 from src.pms._base import _Base
 from src.pms._base import runs_id_cmd_log
 
@@ -60,31 +60,46 @@ class Send2Pms(_Base):
             for case_name_json in os.listdir(case_res_path):
                 if not case_name_json.endswith(".json"):
                     continue
-                # 读取本地json文件中的数据
-                with open(f"{case_res_path}/{case_name_json}", "r") as f:
+                with open(f"{case_res_path}/{case_name_json}", "r", encoding="utf-8") as f:
                     data = json.load(f)
                 if not exists(data_send_result_csv):
-                    with open(data_send_result_csv, "w+") as f:
+                    with open(data_send_result_csv, "w+", encoding="utf-8") as f:
                         pass
-                with open(data_send_result_csv, "r") as f:
+                with open(data_send_result_csv, "r", encoding="utf-8") as f:
                     reqeusted = f.read()
                 case_name = case_name_json.split(".")[0]
+                case_result = data.get("result")
+                if case_name not in reqeusted:
+                    self.push(data_send_result_csv, data, case_name, case_result)
+                else:
+                    if f"{case_name},fail" in reqeusted and case_result == "cover-pass":
+                        fix_requested = re.sub(rf"{case_name},fail,request_.*?\n", "", reqeusted)
+                        with open(data_send_result_csv, "w+", encoding="utf-8") as f:
+                            f.write(fix_requested)
+                        self.push(data_send_result_csv, data, case_name, case_result)
+                    elif f"{case_name},pass" in reqeusted and case_result == "fail":
+                        fix_requested = re.sub(rf"{case_name},pass,request_.*?\n", "", reqeusted)
+                        with open(data_send_result_csv, "w+", encoding="utf-8") as f:
+                            f.write(fix_requested)
+                        self.push(data_send_result_csv, data, case_name, case_result)
 
-                # 如果这条用例已经回填过数据
-                if case_name in reqeusted:
-                    continue
 
-                with open(data_send_result_csv, "a+") as f:
-                    for _ in range(int(GlobalConfig.SEND_PMS_RETRY_NUMBER)):
-                        # 请求
-                        status_code = self.post_to_pms(**data)
-                        if status_code == 200:
-                            logger.info(f"{runs_id_cmd_log(data)} 数据回填成功 😃")
-                            f.write(f"{case_name},request_ok\n")
-                            break
-                    else:
-                        logger.info(f"{runs_id_cmd_log(data)} 数据回填失败 😡")
-                        f.write(f"{case_name},request_fail\n")
+    def push(self, data_send_result_csv, data, case_name, case_result):
+        if data["result"] == "cover-pass":
+            data["result"] = "pass"
+        data.pop("item")
+        with open(data_send_result_csv, "a+", encoding="utf-8") as f:
+            for _ in range(int(GlobalConfig.SEND_PMS_RETRY_NUMBER)):
+                status_code = self.post_to_pms(**data)
+                if status_code == 200:
+                    logger.info(f"{runs_id_cmd_log(data)} 数据回填成功 ✔")
+                    if case_result == "cover-pass" and  f"{case_name},pass" in f.read():
+                        break
+                    f.write(f"{case_name},{data['result']},request_ok\n")
+                    break
+            else:
+                logger.info(f"{runs_id_cmd_log(data)} 数据回填失败 ✘")
+                f.write(f"{case_name},{data['result']},request_fail\n")
 
     @staticmethod
     def case_res_path(taskid):

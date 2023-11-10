@@ -6,12 +6,13 @@
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
 import json
-from os.path import exists
+import os
 from os import makedirs
+from os.path import exists
 from re import findall, sub
 
 from setting.globalconfig import GlobalConfig
-from src  import logger
+from src import logger
 from src.requestx import RequestX
 
 MAX_CASE_NUMBER = 10000
@@ -45,10 +46,10 @@ def _unicode_to_cn(in_str):
     """
     local_in_str_replace = (
         in_str.replace(r"\"", '"')
-        .replace(r"\/", "/")
-        .replace(r"\\u", r"\u")
-        .replace(r"\\n", "")
-        .replace(r"\\r", "")
+            .replace(r"\/", "/")
+            .replace(r"\\u", r"\u")
+            .replace(r"\\n", "")
+            .replace(r"\\r", "")
     )
     if isinstance(local_in_str_replace, bytes):
         local_temp = str(local_in_str_replace, encoding="utf-8")
@@ -57,10 +58,10 @@ def _unicode_to_cn(in_str):
         local_out = local_in_str_replace.encode("utf-8").decode("unicode_escape")
     return (
         local_out.replace('"data":"{', '"data":{')
-        .replace('","md5"', ',"md5"')
-        .replace(":null", ':"null"')
-        .replace(":true", ':"true"')
-        .replace(":false", ':"false"')
+            .replace('","md5"', ',"md5"')
+            .replace(":null", ':"null"')
+            .replace(":true", ':"true"')
+            .replace(":false", ':"false"')
     )
 
 
@@ -99,9 +100,31 @@ def write_case_result(item, report):
     case_result_tpl["from_case_id"] = from_case_id
     case_result_tpl["task_id"] = taskid or suiteid
     case_result_tpl["at_case_id"] = at_case_id
+    case_result_tpl["item"] = item.name
     case_result_tpl["result"] = "pass" if report.outcome == "passed" else "fail"
     case_res_path = item.session.case_res_path
     if not exists(case_res_path):
         makedirs(case_res_path)
-    with open(f"{case_res_path}/{item.name}.json", "w+", encoding="utf-8") as _f:
-        _f.write(json.dumps(case_result_tpl, indent=2, ensure_ascii=False))
+
+    json_file_name = f"{os.path.splitext(item.fspath.basename)[0]}.json"
+    abs_json_file_path = f"{case_res_path}/{json_file_name}"
+    if exists(abs_json_file_path):
+        with open(abs_json_file_path, "r", encoding="utf-8") as _f:
+            case_res_from_json = json.load(_f)
+
+        if item.execution_count >= 2:
+            if (
+                    case_res_from_json.get("result") == "fail"
+                    and case_result_tpl["result"] == "pass"
+                    and case_res_from_json.get("item") == case_result_tpl["item"]
+            ):
+                case_result_tpl["result"] = "cover-pass"
+                with open(abs_json_file_path, "w+", encoding="utf-8") as _f:
+                    _f.write(json.dumps(case_result_tpl, indent=2, ensure_ascii=False))
+        else:
+            if case_res_from_json.get("result") in ("pass", "cover-pass") and case_result_tpl["result"] == "fail":
+                with open(abs_json_file_path, "w+", encoding="utf-8") as _f:
+                    _f.write(json.dumps(case_result_tpl, indent=2, ensure_ascii=False))
+    else:
+        with open(abs_json_file_path, "w+", encoding="utf-8") as _f:
+            _f.write(json.dumps(case_result_tpl, indent=2, ensure_ascii=False))

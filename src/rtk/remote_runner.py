@@ -158,6 +158,7 @@ class RemoteRunner:
             ".idea",
             ".git",
             "docs",
+            "site",
             "README.md",
             "README.zh_CN.md",
             "RELEASE.md",
@@ -171,6 +172,10 @@ class RemoteRunner:
                     exclude += f"--exclude='{i}' "
         system(
             f"{self.rsync % (password,)} {exclude} {GlobalConfig.ROOT_DIR}/* "
+            f"{user}@{_ip}:~/{self.server_project_path}/ {self.empty}"
+        )
+        system(
+            f"{self.rsync % (password,)} {exclude} {GlobalConfig.ROOT_DIR}/.env "
             f"{user}@{_ip}:~/{self.server_project_path}/ {self.empty}"
         )
         logger.info(f"代码发送成功 - < {user}@{_ip} >")
