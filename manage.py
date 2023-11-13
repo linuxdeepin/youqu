@@ -134,11 +134,7 @@ class Manage:
 
         say(GlobalConfig.PROJECT_NAME)
         version_font = "slick"
-        if "(unreleased)" in GlobalConfig.current_tag:
-            say(GlobalConfig.current_tag.strip("(unreleased)"), font=version_font, space=False)
-            say("unreleased", font=version_font, space=False)
-        else:
-            say(GlobalConfig.current_tag, font=version_font, space=False)
+        say(GlobalConfig.current_tag, font=version_font, space=False)
         say(f"Code: \033[0;32m{GlobalConfig.GITHUB_URL}\033[0m", font="console", space=False)
         say(f"Docs: \033[0;32m{GlobalConfig.DOCS_URL}\033[0m", font="console", space=False)
         say(f"PyPI: \033[0;32m{GlobalConfig.PyPI_URL}\033[0m", font="console", space=False)

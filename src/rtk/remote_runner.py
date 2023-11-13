@@ -328,6 +328,8 @@ class RemoteRunner:
         ):
             lr_args[Args.trigger.value] = "hand"
             self.collection_json = True
+            self.pms_user = lr_args.get(Args.pms_user.value)
+            self.pms_password = lr_args.get(Args.pms_password.value)
             self.server_json_dir_id = lr_args.get(Args.task_id.value)
         pytest_cmd = lr.create_pytest_cmd(real_app_name.replace("apps/", ""), default=lr_args, proj_path=f"/home/{user}/{self.server_project_path}")
 
@@ -450,7 +452,6 @@ class RemoteRunner:
                             res[case_name] = _client_res
         with open(f"{json_path}/total.json", "w+", encoding="utf-8") as f:
             f.write(json.dumps(res, indent=2, ensure_ascii=False))
-
         Send2Pms(
             user=self.pms_user,
             password=self.pms_password,

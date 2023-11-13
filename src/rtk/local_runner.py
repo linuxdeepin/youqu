@@ -93,7 +93,7 @@ class LocalRunner:
             latest_tag = json.loads(github_tags)[0].get("name")
             if GlobalConfig.current_tag != latest_tag:
                 print(f"YouQu最新版本为: {latest_tag}，当前使用版本为: {GlobalConfig.current_tag}")
-                print(f"建议使用：sudo pip3 install youqu=={latest_tag} 升级版本。")
+                print(f"建议使用：sudo pip3 install youqu=={latest_tag} 升级版本")
         except Exception:
             pass
         self.default = {
