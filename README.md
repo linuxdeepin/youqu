@@ -303,4 +303,4 @@ youqu manage.py remote -a ... --parallel no
 
 ## 开源许可证
 
-有趣 在 [GPL-2.0-only](LICENSE) 下发布。
+有趣 在 [GPL-2.0-only](https://github.com/linuxdeepin/deepin-autotest-framework/blob/master/LICENSE) 下发布。

@@ -83,7 +83,6 @@ class Send2Pms(_Base):
                             f.write(fix_requested)
                         self.push(data_send_result_csv, data, case_name, case_result)
 
-
     def push(self, data_send_result_csv, data, case_name, case_result):
         if data["result"] == "cover-pass":
             data["result"] = "pass"
@@ -93,7 +92,7 @@ class Send2Pms(_Base):
                 status_code = self.post_to_pms(**data)
                 if status_code == 200:
                     logger.info(f"{runs_id_cmd_log(data)} 数据回填成功 ✔")
-                    if case_result == "cover-pass" and  f"{case_name},pass" in f.read():
+                    if case_result == "cover-pass" and f"{case_name},pass" in f.read():
                         break
                     f.write(f"{case_name},{data['result']},request_ok\n")
                     break
@@ -110,3 +109,17 @@ class Send2Pms(_Base):
     def data_send_result_csv(cls, taskid):
         """data_send_result_csv"""
         return f"{cls.case_res_path(taskid)}/send_pms_{taskid}.csv"
+
+    def remote_finish_push(self, res):
+        """remote_finish_push"""
+        for data in res.values():
+            data.pop("item")
+            if data["result"] == "cover-pass":
+                data["result"] = "pass"
+            for _ in range(int(GlobalConfig.SEND_PMS_RETRY_NUMBER)):
+                status_code = self.post_to_pms(**data)
+                if status_code == 200:
+                    logger.info(f"{runs_id_cmd_log(data)} 数据回填成功 ✔")
+                    break
+            else:
+                logger.info(f"{runs_id_cmd_log(data)} 数据回填失败 ✘")

@@ -21,6 +21,7 @@ rm -rf ${tmp_publish_dir_name}/youqu/site
 rm -rf ${tmp_publish_dir_name}/youqu/docs
 rm -rf ${tmp_publish_dir_name}/youqu/README.en.md
 rm -rf ${tmp_publish_dir_name}/youqu/LICENSE
+rm -rf ${tmp_publish_dir_name}/youqu/RELEASE.md
 rm -rf ${tmp_publish_dir_name}/youqu/mkdocs.yml
 rm -rf ${tmp_publish_dir_name}/youqu/requirements*.txt
 rm -rf ${tmp_publish_dir_name}/youqu/apps/autotest*

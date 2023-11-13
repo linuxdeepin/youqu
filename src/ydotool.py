@@ -185,54 +185,6 @@ KEY_NAMES = {
     '。': 52
 }
 
-KEY_NAMES_S = {
-    ")": 11,
-    "!": 2,
-    "@": 3,
-    "#": 4,
-    "$": 5,
-    "%": 6,
-    "^": 7,
-    "&": 8,
-    "(": 10,
-    "_": 12,
-    "~": 41,
-    "{": 26,
-    "}": 27,
-    "|": 43,
-    ":": 39,
-    "\"": 40,
-    "<": 51,
-    ">": 52,
-    "?": 53,
-    'A': 30,
-    'B': 48,
-    'C': 46,
-    'D': 32,
-    'E': 18,
-    'F': 33,
-    'G': 34,
-    'H': 35,
-    'I': 23,
-    'J': 36,
-    'K': 37,
-    'L': 38,
-    'M': 50,
-    'N': 49,
-    'O': 24,
-    'P': 25,
-    'Q': 16,
-    'R': 19,
-    'S': 31,
-    'T': 20,
-    'U': 22,
-    'V': 47,
-    'W': 17,
-    'X': 45,
-    'Y': 21,
-    'Z': 44
-}
-
 
 def context_manager(func):
     @functools.wraps(func)
@@ -240,8 +192,13 @@ def context_manager(func):
         tool_status = os.popen("ps aux | grep ydotoold | grep -v grep").read()
         if not tool_status:
             os.system(
+                f'echo "{conf.PASSWORD}" | sudo -S apt update;'
+                f'echo "{conf.PASSWORD}" | sudo -S apt install -y scdoc;'
                 f"cd {conf.ROOT_DIR}/src/depends/ydotool/;"
-                'mkdir build;cd build;cd build;cmake ..;make -j "$(nproc)"'
+                'mkdir build;'
+                'cd build;'
+                'cmake ..;'
+                'make -j "$(nproc)";'
                 f'echo "{conf.PASSWORD}" | sudo -S make install'
             )
             sleep(1)
@@ -252,9 +209,7 @@ def context_manager(func):
             if "未找到命令" in res:
                 raise EnvironmentError("ydotool not installed")
             sleep(2)
-
         return func(*args, **kwargs)
-
     return wrapper
 
 

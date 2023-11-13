@@ -11,7 +11,6 @@ import subprocess as sp
 import os
 import errno
 
-from time import sleep
 from src.mouse_key import MouseKey
 from setting.globalconfig import GlobalConfig
 from src  import logger
@@ -49,7 +48,7 @@ def recording_screen(name):
         ) as proc:
 
             # let ffmpeg start
-            sleep(0.5)
+            time.sleep(0.5)
             if proc.poll() is not None:
                 raise RuntimeError("ffmpeg did not start")
 
@@ -60,17 +59,22 @@ def recording_screen(name):
                 try:
                     with suppress(IOError, errnos=(errno.EINVAL, errno.EPIPE)):
                         logger.debug(" stop step 1")
-                        proc.communicate(input=b"q")
+                        proc.communicate(input=b"q", timeout=10)
                         logger.debug(f"录屏状态 {proc.stdin.closed}")
                         if not proc.stdin.closed:
                             proc.stdin.close()
                             logger.debug("停止录屏 finish")
                 except:
                     try:
-                        proc.communicate(input=b"q")
-                        proc.stdin.close()
+                        for _ in range(5):
+                            proc.communicate(input=b"q", timeout=10)
+                            proc.stdin.close()
+                            time.sleep(0.5)
+                            if proc.stdin.closed:
+                                break
                     except:
                         pass
+
                 logger.info("停止录屏 finish")
 
 

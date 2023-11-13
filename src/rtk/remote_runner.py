@@ -6,6 +6,8 @@
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
 # pylint: disable=E0401,C0413,R0902,R0913,R0914,W0613,C0301,C0415,C0103
+import json
+import os
 import re
 import sys
 from configparser import ConfigParser
@@ -28,6 +30,7 @@ from allure_custom import AllureCustom
 from allure_custom.conf import setting
 
 from setting.globalconfig import GlobalConfig
+from src.pms.send2pms import Send2Pms
 
 setting.html_title = GlobalConfig.REPORT_TITLE
 setting.report_name = GlobalConfig.REPORT_NAME
@@ -117,6 +120,8 @@ class RemoteRunner:
                 x: f"/home/{x}/{self.server_project_path}/{GlobalConfig.report_cfg.get('ALLURE_REPORT_PATH', default='report')}/allure".replace(
             "//", "/"
         )
+        self.client_pms_json_report_path =  lambda x, y: f"/home/{x}/{self.server_project_path}/report/pms_{y}"
+
         self.client_xml_report_path = lambda \
                 x: f"/home/{x}/{self.server_project_path}/{GlobalConfig.report_cfg.get('XML_REPORT_PATH', default='report')}/xml".replace(
             "//", "/"
@@ -130,6 +135,11 @@ class RemoteRunner:
         self.rsync = "sshpass -p '%s' rsync -av -e ssh"
         self.empty = "> /dev/null 2>&1"
         self.strf_time = strftime("%m%d%p%I%M%S")
+
+        self.collection_json = False
+        self.server_json_dir_id = None
+        self.pms_user = None
+        self.pms_password = None
 
     def send_code_to_client(self, user, _ip, password):
         """
@@ -308,6 +318,17 @@ class RemoteRunner:
         lr_args = {k:v for k, v in lr.export_default.items() if v}
         rr_args = {k:v for k, v in self.local_kwargs.items() if v}
         lr_args.update(rr_args)
+        if all(
+            [
+                lr_args.get(Args.task_id.value),
+                lr_args.get(Args.pms_user.value),
+                lr_args.get(Args.pms_password.value),
+                lr_args.get(Args.send_pms.value) == "finish",
+            ]
+        ):
+            lr_args[Args.trigger.value] = "hand"
+            self.collection_json = True
+            self.server_json_dir_id = lr_args.get(Args.task_id.value)
         pytest_cmd = lr.create_pytest_cmd(real_app_name.replace("apps/", ""), default=lr_args, proj_path=f"/home/{user}/{self.server_project_path}")
 
         cmd.extend(pytest_cmd)
@@ -403,6 +424,37 @@ class RemoteRunner:
         generate_allure_html = f"{server_allure_path}/html"
 
         AllureCustom.gen(server_allure_path, generate_allure_html)
+        if self.collection_json:
+            server_json_path = f"{GlobalConfig.REPORT_PATH}/pms_{self.server_json_dir_id}/{self.strf_time}_ip{_ip}_{self.default.get(Args.app_name.value)}"
+            self.make_dir(server_json_path)
+            system(
+                f"{self.scp % password} {user}@{_ip}:{self.client_pms_json_report_path(user, self.server_json_dir_id)}/* {server_json_path}/ {self.empty}"
+            )
+
+    def remote_finish_send_to_pms(self):
+        json_path = f"{GlobalConfig.REPORT_PATH}/pms_{self.server_json_dir_id}"
+        self.make_dir(json_path)
+        res = {}
+        for root, dirs, files in os.walk(json_path):
+            for file in files:
+                if file.endswith(".json") and file != "total.json":
+                    case_name = os.path.splitext(file)[0]
+                    file_path = f"{root}/{file}"
+
+                    with open(file_path, "r", encoding="utf-8") as f:
+                        _client_res = json.load(f)
+                    if not res.get(case_name):
+                        res[case_name] = _client_res
+                    else:
+                        if res.get(case_name).get("result") != "fail":
+                            res[case_name] = _client_res
+        with open(f"{json_path}/total.json", "w+", encoding="utf-8") as f:
+            f.write(json.dumps(res, indent=2, ensure_ascii=False))
+
+        Send2Pms(
+            user=self.pms_user,
+            password=self.pms_password,
+        ).remote_finish_push(res)
 
     def get_report(self, client_list):
         """
@@ -425,6 +477,9 @@ class RemoteRunner:
         else:
             user, _ip, password = self.default.get(Args.clients.value).get(client_list[0])
             self.scp_report(user, _ip, password)
+
+        if self.collection_json:
+            self.remote_finish_send_to_pms()
 
     def parallel_run(self, client_list):
         """
