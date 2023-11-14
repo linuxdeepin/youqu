@@ -54,7 +54,7 @@ class ButtonCenter:
                     interrupt=False,
                     out_debug_flag=False,
                     command_log=False,
-                ).split("\n")
+                ).strip().split("\n")
                 app_id_list = [int(_id) for _id in app_id if _id]
                 app_id_list.sort()
                 logger.debug(f"app_id_list: {app_id_list}")
@@ -570,7 +570,7 @@ class ButtonCenter:
         cmd = f"xdotool search --onlyvisible --classname {name}"
         app_id = CmdCtl.run_cmd(
             cmd, interrupt=False, out_debug_flag=False, command_log=False
-        )
+        ).strip()
         if app_id:
             return [i for i in app_id.split("\n") if i]
         raise ApplicationStartError(app_id)
@@ -600,7 +600,7 @@ class ButtonCenter:
                 interrupt=False,
                 out_debug_flag=False,
                 command_log=False,
-            ).split("\n")
+            ).strip().split("\n")
             app_id_list = [int(_id) for _id in app_id if _id]  # to int
             app_id_list.sort()
             return app_id_list[-1]
