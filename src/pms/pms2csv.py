@@ -99,6 +99,7 @@ class Pms2Csv(_Base):
                     if device_type and device_type != "null"
                     else "",
                     "online_obj": "CICD" if online_obj == "是" else "",
+                    "skip_reason": "skip-下线CD" if online_obj == "否" else None
                 }
         if not res_data:
             logger.error(f"未从pms获取到数据, {self.config_error_log}")
@@ -162,6 +163,7 @@ class Pms2Csv(_Base):
 
             pms_case_id_index = case_level_index = case_type_index = None
             case_from_index = device_type_index = online_obj_index = None
+            skip_reason_index = None
 
             pms_case_id_name = csv_head_dict.get(FixedCsvTitle.pms_case_id.name)
             if pms_case_id_name:
@@ -187,6 +189,10 @@ class Pms2Csv(_Base):
             if online_obj_name:
                 online_obj_index = online_obj_name.get("head_index")
 
+            skip_reason_name = csv_head_dict.get(FixedCsvTitle.skip_reason.name)
+            if skip_reason_name:
+                skip_reason_index = skip_reason_name.get("head_index")
+
             new_csv_tags = []
             new_csv_tags.append(
                 [i.get("head_name") for i in list(csv_head_dict.values())]
@@ -200,6 +206,7 @@ class Pms2Csv(_Base):
                         case_from = pms_tags.get("case_from")
                         device_type = pms_tags.get("device_type")
                         online_obj = pms_tags.get("online_obj")
+                        skip_reason = pms_tags.get("skip_reason")
                         flag = False
                         if (
                             pms_case_id_index
@@ -241,6 +248,14 @@ class Pms2Csv(_Base):
                         ):
                             csv_tags_dict[csv_case_id][online_obj_index] = online_obj
                             flag = True
+                        if (
+                            skip_reason_index
+                            and csv_tags_dict[csv_case_id][skip_reason_index]
+                            != skip_reason
+                        ):
+                            if skip_reason:
+                                csv_tags_dict[csv_case_id][skip_reason_index] = skip_reason
+                                flag = True
 
                         new_tags = csv_tags_dict[csv_case_id]
                         if flag:
