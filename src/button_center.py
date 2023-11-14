@@ -54,7 +54,7 @@ class ButtonCenter:
                     interrupt=False,
                     out_debug_flag=False,
                     command_log=False,
-                ).split("\n")
+                ).strip().split("\n")
                 app_id_list = [int(_id) for _id in app_id if _id]
                 app_id_list.sort()
                 logger.debug(f"app_id_list: {app_id_list}")
