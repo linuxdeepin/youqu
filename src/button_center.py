@@ -557,7 +557,7 @@ class ButtonCenter:
         cmd = f"xdotool search --classname {name}"
         app_id = CmdCtl.run_cmd(
             cmd, interrupt=False, out_debug_flag=False, command_log=False
-        )
+        ).strip()
         return len([i for i in app_id.split("\n") if i])
 
     @classmethod
