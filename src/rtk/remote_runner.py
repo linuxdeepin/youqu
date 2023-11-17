@@ -18,8 +18,6 @@ from os import popen
 from os import system
 from os.path import exists
 from os.path import splitext
-# from threading import Thread
-# from multiprocessing import Process as Thread
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import wait
 from concurrent.futures import ALL_COMPLETED

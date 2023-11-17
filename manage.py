@@ -24,7 +24,6 @@ from setting.globalconfig import GlobalConfig
 from src.startapp import StartApp
 from src import logger
 from src.pms.pms2csv import Pms2Csv
-from src.pms.csv2pms import Csv2Pms
 from src.rtk._base import SubCmd
 from src.rtk._base import Args
 from src.rtk.local_runner import LocalRunner

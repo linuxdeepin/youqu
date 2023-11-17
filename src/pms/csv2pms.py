@@ -6,9 +6,9 @@
 # SPDX-License-Identifier: GPL-2.0-only
 import json
 import os
-from concurrent.futures import ALL_COMPLETED
-from concurrent.futures import ThreadPoolExecutor
-from concurrent.futures import wait
+# from concurrent.futures import ALL_COMPLETED
+# from concurrent.futures import ThreadPoolExecutor
+# from concurrent.futures import wait
 from time import sleep
 from urllib.parse import urlencode
 
@@ -17,6 +17,7 @@ from setting.globalconfig import FixedCsvTitle
 from src.pms._base import _Base
 from src.rtk._base import transform_app_name
 
+__all__ = []
 
 class Csv2Pms(_Base):
     __author__ = "mikigo<huangmingqiang@uniontech.com>"
@@ -117,10 +118,10 @@ class Csv2Pms(_Base):
             )
             print(f"({index}) {case_id} {data} {res.status}")
 
-        tasks = []
-        executor = ThreadPoolExecutor()
+        # tasks = []
+        # executor = ThreadPoolExecutor()
         for index, value in enumerate(taglines):
-            # push(value, index)
-            t = executor.submit(push, value, index)
-            tasks.append(t)
-        wait(tasks, return_when=ALL_COMPLETED)
+            push(value, index)
+            # t = executor.submit(push, value, index)
+            # tasks.append(t)
+        # wait(tasks, return_when=ALL_COMPLETED)
