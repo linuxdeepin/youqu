@@ -41,8 +41,11 @@ class AssertCommon:
             widget: str,
             rate: float = 0.9,
             multiple: bool = False,
-            match_number: int = None,
             picture_abspath: str = None,
+            network_retry: int = None,
+            pause: [int, float] = None,
+            timeout: [int, float] = None,
+            match_number: int = None,
     ):
         """
          期望界面存在模板图片
@@ -57,8 +60,11 @@ class AssertCommon:
                 widget,
                 rate=rate,
                 multiple=multiple,
-                match_number=match_number,
                 picture_abspath=picture_abspath,
+                network_retry=network_retry,
+                pause=pause,
+                timeout=timeout,
+                max_match_number=match_number,
             )
         except TemplateElementNotFound as exc:
             raise AssertionError(exc) from TemplateElementNotFound
@@ -96,8 +102,11 @@ class AssertCommon:
             widget: str,
             rate: float = 0.9,
             multiple: bool = False,
-            match_number: int = None,
             picture_abspath: str = None,
+            network_retry: int = None,
+            pause: [int, float] = None,
+            timeout: [int, float] = None,
+            match_number: int = None,
     ):
         """
          期望界面不存在模板图片
@@ -113,8 +122,11 @@ class AssertCommon:
                 widget,
                 rate=rate,
                 multiple=multiple,
-                match_number=match_number,
                 picture_abspath=picture_abspath,
+                network_retry=network_retry,
+                pause=pause,
+                timeout=timeout,
+                max_match_number=match_number,
             )
             raise TemplateElementFound(widget)
         except TemplateElementNotFound:
@@ -385,7 +397,15 @@ class AssertCommon:
 
     @staticmethod
     def assert_ocr_exist(
-            *args, picture_abspath=None, similarity=0.6, return_first=False, lang="ch"
+            *args,
+            picture_abspath=None,
+            similarity=0.6,
+            return_first=False,
+            lang="ch",
+            network_retry: int = None,
+            pause: [int, float] = None,
+            timeout: [int, float] = None,
+            max_match_number: int = None,
     ):
         """断言文案存在"""
         pic = None
@@ -397,6 +417,10 @@ class AssertCommon:
             similarity=similarity,
             return_first=return_first,
             lang=lang,
+            network_retry=network_retry,
+            pause=pause,
+            timeout=timeout,
+            max_match_number=max_match_number,
         )
         if res is False:
             raise AssertionError(
@@ -415,7 +439,15 @@ class AssertCommon:
 
     @staticmethod
     def assert_ocr_not_exist(
-            *args, picture_abspath=None, similarity=0.6, return_first=False, lang="ch"
+            *args,
+            picture_abspath=None,
+            similarity=0.6,
+            return_first=False,
+            lang="ch",
+            network_retry: int = None,
+            pause: [int, float] = None,
+            timeout: [int, float] = None,
+            max_match_number: int = None,
     ):
         """断言文案不存在"""
         pic = None
@@ -427,6 +459,10 @@ class AssertCommon:
             similarity=similarity,
             return_first=return_first,
             lang=lang,
+            network_retry=network_retry,
+            pause=pause,
+            timeout=timeout,
+            max_match_number=max_match_number,
         )
         if res is False:
             pass

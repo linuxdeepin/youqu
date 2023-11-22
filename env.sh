@@ -69,7 +69,6 @@ echo -e "${flag_feel}安装 pip 包\n"
 sudo pip3 install -U pip > /tmp/env.log 2>&1
 sudo pip3 config set global.timeout 10000 > /tmp/env.log 2>&1
 sudo pip3 config set global.index-url ${pypi_mirror} > /tmp/env.log 2>&1
-sudo pip3 config set global.extra-index-url https://it.uniontech.com/nexus/repository/pypi-public/simple
 sudo pip3 install pipenv > /tmp/env.log 2>&1
 if [ $? = 0 ]; then
     echo -e "pipenv\t安装成功 √"
