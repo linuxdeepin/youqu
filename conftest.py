@@ -592,8 +592,14 @@ def pytest_runtest_setup(item):
 
     print()  # 处理首行日志换行的问题
     current_item_count = (
-        f"[{item.session.items.index(item) + 1}/{item.session.item_count}]"
+        f"[{item.session.items.index(item) + 1}/{item.session.item_count}] "
     )
+    try:
+        current_item_percent = "{:.0f}%".format(
+            int(item.session.items.index(item) + 1) / int(item.session.item_count) * 100
+        )
+    except:
+        current_item_percent = ""
     try:
         rerun_text = (
             f" | <重跑第{item.execution_count - 1}次>" if item.execution_count > 1 else ""
@@ -603,7 +609,7 @@ def pytest_runtest_setup(item):
     logger.info(
         f"{LN}{FLAG_FEEL} {item.function.__name__} || "
         f"{str(item.function.__doc__).replace(LN, '').replace('    ', '')}{rerun_text} "
-        f"{FLAG_FEEL} {current_item_count}"
+        f"{FLAG_FEEL} {current_item_count} {current_item_percent}"
     )
     try:
         if item.execution_count >= (int(item.config.option.record_failed_case) + 1):

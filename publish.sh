@@ -32,4 +32,4 @@ cp deepin-autotest-framework/pyproject.toml ${tmp_publish_dir_name}/
 cp deepin-autotest-framework/src/startproject.py ${tmp_publish_dir_name}/youqu/
 cd ${tmp_publish_dir_name}/
 python3 -m build
-twine upload dist/*
+#twine upload dist/*

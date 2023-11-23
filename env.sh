@@ -66,6 +66,7 @@ if [ "${env_retry}" = "true" ]; then
 fi
 echo -e "${flag_feel}安装 pip 包\n"
 
+sudo pip3 cache purge
 sudo pip3 install -U pip > /tmp/env.log 2>&1
 sudo pip3 config set global.timeout 10000 > /tmp/env.log 2>&1
 sudo pip3 config set global.index-url ${pypi_mirror} > /tmp/env.log 2>&1
