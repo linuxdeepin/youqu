@@ -950,7 +950,7 @@ def get_runs_id_deque(user, password, class_obj, func, _id):
         raise ValueError("缺少PMS用户名或密码")
     runs_ids = getattr(class_obj(user, password), f"get_{func}_data")(_id)
     if not runs_ids:
-        raise ValueError
+        raise ValueError(f"task_id: {_id}, 没有获取关联的用例")
     id_deque = deque()
     for i in runs_ids:
         id_deque.append(i.get("case_id"))
