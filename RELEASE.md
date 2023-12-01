@@ -9,6 +9,7 @@
 **Fix**
 
 - `env.sh` 增加清理 `pip` 缓存；
+- 修复在低版本系统上安装的 `libkf5wayland-dev` 版本过高与 `libkf5waylandclient5` 版本不匹配，根据获取 `libkf5waylandclient5` 版本指定 `libkf5wayland-dev` 版；感谢 **@程玉婷**；
 
 ## 2.3.3（2023/11/22）
 
