@@ -1,9 +1,7 @@
 #!/bin/bash
-
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
-
 # SPDX-License-Identifier: GPL-2.0-only
-# pylint: disable=C0114
+
 tag=$(echo "$(cat ./CURRENT | grep "tag = ")" | cut -d "=" -f2 | python3 -c "s=input();print(s.strip())")
 
 ROOT_DIR=`pwd`
@@ -32,25 +30,6 @@ deb https://community-packages.deepin.com/deepin apricot main contrib non-free
 EOF
 }
 
-#install_wayland_depends(){
-# libkf5wayland-dev经常出现依赖关系问题，尝试修复依赖关系，
-# 但此举可能引入兼容性问题。
-#/usr/bin/expect << EOF
-#set timeout -1
-#spawn sudo aptitude install libkf5wayland-dev
-#expect {
-#        "是否接受该解决方案" { send "N\n"}
-#}
-#expect {
-#        "是否接受该解决方案" { send "Y\n" }
-#}
-#expect {
-#        "您要继续吗" { send "Y\n" }
-#}
-#expect eof
-#EOF
-#}
-
 check_status(){
     if [ $? = 0 ]; then
         echo -e "$1\t安装成功 √"
@@ -71,15 +50,17 @@ wayland_env(){
         apt policy ${deb} > /tmp/_yqdebversion.txt 2>&1
         cat /tmp/_yqdebversion.txt | grep "已安装"
     done
-    sudo apt install -y libkf5wayland-dev > /tmp/env.log 2>&1
+
+    libkf5waylandclient5_version=$(apt show libkf5waylandclient5 | grep Version | cut -d " " -f2)
+    # 根据 libkf5waylandclient5 的版本决定安装 libkf5wayland-dev 的版本;
+    sudo apt install -y libkf5wayland-dev=${libkf5waylandclient5_version} > /tmp/env.log 2>&1
+    wayland_info="libkf5wayland-dev 可能存在依赖报错，解决方法：\n
+    方案一. 添加镜像对应的ppa仓库源，重新执行；\n
+    方案二. sudo aptitude install libkf5wayland-dev,先输 n,再输 y,再输 y\n
+    ***方案二可能引入兼容性问题，慎用，在下非常非常非常不推荐。***"
+    echo -e ${wayland_info} >> /tmp/env.log 2>&1
     check_status libkf5wayland-dev
-    # libkf5wayland-dev 可能存在依赖报错，解决方法：
-    # 方案一.添加镜像对应的ppa仓库源，重新执行；
-    # 方案二.sudo aptitude install libkf5wayland-dev,先输 n,再输 y,再输 y
-    # 方案二可能引入兼容性问题，慎用。
-    # if [ $? != 0 ]; then
-    #     install_wayland_depends
-    # fi
+
     # 编译工具
     cd ${ROOT_DIR}/src/depends/wayland_autotool/
     mkdir -p build && cd build
@@ -88,7 +69,7 @@ wayland_env(){
     sudo make install > /dev/null 2>&1
     [ $? = 0 ] && tool_status="成功 √" || tool_status="失败 ×"
     echo -e "${flag_feel}wayland_autotool 安装${tool_status}"
-    # 添加一下wayland下有用的环境变量，其实框架执行的时候底层也会自动判断并添加，这里咱们先打个提前量；
+    # 添加wayland下有用的环境变量，其实框架执行的时候底层也会自动判断并添加，这里咱们先打个提前量；
     cat $HOME/.bashrc | grep 'export GDMSESSION=Wayland' > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         echo "export QT_WAYLAND_SHELL_INTEGRATION=kwayland-shell" >> $HOME/.bashrc
@@ -110,8 +91,9 @@ wayland_env(){
     fi
 
     if [ ! -f "$HOME/.Xauthority" ]; then
-        echo -e "I'm not sure why the $HOME/.Xauthority file is not available on this device.\nWe're trying to create an empty .Xauthority file to ensure the program runs properly,\nbut Xlib may have some warning prompts.
-        "
+        warnning_info="咱也不知道为啥$HOME.Xauthority 这个文件不存在，我只能给你创建一个空的.Xauthority文件，\n
+        虽然空文件会有Xlib的警告信息（Warnning），但如果文件不存在Xlib会直接报错，导致程序无法运行。"
+        echo -e ${warnning_info}
         touch $HOME/.Xauthority
     fi
 
