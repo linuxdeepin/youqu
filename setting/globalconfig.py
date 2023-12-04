@@ -97,8 +97,21 @@ class _GlobalConfig:
     SCREEN_CACHE = run_cfg.get("SCREEN_CACHE", default="/tmp/screen.png")
     TMPDIR = run_cfg.get("TMPDIR", default="/tmp/tmpdir")
     SYS_THEME = run_cfg.get("SYS_THEME", default="deepin")
+
+
     OCR_SERVER_HOST = run_cfg.get("OCR_SERVER_HOST", default="localhost")
+    OCR_PORT = run_cfg.get("OCR_PORT", default="8890")
+    OCR_NETWORK_RETRY = run_cfg.get("OCR_NETWORK_RETRY", default=1)
+    OCR_PAUSE = run_cfg.get("OCR_PAUSE", default=1)
+    OCR_TIMEOUT = run_cfg.get("OCR_TIMEOUT", default=5)
+    OCR_MAX_MATCH_NUMBER = run_cfg.get("OCR_MAX_MATCH_NUMBER", default=100)
+
     OPENCV_SERVER_HOST = run_cfg.get("OPENCV_SERVER_HOST", default="localhost")
+    OPENCV_PORT = run_cfg.get("OPENCV_PORT", default="8889")
+    OPENCV_NETWORK_RETRY = run_cfg.get("OPENCV_NETWORK_RETRY", default=1)
+    OPENCV_PAUSE = run_cfg.get("OPENCV_PAUSE", default=1)
+    OPENCV_TIMEOUT = run_cfg.get("OPENCV_TIMEOUT", default=5)
+    OPENCV_MAX_MATCH_NUMBER = run_cfg.get("OPENCV_MAX_MATCH_NUMBER", default=100)
 
     # [report]
     report_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "report")

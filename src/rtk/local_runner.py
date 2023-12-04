@@ -353,10 +353,10 @@ class LocalRunner:
 
         app_dir = self.change_working_dir()
         run_test_cmd_list = self.create_pytest_cmd(app_dir)
-        run_test_cmd = " ".join(run_test_cmd_list)
 
         if not self.default.get(Args.pms_info_file.value):
-            print(f"Running: \n{run_test_cmd}")
+            ...
+            # print(f'Running: \n{" ".join(run_test_cmd_list)}')
         if self.default.get(Args.debug.value):
             logger.info("Debug 模式不执行用例!")
             return

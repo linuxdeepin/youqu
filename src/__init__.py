@@ -10,12 +10,6 @@ import sys
 
 from funnylog import log
 from funnylog import logger
-from pdocr_rpc import OCR
-from pdocr_rpc.conf import setting as ocr_setting
-
-from setting.globalconfig import GlobalConfig
-
-ocr_setting.SERVER_IP = GlobalConfig.OCR_SERVER_HOST
 
 from setting.globalconfig import SystemPath
 
@@ -29,6 +23,7 @@ from src.calculate import Calculate
 from src.cmdctl import CmdCtl
 from src.dogtail_utils import DogtailUtils
 from src.image_utils import ImageUtils
+from src.ocr_utils import OCRUtils as OCR
 from src.button_center import ButtonCenter
 from src.filectl import FileCtl
 from src.shortcut import ShortCut

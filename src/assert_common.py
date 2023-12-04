@@ -14,6 +14,7 @@ try:
 except ModuleNotFoundError:
     pass
 
+from src.ocr_utils import OCRUtils as OCR
 from src.image_utils import ImageUtils
 from src.filectl import FileCtl
 from src.dogtail_utils import DogtailUtils
@@ -25,9 +26,7 @@ from src.custom_exception import AssertOptionError
 from src.cmdctl import CmdCtl
 from src.button_center import ButtonCenter
 from src import logger, log
-from src import OCR
 from setting.globalconfig import GlobalConfig
-
 
 # pylint: disable=too-many-public-methods
 @log

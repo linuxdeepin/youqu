@@ -7,12 +7,11 @@
 <p align="center">
     <em>有趣，一个使用简单且功能强大的自动化测试基础框架。</em>
 </p>
-
-![PyPI](https://img.shields.io/pypi/v/youqu?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu%2F&color=%2344CC11)
-![PyPI - License](https://img.shields.io/pypi/l/youqu?color=blue&color=%2344CC11)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/youqu?color=%2344CC11)
-![Static Badge](https://img.shields.io/badge/UOS%2FDeepin/Ubuntu/Debian-Platform?style=flat&label=OS)
-![Static Badge](https://img.shields.io/badge/Linux-Platform?style=flat&label=Platform)
+![PyPI](https://img.shields.io/pypi/v/youqu?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu%2F&color=%23F79431)
+![PyPI - License](https://img.shields.io/pypi/l/youqu?color=%23F79431)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/youqu?color=%23F79431)
+![Static Badge](https://img.shields.io/badge/UOS%2FDeepin/Ubuntu/Debian-Platform?style=flat&label=OS&color=%23F79431)
+![Static Badge](https://img.shields.io/badge/Linux-Platform?style=flat&label=Platform&color=%23F79431)
 
 [![Downloads](https://static.pepy.tech/badge/youqu/week)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu/month)](https://pepy.tech/project/youqu)

@@ -16,10 +16,14 @@ except ModuleNotFoundError:
 from image_center import ImageCenter
 from image_center.conf import setting as image_setting
 
-from setting.globalconfig import GlobalConfig
+from setting import conf
 
-image_setting.PORT = 8889
-image_setting.SERVER_IP = GlobalConfig.OPENCV_SERVER_HOST
+image_setting.PORT = conf.OPENCV_PORT
+image_setting.SERVER_IP = conf.OPENCV_SERVER_HOST
+image_setting.NETWORK_RETRY = int(conf.OPENCV_NETWORK_RETRY)
+image_setting.PAUSE = float(conf.OPENCV_PAUSE)
+image_setting.TIMEOUT = float(conf.OPENCV_TIMEOUT)
+image_setting.MAX_MATCH_NUMBER = int(conf.OPENCV_MAX_MATCH_NUMBER)
 
 
 class ImageUtils(ImageCenter):
