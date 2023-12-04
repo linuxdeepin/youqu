@@ -89,7 +89,6 @@ echo -e "${flag_feel}安装 pip 包\n"
 sudo pip3 install -U pip > /tmp/env.log 2>&1
 sudo pip3 config set global.timeout 10000 > /tmp/env.log 2>&1
 sudo pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple > /tmp/env.log 2>&1
-sudo pip3 config set global.extra-index-url https://it.uniontech.com/nexus/repository/pypi-public/simple
 
 for p in ${pip_array[*]}
 do
