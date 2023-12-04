@@ -172,6 +172,7 @@ pip_show=$(pipenv run pip show auto_uos | grep Location)
 public_location=$(echo "${pip_show}" | cut -d ":" -f2 | python3 -c "s=input();print(s.strip())")
 sudo rm -rf ${ROOT_DIR}/public
 sudo cp -r ${public_location}/auto_uos ${ROOT_DIR}/public
+sudo chmod -R 755 ${ROOT_DIR}/public
 
 rm -rf Pipfile
 echo "${python_virtualenv_path}"
