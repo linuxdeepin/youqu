@@ -179,7 +179,7 @@ class MouseKey:
          拖拽到指定位置(绝对位置)
         :param _x: 拖拽到的位置x
         :param _y: 拖拽到的位置y
-        :param duration: 拖拽的时常
+        :param duration: 拖拽的时长
         :param delay: 拖拽后等待的时间
         :return:
         """
