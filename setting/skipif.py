@@ -2,9 +2,10 @@
 # _*_ coding:utf-8 _*_
 
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
-
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
+import os
+
 from setting.globalconfig import GlobalConfig
 
 
@@ -35,12 +36,24 @@ def skipif_cpu_name(args: str):
     使用 sudo dmidecode -s system-product-name 查看机器的cpu型号
     剔除中横线和&符号，比如：KLVV-W5821，标签记录为 KLVVW5821
     """
-    import os
     _skip_key = args.split("&")
     for key in _skip_key:
         if os.popen(
                 f"echo '{GlobalConfig.PASSWORD}'| "
                 "sudo -S dmidecode -s system-product-name | awk '{print $NF}'"
         ).read().strip("\n").replace("-", "").replace("&", "") == key:
+            return True
+    return False
+
+
+def skipif_os_version(args: str):
+    """
+    系统版本跳过
+    :param args: 1060&1070
+    :return:
+    """
+    _skip_key = args.split("&")
+    for key in _skip_key:
+        if key == GlobalConfig.OS_VERSION.get("MinorVersion"):
             return True
     return False

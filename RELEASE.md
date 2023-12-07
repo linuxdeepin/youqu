@@ -21,14 +21,14 @@
 **Fix**
 
 - `env.sh` 增加清理 `pip` 缓存；
-- 修复在低版本系统上安装的 `libkf5wayland-dev` 版本过高与 `libkf5waylandclient5` 版本不匹配，根据获取 `libkf5waylandclient5` 版本指定 `libkf5wayland-dev` 版；感谢 **@程玉婷**；
+- 修复在低版本系统上安装的 `libkf5wayland-dev` 版本过高与 `libkf5waylandclient5` 版本不匹配，根据获取 `libkf5waylandclient5` 版本指定 `libkf5wayland-dev` 版；感谢 **[@程玉婷](https://github.com/momiji33)**；
 
 ## 2.3.3（2023/11/22）
 
 **Fix**
 
-- 使用 `Xdotool` 检索窗口 ID 时，如果有多个窗口，则输出以 `\n` 结尾。在原始代码中，使用 `split("\n")` 直接拆分字符串可能会导致结果列表的最后一个元素为空字符串。在迭代窗口 ID 并将其转换为 `int` 类型时，这种情况会导致错误。感谢 [@zhao-george](https://github.com/zhao-george)
-- 图像识别（`image-center`）发布了新版本 `2023.11.22`  [@zhao-george](https://github.com/zhao-george)，OCR（`pdocr-rpc`）发布了新版本 `2023.11.17`，增加了识别的总耗时、每次识别间隔时间；
+- 使用 `Xdotool` 检索窗口 ID 时，如果有多个窗口，则输出以 `\n` 结尾。在原始代码中，使用 `split("\n")` 直接拆分字符串可能会导致结果列表的最后一个元素为空字符串。在迭代窗口 ID 并将其转换为 `int` 类型时，这种情况会导致错误。感谢 [@赵有志](https://github.com/zhao-george)
+- 图像识别（`image-center`）发布了新版本 `2023.11.22`  [@赵有志](https://github.com/zhao-george)，OCR（`pdocr-rpc`）发布了新版本 `2023.11.17`，增加了识别的总耗时、每次识别间隔时间；
 
 ## 2.3.2（2023/11/14）
 
@@ -63,7 +63,7 @@
 
 - 修复 `youqu` 命令无法接收带空格的参数的问题；感谢 **[@禄烨](https://github.com/lu-xianseng)** ；
 - `OCR` 检测模型升级到 `V4` 之后，在识别某些文本情况下出现不能识别的问题，暂时先回滚到 `V3` ；
-- 修复了不同的 `case` 目录下 `py` 文件的名称一样，导出（`manage.py csvctl -p2c`）数据错误的问题；感谢 **@赵有志**；
+- 修复了不同的 `case` 目录下 `py` 文件的名称一样，导出（`manage.py csvctl -p2c`）数据错误的问题；感谢 **[@赵有志](https://github.com/zhao-george)**；
 
 -----------------------
 
@@ -149,7 +149,7 @@ new
 fix
 
 - 对 `docs` 里面细化了远程执行章节的描述；
-- 多 `docs` 里面优化了标签化管理章节的描述；
+- 对 `docs` 里面优化了标签化管理章节的描述；
 
 ## 2.1.5（2023/08/31）
 
@@ -161,10 +161,10 @@ new
 
 fix
 
-- 修复了 Wayland 键鼠工具没有鼠标相对移动方法 moveRel 的问题； 
-- 修复了 Wayland 下获取窗口信息功能模块中环境变量的问题；
-- 优化了 startproject 功能的一些信息输出；
-- 修复了特殊场景下 env_dev.sh 开发环境部署是可能影响到正式环境 env.sh 的问题；
+- 修复了 `Wayland` 键鼠工具没有鼠标相对移动方法 `moveRel` 的问题； 
+- 修复了` Wayland` 下获取窗口信息功能模块中环境变量的问题；
+- 优化了 `startproject` 功能的一些信息输出；
+- 修复了特殊场景下 `env_dev.sh` 开发环境部署是可能影响到正式环境 env.sh 的问题；
 
 ## 2.1.2（2023/08/22）
 
