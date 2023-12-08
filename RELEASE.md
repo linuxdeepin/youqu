@@ -4,11 +4,15 @@
 
 **New**
 
-- 标签化管理支持判断系统版本跳过用例，从 `/etc/os-version` 里面的 `MinorVersion` 为判断依据，在 `setting/skipif.py` 插件中实现了此功能，后续在 `CSV` 文件中可以使用此方法进行条件跳过；
+- 标签化管理支持判断系统版本跳过用例，用 `/etc/os-version` 里面的 `MinorVersion` 字段作为判断依据，在 `setting/skipif.py` 插件中实现了此功能，后续在 `CSV` 文件中可以使用此方法进行条件跳过；
+
+  ```python hl_lines="57-67"
+  --8<-- "setting/skipif.py"
+  ```
 
 **Fix**
 
-- 修改 `public` 目录权限为 `umask 022`，以解决远程开发时无法同步文件失败的问题；
+- 修改 `public` 目录权限为 `umask 022`，以解决远程开发时无法同步文件的问题；
 - 修复 `Wayland` 下系统监视器使用 `WaylandWindowINfo.window_info()`，获取的窗口名称为空；
 - 解除 `env.sh` 中某个 `deb` 包安装失败后替换源 `retry` 机制，因为用固定的源替换之后，容易出现某些包安装失败，而不容易关注到首次包安装失败的问题，给定位环境安装失败带来困难；
 
