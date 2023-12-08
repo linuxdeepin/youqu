@@ -43,23 +43,10 @@ env(){
         wayland_env
     fi
 }
-# 默认源直接安装
 env
-# 如果安装过程中存在失败的情况，替换一下源再试一下
-if [ "${env_retry}" = "true" ]; then
-    # 适配专业版或社区版仓库源
-    source /etc/os-release
-    if [ "${NAME}" = "Deepin" ]; then
-        community_sources_list
-    else
-        sources_list
-    fi
-    sudo mv /etc/apt/sources.list /etc/apt/sources.list.bak
-    sudo cp sources.list /etc/apt/sources.list && rm -rf sources.list
-    # 替换源之后再执行
-    env
-    sudo mv /etc/apt/sources.list.bak /etc/apt/sources.list
-fi
+
+echo -e "${flag_feel}安装 pip 包\n"
+init_pip
 
 pip_array=(
     pyscreeze==0.1.28
@@ -85,10 +72,6 @@ if [ "${ENV_CUT_FLAG}" = "cut" ]; then
         funnylog
     )
 fi
-echo -e "${flag_feel}安装 pip 包\n"
-sudo pip3 install -U pip > /tmp/env.log 2>&1
-sudo pip3 config set global.timeout 10000 > /tmp/env.log 2>&1
-sudo pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple > /tmp/env.log 2>&1
 
 for p in ${pip_array[*]}
 do
@@ -96,9 +79,7 @@ do
     check_status ${p}
     pip3 list | grep -v grep | grep ${p}
 done
-# 前面安装可能比较耗时，sudo免密可能出现过期，再输一把密码
 echo "${PASSWORD}" | sudo -S su > /dev/null 2>&1
-# 应用库新增Python依赖环境
 cd ${ROOT_DIR}/src/utils/
 requirements=$(python3 sub_depends.py)
 if [ "${requirements}" != "" ]; then
@@ -110,8 +91,8 @@ if [ "${requirements}" != "" ]; then
     done
 fi
 
-sudo pip3 install -U auto_uos --extra-index-url ${pypi_mirror} \
--i http://10.20.52.221:8081 --trusted-host=10.20.52.221 > /tmp/env.log 2>&1
+sudo pip3 install -U auto_uos --extra-index-url ${pypi_mirror} -i http://10.20.52.221:8081 --trusted-host=10.20.52.221 \
+> /tmp/env.log 2>&1
 check_status auto_uos
 pip_show=$(pip3 show auto_uos | grep Location)
 public_location=$(echo "${pip_show}" | cut -d ":" -f2 | python3 -c "s=input();print(s.strip())")

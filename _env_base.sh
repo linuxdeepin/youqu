@@ -13,29 +13,11 @@ whitelist="/usr/share/deepin-elf-verify/whitelist"
 pypi_mirror="https://pypi.tuna.tsinghua.edu.cn/simple"
 echo "${PASSWORD}" | sudo -S su  > /dev/null 2>&1
 
-
-sources_list(){
-cat > "sources.list" <<- EOF
-deb [by-hash=force] https://professional-packages.chinauos.com/desktop-professional eagle main contrib non-free
-deb-src https://professional-packages.chinauos.com/desktop-professional eagle main contrib non-free
-deb http://pools.corp.deepin.com/ppa/dde-eagle eagle main contrib non-free
-deb-src http://pools.corp.deepin.com/ppa/dde-eagle eagle main contrib non-free
-deb http://pools.corp.deepin.com/ppa/dde-eagle experimental main contrib non-free
-EOF
-}
-
-community_sources_list(){
-cat > "sources.list" <<- EOF
-deb https://community-packages.deepin.com/deepin apricot main contrib non-free
-EOF
-}
-
 check_status(){
     if [ $? = 0 ]; then
         echo -e "$1\t安装成功 √"
     else
         echo -e "$1\t安装失败 ×"
-        env_retry=true
         cat /tmp/env.log
     fi
 }
@@ -80,7 +62,6 @@ wayland_env(){
         echo "export GDMSESSION=Wayland" >> $HOME/.bashrc
         echo 'export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus"' >> $HOME/.bashrc
     fi
-    # 将 wayland_autotool 写入到安全管控白名单
     wayland_cmd_path="/usr/local/bin/wayland_autotool"
     result=`sudo cat ${whitelist} | grep ${wayland_cmd_path}`
     if [ -z "$result" ]; then
@@ -101,10 +82,7 @@ wayland_env(){
     nohup wayland_autotool > /dev/null 2>&1 &
 }
 
-env_retry=false
-
 system_env(){
-    # 添加一些有用的环境变量
     echo "${PASSWORD}" | sudo -S su  > /dev/null 2>&1
     sudo sed -i "s/#PubkeyAuthentication yes/PubkeyAuthentication yes/g" /etc/ssh/sshd_config > /dev/null 2>&1
     sudo sed -i "s/#   StrictHostKeyChecking ask/   StrictHostKeyChecking no/g" /etc/ssh/ssh_config  > /dev/null 2>&1
@@ -124,4 +102,11 @@ system_env(){
     gsettings set org.gnome.desktop.interface toolkit-accessibility true  > /dev/null 2>&1
     sudo systemctl enable ssh  > /dev/null 2>&1
     sudo systemctl start ssh  > /dev/null 2>&1
+}
+
+init_pip(){
+    sudo pip3 cache purge > /tmp/env.log 2>&1
+    sudo pip3 config set global.timeout 10000 > /tmp/env.log 2>&1
+    sudo pip3 config set global.index-url ${pypi_mirror} > /tmp/env.log 2>&1
+    sudo pip3 install -U pip > /tmp/env.log 2>&1
 }
