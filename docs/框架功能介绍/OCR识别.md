@@ -216,5 +216,3 @@ sudo systemctl status ocr.service
 ```
 
 你可以再重启下电脑，看看服务是不是正常启动了，没报错就 OK 了。
-
-## 
