@@ -406,13 +406,13 @@ class LocalRunner:
                 copy_to=f"{GlobalConfig.REPORT_PATH}/_running_man_{GlobalConfig.TIME_STRING}.log"
             )
 
-    @staticmethod
-    def get_result():
+    @classmethod
+    def get_result(cls, ci_result):
         """
          获取结果
         :return:
         """
-        with open(f"{GlobalConfig.ROOT_DIR}/ci_result.json", "r", encoding="utf-8") as _f:
+        with open(ci_result, "r", encoding="utf-8") as _f:
             results_dict = json.load(_f)
         res = Counter([results_dict.get(i).get("result") for i in results_dict])
         total = sum(res.values())
@@ -439,7 +439,6 @@ class LocalRunner:
         }
         """
         json_tpl_path = f"{GlobalConfig.SETTING_PATH}/template/ci.json"
-
         if not exists(json_tpl_path):
             raise FileNotFoundError
         with open(json_tpl_path, "r", encoding="utf-8") as _f:
@@ -448,12 +447,16 @@ class LocalRunner:
         results["project_name"] = project_name
         results["build_location"] = build_location
         results["line"] = line
+        ci_result_path = f"{GlobalConfig.ROOT_DIR}/ci_result.json"
+        if not exists(ci_result_path):
+            return
+
         (
             results["total"],
             results["fail"],
             results["pass"],
             results["pass_rate"],
-        ) = cls.get_result()
+        ) = cls.get_result(ci_result_path)
 
         json_res_path = f"{GlobalConfig.ROOT_DIR}/{project_name}_at.json"
         with open(json_res_path, "w+", encoding="utf-8") as _f:

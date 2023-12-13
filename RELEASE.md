@@ -1,10 +1,10 @@
 # 版本更新记录
 
-## 2.3.6（dev）
+## 2.3.6（2023/12/13）
 
 **New**
 
-- 标签化管理支持判断系统版本跳过用例，用 `/etc/os-version` 里面的 `MinorVersion` 字段作为判断依据，在 `setting/skipif.py` 插件中实现了此功能，后续在 `CSV` 文件中可以使用此方法进行条件跳过；
+- 标签化管理支持判断系统版本跳过用例，用 `/etc/os-version` 里面的 `MinorVersion` 字段作为判断依据，在 `setting/skipif.py` 插件中实现了此功能，后续在 `CSV` 文件中可以使用此方法进行条件跳过；[# issues 16](https://github.com/linuxdeepin/deepin-autotest-framework/issues/16)
 
   ```python hl_lines="57-67"
   --8<-- "setting/skipif.py"
@@ -13,9 +13,10 @@
 **Fix**
 
 - 修改 `public` 目录权限为 `umask 022`，以解决远程开发时无法同步文件的问题；
-- 修复 `Wayland` 下系统监视器使用 `WaylandWindowINfo.window_info()`，获取的窗口名称为空；
-- 解除 `env.sh` 中某个 `deb` 包安装失败后替换源 `retry` 机制，因为用固定的源替换之后，容易出现某些包安装失败，而不容易关注到首次包安装失败的问题，给定位环境安装失败带来困难；
+- 修复 `Wayland` 下系统监视器使用 `WaylandWindowINfo.window_info()`，获取的窗口名称为空；[# issues 18](https://github.com/linuxdeepin/deepin-autotest-framework/issues/20)
+- 解除 `env.sh` 中某个 `deb` 包安装失败后替换源 `retry` 机制，因为用固定的源替换之后，容易出现某些包安装失败，而不容易关注到首次包安装失败的问题，给定位环境安装失败带来困难；[# issues 19](https://github.com/linuxdeepin/deepin-autotest-framework/issues/19)
 - 修复 `env.sh` 里面报错 `ERROR: unknown command "cache" - maybe you meant "check"`；
+- 修复用例收集数量为 `0` 时，报错 `ci_result.json` 文件找不到；[# issues 20](https://github.com/linuxdeepin/deepin-autotest-framework/issues/20)
 
 ## 2.3.5（2023/12/04）
 
