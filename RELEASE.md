@@ -4,7 +4,7 @@
 
 New
 
-- 
+- `src/__init__.py` 里面的导入全部设置别名，以便后续各组件重命名之后仍能保持接口一致性；
 
 Fix
 
@@ -16,14 +16,14 @@ Fix
 
 - 标签化管理支持判断系统版本跳过用例，用 `/etc/os-version` 里面的 `MinorVersion` 字段作为判断依据，在 `setting/skipif.py` 插件中实现了此功能，后续在 `CSV` 文件中可以使用此方法进行条件跳过；[# issues 16](https://github.com/linuxdeepin/deepin-autotest-framework/issues/16)
 
-  ```python hl_lines="57-67"
+  ```python hl_lines="59-68"
   --8<-- "setting/skipif.py"
   ```
 
 **Fix**
 
 - 修改 `public` 目录权限为 `umask 022`，以解决远程开发时无法同步文件的问题；
-- 修复 `Wayland` 下系统监视器使用 `WaylandWindowINfo.window_info()`，获取的窗口名称为空；[# issues 18](https://github.com/linuxdeepin/deepin-autotest-framework/issues/20)
+- 修复 `Wayland` 下系统监视器使用 `WaylandWindowInfo.window_info()`，获取的窗口名称为空；[# issues 18](https://github.com/linuxdeepin/deepin-autotest-framework/issues/20)
 - 解除 `env.sh` 中某个 `deb` 包安装失败后替换源 `retry` 机制，因为用固定的源替换之后，容易出现某些包安装失败，而不容易关注到首次包安装失败的问题，给定位环境安装失败带来困难；[# issues 19](https://github.com/linuxdeepin/deepin-autotest-framework/issues/19)
 - 修复 `env.sh` 里面报错 `ERROR: unknown command "cache" - maybe you meant "check"`；
 - 修复用例收集数量为 `0` 时，报错 `ci_result.json` 文件找不到；[# issues 20](https://github.com/linuxdeepin/deepin-autotest-framework/issues/20)
@@ -49,8 +49,8 @@ Fix
 
 **Fix**
 
-- 使用 `Xdotool` 检索窗口 ID 时，如果有多个窗口，则输出以 `\n` 结尾。在原始代码中，使用 `split("\n")` 直接拆分字符串可能会导致结果列表的最后一个元素为空字符串。在迭代窗口 ID 并将其转换为 `int` 类型时，这种情况会导致错误。感谢 [@赵有志](https://github.com/zhao-george)
-- 图像识别（`image-center`）发布了新版本 `2023.11.22`  [@赵有志](https://github.com/zhao-george)，OCR（`pdocr-rpc`）发布了新版本 `2023.11.17`，增加了识别的总耗时、每次识别间隔时间；
+- 使用 `Xdotool` 检索窗口 ID 时，如果有多个窗口，则输出以 `\n` 结尾。在原始代码中，使用 `split("\n")` 直接拆分字符串可能会导致结果列表的最后一个元素为空字符串。在迭代窗口 ID 并将其转换为 `int` 类型时，这种情况会导致错误。感谢 **[@赵有志](https://github.com/zhao-george)**
+- 图像识别（`image-center`）发布了新版本 `2023.11.22`  **[@赵有志](https://github.com/zhao-george)**，OCR（`pdocr-rpc`）发布了新版本 `2023.11.17`，增加了识别的总耗时、每次识别间隔时间；
 
 ## 2.3.2（2023/11/14）
 
@@ -177,7 +177,7 @@ fix
 
 new
 
-- 将有趣的文档系统迁移到 [linuxdeepin](https://github.com/linuxdeepin/deepin-autotest-framework) ，剥离文档中的图片资源，采用 `CDN` 网络加速方式加载；
+- 将有趣的文档系统迁移到 **[@linuxdeepin](https://github.com/linuxdeepin/deepin-autotest-framework)** ，剥离文档中的图片资源，采用 `CDN` 网络加速方式加载；
 
 - 尝试合入一个有趣的功能；
 
@@ -186,13 +186,13 @@ fix
 - 修复了 `Wayland` 键鼠工具没有鼠标相对移动方法 `moveRel` 的问题； 
 - 修复了` Wayland` 下获取窗口信息功能模块中环境变量的问题；
 - 优化了 `startproject` 功能的一些信息输出；
-- 修复了特殊场景下 `env_dev.sh` 开发环境部署是可能影响到正式环境 env.sh 的问题；
+- 修复了特殊场景下 `env_dev.sh` 开发环境部署是可能影响到正式环境 `env.sh` 的问题；
 
 ## 2.1.2（2023/08/22）
 
 new
 
-- 增加 OCR 识别自动重试机制，默认重试 2 次，支持动态传入重试次数；
+- 增加 `OCR` 识别自动重试机制，默认重试 2 次，支持动态传入重试次数；
 - 使用窗管最新提供的二进制接口，优化基于 `UI` 的元素定位方案在 `Wayland` 下获取窗口信息的方法；感谢桌面测试部 **@何权 @孙翠** 、窗管研发 **@黄泽铭** 的大力支持。
 - 扩充 `skipif` 条件跳过的功能函数：
   - `skipif_xdg_type` 支持 `x11` 或 `wayland` 上跳过；

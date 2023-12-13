@@ -43,7 +43,7 @@ class WindowStructure(ctypes.Structure):
     ]
 
 
-class WaylandWindowINfo:
+class WaylandWindowInfo:
     """获取窗口信息"""
 
     def __init__(self):
@@ -76,4 +76,4 @@ class WaylandWindowINfo:
         }
 
 if __name__ == '__main__':
-    WaylandWindowINfo().window_info()
+    WaylandWindowInfo().window_info()

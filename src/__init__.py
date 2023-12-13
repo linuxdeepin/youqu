@@ -8,8 +8,8 @@
 # pylint: disable=R0913,C0413,E0401
 import sys
 
-from funnylog import log
-from funnylog import logger
+from funnylog import log as log
+from funnylog import logger as logger
 
 from setting.globalconfig import SystemPath
 
@@ -17,22 +17,22 @@ for i in SystemPath:
     if i.value not in sys.path:
         sys.path.append(i.value)
 
-from src.dbus_utils import DbusUtils
-from src.assert_common import AssertCommon
-from src.calculate import Calculate
-from src.cmdctl import CmdCtl
-from src.dogtail_utils import DogtailUtils
-from src.image_utils import ImageUtils
+from src.dbus_utils import DbusUtils as DbusUtils
+from src.assert_common import AssertCommon as AssertCommon
+from src.calculate import Calculate as Calculate
+from src.cmdctl import CmdCtl as CmdCtl
+from src.dogtail_utils import DogtailUtils as DogtailUtils
+from src.image_utils import ImageUtils as ImageUtils
 from src.ocr_utils import OCRUtils as OCR
-from src.button_center import ButtonCenter
-from src.filectl import FileCtl
-from src.shortcut import ShortCut
-from src.mouse_key import MouseKey
+from src.button_center import ButtonCenter as ButtonCenter
+from src.filectl import FileCtl as FileCtl
+from src.shortcut import ShortCut as ShortCut
+from src.mouse_key import MouseKey as MouseKey
+from src.video_utils import VideoUtils as VideoUtils
+from src.read_csv import ReadCsv as ReadCsv
+from src.pinyin import pinyin as pinyin
+from src.sleepx import sleep as sleep
 from src.custom_exception import *
-from src.sleepx import sleep
-from src.video_utils import VideoUtils
-from src.read_csv import ReadCsv
-from src.pinyin import pinyin
 
 
 class Src(

@@ -18,7 +18,7 @@ from src.custom_exception import ApplicationStartError
 from src.custom_exception import GetWindowInformation
 from src.custom_exception import NoSetReferencePoint
 from src.shortcut import ShortCut
-from src.wayland_wininfo import WaylandWindowINfo
+from src.wayland_wininfo import WaylandWindowInfo
 
 
 class ButtonCenter:
@@ -75,7 +75,7 @@ class ButtonCenter:
             sleep(self.pause)
             ShortCut.esc()
             # Wayland下使用窗管提供的接口获取窗口信息
-            return WaylandWindowINfo().window_info()
+            return WaylandWindowInfo().window_info()
         return None
 
     def window_location_and_sizes(self):

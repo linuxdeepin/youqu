@@ -78,7 +78,8 @@ cd my_project
 bash env.sh
 ```
 
-> 注意，如果你的测试机密码不是 1 ，那你需要在全局配置文件 `globalconfig.ini` 里面将 `PASSWORD` 配置项修改为当前测试机的密码。
+???+ warning
+	如果你的测试机密码不是 `1` ，那你需要在全局配置文件 `globalconfig.ini` 里面将 `PASSWORD` 配置项修改为当前测试机的密码。
 
 -------------------------------
 

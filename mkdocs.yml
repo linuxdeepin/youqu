@@ -66,9 +66,17 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - attr_list
   - tables
   - def_list
+  - abbr
+  - md_in_html
+  - footnotes
 
 plugins:
   - git-revision-date-localized:
