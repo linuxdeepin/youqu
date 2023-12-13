@@ -15,6 +15,7 @@
 - 修改 `public` 目录权限为 `umask 022`，以解决远程开发时无法同步文件的问题；
 - 修复 `Wayland` 下系统监视器使用 `WaylandWindowINfo.window_info()`，获取的窗口名称为空；
 - 解除 `env.sh` 中某个 `deb` 包安装失败后替换源 `retry` 机制，因为用固定的源替换之后，容易出现某些包安装失败，而不容易关注到首次包安装失败的问题，给定位环境安装失败带来困难；
+- 修复 `env.sh` 里面报错 `ERROR: unknown command "cache" - maybe you meant "check"`；
 
 ## 2.3.5（2023/12/04）
 

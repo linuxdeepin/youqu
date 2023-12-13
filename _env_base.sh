@@ -105,8 +105,8 @@ system_env(){
 }
 
 init_pip(){
+    sudo pip3 install -U pip > /tmp/env.log 2>&1
     sudo pip3 cache purge > /tmp/env.log 2>&1
     sudo pip3 config set global.timeout 10000 > /tmp/env.log 2>&1
     sudo pip3 config set global.index-url ${pypi_mirror} > /tmp/env.log 2>&1
-    sudo pip3 install -U pip > /tmp/env.log 2>&1
 }
