@@ -4,10 +4,11 @@
 # SPDX-License-Identifier: GPL-2.0-only
 
 """
-此配置文件用于标签化管理方案实现条件判断的配置项；
-在CSV文件中“跳过原因”列填入函数名和参数，即可实现条件判断；
+此配置文件用于标签化管理方案实现条件判断跳过的配置项；
+在CSV文件中“跳过原因”列填入函数名和参数，即可实现条件判断跳过；
 比如：
-在CSV文件中“跳过原因”列填入：skipif_platform-aarch64
+在CSV文件中“跳过原因”列填入：
+    skipif_platform-aarch64
     函数名称为：skipif_platform，比如是此文件中定义了的函数；
     参数为：aarch64，多个参数用 & 符号连接；
     函数名与参数之间用 - （中横线）连接；
@@ -43,6 +44,7 @@ def skipif_cpu_name(args: str):
     """skipif cpu name
     使用 sudo dmidecode -s system-product-name 查看机器的cpu型号
     剔除中横线和&符号，比如：KLVV-W5821，标签记录为 KLVVW5821
+    skipif_cpu_name-KLVVW5821
     """
     _skip_key = args.split("&")
     for key in _skip_key:
@@ -57,8 +59,7 @@ def skipif_cpu_name(args: str):
 def skipif_os_version(args: str):
     """
     系统版本跳过
-    :param args: 1060&1070
-    :return:
+    skipif_os_version-1060
     """
     _skip_key = args.split("&")
     for key in _skip_key:
