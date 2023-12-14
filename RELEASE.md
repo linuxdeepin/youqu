@@ -5,6 +5,7 @@
 New
 
 - `src/__init__.py` 里面的导入全部设置别名，以便后续各组件重命名之后仍能保持接口一致性；
+- 将 `Wayland` 下输入的方法区分中英文，中文按现有 `input_message` 处理，英文数字字符等使用 `press_key` 处理； [# issues 17](https://github.com/linuxdeepin/deepin-autotest-framework/issues/17)
 
 Fix
 

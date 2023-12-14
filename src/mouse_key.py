@@ -245,7 +245,13 @@ class MouseKey:
         sleep(duration)
 
     @classmethod
-    def input_message(cls, message, delay_time=300, interval=0.2, wayland_shift=False):
+    def input_message(
+            cls, message,
+            delay_time: int = 300,
+            interval: [int, float] = 0.2,
+            wayland_shift: bool = False,
+            _ydotool: bool = False
+    ):
         """
          输入字符串
         :param message: 输入的内容
@@ -271,25 +277,31 @@ class MouseKey:
                 pyautogui.typewrite(message=str(message), interval=interval)
         # wayland上
         else:
-            # 复制
-            if os.popen("ps -aux |  grep wayland_autotool | grep -v grep").read():
-                # 先杀掉
-                CmdCtl.run_cmd("kill -9 $(pidof wayland_autotool)", interrupt=False)
-                sleep(1)
-            dbus_cmd = (
-                "dbus-send --session --dest=com.deepin.Autotool "
-                "--print-reply  /com/deepin/Autotool com.deepin.Autotool"
-            )
-            popen(f'{dbus_cmd}.setText string:"{message}"')
-            sleep(0.5)
-            # 粘贴
-            # popen(f"{dbus_cmd}.getText")
-            # 有些地方可能不支持ctrl+v粘贴，比如终端，需要使用ctrl+shift+v
-            _hk = ["ctrl", "v"]
-            if wayland_shift:
-                _hk.insert(1, "shift")
-            cls.hot_key(*_hk)
-        sleep(1)
+            if check_chinese():
+                # 复制
+                if os.popen("ps -aux |  grep wayland_autotool | grep -v grep").read():
+                    # 先杀掉
+                    CmdCtl.run_cmd("kill -9 $(pidof wayland_autotool)", interrupt=False)
+                    sleep(1)
+                dbus_cmd = (
+                    "dbus-send --session --dest=com.deepin.Autotool "
+                    "--print-reply  /com/deepin/Autotool com.deepin.Autotool"
+                )
+                popen(f'{dbus_cmd}.setText string:"{message}"')
+                sleep(0.5)
+                # popen(f"{dbus_cmd}.getText")
+                # 有些地方可能不支持ctrl+v粘贴，比如终端，需要使用ctrl+shift+v
+                _hk = ["ctrl", "v"]
+                if wayland_shift:
+                    _hk.insert(1, "shift")
+                cls.hot_key(*_hk)
+            else:
+                for key in message:
+                    if _ydotool:
+                        from src import ydotool
+                        ydotool.press(key)
+                    else:
+                        pyautogui.press(key, interval=interval)
 
     @classmethod
     def press_key(cls, key: str, interval=0.0, _ydotool: bool = False):
@@ -305,7 +317,6 @@ class MouseKey:
             ydotool.press(key)
         else:
             pyautogui.press(key, interval=interval)
-            sleep(0.1)
 
     @classmethod
     def press_key_down(cls, key: str):
