@@ -59,27 +59,41 @@
 
 从 PyPI 安装:
 
-```shel
-sudo pip3 install youqu
+<div class="termy">
+
+```console
+$ sudo pip3 install youqu
+---> 100%
 ```
+
+</div>
 
 创建项目:
 
-```shell
-youqu-startproject my_project
+<div class="termy">
+
+```console
+$ youqu-startproject my_project
+---> 100%
+The project: [my_project],has been created by youqu-x.x.x
 ```
+
+</div>
 
 如果 `youqu-startproject` 后面不加参数，默认的项目名称为：`youqu` ；
 
 安装依赖:
 
-```sh
-cd my_project
-bash env.sh
+<div class="termy">
+
+```console
+// 如果你的测试机密码不是 `1` ，那你需要在全局配置文件 `globalconfig.ini` 里面将 `PASSWORD` 配置项修改为当前测试机的密码。
+$ cd my_project
+$ bash env.sh
+---> 100%
 ```
 
-???+ warning
-	如果你的测试机密码不是 `1` ，那你需要在全局配置文件 `globalconfig.ini` 里面将 `PASSWORD` 配置项修改为当前测试机的密码。
+</div>
 
 -------------------------------
 
@@ -87,7 +101,7 @@ bash env.sh
 
 如果您已经有一个可用的 `APP` 工程，将应用库放到基础框架下 `apps` 目录下，像这样：
 
-```shell
+```shell hl_lines="3"
 my_project
 ├── apps
 │   ├── autotest_deepin_music  # 应用库
@@ -102,9 +116,14 @@ my_project
 
 创建一个 APP 工程：
 
-```shell
-youqu manage.py startapp autotest_deepin_some  
+<div class="termy">
+
+```console
+$ youqu manage.py startapp autotest_deepin_some
+---> 100%
 ```
+
+</div>
 
 这样在 `apps` 目录下会创建一个子项目工程 `autotest_deepin_some`，同时新建好工程模板目录和模板文件：
 
@@ -149,23 +168,36 @@ apps
 
 ### 2. 本地执行
 
-```shell
-youqu manage.py run
+<div class="termy">
+
+```console
+$ youqu manage.py run
 ```
+
+</div>
 
 #### 2.1. 命令行参数
 
 通过命令行参数配置参数，使用 `-h` 或 `--help` 可以查看所有支持的命令行参数：
 
-```shell
-youqu manage.py run -h
+<div class="termy">
+
+```console
+$ youqu manage.py run -h
 ```
+
+</div>
 
 在一些 CI 环境下使用命令行参数会更加方便：
 
-```shell
-youqu manage.py run --app apps/autotest_deepin_music --keywords "xxx" --tags "xxx"
+<div class="termy">
+
+```console
+$ youqu manage.py run --app apps/autotest_deepin_music --keywords "xxx" --tags "xxx"
+---> 100%
 ```
+
+</div>
 
 更多参数请查看【[命令行参数](https://linuxdeepin.github.io/deepin-autotest-framework/%E6%A1%86%E6%9E%B6%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D/%E6%89%A7%E8%A1%8C%E7%AE%A1%E7%90%86%E5%99%A8/#21)】
 
@@ -183,9 +215,13 @@ youqu manage.py run --app apps/autotest_deepin_music --keywords "xxx" --tags "xx
 
 使用 `remote` 命令：
 
-```shell
-youqu manage.py remote
+<div class="termy">
+
+```console
+$ youqu manage.py remote
 ```
+
+</div>
 
 #### 3.1. 远程多机器分布式异步执行
 
@@ -224,9 +260,13 @@ ip = 10.8.11.xx
 
 然后在命令行：
 
-```shell
-youqu manage.py remote
+<div class="termy">
+
+```console
+$ youqu manage.py remote
 ```
+
+</div>
 
 这样运行是从配置文件去读取相关配置。
 
@@ -249,28 +289,40 @@ youqu manage.py remote
                         动分配给各个测试机执行。
 ```
 
-**除了这些特有参数以外，它同样支持本地执行的所有参数；**
+==除了这些特有参数以外，它同样支持本地执行的所有参数；==
 
 在命令行这样运行：
 
-```shell
-youqu manage.py remote -a apps/autotest_deepin_music -c uos@10.8.13.x3/uos@10.8.13.x4 -k "xxx" -t "xxx"
+<div class="termy">
+
+```console
+$ youqu manage.py remote -a apps/autotest_deepin_music -c uos@10.8.13.x3/uos@10.8.13.x4 -k "xxx" -t "xxx"
 ```
+
+</div>
 
 所有用例执行完之后会在 `report` 目录下回收各个测试机执行的测试报告。
 
-注意，如果远程机器没有搭建自动化测试环境，记得加上参数 `-e` ：
+注意：如果远程机器没有搭建自动化测试环境，记得加上参数 `-e` ：
 
-```shell
-youqu manage.py remote -a ... -e
+<div class="termy">
+
+```console
+$ youqu manage.py remote -a ... -e
 ```
+
+</div>
 
 执行前确保远程机器已经开启了 ssh 服务，否则会提示无法连接，如果没有开启，请手动开启：
 
-```shell
-sudo systemctl restart ssh
-sudo systemctl enable ssh
+<div class="termy">
+
+```console
+$ sudo systemctl restart ssh
+$ sudo systemctl enable ssh
 ```
+
+</div>
 
 配置文件其他相关配置项详细说明，请查看配置文件中的注释内容。
 
@@ -286,9 +338,13 @@ sudo systemctl enable ssh
 
 使用方法和前面一样，只是需要增加一个参数 `--parallel`：
 
-```shell
-youqu manage.py remote -a ... --parallel no
+<div class="termy">
+
+```console
+$ youqu manage.py remote -a ... --parallel no
 ```
+
+</div>
 
 ## 帮助
 

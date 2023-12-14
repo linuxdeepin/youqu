@@ -103,9 +103,13 @@ extra:
 
 extra_javascript:
   - '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js'
+  - js/termynal.js
+  - js/custom.js
 
 extra_css:
   - stylesheets/extra.css
+  - css/termynal.css
+  - css/custom.css
 
 nav:
   - 快速开始: index.md
