@@ -73,9 +73,6 @@ wayland_env(){
     fi
 
     if [ ! -f "$HOME/.Xauthority" ]; then
-        warnning_info="咱也不知道为啥$HOME.Xauthority 这个文件不存在，我只能给你创建一个空的.Xauthority文件，\n
-        虽然空文件会有Xlib的警告信息（Warnning），但如果文件不存在Xlib会直接报错，导致程序无法运行。"
-        echo -e ${warnning_info}
         touch $HOME/.Xauthority
     fi
 
