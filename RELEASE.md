@@ -1,15 +1,17 @@
 # 版本更新记录
 
-## 2.3.7（dev）
+## 2.3.7（2023/12/15）
 
-New
+**New**
 
-- `src/__init__.py` 里面的导入全部设置别名，以便后续各组件重命名之后仍能保持接口一致性；
+- `src/__init__.py` 里面的导入全部设置别名，以便后续各组件重命名之后仍能保持接口一致性和兼容性；
 - 将 `Wayland` 下输入的方法区分中英文，中文按现有 `input_message` 处理，英文数字字符等使用 `press_key` 处理； [# issues 17](https://github.com/linuxdeepin/deepin-autotest-framework/issues/17)
+- 有些镜像没有 `$HOME.Xauthority` 文件（咱也不知道为啥），`YouQu` 执行会报错，我们只能创建一个空的同名文件，以确保程序能正常运行，但 `Xlib.xauth` 获取不到有效信息会有一些 `warning` 日志，看着烦人我都能接受，不能接受的是经常会导致大家在分析用例失败原因的时候将矛头指向它，然后每次我就需要解释这个 `warning` 提示不是问题，因此在底层将这部分日志输出屏蔽掉；
 
-Fix
+**Fix**
 
-- 
+- 修改 `public` 目录权限，以解决远程开发时无法同步文件的问题；
+- 修复通过标签批量执行时，传入的标签超过 `1000` 个，报错超过 `Python` 默认最大递归深度的问题；感谢 **[@赵有志](https://github.com/zhao-george)**
 
 ## 2.3.6（2023/12/13）
 
@@ -23,7 +25,6 @@ Fix
 
 **Fix**
 
-- 修改 `public` 目录权限为 `umask 022`，以解决远程开发时无法同步文件的问题；
 - 修复 `Wayland` 下系统监视器使用 `WaylandWindowInfo.window_info()`，获取的窗口名称为空；[# issues 18](https://github.com/linuxdeepin/deepin-autotest-framework/issues/20)
 - 解除 `env.sh` 中某个 `deb` 包安装失败后替换源 `retry` 机制，因为用固定的源替换之后，容易出现某些包安装失败，而不容易关注到首次包安装失败的问题，给定位环境安装失败带来困难；[# issues 19](https://github.com/linuxdeepin/deepin-autotest-framework/issues/19)
 - 修复 `env.sh` 里面报错 `ERROR: unknown command "cache" - maybe you meant "check"`；

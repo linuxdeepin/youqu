@@ -7,6 +7,8 @@
 # pylint: disable=C0114
 # pylint: disable=C0301,R0913,R0914,W0613,R0912,R0915,E0401,C0413,C0103,C0116
 import json
+import re
+import sys
 from collections import Counter
 from os import chdir
 from os import environ
@@ -237,8 +239,10 @@ class LocalRunner:
 
         if keywords_or_marker:
             if default.get(Args.keywords.value):
+                self.set_recursion_limit(default.get(Args.keywords.value))
                 cmd.extend(["-k", f"'{default.get(Args.keywords.value)}'"])
             if default.get(Args.tags.value):
+                self.set_recursion_limit(default.get(Args.tags.value))
                 cmd.extend(["-m", f"'{default.get(Args.tags.value)}'"])
         if app_dir and app_dir != GlobalConfig.APPS_PATH:
             cmd.extend(["--app_name", app_dir])
@@ -317,6 +321,12 @@ class LocalRunner:
                     join(GlobalConfig.REPORT_PATH, GlobalConfig.ReportFormat.JSON)
                 )
         return cmd
+
+    @staticmethod
+    def set_recursion_limit(strings):
+        len_tags = len(re.split("or |and |not ", strings))
+        if len_tags >= 999:
+            sys.setrecursionlimit(len_tags + 100)
 
     def change_working_dir(self):
         """

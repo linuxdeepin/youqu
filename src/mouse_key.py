@@ -6,6 +6,7 @@
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
 import os
+import sys
 from time import sleep
 
 from src import logger
@@ -16,12 +17,25 @@ os.environ["DISPLAY"] = ":0"
 # pylint: disable=wrong-import-position
 from setting.globalconfig import GlobalConfig
 
-if GlobalConfig.IS_WAYLAND:
-    # pylint: disable=ungrouped-imports
-    from src.depends.pyautogui import _pyautogui_wayland as pyautogui
-    from src.depends.pyautogui._pyautogui_wayland import popen
-else:
-    from src.depends import pyautogui
+
+class HiddenPrints:
+    def __enter__(self):
+        self._original_stdout = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        sys.stdout.close()
+        sys.stdout = self._original_stdout
+
+
+with HiddenPrints():
+    if GlobalConfig.IS_WAYLAND:
+        # pylint: disable=ungrouped-imports
+
+        from src.depends.pyautogui import _pyautogui_wayland as pyautogui
+        from src.depends.pyautogui._pyautogui_wayland import popen
+    else:
+        from src.depends import pyautogui
 
 pyautogui.FAILSAFE = False
 
