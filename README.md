@@ -26,7 +26,7 @@
 
 ---
 
-有趣（YouQu）是深度科技开源的一个用于 `Deepin/UOS` 操作系统（Linux）的自动化测试框架，采用结构分层的设计理念，支持多元化元素定位和断言、用例标签化管理和执行、强大的日志和报告输出等特色功能，同时完美兼容X11、Wayland显示协议，环境部署简单，操作易上手。
+有趣（YouQu）是深度科技开源的一个用于 `Deepin/UOS` 操作系统（Linux）的自动化测试框架，采用结构分层的设计理念，支持多元化元素定位和断言、用例标签化管理和执行、强大的日志和报告输出等特色功能，同时完美兼容 X11、Wayland 显示协议，环境部署简单，操作易上手。
 
 ### 爱上 “有趣” 的 18 个理由
 
@@ -192,7 +192,6 @@ $ youqu manage.py run -h
 
 ```console
 $ youqu manage.py run --app apps/autotest_deepin_music --keywords "xxx" --tags "xxx"
----> 100%
 ```
 
 </div>
