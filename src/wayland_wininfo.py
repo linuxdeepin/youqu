@@ -64,7 +64,7 @@ class WaylandWindowInfo:
         window_info = ws.contents.Geometry
         resourceName = ws.contents.resourceName.decode("utf-8")
         if not resourceName:
-            resourceName = os.popen(f"cat /proc/{ws.contents.pid}/cmdline").read().strip()
+            resourceName = os.popen(f"cat /proc/{ws.contents.pid}/cmdline").read().strip("\x00")
         return {
             "name": resourceName,
             "wininfo": (
@@ -74,6 +74,3 @@ class WaylandWindowInfo:
                 window_info.height
             ),
         }
-
-if __name__ == '__main__':
-    WaylandWindowInfo().window_info()
