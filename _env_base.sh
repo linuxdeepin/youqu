@@ -51,7 +51,7 @@ wayland_env(){
     make -j4 > /dev/null 2>&1
     sudo make install > /dev/null 2>&1
     [ $? = 0 ] && tool_status="成功 √" || tool_status="失败 ×"
-    echo -e "${flag_feel}wayland_autotool 安装${tool_status}"
+    echo -e "wayland_autotool 安装${tool_status}"
     # 添加wayland下有用的环境变量，其实框架执行的时候底层也会自动判断并添加，这里咱们先打个提前量；
     cat $HOME/.bashrc | grep 'export GDMSESSION=Wayland' > /dev/null 2>&1
     if [ $? -ne 0 ]; then
