@@ -71,7 +71,7 @@ class WaylandWindowInfo:
     def __init__(self):
         self.library = ctypes.cdll.LoadLibrary(f"/usr/lib/{machine()}-linux-gnu/libdtkwmjack.so")
 
-    def _window_info_106x(self):
+    def _window_info(self):
         """窗口信息"""
         self.library.InitDtkWmDisplay()
         self.library.GetWindowFromPoint.restype = ctypes.c_int

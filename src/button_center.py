@@ -9,9 +9,12 @@ import re
 from configparser import ConfigParser, NoSectionError
 from time import sleep
 
+import dbus
+
 from setting.globalconfig import GlobalConfig
 from src import logger
 from src.cmdctl import CmdCtl
+from src.shortcut import ShortCut
 from src.custom_exception import ApplicationStartError
 from src.custom_exception import GetWindowInformation
 from src.custom_exception import NoSetReferencePoint
@@ -80,7 +83,11 @@ class ButtonCenter:
                 elif isinstance(info, list):
                     return info[self.number]
             else:
-                return WaylandWindowInfo()._window_info_106x()
+                proxy_object = dbus.SessionBus().get_object("org.kde.KWin", "/dde")
+                dbus.Interface(proxy_object, "org.kde.KWin").WindowMove()
+                sleep(self.pause)
+                ShortCut.esc()
+                return WaylandWindowInfo()._window_info()
         return None
 
     def window_location_and_sizes(self):
@@ -156,7 +163,7 @@ class ButtonCenter:
                 window_height = re.findall(r"Height.*:\s(\d+)", app_window_info)[0]
             else:
                 if hasattr(WaylandWindowInfo().library, "GetAllWindowStatesList"):
-                    window_x, window_y, window_width, window_height = app_window_info.get(self.app_name).get("location")
+                    window_x, window_y, window_width, window_height = app_window_info.get("location")
                 else:
                     window_x, window_y, window_width, window_height = app_window_info.get("wininfo")
             logger.debug(f"获取窗口大小 {window_width}*{window_height}")
