@@ -65,11 +65,8 @@ wayland_env(){
     wayland_cmd_path="/usr/local/bin/wayland_autotool"
     result=`sudo cat ${whitelist} | grep ${wayland_cmd_path}`
     if [ -z "$result" ]; then
-        sudo sed -i '$a\'"${wayland_cmd_path}"'' ${whitelist} && echo "wayland_autotool 白名单已写入 ${whitelist}" || echo "白名单设置失败"
+        sudo sed -i '$a\'"${wayland_cmd_path}"'' ${whitelist} || echo "白名单${whitelist}写入失败"
         sudo systemctl restart deepin-elf-verify.service || true
-
-    else
-        echo "wayland_autotool 白名单已写入 ${whitelist}"
     fi
 
     if [ ! -f "$HOME/.Xauthority" ]; then

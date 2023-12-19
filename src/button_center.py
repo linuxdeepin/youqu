@@ -9,15 +9,12 @@ import re
 from configparser import ConfigParser, NoSectionError
 from time import sleep
 
-import dbus
-
 from setting.globalconfig import GlobalConfig
 from src import logger
 from src.cmdctl import CmdCtl
 from src.custom_exception import ApplicationStartError
 from src.custom_exception import GetWindowInformation
 from src.custom_exception import NoSetReferencePoint
-from src.shortcut import ShortCut
 from src.wayland_wininfo import WaylandWindowInfo
 
 
@@ -28,7 +25,7 @@ class ButtonCenter:
     # pylint: disable=too-many-arguments,too-many-locals,too-many-public-methods
     __author__ = "Mikigo <huangmingqiang@uniontech.com>, Litao <litaoa@uniontech.com>"
 
-    def __init__(self, app_name: str, config_path: str, number: int = -1, pause: int = 1):
+    def __init__(self, app_name: str, config_path: str, number: int = -1, pause: int = 1, retry: int = 1):
         """
         :param app_name: 系统应用软件包，例如，dde-file-manager
         :param config_path: ui 定位配置文件路径（绝对路径）
@@ -40,6 +37,7 @@ class ButtonCenter:
         # 每个操作步骤之前暂停的时间
         self.pause = pause
         self.config_path = config_path
+        self.retry = retry
 
     def window_info(self):
         """
@@ -68,14 +66,21 @@ class ButtonCenter:
                 raise ApplicationStartError(f"{self.app_name, exc}") from exc
 
         elif GlobalConfig.IS_WAYLAND:
-            # 移动到当前窗口
-            proxy_object = dbus.SessionBus().get_object("org.kde.KWin", "/dde")
-            # 移动鼠标到目标窗口
-            dbus.Interface(proxy_object, "org.kde.KWin").WindowMove()
-            sleep(self.pause)
-            ShortCut.esc()
-            # Wayland下使用窗管提供的接口获取窗口信息
-            return WaylandWindowInfo().window_info()
+            if hasattr(WaylandWindowInfo().library, "GetAllWindowStatesList"):
+                for _ in range(self.retry + 1):
+                    info = WaylandWindowInfo().window_info().get(self.app_name)
+                    if info is None:
+                        sleep(1)
+                    else:
+                        break
+                else:
+                    raise ApplicationStartError(self.app_name)
+                if isinstance(info, dict):
+                    return info
+                elif isinstance(info, list):
+                    return info[self.number]
+            else:
+                return WaylandWindowInfo()._window_info_106x()
         return None
 
     def window_location_and_sizes(self):
@@ -84,26 +89,30 @@ class ButtonCenter:
         :return:
         """
         try:
-            app_window_info = self.window_info()
-
             if GlobalConfig.IS_X11:
-                re_pattern = re.compile(r"Absolute.*:\s\s(-?\d+)")
-                result = re.findall(re_pattern, app_window_info)
+                for _ in range(self.retry + 1):
+                    app_window_info = self.window_info()
+                    re_pattern = re.compile(r"Absolute.*:\s\s(-?\d+)")
+                    result = re.findall(re_pattern, app_window_info)
+                    if not result:
+                        sleep(1)
+                    else:
+                        break
+                else:
+                    raise ApplicationStartError(self.app_name)
                 window_width = re.findall(r"Width.*:\s(\d+)", app_window_info)[0]
                 window_height = re.findall(r"Height.*:\s(\d+)", app_window_info)[0]
-                if not result:
-                    sleep(1)
-                    app_window_info = self.window_info()
-                    result = re.findall(re_pattern, app_window_info)
-                    window_width = re.findall(r"Width.*:\s(\d+)", app_window_info)[0]
-                    window_height = re.findall(r"Height.*:\s(\d+)", app_window_info)[0]
                 window_x, window_y = result
-            # wayland
             else:
-                name = app_window_info.get("name")
-                if name != self.app_name:
-                    raise ValueError(f"您想要获取的窗口为：{self.app_name}, 但实际获取的窗口为：{name}")
-                window_x, window_y, window_width, window_height = app_window_info.get("wininfo")
+                if hasattr(WaylandWindowInfo().library, "GetAllWindowStatesList"):
+                    app_window_info = self.window_info()
+                    window_x, window_y, window_width, window_height = app_window_info.get("location")
+                else:
+                    app_window_info = self.window_info()
+                    name = app_window_info.get("name")
+                    if name != self.app_name:
+                        raise ValueError(f"您想要获取的窗口为：{self.app_name}, 但实际获取的窗口为：{name}")
+                    window_x, window_y, window_width, window_height = app_window_info.get("wininfo")
             logger.debug(
                 f"窗口左上角坐标 {window_x, window_y},获取窗口大小 {window_width}*{window_height}"
             )
@@ -126,7 +135,10 @@ class ButtonCenter:
                     result = re.findall(re_pattern, self.window_info())
                 window_x, window_y = result
             else:
-                window_x, window_y, window_width, window_height = app_window_info.get("wininfo")
+                if hasattr(WaylandWindowInfo().library, "GetAllWindowStatesList"):
+                    window_x, window_y, window_width, window_height = app_window_info.get("location")
+                else:
+                    window_x, window_y, window_width, window_height = app_window_info.get("wininfo")
             logger.debug(f"窗口左上角坐标 {window_x, window_y}")
             return int(window_x), int(window_y)
         except (ValueError, KeyError) as exc:
@@ -143,7 +155,10 @@ class ButtonCenter:
                 window_width = re.findall(r"Width.*:\s(\d+)", app_window_info)[0]
                 window_height = re.findall(r"Height.*:\s(\d+)", app_window_info)[0]
             else:
-                window_x, window_y, window_width, window_height = app_window_info.get("wininfo")
+                if hasattr(WaylandWindowInfo().library, "GetAllWindowStatesList"):
+                    window_x, window_y, window_width, window_height = app_window_info.get(self.app_name).get("location")
+                else:
+                    window_x, window_y, window_width, window_height = app_window_info.get("wininfo")
             logger.debug(f"获取窗口大小 {window_width}*{window_height}")
             return int(window_width), int(window_height)
         except (IndexError, KeyError) as exc:
@@ -547,33 +562,45 @@ class ButtonCenter:
         position = [int(i.strip()) for i in conf.get(btn_name, "location").split(",")]
         return position, direction
 
-    @classmethod
-    def get_windows_number(cls, name: str) -> int:
+    def get_windows_number(self, name: str) -> int:
         """
          获取应用所有窗口数量
         :param name: 应用包名
         :return: int 窗口数量
         """
-        cmd = f"xdotool search --classname {name}"
-        app_id = CmdCtl.run_cmd(
-            cmd, interrupt=False, out_debug_flag=False, command_log=False
-        ).strip()
-        return len([i for i in app_id.split("\n") if i])
+        if GlobalConfig.IS_X11:
+            cmd = f"xdotool search --classname {name}"
+            app_id = CmdCtl.run_cmd(
+                cmd, interrupt=False, out_debug_flag=False, command_log=False
+            ).strip()
+            return len([i for i in app_id.split("\n") if i])
+        else:
+            info = WaylandWindowInfo().window_info().get(self.app_name)
+            if isinstance(info, dict):
+                return 1
+            elif isinstance(info, list):
+                return len(info)
 
-    @classmethod
-    def get_windows_id(cls, name: str) -> list:
+    def get_windows_id(self, name: str) -> list:
         """
          获取活动应用窗口ID
         :param name: 应用包名
         :return: 窗口编号列表
         """
-        cmd = f"xdotool search --onlyvisible --classname {name}"
-        app_id = CmdCtl.run_cmd(
-            cmd, interrupt=False, out_debug_flag=False, command_log=False
-        ).strip()
-        if app_id:
-            return [i for i in app_id.split("\n") if i]
-        raise ApplicationStartError(app_id)
+        if GlobalConfig.IS_X11:
+            cmd = f"xdotool search --onlyvisible --classname {name}"
+            app_id = CmdCtl.run_cmd(
+                cmd, interrupt=False, out_debug_flag=False, command_log=False
+            ).strip()
+            if app_id:
+                return [i for i in app_id.split("\n") if i]
+            raise ApplicationStartError(app_id)
+        else:
+            info = WaylandWindowInfo().window_info().get(self.app_name)
+            if isinstance(info, dict):
+                return info.get("window_id")
+            elif isinstance(info, list):
+                return [i.get("window_id") for i in info]
 
     def focus_windows(self, app_name: str = None):
         """
@@ -588,21 +615,27 @@ class ButtonCenter:
         CmdCtl.run_cmd(cmd, interrupt=False, out_debug_flag=False, command_log=False)
         logger.debug(f"<{app_name}> 窗口置顶并聚焦")
 
-    @staticmethod
-    def get_lastest_window_id(app_name: str) -> int:
+    def get_lastest_window_id(self, app_name: str) -> int:
         """
          获取应用的所有窗口编号，并返回编号最大的窗口ID
         :return: 返回最新创建的窗口编号
         """
-        try:
-            app_id = CmdCtl.run_cmd(
-                f"xdotool search --classname --onlyvisible {app_name}",
-                interrupt=False,
-                out_debug_flag=False,
-                command_log=False,
-            ).strip().split("\n")
-            app_id_list = [int(_id) for _id in app_id if _id]  # to int
-            app_id_list.sort()
-            return app_id_list[-1]
-        except Exception as exc:
-            raise ApplicationStartError(f"{app_name, exc}") from exc
+        if GlobalConfig.IS_X11:
+            try:
+                app_id = CmdCtl.run_cmd(
+                    f"xdotool search --classname --onlyvisible {app_name}",
+                    interrupt=False,
+                    out_debug_flag=False,
+                    command_log=False,
+                ).strip().split("\n")
+                app_id_list = [int(_id) for _id in app_id if _id]  # to int
+                app_id_list.sort()
+                return app_id_list[-1]
+            except Exception as exc:
+                raise ApplicationStartError(f"{app_name, exc}") from exc
+        else:
+            info = WaylandWindowInfo().window_info().get(self.app_name)
+            if isinstance(info, dict):
+                return info.get("window_id")
+            elif isinstance(info, list):
+                return info[-1].get("window_id")

@@ -7,6 +7,7 @@
 import os
 
 from setting.globalconfig import GlobalConfig
+
 # wayland PATH
 if GlobalConfig.IS_WAYLAND:
     os.environ["QT_WAYLAND_SHELL_INTEGRATION"] = "kwayland-shell"
@@ -30,6 +31,28 @@ class Geometry(ctypes.Structure):
     ]
 
 
+class WindowState(ctypes.Structure):
+    """window structure"""
+    _fields_ = [
+        ("pid", ctypes.c_int),
+        ("windowId", ctypes.c_int),
+        ("resourceName", ctypes.c_char * 256),
+        ("Geometry", Geometry),
+        ("isMinimized", ctypes.c_bool),
+        ("isFullScreen", ctypes.c_bool),
+        ("isActive", ctypes.c_bool),
+        ("splitable", ctypes.c_int),
+        ("uuid", ctypes.c_char * 256),
+    ]
+
+
+class dtk_array(ctypes.Structure):
+    _fields_ = [
+        ("size", ctypes.c_size_t),
+        ("alloc", ctypes.c_size_t),
+        ("data", ctypes.POINTER(WindowState)),
+    ]
+
 class WindowStructure(ctypes.Structure):
     """window structure"""
     _fields_ = [
@@ -42,23 +65,17 @@ class WindowStructure(ctypes.Structure):
         ("isActive", ctypes.c_bool),
     ]
 
-
 class WaylandWindowInfo:
     """获取窗口信息"""
 
     def __init__(self):
         self.library = ctypes.cdll.LoadLibrary(f"/usr/lib/{machine()}-linux-gnu/libdtkwmjack.so")
-        self.library.InitDtkWmDisplay()
 
-    def window_id(self):
-        """窗口id"""
+    def _window_info_106x(self):
+        """窗口信息"""
+        self.library.InitDtkWmDisplay()
         self.library.GetWindowFromPoint.restype = ctypes.c_int
         wid = self.library.GetWindowFromPoint()
-        return wid
-
-    def window_info(self):
-        """窗口信息"""
-        wid = self.window_id()
         self.library.GetWindowState.restype = ctypes.POINTER(WindowStructure)
         ws = self.library.GetWindowState(wid)
         window_info = ws.contents.Geometry
@@ -74,3 +91,42 @@ class WaylandWindowInfo:
                 window_info.height
             ),
         }
+
+    def window_info(self):
+        """窗口信息"""
+        self.library.InitDtkWmDisplay()
+        self.library.GetAllWindowStatesList.restype = ctypes.POINTER(dtk_array)
+        get_all_window_states_list = self.library.GetAllWindowStatesList()
+        range_index = get_all_window_states_list.contents.size / 544
+        res = {}
+        for i in range(int(range_index)):
+            window_info = get_all_window_states_list.contents.data[i]
+            resource_name = window_info.resourceName.decode("utf-8")
+            if not resource_name:
+                resource_name = os.popen(f"cat /proc/{window_info.pid}/cmdline").read().strip("\x00")
+            _info = {
+                "location": (
+                    window_info.Geometry.x,
+                    window_info.Geometry.y,
+                    window_info.Geometry.width,
+                    window_info.Geometry.height
+                ),
+                "pid": window_info.pid,
+                "window_id": window_info.windowId,
+                "uuid": window_info.uuid.decode("utf-8"),
+                "is_minimized": window_info.isMinimized,
+                "is_fullScreen": window_info.isFullScreen,
+                "is_active": window_info.isActive,
+            }
+            if res.get(resource_name) is None:
+                res[resource_name] = _info
+            else:
+                if isinstance(res.get(resource_name), dict):
+                    res[resource_name] = [res.get(resource_name), _info]
+                elif isinstance(res.get(resource_name), list):
+                    res[resource_name].append(_info)
+        return res
+
+
+if __name__ == '__main__':
+    WaylandWindowInfo().window_info()
