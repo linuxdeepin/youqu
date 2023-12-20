@@ -34,15 +34,15 @@ class Geometry(ctypes.Structure):
 class WindowState(ctypes.Structure):
     """window structure"""
     _fields_ = [
-        ("pid", ctypes.c_int),
-        ("windowId", ctypes.c_int),
-        ("resourceName", ctypes.c_char * 256),
-        ("Geometry", Geometry),
-        ("isMinimized", ctypes.c_bool),
+        ("pid", ctypes.c_int),  # 4
+        ("windowId", ctypes.c_int),  # 4
+        ("resourceName", ctypes.c_char * 256),  # 256
+        ("Geometry", Geometry),  # 16
+        ("isMinimized", ctypes.c_bool),  # 4
         ("isFullScreen", ctypes.c_bool),
         ("isActive", ctypes.c_bool),
-        ("splitable", ctypes.c_int),
-        ("uuid", ctypes.c_char * 256),
+        ("splitable", ctypes.c_int),  # 4
+        ("uuid", ctypes.c_char * 256),  # 256
     ]
 
 
@@ -52,6 +52,7 @@ class dtk_array(ctypes.Structure):
         ("alloc", ctypes.c_size_t),
         ("data", ctypes.POINTER(WindowState)),
     ]
+
 
 class WindowStructure(ctypes.Structure):
     """window structure"""
@@ -64,6 +65,7 @@ class WindowStructure(ctypes.Structure):
         ("isFullScreen", ctypes.c_bool),
         ("isActive", ctypes.c_bool),
     ]
+
 
 class WaylandWindowInfo:
     """获取窗口信息"""
@@ -78,6 +80,7 @@ class WaylandWindowInfo:
         wid = self.library.GetWindowFromPoint()
         self.library.GetWindowState.restype = ctypes.POINTER(WindowStructure)
         ws = self.library.GetWindowState(wid)
+        self.library.DestoryDtkWmDisplay()
         window_info = ws.contents.Geometry
         resourceName = ws.contents.resourceName.decode("utf-8")
         if not resourceName:
@@ -97,6 +100,7 @@ class WaylandWindowInfo:
         self.library.InitDtkWmDisplay()
         self.library.GetAllWindowStatesList.restype = ctypes.POINTER(dtk_array)
         get_all_window_states_list = self.library.GetAllWindowStatesList()
+        self.library.DestoryDtkWmDisplay()
         range_index = get_all_window_states_list.contents.size / 544
         res = {}
         for i in range(int(range_index)):
@@ -115,7 +119,7 @@ class WaylandWindowInfo:
                 "window_id": window_info.windowId,
                 "uuid": window_info.uuid.decode("utf-8"),
                 "is_minimized": window_info.isMinimized,
-                "is_fullScreen": window_info.isFullScreen,
+                "is_full_screen": window_info.isFullScreen,
                 "is_active": window_info.isActive,
             }
             if res.get(resource_name) is None:

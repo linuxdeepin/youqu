@@ -41,6 +41,8 @@ class ButtonCenter:
         self.pause = pause
         self.config_path = config_path
         self.retry = retry
+        if GlobalConfig.IS_WAYLAND:
+            self.wayland_info_obj = WaylandWindowInfo()
 
     def window_info(self):
         """
@@ -69,9 +71,9 @@ class ButtonCenter:
                 raise ApplicationStartError(f"{self.app_name, exc}") from exc
 
         elif GlobalConfig.IS_WAYLAND:
-            if hasattr(WaylandWindowInfo().library, "GetAllWindowStatesList"):
+            if hasattr(self.wayland_info_obj.library, "GetAllWindowStatesList"):
                 for _ in range(self.retry + 1):
-                    info = WaylandWindowInfo().window_info().get(self.app_name)
+                    info = self.wayland_info_obj.window_info().get(self.app_name)
                     if info is None:
                         sleep(1)
                     else:
@@ -87,7 +89,7 @@ class ButtonCenter:
                 dbus.Interface(proxy_object, "org.kde.KWin").WindowMove()
                 sleep(self.pause)
                 ShortCut.esc()
-                return WaylandWindowInfo()._window_info()
+                return self.wayland_info_obj._window_info()
         return None
 
     def window_location_and_sizes(self):
@@ -111,7 +113,7 @@ class ButtonCenter:
                 window_height = re.findall(r"Height.*:\s(\d+)", app_window_info)[0]
                 window_x, window_y = result
             else:
-                if hasattr(WaylandWindowInfo().library, "GetAllWindowStatesList"):
+                if hasattr(self.wayland_info_obj.library, "GetAllWindowStatesList"):
                     app_window_info = self.window_info()
                     window_x, window_y, window_width, window_height = app_window_info.get("location")
                 else:
@@ -142,7 +144,7 @@ class ButtonCenter:
                     result = re.findall(re_pattern, self.window_info())
                 window_x, window_y = result
             else:
-                if hasattr(WaylandWindowInfo().library, "GetAllWindowStatesList"):
+                if hasattr(self.wayland_info_obj.library, "GetAllWindowStatesList"):
                     window_x, window_y, window_width, window_height = app_window_info.get("location")
                 else:
                     window_x, window_y, window_width, window_height = app_window_info.get("wininfo")
@@ -162,7 +164,7 @@ class ButtonCenter:
                 window_width = re.findall(r"Width.*:\s(\d+)", app_window_info)[0]
                 window_height = re.findall(r"Height.*:\s(\d+)", app_window_info)[0]
             else:
-                if hasattr(WaylandWindowInfo().library, "GetAllWindowStatesList"):
+                if hasattr(self.wayland_info_obj.library, "GetAllWindowStatesList"):
                     window_x, window_y, window_width, window_height = app_window_info.get("location")
                 else:
                     window_x, window_y, window_width, window_height = app_window_info.get("wininfo")
@@ -582,7 +584,7 @@ class ButtonCenter:
             ).strip()
             return len([i for i in app_id.split("\n") if i])
         else:
-            info = WaylandWindowInfo().window_info().get(self.app_name)
+            info = self.wayland_info_obj.window_info().get(self.app_name)
             if isinstance(info, dict):
                 return 1
             elif isinstance(info, list):
@@ -603,7 +605,7 @@ class ButtonCenter:
                 return [i for i in app_id.split("\n") if i]
             raise ApplicationStartError(app_id)
         else:
-            info = WaylandWindowInfo().window_info().get(self.app_name)
+            info = self.wayland_info_obj.window_info().get(self.app_name)
             if isinstance(info, dict):
                 return info.get("window_id")
             elif isinstance(info, list):
@@ -641,7 +643,7 @@ class ButtonCenter:
             except Exception as exc:
                 raise ApplicationStartError(f"{app_name, exc}") from exc
         else:
-            info = WaylandWindowInfo().window_info().get(self.app_name)
+            info = self.wayland_info_obj.window_info().get(self.app_name)
             if isinstance(info, dict):
                 return info.get("window_id")
             elif isinstance(info, list):
