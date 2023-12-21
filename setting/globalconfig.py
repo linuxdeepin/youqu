@@ -220,6 +220,7 @@ class _GlobalConfig:
     PyPI_URL = "https://pypi.org/project/youqu"
 
     LETMEGO_DEBUG = True
+    DTK_DISPLAY = False
 
 
 GlobalConfig = _GlobalConfig()

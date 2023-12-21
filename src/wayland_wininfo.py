@@ -5,6 +5,7 @@
 
 # SPDX-License-Identifier: GPL-2.0-only
 import os
+from time import sleep
 
 from setting.globalconfig import GlobalConfig
 
@@ -72,15 +73,22 @@ class WaylandWindowInfo:
 
     def __init__(self):
         self.library = ctypes.cdll.LoadLibrary(f"/usr/lib/{machine()}-linux-gnu/libdtkwmjack.so")
+        if not GlobalConfig.DTK_DISPLAY:
+            self.init_dtk_display()
+            GlobalConfig.DTK_DISPLAY = True
+
+    def init_dtk_display(self):
+        self.library.InitDtkWmDisplay()
+
+    def destory_dtk_display(self):
+        self.library.DestoryDtkWmDisplay()
 
     def _window_info(self):
         """窗口信息"""
-        self.library.InitDtkWmDisplay()
         self.library.GetWindowFromPoint.restype = ctypes.c_int
         wid = self.library.GetWindowFromPoint()
         self.library.GetWindowState.restype = ctypes.POINTER(WindowStructure)
         ws = self.library.GetWindowState(wid)
-        self.library.DestoryDtkWmDisplay()
         window_info = ws.contents.Geometry
         resourceName = ws.contents.resourceName.decode("utf-8")
         if not resourceName:
@@ -97,11 +105,18 @@ class WaylandWindowInfo:
 
     def window_info(self):
         """窗口信息"""
-        self.library.InitDtkWmDisplay()
         self.library.GetAllWindowStatesList.restype = ctypes.POINTER(dtk_array)
-        get_all_window_states_list = self.library.GetAllWindowStatesList()
-        self.library.DestoryDtkWmDisplay()
-        range_index = get_all_window_states_list.contents.size / 544
+        _e = None
+        for _ in range(3):
+            try:
+                get_all_window_states_list = self.library.GetAllWindowStatesList()
+                range_index = get_all_window_states_list.contents.size / 544
+                break
+            except ValueError as e:
+                _e = e
+                sleep(1)
+        else:
+            raise ValueError(_e)
         res = {}
         for i in range(int(range_index)):
             window_info = get_all_window_states_list.contents.data[i]
@@ -133,4 +148,9 @@ class WaylandWindowInfo:
 
 
 if __name__ == '__main__':
-    WaylandWindowInfo().window_info()
+    wwininfo = WaylandWindowInfo()
+    wwininfo.library.InitDtkWmDisplay()
+    for i in range(100):
+        print(wwininfo.window_info())
+        sleep(1)
+    wwininfo.library.DestoryDtkWmDisplay()
