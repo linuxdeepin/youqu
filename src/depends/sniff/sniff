@@ -14,6 +14,7 @@ Data display is handled by the SniffController class.
 from sys import path as sys_path
 from os.path import abspath
 from os.path import dirname as dn
+from os import environ
 
 import gi
 
@@ -23,8 +24,12 @@ gi.require_version('Gdk', '3.0')
 # 在某些机型上可能出现环境变量未加载的问题，这里强制将其注册到环境变量中；
 sys_path.append(dn(dn(dn(dn(abspath(__file__))))))
 
-from src.depends.dogtail.config import config
 from setting.globalconfig import GlobalConfig
+
+if GlobalConfig.IS_WAYLAND:
+    environ["XAUTHORITY"] = "~/.Xauthority"
+
+from src.depends.dogtail.config import config
 
 if config.checkForA11y:
     from src.depends.dogtail.utils import checkForA11yInteractively

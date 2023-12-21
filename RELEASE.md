@@ -8,6 +8,10 @@
 
 	本次功能更新离不开多个部门领导和同事们的协助，这里特别感谢：**[@金佳斌](https://github.com/king123666)** **[@孙翠](https://gitlabbj.uniontech.com/ut003620)** **[@黄泽铭](https://github.com/Jimijun)** **[@任斌](https://github.com/rb-union)**
 
+**Fix**
+
+- 修复 `Wayland` 下 `sniff` 命令报错 `~/.Xauthorty` 文件不存在；[# issues 22](https://github.com/linuxdeepin/deepin-autotest-framework/issues/22)
+
 ## 2.3.7（2023/12/15）
 
 **New**
