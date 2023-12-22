@@ -101,4 +101,3 @@ sudo cp -r ${public_location}/auto_uos ${ROOT_DIR}/public
 sudo chmod -R 777 ${ROOT_DIR}/public
 
 system_env
-cd ${ROOT_DIR};python3 manage.py run -h

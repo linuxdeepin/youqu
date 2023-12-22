@@ -168,4 +168,4 @@ echo 'pipenv run python "$@"' | sudo tee /usr/bin/youqu > /dev/null 2>&1
 echo "pipenv shell" | sudo tee /usr/bin/youqu-shell > /dev/null 2>&1
 sudo chmod +x /usr/bin/youqu
 sudo chmod +x /usr/bin/youqu-shell
-cd ${ROOT_DIR};youqu manage.py run -h
+cd ${ROOT_DIR};youqu manage.py -h

@@ -20,8 +20,8 @@ class SubCmd(Enum):
     run = "run"
     remote = "remote"
     pmsctl = "pmsctl"
-    startapp = "startapp"
     csvctl = "csvctl"
+    startapp = "startapp"
 
 
 @unique
