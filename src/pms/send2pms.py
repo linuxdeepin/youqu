@@ -10,7 +10,9 @@ import json
 import os
 import re
 from os.path import exists
+from time import sleep
 from urllib.parse import urlencode
+from urllib.error import HTTPError
 
 from setting.globalconfig import GlobalConfig
 from src import logger
@@ -89,13 +91,16 @@ class Send2Pms(_Base):
         data.pop("item")
         with open(data_send_result_csv, "a+", encoding="utf-8") as f:
             for _ in range(int(GlobalConfig.SEND_PMS_RETRY_NUMBER)):
-                status_code = self.post_to_pms(**data)
-                if status_code == 200:
-                    logger.info(f"{runs_id_cmd_log(data)} 数据回填成功 ✔")
-                    if case_result == "cover-pass" and f"{case_name},pass" in f.read():
+                try:
+                    status_code = self.post_to_pms(**data)
+                    if status_code == 200:
+                        logger.info(f"{runs_id_cmd_log(data)} 数据回填成功 ✔")
+                        if case_result == "cover-pass" and f"{case_name},pass" in f.read():
+                            break
+                        f.write(f"{case_name},{data['result']},request_ok\n")
                         break
-                    f.write(f"{case_name},{data['result']},request_ok\n")
-                    break
+                except HTTPError:
+                    sleep(1)
             else:
                 logger.info(f"{runs_id_cmd_log(data)} 数据回填失败 ✘")
                 f.write(f"{case_name},{data['result']},request_fail\n")
@@ -117,9 +122,13 @@ class Send2Pms(_Base):
             if data["result"] == "cover-pass":
                 data["result"] = "pass"
             for _ in range(int(GlobalConfig.SEND_PMS_RETRY_NUMBER)):
-                status_code = self.post_to_pms(**data)
-                if status_code == 200:
-                    logger.info(f"{runs_id_cmd_log(data)} 数据回填成功 ✔")
-                    break
+                try:
+                    status_code = self.post_to_pms(**data)
+                    if status_code == 200:
+                        logger.info(f"{runs_id_cmd_log(data)} 数据回填成功 ✔")
+                        break
+                except HTTPError:
+                    sleep(1)
+
             else:
                 logger.info(f"{runs_id_cmd_log(data)} 数据回填失败 ✘")
