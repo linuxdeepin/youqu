@@ -13,6 +13,8 @@
 **Fix**
 
 - 修复 `Wayland` 下 `sniff` 命令报错 `~/.Xauthorty` 文件不存在；[# issues 22](https://github.com/linuxdeepin/deepin-autotest-framework/issues/22)
+- 修复远程执行数据回填过程中报 `HTTPError`；[# issues 24](https://github.com/linuxdeepin/deepin-autotest-framework/issues/24)
+- 修复偶现测试报告生成阶段报错；[# issues 25](https://github.com/linuxdeepin/deepin-autotest-framework/issues/25)
 
 ## 2.3.7（2023/12/15）
 
