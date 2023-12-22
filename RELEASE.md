@@ -7,6 +7,8 @@
 - `UOS 1070` `Wayland` 下窗管团队提供了新的接口（`GetAllWindowStatesList`）用于获取桌面所有窗口的信息，`YouQu` 进行开发适配并兼容新老接口，至此基于 `UI` 的元素定位方案在 `Wayland` 下表现和 `X11` 下表现一致，堪称完美；[# issues 21](https://github.com/linuxdeepin/deepin-autotest-framework/issues/21)
 
 	本次功能更新离不开多个部门领导和同事们的协助，这里特别感谢：**[@金佳斌](https://github.com/king123666)** **[@孙翠](https://gitlabbj.uniontech.com/ut003620)** **[@黄泽铭](https://github.com/Jimijun)** **[@任斌](https://github.com/rb-union)**
+	
+- 新增贡献者名单及贡献规则文档；[# issues 23](https://github.com/linuxdeepin/deepin-autotest-framework/issues/23)
 
 **Fix**
 

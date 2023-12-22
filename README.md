@@ -343,17 +343,12 @@ $ youqu manage.py remote -a ... --parallel no
 
 </div>
 
-## 帮助
+## 贡献者
 
-- [官方论坛](https://bbs.deepin.org/) 
-- [开发者中心](https://github.com/linuxdeepin/developer-center) 
-- [Wiki](https://wiki.deepin.org/)
+[贡献文档](https://github.com/linuxdeepin/deepin-autotest-framework/blob/master/CONTRIBUTING.md) 
 
-## 贡献指南
+--8<-- "docs/contributors.html"
 
-我们鼓励您报告问题并做出更改
-
-- [开发者代码贡献指南](https://github.com/linuxdeepin/developer-center/wiki/Contribution-Guidelines-for-Developers) 
 
 ## 开源许可证
 
