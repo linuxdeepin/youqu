@@ -1,6 +1,6 @@
 # 版本更新记录
 
-## 2.4.0（dev）
+## 2.4.0（2023/12/22）
 
 **New**
 
@@ -15,6 +15,7 @@
 - 修复 `Wayland` 下 `sniff` 命令报错 `~/.Xauthorty` 文件不存在；[# issues 22](https://github.com/linuxdeepin/deepin-autotest-framework/issues/22)
 - 修复远程执行数据回填过程中报 `HTTPError`；[# issues 24](https://github.com/linuxdeepin/deepin-autotest-framework/issues/24)
 - 修复偶现测试报告生成阶段报错；[# issues 25](https://github.com/linuxdeepin/deepin-autotest-framework/issues/25)
+- 修复 `globalconfig.ini` 配置文件中 `IMAGE_RATE` 配置项不生效；[# issues 26](https://github.com/linuxdeepin/deepin-autotest-framework/issues/26)
 
 ## 2.3.7（2023/12/15）
 
