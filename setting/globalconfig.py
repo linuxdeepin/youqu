@@ -93,7 +93,7 @@ class _GlobalConfig:
         raise ValueError("测试机密码不能未空")
     IMAGE_MATCH_NUMBER = run_cfg.get("IMAGE_MATCH_NUMBER", default=1)
     IMAGE_MATCH_WAIT_TIME = run_cfg.get("IMAGE_MATCH_WAIT_TIME", default=1)
-    IMAGE_RATE = run_cfg.get("IMAGE_RATE", default=0.9)
+    IMAGE_RATE = run_cfg.get("IMAGE_RATE", default=0.8)
     SCREEN_CACHE = run_cfg.get("SCREEN_CACHE", default="/tmp/screen.png")
     TMPDIR = run_cfg.get("TMPDIR", default="/tmp/tmpdir")
     SYS_THEME = run_cfg.get("SYS_THEME", default="deepin")

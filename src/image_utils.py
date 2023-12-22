@@ -24,6 +24,7 @@ image_setting.NETWORK_RETRY = int(conf.OPENCV_NETWORK_RETRY)
 image_setting.PAUSE = float(conf.OPENCV_PAUSE)
 image_setting.TIMEOUT = float(conf.OPENCV_TIMEOUT)
 image_setting.MAX_MATCH_NUMBER = int(conf.OPENCV_MAX_MATCH_NUMBER)
+image_setting.IMAGE_RATE = float(conf.IMAGE_RATE)
 
 
 class ImageUtils(ImageCenter):

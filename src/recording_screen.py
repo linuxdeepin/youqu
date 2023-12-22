@@ -40,14 +40,10 @@ def recording_screen(name):
         logger.info(f"录屏路径存放  {path}")
 
     with open(os.devnull, "w", encoding="utf-8") as dev_null:
-        # proc = sp.Popen(
-        #     cmd, stdin=sp.PIPE, stdout=dev_null, stderr=dev_null, close_fds=True
-        # )
         with sp.Popen(
             cmd, stdin=sp.PIPE, stdout=dev_null, stderr=dev_null, close_fds=True
         ) as proc:
 
-            # let ffmpeg start
             time.sleep(0.5)
             if proc.poll() is not None:
                 raise RuntimeError("ffmpeg did not start")

@@ -33,9 +33,8 @@ wayland_env(){
         cat /tmp/_yqdebversion.txt | grep "已安装"
     done
 
-    libkf5waylandclient5_version=$(apt policy libkf5waylandclient5 | grep "已安装" | python3 -c "s=input();print(s.split('：')[1])")
-    echo ${libkf5waylandclient5_version}
     # 根据 libkf5waylandclient5 的版本决定安装 libkf5wayland-dev 的版本;
+    libkf5waylandclient5_version=$(apt policy libkf5waylandclient5 | grep "已安装" | python3 -c "s=input();print(s.split('：')[1])")
     sudo apt install -y libkf5wayland-dev=${libkf5waylandclient5_version} > /tmp/env.log 2>&1
     wayland_info="libkf5wayland-dev 可能存在依赖报错，解决方法：\n
     方案一. 添加镜像对应的ppa仓库源，重新执行；\n
