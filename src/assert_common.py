@@ -38,7 +38,7 @@ class AssertCommon:
     @staticmethod
     def assert_image_exist(
             widget: str,
-            rate: float = 0.9,
+            rate: float = None,
             multiple: bool = False,
             picture_abspath: str = None,
             network_retry: int = None,
@@ -54,6 +54,7 @@ class AssertCommon:
         logger.info(
             f"屏幕上匹配图片< {f'***{widget[-40:]}' if len(widget) >= 40 else widget} >"
         )
+
         try:
             ImageUtils.find_image(
                 widget,
@@ -75,7 +76,7 @@ class AssertCommon:
             cls,
             widget: str,
             screen_time: Union[float, int],
-            rate: float = 0.9,
+            rate: float = None,
             pause: Union[int, float] = None,
     ):
         """
@@ -99,7 +100,7 @@ class AssertCommon:
     @staticmethod
     def assert_image_not_exist(
             widget: str,
-            rate: float = 0.9,
+            rate: float = None,
             multiple: bool = False,
             picture_abspath: str = None,
             network_retry: int = None,

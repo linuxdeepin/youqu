@@ -1,28 +1,34 @@
 # 版本更新记录
 
+## 2.4.1（dev）
+
+**Fix**
+
+- 修复 `AssertCommon.assert_image_exist` 参数 `rate` 主动传入，没有用到全局配置 `IMAGE_RATE`；
+
 ## 2.4.0（2023/12/22）
 
 **New**
 
-- `UOS 1070` `Wayland` 下窗管团队提供了新的接口（`GetAllWindowStatesList`）用于获取桌面所有窗口的信息，`YouQu` 进行开发适配并兼容新老接口，至此基于 `UI` 的元素定位方案在 `Wayland` 下表现和 `X11` 下表现一致，堪称完美；[# issues 21](https://github.com/linuxdeepin/deepin-autotest-framework/issues/21)
+- `UOS 1070` `Wayland` 下窗管团队提供了新的接口（`GetAllWindowStatesList`）用于获取桌面所有窗口的信息，`YouQu` 进行开发适配并兼容新老接口，至此基于 `UI` 的元素定位方案在 `Wayland` 下表现和 `X11` 下表现一致，堪称完美；[issues #21](https://github.com/linuxdeepin/deepin-autotest-framework/issues/21)
 
 	本次功能更新离不开多个部门领导和同事们的协助，这里特别感谢：**[@金佳斌](https://github.com/king123666)** **[@孙翠](https://gitlabbj.uniontech.com/ut003620)** **[@黄泽铭](https://github.com/Jimijun)** **[@任斌](https://github.com/rb-union)**
 	
-- 新增贡献者名单及贡献规则文档；[# issues 23](https://github.com/linuxdeepin/deepin-autotest-framework/issues/23)
+- 新增贡献者名单及贡献规则文档；[issues #23](https://github.com/linuxdeepin/deepin-autotest-framework/issues/23)
 
 **Fix**
 
-- 修复 `Wayland` 下 `sniff` 命令报错 `~/.Xauthorty` 文件不存在；[# issues 22](https://github.com/linuxdeepin/deepin-autotest-framework/issues/22)
-- 修复远程执行数据回填过程中报 `HTTPError`；[# issues 24](https://github.com/linuxdeepin/deepin-autotest-framework/issues/24)
-- 修复偶现测试报告生成阶段报错；[# issues 25](https://github.com/linuxdeepin/deepin-autotest-framework/issues/25)
-- 修复 `globalconfig.ini` 配置文件中 `IMAGE_RATE` 配置项不生效；[# issues 26](https://github.com/linuxdeepin/deepin-autotest-framework/issues/26)
+- 修复 `Wayland` 下 `sniff` 命令报错 `~/.Xauthorty` 文件不存在；[issues #22](https://github.com/linuxdeepin/deepin-autotest-framework/issues/22)
+- 修复远程执行数据回填过程中报 `HTTPError`；[issues #24](https://github.com/linuxdeepin/deepin-autotest-framework/issues/24)
+- 修复偶现测试报告生成阶段报错；[issues #25](https://github.com/linuxdeepin/deepin-autotest-framework/issues/25)
+- 修复 `globalconfig.ini` 配置文件中 `IMAGE_RATE` 配置项不生效；[issues #26](https://github.com/linuxdeepin/deepin-autotest-framework/issues/26)
 
 ## 2.3.7（2023/12/15）
 
 **New**
 
 - `src/__init__.py` 里面的导入全部设置别名，以便后续各组件重命名之后仍能保持接口一致性和兼容性；
-- 将 `Wayland` 下输入的方法区分中英文，中文按现有 `input_message` 处理，英文数字字符等使用 `press_key` 处理； [# issues 17](https://github.com/linuxdeepin/deepin-autotest-framework/issues/17)
+- 将 `Wayland` 下输入的方法区分中英文，中文按现有 `input_message` 处理，英文数字字符等使用 `press_key` 处理； [issues #17](https://github.com/linuxdeepin/deepin-autotest-framework/issues/17)
 - 有些镜像没有 `$HOME/.Xauthority` 文件（咱也不知道为啥），`YouQu` 执行会报错，我们只能创建一个空的同名文件，以确保程序能正常运行，但 `Xlib.xauth` 获取不到有效信息会有一些 `warning` 日志，看着烦人我都能接受，不能接受的是经常会导致大家在分析用例失败原因的时候将矛头指向它，然后每次我就需要解释这个 `warning` 提示不是问题，因此在底层将这部分日志输出屏蔽掉；
 
 **Fix**
@@ -34,7 +40,7 @@
 
 **New**
 
-- 标签化管理支持判断系统版本跳过用例，用 `/etc/os-version` 里面的 `MinorVersion` 字段作为判断依据，在 `setting/skipif.py` 插件中实现了此功能，后续在 `CSV` 文件中可以使用此方法进行条件跳过；[# issues 16](https://github.com/linuxdeepin/deepin-autotest-framework/issues/16)
+- 标签化管理支持判断系统版本跳过用例，用 `/etc/os-version` 里面的 `MinorVersion` 字段作为判断依据，在 `setting/skipif.py` 插件中实现了此功能，后续在 `CSV` 文件中可以使用此方法进行条件跳过；[issues #16](https://github.com/linuxdeepin/deepin-autotest-framework/issues/16)
 
   ```python hl_lines="59-68"
   --8<-- "setting/skipif.py"
@@ -42,10 +48,10 @@
 
 **Fix**
 
-- 修复 `Wayland` 下系统监视器使用 `WaylandWindowInfo.window_info()`，获取的窗口名称为空；[# issues 18](https://github.com/linuxdeepin/deepin-autotest-framework/issues/20)
-- 解除 `env.sh` 中某个 `deb` 包安装失败后替换源 `retry` 机制，因为用固定的源替换之后，容易出现某些包安装失败，而不容易关注到首次包安装失败的问题，给定位环境安装失败带来困难；[# issues 19](https://github.com/linuxdeepin/deepin-autotest-framework/issues/19)
+- 修复 `Wayland` 下系统监视器使用 `WaylandWindowInfo.window_info()`，获取的窗口名称为空；[issues #18](https://github.com/linuxdeepin/deepin-autotest-framework/issues/20)
+- 解除 `env.sh` 中某个 `deb` 包安装失败后替换源 `retry` 机制，因为用固定的源替换之后，容易出现某些包安装失败，而不容易关注到首次包安装失败的问题，给定位环境安装失败带来困难；[issues #19](https://github.com/linuxdeepin/deepin-autotest-framework/issues/19)
 - 修复 `env.sh` 里面报错 `ERROR: unknown command "cache" - maybe you meant "check"`；
-- 修复用例收集数量为 `0` 时，报错 `ci_result.json` 文件找不到；[# issues 20](https://github.com/linuxdeepin/deepin-autotest-framework/issues/20)
+- 修复用例收集数量为 `0` 时，报错 `ci_result.json` 文件找不到；[issues #20](https://github.com/linuxdeepin/deepin-autotest-framework/issues/20)
 
 ## 2.3.5（2023/12/04）
 
