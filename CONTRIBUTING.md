@@ -1,6 +1,8 @@
 # 贡献，并且帮助我们改进
 
-感谢您参与该项目！ 我们欢迎以下方面的贡献：
+感谢您参与本项目，对于任何形式的贡献我们都欢迎；
+
+目前我们欢迎以下方面的贡献：
 
 ## 帮助改进 YouQu 文档
 
@@ -8,7 +10,7 @@
 
 ## 向 YouQu 提交 Issues
 
-Issues提交地址：https://github.com/linuxdeepin/deepin-autotest-framework/issues
+Issues 提交地址：https://github.com/linuxdeepin/deepin-autotest-framework/issues
 
 ## 向 YouQu 仓库提交代码
 
