@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, print_function, unicode_literals
-from .config import config
+
+import os
+from time import sleep
+from types import LambdaType
+
+import gi
+from gi.repository import GLib
+
 from . import path
 from . import predicate
 from . import rawinput
+from .config import config
 from .logging import debugLogger as logger
 from .utils import doDelay, Blinker, Lock
-
-from time import sleep
-from types import LambdaType
-import gi
-from gi.repository import GLib
-import os
-import sys
 
 try:
     import pyatspi
@@ -82,12 +83,14 @@ David Malcolm <dmalcolm@redhat.com>
 
 if config.checkForA11y:
     from .utils import checkForA11y
+
     checkForA11y()
 
 # We optionally import the bindings for libWnck.
 try:
     gi.require_version('Wnck', '3.0')
     from gi.repository import Wnck
+
     gotWnck = True  # pragma: no cover
 except (ImportError, ValueError):
     # Skip this warning, since the functionality is almost entirely nonworking anyway.
@@ -164,7 +167,7 @@ class Action(object):
 
     def __str__(self):
         return "[action | %s | %s ]" % \
-            (self.name, self.keyBinding)
+               (self.name, self.keyBinding)
 
     def do(self):
         """
@@ -422,6 +425,16 @@ class Node(object):
         except NotImplementedError:
             return None
 
+    @property
+    def center(self):
+        """
+        A tuple containing the center position of the Accessible:(x, y)
+        """
+        x, y, w, h = self.extents
+        centerX = x + w / 2
+        centerY = y + h / 2
+        return centerX, centerY
+
     def contains(self, x, y):
         try:
             return self.queryComponent().contains(x, y, pyatspi.DESKTOP_COORDS)
@@ -512,6 +525,7 @@ class Node(object):
                 for i in range(relation.getNTargets()):
                     targets.append(relation.getTarget(i))
                 return targets
+
     labeller = labeler
 
     @property
@@ -529,6 +543,7 @@ class Node(object):
                 for i in range(relation.getNTargets()):
                     targets.append(relation.getTarget(i))
                 return targets
+
     labellee = labelee
 
     #
@@ -897,6 +912,7 @@ class Node(object):
         If requireResult is True (the default), an exception is raised after all
         attempts have failed. If it is false, the function simply returns None.
         """
+
         def describeSearch(parent, pred, recursive, debugName):
             """
             Internal helper function
@@ -1001,7 +1017,8 @@ class Node(object):
         return None
 
     # Various wrapper/helper search methods:
-    def child(self, name='', roleName='', description='', label='', recursive=True, retry=True, debugName=None, showingOnly=None):
+    def child(self, name='', roleName='', description='', label='', recursive=True, retry=True, debugName=None,
+              showingOnly=None):
         """
         Finds a child satisying the given criteria.
 
@@ -1010,9 +1027,11 @@ class Node(object):
         also logs the search.
         """
         return self.findChild(predicate.GenericPredicate(name=name, roleName=roleName, description=description,
-                              label=label), recursive=recursive, retry=retry, debugName=debugName, showingOnly=showingOnly)
+                                                         label=label), recursive=recursive, retry=retry,
+                              debugName=debugName, showingOnly=showingOnly)
 
-    def isChild(self, name='', roleName='', description='', label='', recursive=True, retry=False, debugName=None, showingOnly=None):
+    def isChild(self, name='', roleName='', description='', label='', recursive=True, retry=False, debugName=None,
+                showingOnly=None):
         """
         Determines whether a child satisying the given criteria exists.
 
@@ -1060,7 +1079,8 @@ class Node(object):
         if no such child is found, and will eventually raise an exception. It
         also logs the search.
         """
-        return self.findChild(predicate.IsATextEntryNamed(textEntryName=textEntryName), recursive, showingOnly=showingOnly)
+        return self.findChild(predicate.IsATextEntryNamed(textEntryName=textEntryName), recursive,
+                              showingOnly=showingOnly)
 
     def button(self, buttonName, recursive=True, showingOnly=None):
         """
@@ -1154,7 +1174,7 @@ class LinkAnchor(object):
         return self.link.getURI(self.anchorIndex)
 
 
-class Root (Node):
+class Root(Node):
     """
     FIXME:
     """
@@ -1177,7 +1197,7 @@ class Root (Node):
         return root.findChild(predicate.IsAnApplicationNamed(appName), recursive=False, retry=retry, showingOnly=False)
 
 
-class Application (Node):
+class Application(Node):
     def dialog(self, dialogName, recursive=False, showingOnly=None):
         """
         Search below this node for a dialog with the given name,
@@ -1227,7 +1247,7 @@ class Application (Node):
             return wnckWindow.get_application()
 
 
-class Window (Node):
+class Window(Node):
 
     def getWnckWindow(self):  # pragma: no cover
         """
@@ -1259,7 +1279,7 @@ class Window (Node):
         wnckWindow.activate(0)
 
 
-class Wizard (Window):
+class Wizard(Window):
     """
     Note that the buttons of a GnomeDruid were not accessible until
     recent versions of libgnomeui.  This is
@@ -1328,8 +1348,9 @@ class Wizard (Window):
 
         # FIXME: debug logging?
 
+
 Accessibility.Accessible.__bases__ = (
-    Application, Root, Node,) + Accessibility.Accessible.__bases__
+                                         Application, Root, Node,) + Accessibility.Accessible.__bases__
 
 try:
     root = pyatspi.Registry.getDesktop(0)
