@@ -269,7 +269,7 @@ class AssertCommon:
         :param app: 应用名字
         """
         logger.info(f"断言应用窗口数量{app}与期望{expect}是否相同")
-        number = ButtonCenter.get_windows_number(app)
+        number = ButtonCenter(app_name=app, config_path="xxx").get_windows_number(app)
         if expect != number:
             raise AssertionError(f"断言应用窗口数量{app}为{number}与期望{expect}不相同")
 
