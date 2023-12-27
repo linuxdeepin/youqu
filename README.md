@@ -16,13 +16,11 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/youqu?color=%23F79431)
 ![Static Badge](https://img.shields.io/badge/UOS%2FDeepin/Ubuntu/Debian-Platform?style=flat&label=OS&color=%23F79431)
 ![Static Badge](https://img.shields.io/badge/Linux-Platform?style=flat&label=Platform&color=%23F79431)
+![Website](https://img.shields.io/website?url=https%3A%2F%2Flinuxdeepin.github.io%2Fdeepin-autotest-framework%2F&up_color=%23F79431)
 
 [![Downloads](https://static.pepy.tech/badge/youqu/week)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu/month)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu)](https://pepy.tech/project/youqu)
-
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/linuxdeepin/deepin-autotest-framework)
-![Website](https://img.shields.io/website?url=https%3A%2F%2Flinuxdeepin.github.io%2Fdeepin-autotest-framework%2F&up_color=blue)
 
 ---
 
