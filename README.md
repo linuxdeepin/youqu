@@ -8,6 +8,9 @@
     <em>有趣，一个使用简单且功能强大的自动化测试基础框架。</em>
 </p>
 
+![GitHub issues](https://img.shields.io/github/issues/linuxdeepin/deepin-autotest-framework?color=%23F79431)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/linuxdeepin/deepin-autotest-framework?color=%23F79431)
+
 ![PyPI](https://img.shields.io/pypi/v/youqu?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu%2F&color=%23F79431)
 ![PyPI - License](https://img.shields.io/pypi/l/youqu?color=%23F79431)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/youqu?color=%23F79431)
@@ -17,6 +20,9 @@
 [![Downloads](https://static.pepy.tech/badge/youqu/week)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu/month)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu)](https://pepy.tech/project/youqu)
+
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/linuxdeepin/deepin-autotest-framework)
+![Website](https://img.shields.io/website?url=https%3A%2F%2Flinuxdeepin.github.io%2Fdeepin-autotest-framework%2F&up_color=blue)
 
 ---
 
