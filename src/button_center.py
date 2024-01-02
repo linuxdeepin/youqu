@@ -588,7 +588,7 @@ class ButtonCenter:
             ).strip()
             return len([i for i in app_id.split("\n") if i])
         else:
-            info = self.wwininfo.window_info().get(self.app_name)
+            info = WaylandWindowInfo().window_info().get(self.app_name)
             if isinstance(info, dict):
                 return 1
             elif isinstance(info, list):
