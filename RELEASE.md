@@ -4,7 +4,8 @@
 
 **New**
 
-- 
+- 切换 `YouQu` 的正式域名为：youqu.uniontech.com ；
+- 文档工程新增`工具库`和`知识库`的跳转链接；
 
 ## 2.4.2（2023/12/27）
 
@@ -337,7 +338,7 @@ youqu manage.py run
 
 过去咱们 `YouQu` 的在线文档是部署在公司内网的，现在开源到 github 了，外部开发者肯定访问不到内网的文档，因此需要将文档部署到公网【[公网文档](https://linuxdeepin.github.io/deepin-autotest-framework/)】；
 
-公网文档使用的是 github pages（白嫖怪一顿狂喜~~），但可能会出现文档速度慢的问题（代理下就好了），不过没关系，咱们【[内网文档](http://youqu-dev.uniontech.com/)】仍然保留，文档内容一样，访问速度更快。
+公网文档使用的是 github pages（白嫖怪一顿狂喜~~），但可能会出现文档速度慢的问题（代理下就好了），不过没关系，咱们【[内网文档](http://youqu.uniontech.com/)】仍然保留，文档内容一样，访问速度更快。
 
 **5、其他一些小小功能更新：**
 
@@ -505,8 +506,8 @@ new
   youqu run -a deepin-music -k 001
   ```
 
-- `RPC` 服务 `IP` 地址修改为域名：http://youqu-dev.uniontech.com，指定不同的端口；
-- 在线文档地址修改为域名：http://youqu-dev.uniontech.com，原来的地址 10.8.10.215 将不在使用；
+- `RPC` 服务 `IP` 地址修改为域名：http://youqu.uniontech.com，指定不同的端口；
+- 在线文档地址修改为域名：http://youqu.uniontech.com，原来的地址 10.8.10.215 将不在使用；
 
 fix
 
