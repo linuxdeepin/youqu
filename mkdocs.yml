@@ -1,5 +1,5 @@
 site_name: YouQu Docs
-copyright: Copyright © 2023 UnionTech Software Technology Co., Ltd. All Rights Reserved.
+copyright: Copyright © 2024 UnionTech Software Technology Co., Ltd. All Rights Reserved.
 theme:
   name: material
   language: zh
@@ -117,6 +117,7 @@ extra_css:
 
 nav:
   - 快速开始: index.md
+
   - 详细功能介绍:
     - 框架功能介绍/环境部署.md
     - 框架功能介绍/全局配置.md
@@ -137,25 +138,33 @@ nav:
     - 框架功能介绍/PMS数据回填.md
     - 框架功能介绍/Wayland适配.md
     - 框架功能介绍/静态代码扫描.md
+
   - 版本更新:
     - RELEASE.md
+
   - 框架设计:
     - 自动化测试架构设计v1.0.md
     - AT基础框架设计方案.md
     - AT应用库设计方案.md
+
   - 操作规范&指引:
     - AT开发规范.md
     - AT经验总结.md
     - AT用例筛选指北.md
     - AT执行器使用指北.md
+
   - 框架生态:
-    - letmego: https://linuxdeepin.github.io/letmego
-    - funnylog: https://linuxdeepin.github.io/funnylog
-    - pdocr-rpc: https://linuxdeepin.github.io/pdocr-rpc
-    - image-center: https://linuxdeepin.github.io/image-center
+    - letmego: https://linuxdeepin.github.io/letmego" target="_blank
+    - funnylog: https://linuxdeepin.github.io/funnylog" target="_blank
+    - pdocr-rpc: https://linuxdeepin.github.io/pdocr-rpc" target="_blank
+    - image-center: https://linuxdeepin.github.io/image-center" target="_blank
+
   - 其他:
     - 智能化功能测试.md
     - 智能化性能测试.md
+
   - 常见问题: 常见问题.md
+
   - 工具库: http://youqu.uniontech.com/tool" target="_blank
+
   - 知识库: http://youqu.uniontech.com/docs" target="_blank
