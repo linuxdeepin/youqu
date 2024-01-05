@@ -60,7 +60,7 @@
 - 标签化管理支持判断系统版本跳过用例，用 `/etc/os-version` 里面的 `MinorVersion` 字段作为判断依据，在 `setting/skipif.py` 插件中实现了此功能，后续在 `CSV` 文件中可以使用此方法进行条件跳过；[issues #16](https://github.com/linuxdeepin/deepin-autotest-framework/issues/16)
 
   ```python hl_lines="59-68"
-  --8<-- "setting/skipif.py"
+  --8<-- "setting/skipif.py:59:68"
   ```
 
 **Fix**
