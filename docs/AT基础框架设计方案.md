@@ -170,7 +170,7 @@ class BaseWidget(Src):
 
 公共方法库里面每个应用都是一个单独的 `py` 文件，相互之间是独立的，每个 `py` 文件里面是该应用的方法类，比如：最常用的方法类 `dde_desktop_public_widget.py`
 
-```python title="dde_desktop_public_widget.py"
+```python title="dde_desktop_public_widget.py" hl_lines="3 13"
 from src import Src
 
 class _DdeDesktopPublicBaseWidget(Src):

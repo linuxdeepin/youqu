@@ -14,8 +14,8 @@ theme:
         name: Switch to light mode
     - media: '(prefers-color-scheme: dark)'
       scheme: slate
-      primary: custom
-      accent: amber
+      primary: black
+      accent:
       toggle:
         icon: material/lightbulb-outline
         name: Switch to dark mode
@@ -33,6 +33,7 @@ theme:
     - navigation.sections
     - navigation.top
     - navigation.tracking
+    - navigation.tabs
     - search.highlight
     - search.share
     - search.suggest
@@ -85,6 +86,8 @@ markdown_extensions:
 plugins:
   - git-revision-date-localized:
       locale: zh
+      exclude:
+        - comments.md
   - git-authors:
   - search
   - mike
@@ -118,7 +121,7 @@ extra_css:
 nav:
   - 快速开始: index.md
 
-  - 详细功能介绍:
+  - 详细功能:
     - 框架功能介绍/环境部署.md
     - 框架功能介绍/全局配置.md
     - 框架功能介绍/执行管理器.md
@@ -139,32 +142,27 @@ nav:
     - 框架功能介绍/Wayland适配.md
     - 框架功能介绍/静态代码扫描.md
 
-  - 版本更新:
-    - RELEASE.md
-
   - 框架设计:
     - 自动化测试架构设计v1.0.md
     - AT基础框架设计方案.md
     - AT应用库设计方案.md
 
-  - 操作规范&指引:
+  - 规范建议:
     - AT开发规范.md
     - AT经验总结.md
     - AT用例筛选指北.md
-    - AT执行器使用指北.md
 
-  - 框架生态:
-    - letmego: https://linuxdeepin.github.io/letmego" target="_blank
-    - funnylog: https://linuxdeepin.github.io/funnylog" target="_blank
-    - pdocr-rpc: https://linuxdeepin.github.io/pdocr-rpc" target="_blank
-    - image-center: https://linuxdeepin.github.io/image-center" target="_blank
-
-  - 其他:
+  - 技术演进:
     - 智能化功能测试.md
     - 智能化性能测试.md
 
+  - 框架生态:
+      - 框架生态.md
+
+  - 版本更新:
+    - RELEASE.md
+
   - 常见问题: 常见问题.md
 
-  - 工具库: http://youqu.uniontech.com/tool" target="_blank
-
-  - 知识库: http://youqu.uniontech.com/docs" target="_blank
+  - 留言:
+      - comments.md

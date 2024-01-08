@@ -2,8 +2,6 @@
 ```shell
 # =================================================
 # Author  : mikigo
-# Time    : 2022/3/16
-# version ：1.0
 # =================================================
 ```
 
@@ -19,12 +17,13 @@ AT 应用库改造是基于自动化测试基础框架进行用例方法和业�
 
 整体仍然遵循 PO 设计理念，根据业务需要，将文管业务层进行 3 层划分：
 
-![](https://pic.imgdb.cn/item/64f054c3661c6c8e54ff47db.png)
+???+ note "应用库架构图（文件管理器）"
+	![](https://pic.imgdb.cn/item/64f054c3661c6c8e54ff47db.png)
 
 ### 2、目录结构
 
 ```shell
-autotest-dde-file-manager  # 应用仓库
+autotest_dde_file_manager  # 应用仓库
 ├── case  # 用例
 │   ├── assert_res  # 断言的图片资源目录
 │   ├── test_xxx_001.py
@@ -51,72 +50,65 @@ autotest-dde-file-manager  # 应用仓库
 
 ## 三、详细方案
 
-### 1、基类
+### 1、基类（base_widget.py）
 
-- 继承核心层的各个模块类。
-- 抽取操作层的一些基础方法。
-  - 元素定位操作的一些公共方法。
-  - 路径组装方法。
-- 一些**业务层**相关的变量、常量、shell命令、坐标。
-
-方法基类的写法：
-
-```python
-from src import Src
-
-class BaseWidget(Src):
+- 继承核心层（src.Src）；
+    ```python
+    from src import Src
+    
+    class BaseWidget(Src):
     """方法基类"""
-    APP_NAME = "dde-file-manager"
-    DESC = "/usr/bin/dde-file-manager"
-
-    def __init__(self, number=-1):
-        Src.__init__(self, APP_NAME=self.APP_NAME, DESC=self.DESC, number=number)
-```
+    
+        APP_NAME = "dde-file-manager"
+        DESC = "/usr/bin/dde-file-manager"
+    
+        def __init__(self, number=-1):
+            Src.__init__(self, APP_NAME=self.APP_NAME, DESC=self.DESC, number=number)
+    ```
+- 抽取操作层的一些基础方法；
+    - 元素定位操作的一些公共方法；
+    - 路径组装方法；
+- 一些**业务层**相关的变量、常量、shell命令、坐标；
 
 ### 2、操作层
 
 - 模块划分
 
-  按照文件管理器的界面区域划分为：`TitleWidget` 、`RightViewWidget`、`LeftViewWidget` 、`PopWidget`
+    按照文件管理器的界面区域划分为：==TitleWidget 、RightViewWidget、LeftViewWidget 、PopWidget== ；
 
-  文管主界面分为三个区域：标题栏、右边视图区域、左边视图区域
+    文管界面分为四个区域：==标题栏、右边视图区域、左边视图区域、弹窗[^1]==；
 
-  弹窗：设置界面弹窗、保险箱弹窗、删除确认弹窗、及各种网络弹窗
+	[^1]: 设置界面弹窗、保险箱弹窗、删除确认弹窗、及各种网络弹窗.
 
-  右键菜单：暂时不考虑为单独的模块，考虑以图像识别的定位方案做成公共库。
+	???+ note "主界面区域划分"
+    	![](https://pic.imgdb.cn/item/64f054c3661c6c8e54ff4806.png)
+	???+ note "弹窗区域"
+    	![](https://pic.imgdb.cn/item/64f054c8661c6c8e54ff4d1b.png)
 
-  ![](https://pic.imgdb.cn/item/64f054c3661c6c8e54ff4806.png)
-
-  ![](https://pic.imgdb.cn/item/64f054c8661c6c8e54ff4d1b.png)
-
-  ![](https://pic.imgdb.cn/item/64f054c9661c6c8e54ff4d5a.png)
 
 - 各个模块只继承基类
 
-  ```python
-  from apps.dde_file_manager.widget import BaseWidget  # dde_file_manager 为仓库名称
+    ```python title="标题栏" hl_lines="1 3"
+    from apps.autotest_dde_file_manager.widget import BaseWidget
   
-  class TitleWidget(BaseWidget):
+    class TitleWidget(BaseWidget):
       """标题栏方法类"""
-      
+  
       def click_xxx_in_title_by_ui(self):
           # self.dog.find_element_by_attr("xxxx").click()
           self.click(*self.ui.btn_center("xxx"))
-  ```
+    ```
   
-- 构造函数里面不构造对象，可以初始化一些变量。
-
 - 不同的定位方案调用不同的定位工具对象。
 
-  ```python
-  self.dog
-  self.ui
-  self.d_bus
-  ```
+      ```python
+      self.dog
+      self.ui
+      ```
 
 - 方法编写
 
-  - 动作开头，注意是动词
+    - 动作开头，注意是动词
 
     ```python
     click
@@ -125,24 +117,23 @@ class BaseWidget(Src):
     get
     make
     ```
-    
-  - 元素对象名称
-  
-    - 界面元素直接与元素名称相同，没有名称的就取一个好听易懂的名字。
-  
-  - **加上类的关键词**
-  
-    - 避免方法重名，同时可以标记区域。
-  
-  - 标定操作方法
-  
-    ```python
-    by_ui
-    by_attr
-    by_mk
-    by_img
-    ```
 
+    - 元素对象名称
+
+    	界面元素直接与元素名称相同，没有名称的就取一个好听易懂的名字。
+
+    - 加上类的关键词
+
+    	避免方法重名，同时可以标记区域。
+
+    - 标定操作方法
+
+        ```python
+        by_ui
+        by_attr
+        by_mk
+        by_img
+        ```
 
 ### 3、应用层
 
@@ -150,42 +141,47 @@ class BaseWidget(Src):
 
 - 仅仅用于用例中导入方便，不做其他事情。
 
-  ```python
-  class DfmWidget(TitleWidget, RightViewWidget, LeftViewWidget, PopWidget):
-      pass
-  ```
+    ```python
+    class DfmWidget(TitleWidget, RightViewWidget, LeftViewWidget, PopWidget):
+		pass
+    ```
 
 - `DfmAssert`  直接在用例里面继承，方便使用断言语句。
 
-  ```python
-  from apps.dde_file_manager.widget.dfm_widget import DfmWidget
-  from public.assert import Assert
+    ```python hl_lines="2 4 7"
+    from apps.dde_file_manager.widget.dfm_widget import DfmWidget
+    from public.assert import Assert
   
-  class DfmAssert(Assert):
-      
-      def assert_file_exists_in_desktop(self, file_name):
-          self.assert_file_exists(f"~/Desktop{file_name}")
-          ...
-          DfmWidget().get_file_in_desktop()
-  ```
+    class DfmAssert(Assert):
+  
+        def assert_file_exists_in_desktop(self, file_name):
+            self.assert_file_exists(f"~/Desktop{file_name}")
+            ...
+            DfmWidget().get_file_in_desktop()
+    ```
 
   - 用例里面直接继承，方便在用例里面使用 self 进行断言，更符合断言的使用习惯，用例逻辑上更清楚。
 
-  ```python
-  class BaseCase(DfmAssert):
-      pass
-      
-  class TestFileManager(BaseCase):
-      def test_xxx_001(self):
-      	self.assert_file_exists_in_desktop("xxx")
-  ```
+    ```python hl_lines="1 3" title="case/base_case.py"
+    from public.assert import Assert
+    
+    class BaseCase(DfmAssert):
+		pass
+    ```
+    
+    ```python hl_lines="1 3 5" title="case/test_xxx_001.py"
+    from apps.autotest_dde_file_manager.case import BaseCase
+    
+    class TestFileManager(BaseCase):
+        def test_xxx_001(self):
+            self.assert_file_exists_in_desktop("xxx")
+    ```
 
 ### 4、逻辑举例
 
 用例代码调用逻辑举例：
 
-```python
-# BaseWidget
+```python title="widget/base_widget.py"
 class BaseWidget(Src):
     """方法基类"""
     APP_NAME = "dde-file-manager"
@@ -193,10 +189,11 @@ class BaseWidget(Src):
 
     def __init__(self, number=-1):
         Src.__init__(self, APP_NAME=self.APP_NAME, DESC=self.DESC, number=number)
+```
 
+```python title="widget/title_widget.py"
+from apps.autotest_dde_file_manager.widget import BaseWidget
 
-# =============================================
-# TitleWidget
 class TitleWidget(BaseWidget):
 
     def __init__(self, nubmer=-1):
@@ -205,9 +202,11 @@ class TitleWidget(BaseWidget):
     def click_xxx_title_by_ui(self):
         print(self.dog.app_name)
         self.ui.print_number()
+```
 
+```python title="widget/right_view_widget.py"
+from apps.autotest_dde_file_manager.widget import BaseWidget
 
-# RightViewWidget
 class RightViewWidget(BaseWidget):
 
     def __init__(self, nubmer=-1):
@@ -216,30 +215,35 @@ class RightViewWidget(BaseWidget):
     def click_xxx_right_by_ui(self):
         print(self.dog.app_name)
         self.ui.print_number()
+```
 
+```python title="widget/dfm_widget.py"
+from apps.autotest_dde_file_manager.widget import TitleWidget
+from apps.autotest_dde_file_manager.widget import RightViewWidget
 
-# =============================================
-# 出口 DfmWidget
 class DfmWidget(TitleWidget, RightViewWidget):
     pass
+```
 
+```python title="case/test_xxx_002.py"
+from apps.dde_file_manager.widget import DfmWidget
+from apps.autotest_dde_file_manager.case import BaseCase
 
-# =============================================
-# in case
-from apps.dde_file_manager.widget.dfm_widget import DfmWidget
-
-dfm = DfmWidget()
-dfm.click_xxx_title_by_ui()
-dfm.click_xxx_right_by_ui()
-dfm.dog.print_desc()
-dfm.ui.print_number()
+class TestDdeFileManager(BaseCase):
+	
+	def test_xxx_002(self):
+        dfm = DfmWidget()
+        dfm.click_xxx_title_by_ui()
+        dfm.click_xxx_right_by_ui()
+        dfm.dog.print_desc()
+        dfm.ui.print_number()
 ```
 
 ## 四、工程改造实施步骤
 
-### 1、工程代码拉取
+### 1、基础框架代码拉取
 
-1.1. 将自动化基础框架的功能拉到本地 `Autotest Basic Frame` ：https://gerrit.uniontech.com/admin/repos/autotest-basic-frame 
+1.1. 将自动化基础框架的功能拉到本地（参考《快速开始》章节）
 
 1.2. 将应用库代码拉到基础框架下 `apps` 目录下，应用库的仓库命名应该是长这样的 `autotest_deepin_xxx`。
 
@@ -261,7 +265,7 @@ dfm.ui.print_number()
 
 在 `BaseWidget` 里面把该写的都写好，你可以参考上面的设计理念来写。
 
-如果你嫌麻烦，你可以参考文管的实际工程代码 `autotest_dde_file_manager` :   https://gerrit.uniontech.com/admin/repos/autotest_dde_file_manager 。
+如果你嫌麻烦，你可以参考文件管理器的实际工程代码 `autotest_dde_file_manager` :   [https://gerrit.uniontech.com/admin/repos/autotest_dde_file_manager](https://gerrit.uniontech.com/admin/repos/autotest_dde_file_manager ) 
 
 3.2. 操作层
 
