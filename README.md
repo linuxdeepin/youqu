@@ -8,11 +8,11 @@
     <em>有趣，一个使用简单且功能强大的自动化测试基础框架。</em>
 </p>
 
-[![GitHub issues](https://img.shields.io/github/issues/linuxdeepin/deepin-autotest-framework?color=%23F79431)](https://github.com/linuxdeepin/deepin-autotest-framework/issues){target="_blank"}
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/linuxdeepin/deepin-autotest-framework?color=%23F79431)](https://github.com/linuxdeepin/deepin-autotest-framework/pulls){target="_blank"}
-[![GitHub Discussions](https://img.shields.io/github/discussions/linuxdeepin/deepin-autotest-framework?color=%23F79431)](https://github.com/linuxdeepin/deepin-autotest-framework/discussions){target="_blank"}
+[![GitHub issues](https://img.shields.io/github/issues/linuxdeepin/deepin-autotest-framework?color=%23F79431)](https://github.com/linuxdeepin/deepin-autotest-framework/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/linuxdeepin/deepin-autotest-framework?color=%23F79431)](https://github.com/linuxdeepin/deepin-autotest-framework/pulls)
+[![GitHub Discussions](https://img.shields.io/github/discussions/linuxdeepin/deepin-autotest-framework?color=%23F79431)](https://github.com/linuxdeepin/deepin-autotest-framework/discussions)
 
-[![PyPI](https://img.shields.io/pypi/v/youqu?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu%2F&color=%23F79431)](https://pypi.org/project/youqu/){target="_blank"}
+[![PyPI](https://img.shields.io/pypi/v/youqu?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu%2F&color=%23F79431)](https://pypi.org/project/youqu/)
 ![PyPI - License](https://img.shields.io/pypi/l/youqu?color=%23F79431)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/youqu?color=%23F79431)
 ![Static Badge](https://img.shields.io/badge/UOS%2FDeepin/Ubuntu/Debian-Platform?style=flat&label=OS&color=%23F79431)
@@ -23,10 +23,10 @@
 [![Downloads](https://static.pepy.tech/badge/youqu/month)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu)](https://pepy.tech/project/youqu)
 
-[![Hits](https://hits.sh/github.com/linuxdeepin/deepin-autotest-framework.svg?style=flat&label=Github Hits&color=blue)](https://github.com/linuxdeepin/deepin-autotest-framework){target="_blank"}
-[![Hits](https://hits.sh/linuxdeepin.github.io/deepin-autotest-framework.svg?style=flat&label=YouQu Hits&color=blue)](https://linuxdeepin.github.io/deepin-autotest-framework){target="_blank"}
-[![Hits](https://hits.sh/youqu.uniontech.com.svg?style=flat&label=YouQu内网 Hits&color=blue)](http://youqu.uniontech.com/){target="_blank"}
-[![Hits](https://hits.sh/pypi.org/project/youqu.svg?style=flat&label=PyPI Hits&color=blue)](https://pypi.org/project/youqu/){target="_blank"}
+[![Hits](https://hits.sh/github.com/linuxdeepin/deepin-autotest-framework.svg?style=flat&label=Github Hits&color=blue)](https://github.com/linuxdeepin/deepin-autotest-framework)
+[![Hits](https://hits.sh/linuxdeepin.github.io/deepin-autotest-framework.svg?style=flat&label=YouQu Hits&color=blue)](https://linuxdeepin.github.io/deepin-autotest-framework)
+[![Hits](https://hits.sh/youqu.uniontech.com.svg?style=flat&label=YouQu内网 Hits&color=blue)](http://youqu.uniontech.com/)
+[![Hits](https://hits.sh/pypi.org/project/youqu.svg?style=flat&label=PyPI Hits&color=blue)](https://pypi.org/project/youqu/)
 
 ---
 
