@@ -23,10 +23,10 @@
 [![Downloads](https://static.pepy.tech/badge/youqu/month)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu)](https://pepy.tech/project/youqu)
 
-[![Hits](https://hits.sh/github.com/linuxdeepin/deepin-autotest-framework.svg?style=flat&label=Github Hits&color=blue)](https://github.com/linuxdeepin/deepin-autotest-framework)
-[![Hits](https://hits.sh/linuxdeepin.github.io/deepin-autotest-framework.svg?style=flat&label=YouQu Hits&color=blue)](https://linuxdeepin.github.io/deepin-autotest-framework)
-[![Hits](https://hits.sh/youqu.uniontech.com.svg?style=flat&label=YouQu内网 Hits&color=blue)](http://youqu.uniontech.com/)
-[![Hits](https://hits.sh/pypi.org/project/youqu.svg?style=flat&label=PyPI Hits&color=blue)](https://pypi.org/project/youqu/)
+[![Hits](https://hits.sh/github.com/linuxdeepin/deepin-autotest-framework.svg?style=flat&label=Github_Hits&color=blue)](https://github.com/linuxdeepin/deepin-autotest-framework)
+[![Hits](https://hits.sh/linuxdeepin.github.io/deepin-autotest-framework.svg?style=flat&label=YouQu_Hits&color=blue)](https://linuxdeepin.github.io/deepin-autotest-framework)
+[![Hits](https://hits.sh/youqu.uniontech.com.svg?style=flat&label=YouQu内网_Hits&color=blue)](http://youqu.uniontech.com/)
+[![Hits](https://hits.sh/pypi.org/project/youqu.svg?style=flat&label=PyPI_Hits&color=blue)](https://pypi.org/project/youqu/)
 
 ---
 
