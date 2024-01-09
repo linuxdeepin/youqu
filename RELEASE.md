@@ -5,7 +5,7 @@
 **New**
 
 - 切换 `YouQu` 的正式域名为：youqu.uniontech.com ；
-- 文档工程新增`工具库`和`知识库`的跳转链接；
+- 重新构建了文档 UI 布局，对多个文档模块及文档内容进行了修改、调整、优化，增加了留言模块；
 
 ## 2.4.2（2023/12/27）
 
@@ -29,7 +29,7 @@
 
 - `UOS 1070` `Wayland` 下窗管团队提供了新的接口（`GetAllWindowStatesList`）用于获取桌面所有窗口的信息，`YouQu` 进行开发适配并兼容新老接口，至此基于 `UI` 的元素定位方案在 `Wayland` 下表现和 `X11` 下表现一致，堪称完美；[issues #21](https://github.com/linuxdeepin/deepin-autotest-framework/issues/21)
 
-	本次功能更新离不开多个部门领导和同事们的协助，这里特别感谢：**[@金佳斌](https://github.com/king123666)** **[@孙翠](https://gitlabbj.uniontech.com/ut003620)** **[@黄泽铭](https://github.com/Jimijun)** **[@任斌](https://github.com/rb-union)**
+	本次功能更新离不开多个部门领导和同事们的协助，这里特别感谢：**[@佳斌](https://github.com/king123666)** **[@孙翠](https://gitlabbj.uniontech.com/ut003620)** **[@泽铭](https://github.com/Jimijun)** **[@任斌](https://github.com/rb-union)**
 	
 - 新增贡献者名单及贡献规则文档；[issues #23](https://github.com/linuxdeepin/deepin-autotest-framework/issues/23)
 
@@ -51,7 +51,7 @@
 **Fix**
 
 - 修改 `public` 目录权限，以解决远程开发时无法同步文件的问题；
-- 修复通过标签批量执行时，传入的标签超过 `1000` 个，报错超过 `Python` 默认最大递归深度的问题；感谢 **[@赵有志](https://github.com/zhao-george)**
+- 修复通过标签批量执行时，传入的标签超过 `1000` 个，报错超过 `Python` 默认最大递归深度的问题；感谢 **[@有志](https://github.com/zhao-george)**
 
 ## 2.3.6（2023/12/13）
 
@@ -74,7 +74,7 @@
 
 **Fix**
 
-- 修复在低版本系统上安装的 `libkf5wayland-dev` 版本问题；上个版本此问题没有完全修复，本次彻底解决；感谢 **[@程玉婷](https://github.com/momiji33)**；
+- 修复在低版本系统上安装的 `libkf5wayland-dev` 版本问题；上个版本此问题没有完全修复，本次彻底解决；感谢 **[@玉婷](https://github.com/momiji33)**；
 
 ## 2.3.4（2023/12/04） 
 
@@ -85,14 +85,14 @@
 **Fix**
 
 - `env.sh` 增加清理 `pip` 缓存；
-- 修复在低版本系统上安装的 `libkf5wayland-dev` 版本过高与 `libkf5waylandclient5` 版本不匹配，根据获取 `libkf5waylandclient5` 版本指定 `libkf5wayland-dev` 版；感谢 **[@程玉婷](https://github.com/momiji33)**；
+- 修复在低版本系统上安装的 `libkf5wayland-dev` 版本过高与 `libkf5waylandclient5` 版本不匹配，根据获取 `libkf5waylandclient5` 版本指定 `libkf5wayland-dev` 版；感谢 **[@玉婷](https://github.com/momiji33)**；
 
 ## 2.3.3（2023/11/22）
 
 **Fix**
 
-- 使用 `Xdotool` 检索窗口 ID 时，如果有多个窗口，则输出以 `\n` 结尾。在原始代码中，使用 `split("\n")` 直接拆分字符串可能会导致结果列表的最后一个元素为空字符串。在迭代窗口 ID 并将其转换为 `int` 类型时，这种情况会导致错误。感谢 **[@赵有志](https://github.com/zhao-george)**
-- 图像识别（`image-center`）发布了新版本 `2023.11.22`  **[@赵有志](https://github.com/zhao-george)**，OCR（`pdocr-rpc`）发布了新版本 `2023.11.17`，增加了识别的总耗时、每次识别间隔时间；
+- 使用 `Xdotool` 检索窗口 ID 时，如果有多个窗口，则输出以 `\n` 结尾。在原始代码中，使用 `split("\n")` 直接拆分字符串可能会导致结果列表的最后一个元素为空字符串。在迭代窗口 ID 并将其转换为 `int` 类型时，这种情况会导致错误。感谢 **[@有志](https://github.com/zhao-george)**
+- 图像识别（`image-center`）发布了新版本 `2023.11.22`  **[@有志](https://github.com/zhao-george)**，OCR（`pdocr-rpc`）发布了新版本 `2023.11.17`，增加了识别的总耗时、每次识别间隔时间；
 
 ## 2.3.2（2023/11/14）
 
@@ -127,7 +127,7 @@
 
 - 修复 `youqu` 命令无法接收带空格的参数的问题；感谢 **[@禄烨](https://github.com/lu-xianseng)** ；
 - `OCR` 检测模型升级到 `V4` 之后，在识别某些文本情况下出现不能识别的问题，暂时先回滚到 `V3` ；
-- 修复了不同的 `case` 目录下 `py` 文件的名称一样，导出（`manage.py csvctl -p2c`）数据错误的问题；感谢 **[@赵有志](https://github.com/zhao-george)**；
+- 修复了不同的 `case` 目录下 `py` 文件的名称一样，导出（`manage.py csvctl -p2c`）数据错误的问题；感谢 **[@有志](https://github.com/zhao-george)**；
 
 -----------------------
 
@@ -235,7 +235,7 @@ fix
 new
 
 - 增加 `OCR` 识别自动重试机制，默认重试 2 次，支持动态传入重试次数；
-- 使用窗管最新提供的二进制接口，优化基于 `UI` 的元素定位方案在 `Wayland` 下获取窗口信息的方法；感谢桌面测试部 **@何权 @孙翠** 、窗管研发 **@黄泽铭** 的大力支持。
+- 使用窗管最新提供的二进制接口，优化基于 `UI` 的元素定位方案在 `Wayland` 下获取窗口信息的方法；感谢桌面测试部 **@何权 @孙翠** 、窗管研发 **@泽铭** 的大力支持。
 - 扩充 `skipif` 条件跳过的功能函数：
   - `skipif_xdg_type` 支持 `x11` 或 `wayland` 上跳过；
   - `skipif_cpu_name` 支持不同 `cpu` 上跳过，比如：`skipif_cpu_name-KLVVW5821`；

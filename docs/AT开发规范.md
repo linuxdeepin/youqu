@@ -168,7 +168,7 @@ AT 开发规范是根据自动化测试运行多年以来，遇到问题解决�
     class TitleWidget:
 
       def click_xxx_by_ui(self):
-        pass
+          pass
 
       @staticmethod
       def click_xxx_by_ui():
