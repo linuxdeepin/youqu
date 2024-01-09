@@ -357,3 +357,18 @@ $ youqu manage.py remote -a ... --parallel no
 ## 开源许可证
 
 有趣 在 [GPL-2.0-only](https://github.com/linuxdeepin/deepin-autotest-framework/blob/master/LICENSE) 下发布。
+
+------------
+[__Star数__]()
+
+
+[![Stargazers over time](https://starchart.cc/linuxdeepin/deepin-autotest-framework.svg)](https://starchart.cc/linuxdeepin/deepin-autotest-framework)
+
+-------------
+
+[__各站点击量__]()
+
+[![Hits](https://hits.sh/github.com/linuxdeepin/deepin-autotest-framework.svg?style=for-the-badge&label=Github)](https://github.com/linuxdeepin/deepin-autotest-framework){target="_blank"}
+[![Hits](https://hits.sh/youqu.uniontech.com.svg?style=for-the-badge&label=YouQu内网)](http://youqu.uniontech.com/){target="_blank"}
+[![Hits](https://hits.sh/linuxdeepin.github.io/deepin-autotest-framework.svg?style=for-the-badge&label=YouQu)](https://linuxdeepin.github.io/deepin-autotest-framework){target="_blank"}
+[![Hits](https://hits.sh/pypi.org/project/youqu.svg?style=for-the-badge&label=PyPI)](https://pypi.org/project/youqu/){target="_blank"}

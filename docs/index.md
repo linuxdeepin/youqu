@@ -1,4 +1,5 @@
 ---
+template: no_busuanzi.html
 hide:
     - navigation
     - toc.integrate
