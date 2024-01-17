@@ -105,12 +105,12 @@ class WaylandWindowInfo:
 
     def window_info(self):
         """窗口信息"""
-        self.library.GetAllWindowStatesList.restype = ctypes.POINTER(dtk_array)
+        self.library.GetAllWindowStatesList.restype = ctypes.c_int
         _e = None
         for _ in range(3):
             try:
-                get_all_window_states_list = self.library.GetAllWindowStatesList()
-                range_index = get_all_window_states_list.contents.size / 544
+                windows_pointer = ctypes.pointer(WindowState())
+                range_index = self.library.GetAllWindowStatesList(ctypes.byref(windows_pointer))
                 break
             except ValueError as e:
                 _e = e
@@ -119,7 +119,7 @@ class WaylandWindowInfo:
             raise ValueError(_e)
         res = {}
         for i in range(int(range_index)):
-            window_info = get_all_window_states_list.contents.data[i]
+            window_info = windows_pointer[i]
             resource_name = window_info.resourceName.decode("utf-8")
             if not resource_name:
                 resource_name = os.popen(f"cat /proc/{window_info.pid}/cmdline").read().strip("\x00")

@@ -6,6 +6,7 @@
 
 - 切换 `YouQu` 的正式域名为：youqu.uniontech.com ；
 - 重新构建了文档 UI 布局，对多个文档模块及文档内容进行了修改、调整、优化，增加了留言模块；
+- 1070 窗管获取窗口信息的接口 `GetAllWindowStatesList` 换了调用逻辑，YouQu 适配最新的接口；**[@泽铭](https://github.com/Jimijun)**
 
 ## 2.4.2（2023/12/27）
 
