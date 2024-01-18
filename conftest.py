@@ -447,7 +447,7 @@ def pytest_collection_modifyitems(session):
                             elif f"{ConfStr.SKIPIF.value}_" in tag:
                                 tag_list = tag.split("&&")
                                 for _tag in tag_list:
-                                    skip_method, param = _tag.split("-", maxsplit=1)
+                                    skip_method, param = _tag.str.strip(" ").split("-", maxsplit=1)
                                     if hasattr(skipif, skip_method):
                                         skip_result = getattr(skipif, skip_method)(param)
                                         add_mark(
