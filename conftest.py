@@ -445,23 +445,25 @@ def pytest_collection_modifyitems(session):
                                     pass
                                 add_mark(item, ConfStr.SKIP.value, (tag,), {})
                             elif f"{ConfStr.SKIPIF.value}_" in tag:
-                                skip_method, param = tag.split("-", maxsplit=1)
-                                if hasattr(skipif, skip_method):
-                                    skip_result = getattr(skipif, skip_method)(param)
-                                    add_mark(
-                                        item,
-                                        ConfStr.SKIPIF.value,
-                                        (skip_result,),
-                                        {"reason": tag},
-                                    )
-                                else:
-                                    logger.error(f"未找到判断是否跳过的自定义方法 <{skip_method}>")
-                                    add_mark(
-                                        item,
-                                        ConfStr.SKIP.value,
-                                        (f"未找到判断是否跳过的自定义方法 <{skip_method}>",),
-                                        {},
-                                    )
+                                tag_list = tag.split("&&")
+                                for _tag in tag_list:
+                                    skip_method, param = _tag.split("-", maxsplit=1)
+                                    if hasattr(skipif, skip_method):
+                                        skip_result = getattr(skipif, skip_method)(param)
+                                        add_mark(
+                                            item,
+                                            ConfStr.SKIPIF.value,
+                                            (skip_result,),
+                                            {"reason": _tag},
+                                        )
+                                    else:
+                                        logger.error(f"未找到判断是否跳过的自定义方法 <{skip_method}>")
+                                        add_mark(
+                                            item,
+                                            ConfStr.SKIP.value,
+                                            (f"未找到判断是否跳过的自定义方法 <{skip_method}>",),
+                                            {},
+                                        )
                         else:  # 非跳过列
                             # 处理 pms id
                             if (
