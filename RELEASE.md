@@ -1,5 +1,11 @@
 # 版本更新记录
 
+## 2.4.5（2024/01/20）
+
+**Fix**
+
+- 修复 1070 华为机型 Wayland 下报错：`Xlib.error.DisplayConnectionError`；[@mikigo](https://github.com/mikigo)
+
 ## 2.4.4（2024/01/19）
 
 **New**

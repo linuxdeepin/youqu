@@ -246,7 +246,9 @@ except ImportError:
 
 
 try:
+    import Xlib
     import mouseinfo
+
 
     def mouseInfo():
         """
@@ -254,6 +256,9 @@ try:
         planning GUI automation tasks. This function blocks until the application is closed.
         """
         mouseinfo.MouseInfoWindow()
+
+except Xlib.error.DisplayConnectionError:
+    pass
 
 
 except ImportError:
