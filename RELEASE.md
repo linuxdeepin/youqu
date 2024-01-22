@@ -5,6 +5,7 @@
 **Fix**
 
 - 修复 1070 华为机型 Wayland 下报错：`Xlib.error.DisplayConnectionError`；[@mikigo](https://github.com/mikigo)
+- 增加csv多条件跳过用例功能，多个以&&符号隔开即可；感谢 **[@有志](https://github.com/zhao-george)**
 
 ## 2.4.4（2024/01/19）
 
