@@ -333,10 +333,9 @@ class RemoteRunner:
 
         cmd.extend(pytest_cmd)
         cmd.append('"')
-
         cmd_str = " ".join(cmd)
-        logger.info(f"\n{cmd_str}\n")
         if self.default.get(Args.debug.value):
+            logger.info(f"\n{cmd_str}\n")
             logger.info("DEBUG 模式不执行用例!")
         else:
             system(cmd_str)
