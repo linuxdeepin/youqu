@@ -888,7 +888,10 @@ class Node(object):
             pred = lambda n: orig_pred(n) and \
                              n.getState().contains(pyatspi.STATE_SHOWING)
         if not recursive:
-            cIter = iter(self)
+            if config.reversed is False:
+                cIter = iter(self)
+            else:
+                cIter = reversed(self)
             while True:
                 try:
                     child = next(cIter)

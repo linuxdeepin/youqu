@@ -114,6 +114,10 @@ class _Config(object):
 
     logDebugToStdOut (boolean):
     Whether to print log output to console or not (default True).
+
+    reversed (boolean):
+    When traversing nodes, is reverse iteration adopted?(default False).
+
     """
     @property
     def scriptName(self):
@@ -158,7 +162,10 @@ class _Config(object):
         'checkForA11y': True,
 
         # Logging
-        'logDebugToFile': True
+        'logDebugToFile': True,
+
+        # reversed
+        'reversed': True
     }
 
     options = {}
