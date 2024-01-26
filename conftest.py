@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # _*_ coding:utf-8 _*_
-
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
-
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0301,R0912,C0413,R0914,W0212,R1702,R0915
 # pylint: disable=C0114,W0621,C0411,C0412,R1706,E0401
@@ -522,8 +520,25 @@ def pytest_collection_modifyitems(session):
 def pytest_collection_finish(session):
     """pytest collection finish"""
     session.item_count = len(session.items)
-    print(f"用例收集数量:\t{session.item_count}")
-    print(f"用例文件数量:\t{len(set([item.fspath for item in session.items]))}")
+
+    pop_skip_case_from_items = session.items[:]
+    is_skiped_case = False
+    for item in pop_skip_case_from_items[::-1]:
+        for mark in item.own_markers:
+            if mark.name == ConfStr.SKIP.value:
+                is_skiped_case = True
+                pop_skip_case_from_items.remove(item)
+            elif mark.name == ConfStr.SKIPIF.value and mark.args == (True,):
+                is_skiped_case = True
+                pop_skip_case_from_items.remove(item)
+    print(
+        f"用例收集数量:\t{session.item_count} "
+        f"({f'剔除skip-xx: {len(pop_skip_case_from_items)}' if is_skiped_case else ''})"
+    )
+    print(
+        f"用例文件数量:\t{len(set([item.fspath for item in session.items]))} "
+        f"({f'剔除skip-xx: {len(set([item.fspath for item in pop_skip_case_from_items]))}' if is_skiped_case else ''})"
+    )
     if session.config.option.reruns and not session.config.option.collectonly:
         print(f"失败重跑次数:\t{session.config.option.reruns}")
     if session.config.option.max_fail and not session.config.option.collectonly:
