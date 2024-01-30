@@ -533,11 +533,11 @@ def pytest_collection_finish(session):
                 pop_skip_case_from_items.remove(item)
     print(
         f"用例收集数量:\t{session.item_count} "
-        f"({f'剔除skip-xx: {len(pop_skip_case_from_items)}' if is_skiped_case else ''})"
+        f"{f'(剔除跳过: {len(pop_skip_case_from_items)})' if is_skiped_case else ''}"
     )
     print(
         f"用例文件数量:\t{len(set([item.fspath for item in session.items]))} "
-        f"({f'剔除skip-xx: {len(set([item.fspath for item in pop_skip_case_from_items]))}' if is_skiped_case else ''})"
+        f"{f'(剔除跳过: {len(set([item.fspath for item in pop_skip_case_from_items]))})' if is_skiped_case else ''}"
     )
     if session.config.option.reruns and not session.config.option.collectonly:
         print(f"失败重跑次数:\t{session.config.option.reruns}")
