@@ -442,7 +442,7 @@ def pytest_collection_modifyitems(session):
                                     # 如果访问越界，说明这行没有fixed标签或者标签写错位置了，所以正常跳过
                                     pass
                                 add_mark(item, ConfStr.SKIP.value, (tag,), {})
-                            elif f"{ConfStr.SKIPIF.value}_" in tag:
+                            elif not session.config.option.noskip and  f"{ConfStr.SKIPIF.value}_" in tag:
                                 tag_list = tag.split("&&")
                                 for _tag in tag_list:
                                     skip_method, param = _tag.strip(" ").split("-", maxsplit=1)
