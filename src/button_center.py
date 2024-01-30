@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # _*_ coding:utf-8 _*_
-
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
-
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
 import re
@@ -41,8 +39,6 @@ class ButtonCenter:
         self.pause = pause
         self.config_path = config_path
         self.retry = retry
-        # if GlobalConfig.IS_WAYLAND:
-        #     self.wwininfo = WaylandWindowInfo()
 
     def window_info(self):
         """

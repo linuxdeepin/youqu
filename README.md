@@ -61,8 +61,6 @@
 
 ------------------------
 
-【[视频介绍](https://doc.uniontech.com/file/gXqmeOpjg4uGpRqo)】
-
 统信公司内网还可以访问【[内网文档](http://youqu.uniontech.com/)】，文档内容一样，访问速度更快哦~~
 
 ## 安装使用
