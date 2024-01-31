@@ -163,7 +163,7 @@ autotest_dde_file_manager  # 应用仓库
   - 用例里面直接继承，方便在用例里面使用 self 进行断言，更符合断言的使用习惯，用例逻辑上更清楚。
 
     ```python hl_lines="1 3" title="case/base_case.py"
-    from public.assert import Assert
+    from apps.autotest_dde_file_manager.dfm_assert import DfmAssert
     
     class BaseCase(DfmAssert):
 		pass
