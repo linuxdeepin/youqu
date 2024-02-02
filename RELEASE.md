@@ -1,17 +1,30 @@
 # 版本更新记录
 
+## 2.4.6（dev）
+
+**New**
+
+- 计算收集用例数量剔除 `skip` 和 `skipif` 的用例数量；[@mikigo](https://github.com/mikigo)
+- 报告新增显示当前目录；[@mikigo](https://github.com/mikigo)
+- 启用 Ruff 代码检查；[@mikigo](https://github.com/mikigo)
+
+**Fix**
+
+- 修复 `--noskip` 参数不能对 `skipif` 标签生效的问题；[@mikigo](https://github.com/mikigo)
+- 修复 `dogtail` 获取 `application` 阻塞问题；感谢 **[@有志](https://github.com/zhao-george)**
+
 ## 2.4.5（2024/01/20）
 
 **Fix**
 
 - 修复 1070 华为机型 Wayland 下报错：`Xlib.error.DisplayConnectionError`；[@mikigo](https://github.com/mikigo)
-- 增加csv多条件跳过用例功能，多个以&&符号隔开即可；感谢 **[@有志](https://github.com/zhao-george)**
+- 增加 `CSV` 多条件跳过用例功能，多个以 `&&` 符号隔开即可；感谢 **[@有志](https://github.com/zhao-george)**
 
 ## 2.4.4（2024/01/19）
 
 **New**
 
-- 切换 `YouQu` 的正式域名为：youqu.uniontech.com ；[@mikigo](https://github.com/mikigo)
+- 切换 `YouQu` 的正式域名为：`youqu.uniontech.com` ；[@mikigo](https://github.com/mikigo)
 - 重新构建了文档 UI 布局，对多个文档模块及文档内容进行了修改、调整、优化，增加了留言模块；[@mikigo](https://github.com/mikigo)
 - 1070 窗管获取窗口信息的接口 `GetAllWindowStatesList` 换了调用逻辑，YouQu 适配最新的接口；感谢 **[@泽铭](https://github.com/Jimijun)**
 

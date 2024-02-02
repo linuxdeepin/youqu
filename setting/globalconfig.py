@@ -19,6 +19,7 @@ from time import strftime
 
 # pylint: disable=C0116,C0103,C0103,C0115,R0903
 
+
 class GetCfg:
     """Gets the value in the configuration file"""
 
@@ -45,6 +46,7 @@ class GetCfg:
 
 class _GlobalConfig:
     """Basic framework global configuration"""
+
     PROJECT_NAME = "YouQu"
 
     class DirName:
@@ -98,7 +100,6 @@ class _GlobalConfig:
     TMPDIR = run_cfg.get("TMPDIR", default="/tmp/tmpdir")
     SYS_THEME = run_cfg.get("SYS_THEME", default="deepin")
 
-
     OCR_SERVER_HOST = run_cfg.get("OCR_SERVER_HOST", default="localhost")
     OCR_PORT = run_cfg.get("OCR_PORT", default="8890")
     OCR_NETWORK_RETRY = run_cfg.get("OCR_NETWORK_RETRY", default=1)
@@ -149,19 +150,25 @@ class _GlobalConfig:
     csv_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "csvctl")
     PY_ID_TO_CSV = csv_cfg.get_bool("PY_ID_TO_CSV", default=False)
     EXPORT_CSV_FILE = csv_cfg.get("EXPORT_CSV_FILE", default="")
-    EXPORT_CSV_HEARD = csv_cfg.get("EXPORT_CSV_HEARD", default="用例级别,用例类型,测试级别,是否跳过").replace(" ", "")
+    EXPORT_CSV_HEARD = csv_cfg.get(
+        "EXPORT_CSV_HEARD", default="用例级别,用例类型,测试级别,是否跳过"
+    ).replace(" ", "")
 
     # [log_cli]
     log_cli = GetCfg(GLOBAL_CONFIG_FILE_PATH, "log_cli")
     LOG_LEVEL = log_cli.get("LOG_LEVEL", default="INFO")
     CLASS_NAME_STARTSWITH = tuple(
-        log_cli.get("CLASS_NAME_STARTSWITH", default="Assert").replace(" ", "").split(",")
+        log_cli.get("CLASS_NAME_STARTSWITH", default="Assert")
+        .replace(" ", "")
+        .split(",")
     )
     CLASS_NAME_ENDSWITH = tuple(
         log_cli.get("CLASS_NAME_ENDSWITH", default="Widget").replace(" ", "").split(",")
     )
     CLASS_NAME_CONTAIN = tuple(
-        log_cli.get("CLASS_NAME_CONTAIN", default="ShortCut").replace(" ", "").split(",")
+        log_cli.get("CLASS_NAME_CONTAIN", default="ShortCut")
+        .replace(" ", "")
+        .split(",")
     )
 
     # ====================== 动态获取变量 ======================
@@ -172,7 +179,7 @@ class _GlobalConfig:
     HOST_IP = str(popen("hostname -I |awk '{print $1}'").read()).strip("\n").strip()
     PRODUCT_INFO = popen("cat /etc/product-info").read()
     VERSION = (OS_VERSION.get("EditionName[zh_CN]") or "") + (
-            OS_VERSION.get("MinorVersion") or ""
+        OS_VERSION.get("MinorVersion") or ""
     )
     # machine type
     # e.g. x86_64
@@ -201,9 +208,9 @@ class _GlobalConfig:
     # 直接读环境变量XDG_SESSION_TYPE会有问题，采用读文件的方式获取
     DISPLAY_SERVER = (
         popen("cat ~/.xsession-errors | grep XDG_SESSION_TYPE | head -n 1")
-            .read()
-            .split("=")[-1]
-            .strip("\n")
+        .read()
+        .split("=")[-1]
+        .strip("\n")
     )
 
     class DisplayServer:

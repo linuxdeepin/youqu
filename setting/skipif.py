@@ -48,10 +48,17 @@ def skipif_cpu_name(args: str):
     """
     _skip_key = args.split("&")
     for key in _skip_key:
-        if os.popen(
+        if (
+            os.popen(
                 f"echo '{GlobalConfig.PASSWORD}'| "
                 "sudo -S dmidecode -s system-product-name | awk '{print $NF}'"
-        ).read().strip("\n").replace("-", "").replace("&", "") == key:
+            )
+            .read()
+            .strip("\n")
+            .replace("-", "")
+            .replace("&", "")
+            == key
+        ):
             return True
     return False
 
