@@ -103,3 +103,15 @@ init_pip(){
     sudo pip3 config set global.timeout 10000 > /tmp/env.log 2>&1
     sudo pip3 config set global.index-url ${pypi_mirror} > /tmp/env.log 2>&1
 }
+
+install_py_deb(){
+    rm -rf ${1}*
+    apt download ${1} > /tmp/env.log 2>&1
+    if [ $? != 0 ]; then
+        cat /tmp/env.log
+        exit 520
+    fi
+    dpkg -x ${1}*.deb ${1}
+    cp -r ./${1}/usr/lib/python3/dist-packages/* ${2}/lib/python3.7/site-packages/
+    rm -rf ${1}*
+}

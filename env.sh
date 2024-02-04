@@ -64,7 +64,7 @@ else
     exit 520
 fi
 cd ${ROOT_DIR}/
-pipenv --python 3.7 > /tmp/env.log 2>&1
+pipenv --python 3 > /tmp/env.log 2>&1
 if [ $? != 0 ]; then
     echo -e "AT环境创建失败"
     exit 521
@@ -91,21 +91,20 @@ py_debs=(
 )
 for pd in ${py_debs[*]}
 do
-    rm -rf ${pd}*
-    apt download ${pd} > /tmp/env.log 2>&1
-    if [ $? != 0 ]; then
-        cat /tmp/env.log
-        exit 520
-    fi
-    dpkg -x ${pd}*.deb ${pd}
-    cp -r ./${pd}/usr/lib/python3/dist-packages/* ${python_virtualenv_path}/lib/python3.7/site-packages/
-    rm -rf ${pd}*
+    install_py_deb ${pd} ${python_virtualenv_path}
 done
 
 apt download python3-gi-cairo > /tmp/env.log 2>&1
 dpkg -x python3-gi-cairo*.deb python3-gi-cairo
-cp -r ./python3-gi-cairo//usr/lib/python3/dist-packages/gi/* ${python_virtualenv_path}/lib/python3.7/site-packages/gi/
+cp -r ./python3-gi-cairo/usr/lib/python3/dist-packages/gi/* ${python_virtualenv_path}/lib/python3.7/site-packages/gi/
 rm -rf python3-gi-cairo*
+
+cd ${ROOT_DIR}/src/utils/
+sub_py_debs=$(python3 sub_deb.py)
+for spd in ${sub_py_debs[*]}
+do
+    install_py_deb ${spd} ${python_virtualenv_path}
+done
 
 pip_array=(
     pyscreeze==0.1.28

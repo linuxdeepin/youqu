@@ -1,9 +1,6 @@
 #!/bin/bash
-
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
-
 # SPDX-License-Identifier: GPL-2.0-only
-# pylint: disable=C0114
 source ./_env_base.sh
 
 env(){
@@ -36,6 +33,14 @@ env(){
     do
         sudo apt install -y ${deb} > /tmp/env.log 2>&1
         check_status ${deb}
+    done
+
+    cd ${ROOT_DIR}/src/utils/
+    sub_py_debs=$(python3 sub_deb.py)
+    for spd in ${sub_py_debs[*]}
+    do
+        sudo apt install -y ${spd} > /tmp/env.log 2>&1
+        check_status ${spd}
     done
 
     # wayland

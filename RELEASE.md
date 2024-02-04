@@ -6,7 +6,8 @@
 
 - 计算收集用例数量剔除 `skip` 和 `skipif` 的用例数量；[@mikigo](https://github.com/mikigo)
 - 报告新增显示当前目录；[@mikigo](https://github.com/mikigo)
-- 启用 Ruff 代码检查；[@mikigo](https://github.com/mikigo)
+- 启用 Ruff 代码检查；[issues #38](https://github.com/linuxdeepin/deepin-autotest-framework/issues/38) by [@mikigo](https://github.com/mikigo)
+- 新增定制依赖功能支持应用库定义 deb 形式 Python 包；[issues #37](https://github.com/linuxdeepin/deepin-autotest-framework/issues/37) by [@mikigo](https://github.com/mikigo)
 
 **Fix**
 
