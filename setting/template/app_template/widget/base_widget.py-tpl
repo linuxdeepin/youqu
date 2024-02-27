@@ -21,7 +21,7 @@
 ##            kwargs["name"] = self.APP_NAME
 ##            kwargs["description"] = self.DESC
 ##            kwargs["check_start"] = check_start
-##            kwargs["config_path"] = Config.UI_INI_PATH
+##            kwargs["config_path"] = config.UI_INI_PATH
 ##        if number > 0:
 ##            kwargs["number"] = number
 ##        Src.__init__(self, **kwargs)
@@ -29,7 +29,7 @@
 ##    @classmethod
 ##    def find_image_in_screen(cls, *elements, rate=0.9, picture_abspath=None):
 ##        """查找图片坐标"""
-##        element = tuple(map(lambda x: f"{Config.PIC_RES_PATH}/{x}", elements))
+##        element = tuple(map(lambda x: f"{config.PIC_RES_PATH}/{x}", elements))
 ##        return cls.find_image(*element, rate=rate, picture_abspath=picture_abspath)
 
 ##    def find_image_in_${app_name}(self, *elements, rate=0.9):
