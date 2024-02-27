@@ -36,6 +36,11 @@ class StartApp:
             f"{GlobalConfig.SETTING_PATH}/template/app_template/* "
             f"{app_name_path}/"
         )
+        os.system(
+            "cp -r "
+            f"{GlobalConfig.SETTING_PATH}/template/app_template/.gitignore-tpl "
+            f"{app_name_path}/"
+        )
 
     def rewrite(self):
         """rewrite"""

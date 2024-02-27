@@ -4,7 +4,7 @@
 :Author:${USER}
 :Date  :${DATE} ${TIME}
 """
-##from apps.${APP_NAME}.config import Config
+##from apps.${APP_NAME}.config import config
 ##from src import Src
 ##from src import logger
 ##from src import OcrTextRecognitionError
