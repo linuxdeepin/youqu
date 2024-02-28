@@ -4,7 +4,11 @@
 
 **New**
 
-- 
+- `startapp` 初始化工程新增 `.gitignore` 文件；[@mikigo](https://github.com/mikigo)
+
+**Fix**
+
+- 修复 `startapp` 初始化工程中的错误；[@mikigo](https://github.com/mikigo)
 
 ## 2.4.6（2024/02/26）
 
