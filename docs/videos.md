@@ -35,7 +35,7 @@ hide:
 
 ------------------------
 
-## 【系列三】应用库设计方案、YouQu功能介绍（二）
+## 【系列三】YouQu功能介绍（二）
 
 <div>
     <span style="color:#707070;font-size: small">
