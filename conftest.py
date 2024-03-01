@@ -527,10 +527,16 @@ def pytest_collection_finish(session):
         for mark in item.own_markers:
             if mark.name == ConfStr.SKIP.value:
                 is_skiped_case = True
-                pop_skip_case_from_items.remove(item)
+                try:
+                    pop_skip_case_from_items.remove(item)
+                except ValueError:
+                    ...
             elif mark.name == ConfStr.SKIPIF.value and mark.args == (True,):
                 is_skiped_case = True
-                pop_skip_case_from_items.remove(item)
+                try:
+                    pop_skip_case_from_items.remove(item)
+                except ValueError:
+                    ...
     print(
         f"用例收集数量:\t{session.item_count} "
         f"{f'(剔除跳过: {len(pop_skip_case_from_items)})' if is_skiped_case else ''}"
