@@ -9,6 +9,7 @@
 **Fix**
 
 - 修复 `startapp` 初始化工程中的错误；[@mikigo](https://github.com/mikigo)
+- 修复 skip 用例在收集阶段报错；[issues #44](https://github.com/linuxdeepin/deepin-autotest-framework/issues/44) by [@mikigo](https://github.com/mikigo)
 
 ## 2.4.6（2024/02/26）
 
