@@ -22,6 +22,7 @@ class SubCmd(Enum):
     pmsctl = "pmsctl"
     csvctl = "csvctl"
     startapp = "startapp"
+    git = "git"
 
 
 @unique
@@ -69,6 +70,12 @@ class Args(Enum):
     pms2csv = "pms2csv"
     pms_link_csv = "pms_link_csv"
     send2task = "send2task"
+    url = "url"
+    commit1 = "commit1"
+    commit2 = "commit2"
+    user = "user"
+    password = "password"
+    depth = "depth"
 
 
 def  transform_app_name(app_name):

@@ -12,6 +12,7 @@ import traceback
 from argparse import ArgumentParser
 
 os.environ["DISPLAY"] = ":0"
+os.environ["PIPENV_VERBOSITY"] = "-1"
 
 from setting.globalconfig import SystemPath
 
@@ -85,6 +86,12 @@ class Manage:
             csv_name=None,
             pms_link_csv=None,
             send2task=None,
+            url=None,
+            commit1=None,
+            commit2=None,
+            git_user=None,
+            git_password=None,
+            depth=None,
     ):
         self.default_app = app
         self.default_keywords = keywords
@@ -130,6 +137,12 @@ class Manage:
         self.default_csv_name = csv_name
         self.default_pms_link_csv = pms_link_csv
         self.default_send2task = send2task
+        self.default_url = url
+        self.default_commit1 = commit1
+        self.default_commit2 = commit2
+        self.default_git_user = git_user
+        self.default_git_password = git_password
+        self.default_depth = depth
 
         say(GlobalConfig.PROJECT_NAME)
         version_font = "slick"
@@ -147,6 +160,7 @@ class Manage:
         sub_parser_run = subparsers.add_parser(SubCmd.run.value)
         sub_parser_pms = subparsers.add_parser(SubCmd.pmsctl.value)
         sub_parser_csv = subparsers.add_parser(SubCmd.csvctl.value)
+        sub_parser_git = subparsers.add_parser(SubCmd.git.value)
 
         help_tip = (
             f"\033[0;32mmanage.py\033[0m 支持 \033[0;32m{[i.value for i in SubCmd]}\033[0m 命令, "
@@ -167,7 +181,7 @@ class Manage:
         elif self.cmd_args[0] == SubCmd.csvctl.value:
             self.csv_control(parser, sub_parser_csv)
         elif self.cmd_args[0] == SubCmd.startapp.value:
-            start_config_log = f"{SubCmd.startapp.value} 后面直接加工程名称,工程名称以 'autotest_' 开头"
+            start_config_log = f"{SubCmd.startapp.value} 后面直接加工程名称"
             try:
                 if self.cmd_args[1] in ("-h", "--help"):
                     print(start_config_log)
@@ -175,6 +189,8 @@ class Manage:
                 self.start_app(self.cmd_args[1])
             except IndexError:
                 logger.error(f"参数异常: {start_config_log}")
+        elif self.cmd_args[0] == SubCmd.git.value:
+            self.git_control(parser, sub_parser_git)
         elif self.cmd_args[0] in ["-h", "--help"]:
             print(help_tip)
         else:
@@ -480,6 +496,72 @@ class Manage:
                 f"需要传递一些有用参数或配置项：{Args.pyid2csv.value} 或 {Args.export_csv_file.value}"
                 "，您可以使用 -h 或 --help 查看支持的参数"
             )
+
+    def git_control(self, parser=None, sub_parser_csv=None):
+        """csv相关功能命令参数"""
+        sub_parser_csv.add_argument(
+            "-a", "--app", default="",
+            help="应用名称：apps/autotest_deepin_music 或 autotest_deepin_music"
+        )
+        sub_parser_csv.add_argument(
+            "-u", "--user", default="", help="git仓库用户名"
+        )
+        sub_parser_csv.add_argument(
+            "-p", "--password", default="", help="git仓库地密码"
+        )
+        sub_parser_csv.add_argument(
+            "-l", "--url", default="", help="git仓库地址"
+        )
+        sub_parser_csv.add_argument(
+            "-b", "--branch", default="", help="分支"
+        )
+        sub_parser_csv.add_argument(
+            "-d", "--depth", default="", help="git仓库克隆深度"
+        )
+        sub_parser_csv.add_argument(
+            "-c1", "--commit1", default="", help="commit1"
+        )
+        sub_parser_csv.add_argument(
+            "-c2", "--commit2", default="", help="commit2"
+        )
+        args = parser.parse_args()
+        git_kwargs = {
+            Args.app_name.value: args.app or self.default_app,
+            Args.url.value: args.url or self.default_url,
+            Args.user.value: args.user or self.default_git_user,
+            Args.password.value: args.password or self.default_git_password,
+            Args.branch.value: args.branch or self.default_branch,
+            Args.depth.value: args.depth or self.default_depth,
+            Args.commit1.value: args.commit1 or self.default_commit1,
+            Args.commit2.value: args.commit2 or self.default_commit2,
+        }
+
+        from src.git.check import check_git_installed
+
+
+        if git_kwargs.get(Args.url.value):
+            if all(
+                    [
+                        git_kwargs.get(Args.user.value),
+                        git_kwargs.get(Args.password.value),
+                    ]
+            ):
+                from src.git.clone import sslclone as git_clone
+            else:
+                from src.git.clone import clone as git_clone
+            check_git_installed()
+            git_clone(**git_kwargs)
+
+        if all(
+                [
+                    git_kwargs.get(Args.app_name.value),
+                    git_kwargs.get(Args.commit1.value),
+                    git_kwargs.get(Args.commit2.value),
+                ]
+        ):
+            from src.git.code_statistics import CodeStatistics
+            check_git_installed()
+            CodeStatistics(**git_kwargs).write_result()
 
 
 if __name__ == "__main__":
