@@ -1,10 +1,17 @@
 # 版本更新记录
 
-## 2.5.0（dev）
+## 2.5.1（dev）
 
 **New**
 
-- `startapp` 初始化工程新增 `.gitignore` 文件；[@mikigo](https://github.com/mikigo)
+- `startapp` 初始化应用新增 2 条示例用例和一个方法；[issues #46](https://github.com/linuxdeepin/deepin-autotest-framework/issues/46) by [@mikigo](https://github.com/mikigo)
+- 新增子命令 `youqu manage.py git` 可用于拉取 git 仓库代码到 apps 目录下，支持统计分析仓库新增修复的用例或方法数量；[issues #40](https://github.com/linuxdeepin/deepin-autotest-framework/issues/40) by [@mikigo](https://github.com/mikigo)
+
+## 2.5.0（2024/03/04）
+
+**New**
+
+- `startapp` 初始化工程新增 `.gitignore` 文件；[issues #43](https://github.com/linuxdeepin/deepin-autotest-framework/issues/43) by [@mikigo](https://github.com/mikigo)
 
 **Fix**
 
