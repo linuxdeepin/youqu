@@ -1,0 +1,1 @@
+##from apps.${APP_NAME}.widget.${app_name}_widget import ${AppName}Widget
