@@ -73,6 +73,8 @@ class Args(Enum):
     url = "url"
     commit1 = "commit1"
     commit2 = "commit2"
+    startdate = "startdate"
+    enddate = "enddate"
     user = "user"
     password = "password"
     depth = "depth"

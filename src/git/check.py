@@ -3,8 +3,8 @@
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
 import os
-import sys
 from setting import conf
+
 
 def check_git_installed():
     if not os.popen("git --version").read().startswith("git version"):
