@@ -8,7 +8,7 @@
 # pylint: disable=C0301,C0103,R0904
 from time import sleep
 from src.mouse_key import MouseKey
-from src  import log
+from src import log
 
 
 @log
@@ -367,6 +367,15 @@ class ShortCut(MouseKey):
         """
         sleep(1)
         cls.hot_key("winleft", "d")
+
+    @classmethod
+    def winleft_q(cls):
+        """
+         winleft_q
+        :return:
+        """
+        sleep(1)
+        cls.hot_key("winleft", "q")
 
     @classmethod
     def ctrl_z(cls):
@@ -782,6 +791,13 @@ class ShortCut(MouseKey):
         :return:
         """
         cls.hot_key("win", "d")
+
+    @classmethod
+    def super(cls):
+        """快捷键 super
+        :return:
+        """
+        cls.hot_key("win")
 
     @classmethod
     def pageup(cls):
