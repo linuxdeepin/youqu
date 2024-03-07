@@ -523,10 +523,10 @@ class Manage:
             "-d", "--depth", default="", help="git仓库克隆深度"
         )
         sub_parser_csv.add_argument(
-            "-c1", "--commit1", default="", help="commit1"
+            "-c1", "--commit_old", default="", help="commit_old"
         )
         sub_parser_csv.add_argument(
-            "-c2", "--commit2", default="", help="commit2"
+            "-c2", "--commit_new", default="", help="commit_new"
         )
         sub_parser_csv.add_argument(
             "-s", "--startdate", default="", help="统计开始时间"
@@ -542,8 +542,8 @@ class Manage:
             Args.password.value: args.password or self.default_git_password,
             Args.branch.value: args.branch or self.default_branch,
             Args.depth.value: args.depth or self.default_depth,
-            Args.commit1.value: args.commit1 or self.default_commit1,
-            Args.commit2.value: args.commit2 or self.default_commit2,
+            Args.commit1.value: args.commit_old or self.default_commit1,
+            Args.commit2.value: args.commit_new or self.default_commit2,
             Args.startdate.value: args.startdate or self.default_startdate,
             Args.enddate.value: args.enddate or self.default_enddate,
         }
