@@ -89,6 +89,8 @@ class Manage:
             url=None,
             commit1=None,
             commit2=None,
+            startdate=None,
+            enddate=None,
             git_user=None,
             git_password=None,
             depth=None,
@@ -140,6 +142,8 @@ class Manage:
         self.default_url = url
         self.default_commit1 = commit1
         self.default_commit2 = commit2
+        self.default_startdate = startdate
+        self.default_enddate = enddate
         self.default_git_user = git_user
         self.default_git_password = git_password
         self.default_depth = depth
@@ -498,7 +502,7 @@ class Manage:
             )
 
     def git_control(self, parser=None, sub_parser_csv=None):
-        """csv相关功能命令参数"""
+        """git相关功能命令参数"""
         sub_parser_csv.add_argument(
             "-a", "--app", default="",
             help="应用名称：apps/autotest_deepin_music 或 autotest_deepin_music"
@@ -524,6 +528,12 @@ class Manage:
         sub_parser_csv.add_argument(
             "-c2", "--commit2", default="", help="commit2"
         )
+        sub_parser_csv.add_argument(
+            "-s", "--startdate", default="", help="统计开始时间"
+        )
+        sub_parser_csv.add_argument(
+            "-e", "--enddate", default="", help="统计结束时间"
+        )
         args = parser.parse_args()
         git_kwargs = {
             Args.app_name.value: args.app or self.default_app,
@@ -534,6 +544,8 @@ class Manage:
             Args.depth.value: args.depth or self.default_depth,
             Args.commit1.value: args.commit1 or self.default_commit1,
             Args.commit2.value: args.commit2 or self.default_commit2,
+            Args.startdate.value: args.startdate or self.default_startdate,
+            Args.enddate.value: args.enddate or self.default_enddate,
         }
 
         from src.git.check import check_git_installed
@@ -557,6 +569,8 @@ class Manage:
                     git_kwargs.get(Args.app_name.value),
                     git_kwargs.get(Args.commit1.value),
                     git_kwargs.get(Args.commit2.value),
+                    git_kwargs.get(Args.startdate.value),
+                    git_kwargs.get(Args.enddate.value),
                 ]
         ):
             from src.git.code_statistics import CodeStatistics

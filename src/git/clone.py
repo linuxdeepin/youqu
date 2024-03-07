@@ -7,12 +7,12 @@ from setting import conf
 
 
 def sslclone(
-        url: str = None,
-        user: str = None,
-        password: str = None,
-        branch: str = None,
-        depth: [str, int] = None,
-        **kwargs
+    url: str = None,
+    user: str = None,
+    password: str = None,
+    branch: str = None,
+    depth: [str, int] = None,
+    **kwargs,
 ):
     os.system(
         f"cd {conf.ROOT_DIR}/src/utils && "
@@ -20,12 +20,7 @@ def sslclone(
     )
 
 
-def clone(
-        url: str = None,
-        branch: str = "",
-        depth: [str, int] = "",
-        **kwargs
-):
+def clone(url: str = None, branch: str = "", depth: [str, int] = "", **kwargs):
     os.system(
         f"cd {conf.APPS_PATH} && git clone {url} "
         f"{f'-b {branch}' if branch else ''} {f'--depth {depth}' if depth else ''}"

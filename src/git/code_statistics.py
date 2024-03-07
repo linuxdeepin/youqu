@@ -4,30 +4,49 @@
 # SPDX-License-Identifier: GPL-2.0-only
 import os
 import json
-
-from setting import conf
 from difflib import unified_diff
 
+from setting import conf
 from src.rtk._base import transform_app_name
+from src.git.commit import Commit
 
 
-class CodeStatistics:
+class CodeStatistics(Commit):
     __author__ = "mikigo<huangmingqiang@uniontech.com>"
 
-    def __init__(self, app_name: str, commit_new: str, commit_old: str, **kwargs):
+    def __init__(
+        self,
+        app_name: str,
+        commit1: str = None,
+        commit2: str = None,
+        startdate: str = None,
+        enddate: str = None,
+        **kwargs,
+    ):
+        if (commit1 or commit2) and startdate:
+            raise ValueError("commitid 和 startdate是两种不同的方式，不能同时使用")
+        if (commit1 and commit2 is None) or (commit1 is None and commit2):
+            raise ValueError("commit1 和 commit2 两个参数必须同时传入")
         self.app_name = transform_app_name(app_name)
         self.repo_path = f"{conf.APPS_PATH}/{self.app_name}"
-        self.commit_new = commit_new
-        self.commit_old = commit_old
+        self.commit1 = commit1
+        self.commit2 = commit2
+        if startdate:
+            super().__init__(app_name, startdate=startdate, enddate=enddate)
+            commitids = self.commit_id()
+            if isinstance(commitids, tuple):
+                self.commit1, self.commit2 = commitids
         self.ignore_txt = ["from", "import", ""]
 
         for i in range(100):
             self.ignore_txt.append(" " * i + "#")
 
-        self._debug = []
-
     def get_git_files(self):
-        diffs = os.popen(f"cd {self.repo_path};git diff {self.commit_old} {self.commit_new}").read().split("\n")
+        diffs = (
+            os.popen(f"cd {self.repo_path};git diff {self.commit2} {self.commit1}")
+            .read()
+            .split("\n")
+        )
         git_files = []
         file_info = {}
         for diff in diffs:
@@ -45,6 +64,8 @@ class CodeStatistics:
         return git_files
 
     def compare_files(self):
+        _fix_debug = []
+        _new_debug = []
         new_test_case_num = 0
         del_test_case_num = 0
         fix_test_case_num = 0
@@ -53,16 +74,26 @@ class CodeStatistics:
         fix_method_num = 0
         git_files = self.get_git_files()
         for git_file in git_files:
-            filepath = git_file.get("file").split(" ")[-1].strip('b/')
+            filepath = git_file.get("file").split(" ")[-1].strip("b/")
             filename = filepath.split("/")[-1]
 
             if not filename.endswith(".py"):
-                print("===== ignoring:", filepath, "\n")
+                print("===== ignored:", filepath, "\n")
                 continue
 
             print("filepath:", filepath, "\n")
-            old_code = os.popen(f"cd {self.repo_path}/;git show {self.commit_old}:{filepath}").read().splitlines() or ""
-            new_code = os.popen(f"cd {self.repo_path}/;git show {self.commit_new}:{filepath}").read().splitlines() or ""
+            old_code = (
+                os.popen(f"cd {self.repo_path}/;git show {self.commit2}:{filepath}")
+                .read()
+                .splitlines()
+                or ""
+            )
+            new_code = (
+                os.popen(f"cd {self.repo_path}/;git show {self.commit1}:{filepath}")
+                .read()
+                .splitlines()
+                or ""
+            )
             dif_gen = unified_diff(old_code, new_code)
             print("=" * 100)
             # case
@@ -84,9 +115,7 @@ class CodeStatistics:
                 methods = []
                 method_info = {}
                 for line in dif_txt.splitlines():
-                    if line.startswith(
-                            ("---", "+++", "@@", "@")
-                    ):
+                    if line.startswith(("---", "+++", "@@", "@")):
                         continue
                     if "def " in line:
                         if method_info:
@@ -109,13 +138,14 @@ class CodeStatistics:
                                 if content.startswith(("-", "+")):
                                     if content[1:].startswith(tuple(self.ignore_txt)):
                                         continue
-                                    self._debug.append(method)
+                                    _fix_debug.append(method)
                                     fix_method_num += 1
                                     break
 
                     # 正常出现的方法
                     # 方法名称是+开头，直接视为新增方法
                     elif method_name.startswith("+"):
+                        _new_debug.append(method)
                         new_method_num += 1
                     # 方法名称是-开头，直接视为删除方法
                     elif method_name.startswith("-"):
@@ -124,7 +154,7 @@ class CodeStatistics:
                         if method_content:
                             for content in method_content:
                                 if content.startswith(("-", "+")):
-                                    self._debug.append(method)
+                                    _fix_debug.append(method)
                                     fix_method_num += 1
                                     break
 
@@ -140,12 +170,24 @@ class CodeStatistics:
 
     def write_result(self):
         res = self.compare_files()
-        with open(os.path.join(conf.REPORT_PATH, f"{self.app_name}_git_compare_result.json"), "w", encoding="utf-8") as f:
+        if not os.path.exists(conf.REPORT_PATH):
+            os.makedirs(conf.REPORT_PATH)
+        result_file = os.path.join(conf.REPORT_PATH, f"{self.app_name}_git_compare_result.json")
+        with open(result_file, "w", encoding="utf-8") as f:
             f.write(json.dumps(res, ensure_ascii=False, indent=2))
 
+        with open(result_file, "r", encoding="utf-8") as f:
+            print(f.read())
 
-if __name__ == '__main__':
-    repo = '/home/mikigo/github/deepin-autotest-framework/apps/autotest_deepin_downloader'
-    commit_n = '059632e9e2dfc7fe580abefe3c51f15d8672d213'
-    commit_o = 'c30572e113a2e90cf340426a8c16c44b7605bfd7'
-    CodeStatistics(repo, commit_n, commit_o).write_result()
+
+if __name__ == "__main__":
+    app_name = "apps/autotest_deepin_downloader"
+    commit1 = "059632e9e2dfc7fe580abefe3c51f15d8672d213"
+    commit2 = "c30572e113a2e90cf340426a8c16c44b7605bfd7"
+    CodeStatistics(
+        app_name=app_name,
+        # commit1=commit1,
+        # commit2=commit2,
+        startdate="2024-02-25",
+        enddate="2024-02-27",
+    ).write_result()

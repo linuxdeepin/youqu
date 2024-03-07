@@ -1,4 +1,7 @@
 #!/bin/bash
+# _*_ coding:utf-8 _*_
+# SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+# SPDX-License-Identifier: GPL-2.0-only
 
 CODE_PATH=$1
 URL=$2
