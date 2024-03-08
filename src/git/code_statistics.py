@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: GPL-2.0-only
 import os
 import json
+import re
 from difflib import unified_diff
 
 from setting import conf
@@ -15,35 +16,37 @@ class CodeStatistics(Commit):
     __author__ = "mikigo<huangmingqiang@uniontech.com>"
 
     def __init__(
-        self,
-        app_name: str,
-        commit1: str = None,
-        commit2: str = None,
-        startdate: str = None,
-        enddate: str = None,
-        **kwargs,
+            self,
+            app_name: str,
+            branch: str,
+            commit_old: str = None,
+            commit_new: str = None,
+            startdate: str = None,
+            enddate: str = None,
+            **kwargs,
     ):
-        if (commit1 or commit2) and startdate:
-            raise ValueError("commitid 和 startdate是两种不同的方式，不能同时使用")
-        if (commit1 and commit2 is None) or (commit1 is None and commit2):
-            raise ValueError("commit1 和 commit2 两个参数必须同时传入")
+        if (commit_old or commit_new) and startdate:
+            raise ValueError("commit id 和 startdate是两种不同的方式，不能同时使用")
+        if (commit_old and commit_new is None) or (commit_old is None and commit_new):
+            raise ValueError("commit_old 和 commit_new 两个参数必须同时传入")
+
         self.app_name = transform_app_name(app_name)
+        self.branch = branch
         self.repo_path = f"{conf.APPS_PATH}/{self.app_name}"
-        self.commit1 = commit1
-        self.commit2 = commit2
+        self.commit_old = commit_old
+        self.commit_new = commit_new
+        self.startdate = startdate
+
         if startdate:
-            super().__init__(app_name, startdate=startdate, enddate=enddate)
-            commitids = self.commit_id()
-            if isinstance(commitids, tuple):
-                self.commit1, self.commit2 = commitids
+            super().__init__(app_name, branch=branch, startdate=startdate, enddate=enddate)
         self.ignore_txt = ["from", "import", ""]
 
         for i in range(100):
             self.ignore_txt.append(" " * i + "#")
 
-    def get_git_files(self):
+    def get_git_files(self, commit_old, commit_new):
         diffs = (
-            os.popen(f"cd {self.repo_path};git diff {self.commit2} {self.commit1}")
+            os.popen(f"cd {self.repo_path};git diff {commit_old} {commit_new}")
             .read()
             .split("\n")
         )
@@ -63,7 +66,7 @@ class CodeStatistics(Commit):
         git_files.append(file_info)
         return git_files
 
-    def compare_files(self):
+    def compare_files(self, commit_old, commit_new, author):
         _fix_debug = []
         _new_debug = []
         new_test_case_num = 0
@@ -72,7 +75,7 @@ class CodeStatistics(Commit):
         new_method_num = 0
         del_method_num = 0
         fix_method_num = 0
-        git_files = self.get_git_files()
+        git_files = self.get_git_files(commit_old, commit_new)
         for git_file in git_files:
             filepath = git_file.get("file").split(" ")[-1].strip("b/")
             filename = filepath.split("/")[-1]
@@ -82,17 +85,17 @@ class CodeStatistics(Commit):
                 continue
 
             print("filepath:", filepath, "\n")
-            old_code = (
-                os.popen(f"cd {self.repo_path}/;git show {self.commit2}:{filepath}")
-                .read()
-                .splitlines()
-                or ""
-            )
             new_code = (
-                os.popen(f"cd {self.repo_path}/;git show {self.commit1}:{filepath}")
-                .read()
-                .splitlines()
-                or ""
+                    os.popen(f"cd {self.repo_path}/;git show {commit_new}:{filepath}")
+                    .read()
+                    .splitlines()
+                    or ""
+            )
+            old_code = (
+                    os.popen(f"cd {self.repo_path}/;git show {commit_old}:{filepath}")
+                    .read()
+                    .splitlines()
+                    or ""
             )
             dif_gen = unified_diff(old_code, new_code)
             print("=" * 100)
@@ -159,6 +162,9 @@ class CodeStatistics(Commit):
                                     break
 
         res = {
+            "commit_new": commit_new,
+            "commit_old": commit_old,
+            "author": author,
             "新增用例": new_test_case_num,
             "删除用例": del_test_case_num,
             "修改用例": fix_test_case_num,
@@ -168,8 +174,7 @@ class CodeStatistics(Commit):
         }
         return res
 
-    def write_result(self):
-        res = self.compare_files()
+    def write_result(self, res):
         if not os.path.exists(conf.REPORT_PATH):
             os.makedirs(conf.REPORT_PATH)
         result_file = os.path.join(conf.REPORT_PATH, f"{self.app_name}_git_compare_result.json")
@@ -179,15 +184,35 @@ class CodeStatistics(Commit):
         with open(result_file, "r", encoding="utf-8") as f:
             print(f.read())
 
+    def codex(self):
+        if self.startdate:
+            commit_id_pairs = self.commit_id()
+            results = []
+            for _commit_old, _commit_new, _author in commit_id_pairs:
+                res = self.compare_files(_commit_old, _commit_new, _author)
+                results.append(res)
+
+        elif self.commit_new and self.commit_old:
+            a = os.popen(f"cd {self.repo_path} && git show {self.commit_new}").read()
+            re_author = re.findall(r"Author: (.*?)\n", a)
+            if re_author:
+                # self.write_result(self.commit_old, self.commit_new, re_author[0])
+                re_author = re_author[0]
+            else:
+                raise ValueError()
+            results = self.compare_files(self.commit_old, self.commit_new, re_author)
+        self.write_result(results)
+
 
 if __name__ == "__main__":
     app_name = "apps/autotest_deepin_downloader"
-    commit1 = "059632e9e2dfc7fe580abefe3c51f15d8672d213"
-    commit2 = "c30572e113a2e90cf340426a8c16c44b7605bfd7"
+    # commit_new = "059632e9e2dfc7fe580abefe3c51f15d8672d213"
+    # commit_old = "c30572e113a2e90cf340426a8c16c44b7605bfd7"
     CodeStatistics(
         app_name=app_name,
-        # commit1=commit1,
-        # commit2=commit2,
+        branch="master",
+        # commit_old=commit_old,
+        # commit_new=commit_new,
         startdate="2024-02-25",
-        enddate="2024-02-27",
-    ).write_result()
+        # enddate="2024-02-27",
+    ).codex()
