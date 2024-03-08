@@ -6,6 +6,7 @@ import os
 import json
 import re
 from difflib import unified_diff
+from datetime import datetime
 
 from setting import conf
 from src.rtk._base import transform_app_name
@@ -66,7 +67,7 @@ class CodeStatistics(Commit):
         git_files.append(file_info)
         return git_files
 
-    def compare_files(self, start_commit_id, end_commit_id, author):
+    def compare_files(self, start_commit_id, end_commit_id, author, git_dt: datetime):
         _fix_debug = []
         _new_debug = []
         new_test_case_num = 0
@@ -165,6 +166,7 @@ class CodeStatistics(Commit):
             "start_commit_id": start_commit_id,
             "end_commit_id": end_commit_id,
             "author": author,
+            "git_dt": git_dt.strftime("%Y-%m-%d"),
             "branch": self.branch,
             "新增用例": new_test_case_num,
             "删除用例": del_test_case_num,
@@ -175,10 +177,10 @@ class CodeStatistics(Commit):
         }
         return res
 
-    def write_result(self, res):
+    def write_result(self, res, detail=False):
         if not os.path.exists(conf.REPORT_PATH):
             os.makedirs(conf.REPORT_PATH)
-        result_file = os.path.join(conf.REPORT_PATH, f"{self.app_name}_git_compare_result.json")
+        result_file = os.path.join(conf.REPORT_PATH, f"{self.app_name}_git_compare_result{f'_detail' if detail else ''}.json")
         with open(result_file, "w", encoding="utf-8") as f:
             f.write(json.dumps(res, ensure_ascii=False, indent=4, default=None))
 
@@ -189,13 +191,13 @@ class CodeStatistics(Commit):
 
     def codex(self):
         results = None
+        results_detail = []
         if self.startdate:
             commit_id_pairs = self.commit_id()
             results = {}
-            # results_detail = []
-            for i, (_start_commit_id, _end_commit_id, _author) in enumerate(commit_id_pairs):
-                res = self.compare_files(_start_commit_id, _end_commit_id, _author)
-                # results_detail.append(res)
+            for i, (_start_commit_id, _end_commit_id, _author, git_dt) in enumerate(commit_id_pairs):
+                res = self.compare_files(_start_commit_id, _end_commit_id, _author, git_dt)
+                results_detail.append(res)
                 author = res["author"]
                 new_test_case_num = res["新增用例"]
                 del_test_case_num = res["删除用例"]
@@ -226,6 +228,8 @@ class CodeStatistics(Commit):
         if results is None:
             raise ValueError()
         self.write_result(results)
+        if results_detail:
+            self.write_result(results_detail, detail=True)
 
 
 if __name__ == "__main__":
@@ -236,7 +240,7 @@ if __name__ == "__main__":
         app_name=app_name,
         branch="master",
         # start_commit_id=start_commit_id,
-        end_commit_id=end_commit_id,
-        # startdate="2024-02-25",
+        # end_commit_id=end_commit_id,
+        startdate="2024-02-25",
         # enddate="2024-02-23",
     ).codex()

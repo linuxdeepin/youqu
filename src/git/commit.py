@@ -50,15 +50,15 @@ class Commit:
             git_dt = datetime.strptime(time_str, "%a %b %d %H:%M:%S %Y")
 
             if self.startdate <= git_dt <= self.enddate:
-                commit_ids.appendleft([commit_id, author])
+                commit_ids.appendleft([commit_id, author, git_dt])
             elif git_dt < self.startdate:
                 if flag is False:
-                    commit_ids.appendleft([commit_id, None])
+                    commit_ids.appendleft([commit_id, None, None])
                     flag = True
 
             if commit_ids and flag:
                 commit_id_pairs = [
-                    [commit_ids[i][0], commit_ids[i + 1][0], commit_ids[i + 1][1]] for i in range(len(commit_ids) - 1)
+                    [commit_ids[i][0], commit_ids[i + 1][0], commit_ids[i + 1][1], commit_ids[i + 1][2]] for i in range(len(commit_ids) - 1)
                 ]
                 return commit_id_pairs
 

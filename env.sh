@@ -64,7 +64,7 @@ else
     exit 520
 fi
 cd ${ROOT_DIR}/
-pipenv --python 3 > /tmp/env.log 2>&1
+pipenv --python 3.7 > /tmp/env.log 2>&1
 if [ $? != 0 ]; then
     echo -e "AT环境创建失败"
     exit 521
