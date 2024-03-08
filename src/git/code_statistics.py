@@ -19,23 +19,23 @@ class CodeStatistics(Commit):
             self,
             app_name: str,
             branch: str,
-            commit_old: str = None,
-            commit_new: str = None,
+            start_commit_id: str = None,
+            end_commit_id: str = None,
             startdate: str = None,
             enddate: str = None,
             **kwargs,
     ):
-        if (commit_old or commit_new) and startdate:
+        if (start_commit_id or end_commit_id) and startdate:
             raise ValueError("commit id 和 startdate是两种不同的方式，不能同时使用")
-        if (commit_old and commit_new is None) or (commit_old is None and commit_new):
-            raise ValueError("commit_old 和 commit_new 两个参数必须同时传入")
+        if (start_commit_id and end_commit_id is None) or (start_commit_id is None and end_commit_id):
+            raise ValueError("end_commit_id 和 end_commit_id 参数需要同时传入")
 
-        self.app_name = transform_app_name(app_name)
-        self.branch = branch
+        self.app_name = transform_app_name(app_name or conf.APP_NAME)
         self.repo_path = f"{conf.APPS_PATH}/{self.app_name}"
-        self.commit_old = commit_old
-        self.commit_new = commit_new
-        self.startdate = startdate
+        self.branch = branch or conf.BRANCH
+        self.start_commit_id = start_commit_id or conf.START_COMMIT_ID
+        self.end_commit_id = end_commit_id or conf.END_COMMIT_ID
+        self.startdate = startdate or conf.START_DATE
 
         if startdate:
             super().__init__(app_name, branch=branch, startdate=startdate, enddate=enddate)
@@ -44,9 +44,9 @@ class CodeStatistics(Commit):
         for i in range(100):
             self.ignore_txt.append(" " * i + "#")
 
-    def get_git_files(self, commit_old, commit_new):
+    def get_git_files(self, start_commit_id, end_commit_id):
         diffs = (
-            os.popen(f"cd {self.repo_path};git diff {commit_old} {commit_new}")
+            os.popen(f"cd {self.repo_path};git diff {start_commit_id} {end_commit_id}")
             .read()
             .split("\n")
         )
@@ -66,7 +66,7 @@ class CodeStatistics(Commit):
         git_files.append(file_info)
         return git_files
 
-    def compare_files(self, commit_old, commit_new, author):
+    def compare_files(self, start_commit_id, end_commit_id, author):
         _fix_debug = []
         _new_debug = []
         new_test_case_num = 0
@@ -75,7 +75,7 @@ class CodeStatistics(Commit):
         new_method_num = 0
         del_method_num = 0
         fix_method_num = 0
-        git_files = self.get_git_files(commit_old, commit_new)
+        git_files = self.get_git_files(start_commit_id, end_commit_id)
         for git_file in git_files:
             filepath = git_file.get("file").split(" ")[-1].strip("b/")
             filename = filepath.split("/")[-1]
@@ -86,13 +86,13 @@ class CodeStatistics(Commit):
 
             print("filepath:", filepath, "\n")
             new_code = (
-                    os.popen(f"cd {self.repo_path}/;git show {commit_new}:{filepath}")
+                    os.popen(f"cd {self.repo_path}/;git show {end_commit_id}:{filepath}")
                     .read()
                     .splitlines()
                     or ""
             )
             old_code = (
-                    os.popen(f"cd {self.repo_path}/;git show {commit_old}:{filepath}")
+                    os.popen(f"cd {self.repo_path}/;git show {start_commit_id}:{filepath}")
                     .read()
                     .splitlines()
                     or ""
@@ -162,9 +162,10 @@ class CodeStatistics(Commit):
                                     break
 
         res = {
-            "commit_new": commit_new,
-            "commit_old": commit_old,
+            "start_commit_id": start_commit_id,
+            "end_commit_id": end_commit_id,
             "author": author,
+            "branch": self.branch,
             "新增用例": new_test_case_num,
             "删除用例": del_test_case_num,
             "修改用例": fix_test_case_num,
@@ -179,40 +180,63 @@ class CodeStatistics(Commit):
             os.makedirs(conf.REPORT_PATH)
         result_file = os.path.join(conf.REPORT_PATH, f"{self.app_name}_git_compare_result.json")
         with open(result_file, "w", encoding="utf-8") as f:
-            f.write(json.dumps(res, ensure_ascii=False, indent=2))
+            f.write(json.dumps(res, ensure_ascii=False, indent=4, default=None))
 
         with open(result_file, "r", encoding="utf-8") as f:
             print(f.read())
 
+        print(f"数据结果报告：{result_file}")
+
     def codex(self):
+        results = None
         if self.startdate:
             commit_id_pairs = self.commit_id()
-            results = []
-            for _commit_old, _commit_new, _author in commit_id_pairs:
-                res = self.compare_files(_commit_old, _commit_new, _author)
-                results.append(res)
+            results = {}
+            # results_detail = []
+            for i, (_start_commit_id, _end_commit_id, _author) in enumerate(commit_id_pairs):
+                res = self.compare_files(_start_commit_id, _end_commit_id, _author)
+                # results_detail.append(res)
+                author = res["author"]
+                new_test_case_num = res["新增用例"]
+                del_test_case_num = res["删除用例"]
+                fix_test_case_num = res["修改用例"]
+                new_method_num = res["新增方法"]
+                del_method_num = res["删除方法"]
+                fix_method_num = res["修改方法"]
+                commit_new = res["end_commit_id"]
+                if results.get(author) is None:
+                    results[author] = res
+                else:
+                    results[author]["新增用例"] += new_test_case_num
+                    results[author]["删除用例"] += del_test_case_num
+                    results[author]["修改用例"] += fix_test_case_num
+                    results[author]["新增方法"] += new_method_num
+                    results[author]["删除方法"] += del_method_num
+                    results[author]["修改方法"] += fix_method_num
+                    results[author]["end_commit_id"] = commit_new
 
-        elif self.commit_new and self.commit_old:
-            a = os.popen(f"cd {self.repo_path} && git show {self.commit_new}").read()
+        elif self.end_commit_id and self.start_commit_id:
+            a = os.popen(f"cd {self.repo_path} && git show {self.end_commit_id}").read()
             re_author = re.findall(r"Author: (.*?)\n", a)
             if re_author:
-                # self.write_result(self.commit_old, self.commit_new, re_author[0])
                 re_author = re_author[0]
             else:
                 raise ValueError()
-            results = self.compare_files(self.commit_old, self.commit_new, re_author)
+            results = self.compare_files(self.start_commit_id, self.end_commit_id, re_author)
+        if results is None:
+            raise ValueError()
         self.write_result(results)
 
 
 if __name__ == "__main__":
     app_name = "apps/autotest_deepin_downloader"
-    # commit_new = "059632e9e2dfc7fe580abefe3c51f15d8672d213"
-    # commit_old = "c30572e113a2e90cf340426a8c16c44b7605bfd7"
+    end_commit_id = "059632e9e2dfc7fe580abefe3c51f15d8672d213"
+    # start_commit_id = "c30572e113a2e90cf340426a8c16c44b7605bfd7"
     CodeStatistics(
         app_name=app_name,
         branch="master",
-        # commit_old=commit_old,
-        # commit_new=commit_new,
-        startdate="2024-02-25",
-        # enddate="2024-02-27",
+        # start_commit_id=start_commit_id,
+        end_commit_id=end_commit_id,
+        # startdate="2024-02-25",
+        # enddate="2024-02-23",
     ).codex()

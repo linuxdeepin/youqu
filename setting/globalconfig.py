@@ -171,6 +171,18 @@ class _GlobalConfig:
         .split(",")
     )
 
+    # [git]
+    git_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "git")
+    GIT_URL = log_cli.get("GIT_URL", default="")
+    GTI_USER = log_cli.get("GTI_USER", default="")
+    GIT_PASSWORD = log_cli.get("GIT_PASSWORD", default="")
+    BRANCH = log_cli.get("BRANCH", default="")
+    DEPTH = log_cli.get("DEPTH", default="")
+    START_COMMIT_ID = log_cli.get("START_COMMIT_ID", default="")
+    END_COMMIT_ID = log_cli.get("END_COMMIT_ID", default="")
+    START_DATE = log_cli.get("STAR_TDATE", default="")
+    END_DATE = log_cli.get("END_DATE", default="")
+
     # ====================== 动态获取变量 ======================
     # username
     USERNAME = getuser()
@@ -179,7 +191,7 @@ class _GlobalConfig:
     HOST_IP = str(popen("hostname -I |awk '{print $1}'").read()).strip("\n").strip()
     PRODUCT_INFO = popen("cat /etc/product-info").read()
     VERSION = (OS_VERSION.get("EditionName[zh_CN]") or "") + (
-        OS_VERSION.get("MinorVersion") or ""
+            OS_VERSION.get("MinorVersion") or ""
     )
     # machine type
     # e.g. x86_64

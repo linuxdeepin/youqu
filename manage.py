@@ -140,8 +140,8 @@ class Manage:
         self.default_pms_link_csv = pms_link_csv
         self.default_send2task = send2task
         self.default_url = url
-        self.default_commit1 = commit1
-        self.default_commit2 = commit2
+        self.default_start_commit_id = commit1
+        self.default_end_commit_id = commit2
         self.default_startdate = startdate
         self.default_enddate = enddate
         self.default_git_user = git_user
@@ -523,10 +523,10 @@ class Manage:
             "-d", "--depth", default="", help="git仓库克隆深度"
         )
         sub_parser_csv.add_argument(
-            "-c1", "--commit_old", default="", help="commit_old"
+            "-c1", "--start_commit_id", default="", help="start_commit_id"
         )
         sub_parser_csv.add_argument(
-            "-c2", "--commit_new", default="", help="commit_new"
+            "-c2", "--end_commit_id", default="", help="end_commit_id"
         )
         sub_parser_csv.add_argument(
             "-s", "--startdate", default="", help="统计开始时间"
@@ -542,8 +542,8 @@ class Manage:
             Args.password.value: args.password or self.default_git_password,
             Args.branch.value: args.branch or self.default_branch,
             Args.depth.value: args.depth or self.default_depth,
-            Args.commit1.value: args.commit_old or self.default_commit1,
-            Args.commit2.value: args.commit_new or self.default_commit2,
+            Args.start_commit_id.value: args.start_commit_id or self.default_start_commit_id,
+            Args.end_commit_id.value: args.end_commit_id or self.default_end_commit_id,
             Args.startdate.value: args.startdate or self.default_startdate,
             Args.enddate.value: args.enddate or self.default_enddate,
         }
@@ -565,17 +565,24 @@ class Manage:
             git_clone(**git_kwargs)
 
         if all(
-                [
-                    git_kwargs.get(Args.app_name.value),
-                    git_kwargs.get(Args.commit1.value),
-                    git_kwargs.get(Args.commit2.value),
-                    git_kwargs.get(Args.startdate.value),
-                    git_kwargs.get(Args.enddate.value),
-                ]
+            [
+                git_kwargs.get(Args.app_name.value),
+                any(
+                    [
+                        all(
+                            [
+                                git_kwargs.get(Args.start_commit_id.value),
+                                git_kwargs.get(Args.end_commit_id.value),
+                            ]
+                        ),
+                        git_kwargs.get(Args.startdate.value),
+                    ]
+                )
+            ]
         ):
             from src.git.code_statistics import CodeStatistics
             check_git_installed()
-            CodeStatistics(**git_kwargs).write_result()
+            CodeStatistics(**git_kwargs).codex()
 
 
 if __name__ == "__main__":

@@ -27,6 +27,8 @@ class Commit:
             else datetime.strptime(enddate, "%Y-%m-%d") + timedelta(days=1)
         )
         self.branch = branch
+        if self.branch is None:
+            raise ValueError("branch 参数必传")
 
     @property
     def now_dt(self):
@@ -41,10 +43,6 @@ class Commit:
         return git_logs
 
     def commit_id(self):
-        start_commit_id = None
-        start_commit_date = None
-        end_commit_id = None
-        end_commit_date = None
         commit_ids = deque()
         flag = False
         for commit_id, author, _time_str in self.git_logs:
@@ -59,7 +57,9 @@ class Commit:
                     flag = True
 
             if commit_ids and flag:
-                commit_id_pairs = [[commit_ids[i][0], commit_ids[i + 1][0], commit_ids[i + 1][1]] for i in range(len(commit_ids) - 1)]
+                commit_id_pairs = [
+                    [commit_ids[i][0], commit_ids[i + 1][0], commit_ids[i + 1][1]] for i in range(len(commit_ids) - 1)
+                ]
                 return commit_id_pairs
 
         raise ValueError(f"{self.startdate} 到 {self.enddate} 没有获取到有效的 commit id")
