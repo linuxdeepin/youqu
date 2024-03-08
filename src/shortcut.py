@@ -644,6 +644,24 @@ class ShortCut(MouseKey):
         cls.hot_key("ctrl", "shift", "s")
 
     @classmethod
+    def ctrl_shift(cls):
+        """
+         ctrl+shift+s
+        :return:
+        """
+        sleep(1)
+        cls.hot_key("ctrl", "shift")
+
+    @classmethod
+    def ctrl_space(cls):
+        """
+         ctrl+shift+s
+        :return:
+        """
+        sleep(1)
+        cls.hot_key("ctrl", "space")
+
+    @classmethod
     def ctrl_alt_v(cls):
         """
          快捷键打开剪切板
