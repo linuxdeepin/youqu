@@ -19,9 +19,9 @@ def sslclone(
     os.system(
         f"cd {conf.ROOT_DIR}/src/utils && "
         f"bash sslclone.sh {conf.APPS_PATH} "
-        f"{url or conf.GIT_URL}"
-        f" {user or conf.GTI_USER} {password or conf.GIT_PASSWORD} "
-        f"{f'-b {branch}' or ''} {f'--depth {depth}' or ''}"
+        f"{url or conf.GIT_URL} "
+        f"{user or conf.GTI_USER} {password or conf.GIT_PASSWORD} "
+        f"{branch or ''} {depth or ''}"
     )
 
 
