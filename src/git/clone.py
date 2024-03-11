@@ -6,6 +6,11 @@ import os
 from setting import conf
 
 
+def git_config():
+    os.system("git config --global http.lowSpeedLimit 0")
+    os.system("git config --global http.lowSpeedTime 999999")
+
+
 def sslclone(
         url: str = None,
         user: str = None,
@@ -16,13 +21,16 @@ def sslclone(
 ):
     branch = branch or conf.BRANCH
     depth = depth or conf.DEPTH
-    os.system(
+    git_config()
+    clone_cmd = (
         f"cd {conf.ROOT_DIR}/src/utils && "
         f"bash sslclone.sh {conf.APPS_PATH} "
         f"{url or conf.GIT_URL} "
         f"{user or conf.GTI_USER} {password or conf.GIT_PASSWORD} "
         f"{branch or ''} {depth or ''}"
     )
+    print(clone_cmd)
+    os.system(clone_cmd)
 
 
 def clone(
@@ -33,8 +41,11 @@ def clone(
 ):
     branch = branch or conf.BRANCH
     depth = depth or conf.DEPTH
-    os.system(
-        f"cd {conf.APPS_PATH} && git clone {url} "
-        f"{url or conf.GIT_URL}"
-        f"{f'-b {branch}' or ''} {f'--depth {depth}' or ''}"
+    git_config()
+    clone_cmd = (
+        f"cd {conf.APPS_PATH} && git clone "
+        f"{url or conf.GIT_URL} "
+        f"{f'-b {branch}' if branch else ''} {f'--depth {depth}' if depth else ''}"
     )
+    print(clone_cmd)
+    os.system(clone_cmd)

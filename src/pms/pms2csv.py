@@ -72,15 +72,13 @@ class Pms2Csv(_Base):
             f'{app_case_id}-{"-" if GlobalConfig.CASE_FROM == "testcase" else ""}all-0-id_desc-0-{MAX_CASE_NUMBER}.json'
         )
         res = self.rx.open_url(case_url, timeout=10)
-        res_str = _unicode_to_cn(res)
-
         try:
-            res_dict = json.loads(res_str)
+            res_dict = json.loads(res)
         except json.decoder.JSONDecodeError:
             logger.error(f"获取pms数据失败, {self.config_error_log}")
             return
 
-        cases = res_dict.get("data").get("cases")
+        cases = json.loads(res_dict["data"]).get("cases")
         res_data = {}
         for i in cases:
             case = cases.get(i)
