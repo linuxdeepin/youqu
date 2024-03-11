@@ -96,7 +96,7 @@ done
 
 apt download python3-gi-cairo > /tmp/env.log 2>&1
 dpkg -x python3-gi-cairo*.deb python3-gi-cairo
-cp -r ./python3-gi-cairo/usr/lib/python3/dist-packages/gi/* ${python_virtualenv_path}/lib/python3.7/site-packages/gi/
+cp -r ./python3-gi-cairo/usr/lib/python3/dist-packages/gi/* ${python_virtualenv_path}/lib/python$PYTHON_VERSION/site-packages/gi/
 rm -rf python3-gi-cairo*
 
 cd ${ROOT_DIR}/src/utils/
