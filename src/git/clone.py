@@ -41,5 +41,5 @@ def clone(
     os.system(
         f"cd {conf.APPS_PATH} && git clone {url} "
         f"{url or conf.GIT_URL}"
-        f"{f'-b {branch}' or ''} {f'--depth {depth}' or ''}"
+        f"{f'-b {branch}' if branch else ''} {f'--depth {depth}' if depth else ''}"
     )
