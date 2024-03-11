@@ -64,6 +64,14 @@ class ShortCut(MouseKey):
         cls.hot_key_up("ctrl", "shift", "/")
 
     @classmethod
+    def shift(cls):
+        """
+         shift
+        :return:
+        """
+        cls.hot_key("shift")
+
+    @classmethod
     def shift_right(cls):
         """
          'shift' + 'right'
@@ -646,7 +654,7 @@ class ShortCut(MouseKey):
     @classmethod
     def ctrl_shift(cls):
         """
-         ctrl+shift+s
+         ctrl+shift
         :return:
         """
         sleep(1)
@@ -655,11 +663,27 @@ class ShortCut(MouseKey):
     @classmethod
     def ctrl_space(cls):
         """
-         ctrl+shift+s
+         ctrl+space
         :return:
         """
         sleep(1)
         cls.hot_key("ctrl", "space")
+
+    @classmethod
+    def ctrl_shift_e(cls):
+        """
+         ctrl+shift+e
+        :return:
+        """
+        cls.hot_key("ctrl", "shift", "e")
+
+    @classmethod
+    def ctrl_shift_w(cls):
+        """
+         ctrl+shift+w
+        :return:
+        """
+        cls.hot_key("ctrl", "shift", "w")
 
     @classmethod
     def ctrl_alt_v(cls):
