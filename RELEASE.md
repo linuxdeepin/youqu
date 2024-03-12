@@ -7,6 +7,10 @@
 - `startapp` 初始化应用新增 2 条示例用例和一个方法；[issues #46](https://github.com/linuxdeepin/deepin-autotest-framework/issues/46) by [@mikigo](https://github.com/mikigo)
 - 新增子命令 `youqu manage.py git` 可用于拉取 git 仓库代码到 apps 目录下，支持统计分析仓库新增修复的用例或方法数量；[issues #40](https://github.com/linuxdeepin/deepin-autotest-framework/issues/40) by [@mikigo](https://github.com/mikigo)
 
+**Fix**
+
+- 修复 `env.sh` 中 Python 虚拟环境的解释器版本没有动态获取系统中的 Python 版本的问题；[PR #51](https://github.com/linuxdeepin/deepin-autotest-framework/pull/51) by [@saifeiLee](https://github.com/saifeiLee)
+
 ## 2.5.0（2024/03/04）
 
 **New**
