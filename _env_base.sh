@@ -8,13 +8,12 @@ ROOT_DIR=`pwd`
 config_pwd=$(cat ./setting/globalconfig.ini | grep "PASSWORD = ")
 PASSWORD=$(echo "${config_pwd}" | cut -d "=" -f2 | python3 -c "s=input();print(s.strip())")
 DISPLAY_SERVER=$(cat ~/.xsession-errors | grep XDG_SESSION_TYPE | head -n 1 | cut -d "=" -f2)
+PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
 flag_feel="\n**** (・_・) ****\n"
 whitelist="/usr/share/deepin-elf-verify/whitelist"
 pypi_mirror="https://pypi.tuna.tsinghua.edu.cn/simple"
 echo "${PASSWORD}" | sudo -S su  > /dev/null 2>&1
 
-PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
-echo "${PYTHON_VERSION}"
 
 check_status(){
     if [ $? = 0 ]; then
@@ -90,7 +89,7 @@ system_env(){
          echo 'export QT_LINUX_ACCESSIBILITY_ALWAYS_ON=1' >> $HOME/.bashrc
     fi
     source $HOME/.bashrc
-    sudo rm -rf /usr/local/lib/python$PYTHON_VERSION/dist-packages/*.pth
+    sudo rm -rf /usr/local/lib/python${PYTHON_VERSION}/dist-packages/*.pth
     echo "cd ${ROOT_DIR}/src/depends/sniff/;python3 sniff" | sudo tee /usr/bin/sniff > /dev/null 2>&1
     sudo chmod +x /usr/bin/sniff
 
@@ -114,6 +113,6 @@ install_py_deb(){
         exit 520
     fi
     dpkg -x ${1}*.deb ${1}
-    cp -r ./${1}/usr/lib/python3/dist-packages/* ${2}/lib/python$PYTHON_VERSION/site-packages/
+    cp -r ./${1}/usr/lib/python3/dist-packages/* ${2}/lib/python${PYTHON_VERSION}/site-packages/
     rm -rf ${1}*
 }
