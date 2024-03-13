@@ -6,9 +6,11 @@
 # pylint: disable=C0114,W0621,C0411,C0412,R1706,E0401
 import sys
 from os import environ
+
 from setting.globalconfig import GlobalConfig
 
 environ["DISPLAY"] = ":0"
+environ["PIPENV_VERBOSITY"] = "-1"
 environ["XAUTHORITY"] = f"/home/{GlobalConfig.USERNAME}/.Xauthority"
 
 from setting.globalconfig import SystemPath
@@ -115,62 +117,34 @@ def finish_send(session):
 
 def pytest_addoption(parser):
     """pytest_cmdline_main"""
-    parser.addoption(
-        "--clean", action="store", default="no", help="是否清理环境&杀进程"
-    )
+    parser.addoption("--clean", action="store", default="no", help="是否清理环境&杀进程")
     parser.addoption(
         "--log_level", action="store", default=GlobalConfig.LOG_LEVEL, help="终端日志输出级别"
     )
+    parser.addoption("--noskip", action="store", default="", help="skip-xxx标签不生效")
+    parser.addoption("--ifixed", action="store", default="", help="fixed-xxx标签不生效")
+    parser.addoption("--max_fail", action="store", default="", help="最大失败次数")
     parser.addoption(
-        "--noskip", action="store", default="", help="skip-xxx标签不生效"
+        "--record_failed_case", action="store", default="", help="失败录屏从第几次失败开始录制视频"
     )
+    parser.addoption("--send_pms", action="store", default="", help="用例数据回填")
+    parser.addoption("--task_id", action="store", default="", help="测试单id")
+    parser.addoption("--trigger", action="store", default="", help="数据回填的触发者")
+    parser.addoption("--suite_id", action="store", default="", help="pms的测试套件ID")
+    parser.addoption("--pms_user", action="store", default="", help="登录pms的账号")
+    parser.addoption("--pms_password", action="store", default="", help="登录pms的密码")
+    parser.addoption("--top", action="store", default="", help="过程中记录top命令中的值")
     parser.addoption(
-        "--ifixed", action="store", default="", help="fixed-xxx标签不生效"
-    )
-    parser.addoption(
-        "--max_fail", action="store", default="", help="最大失败次数"
-    )
-    parser.addoption(
-        "--record_failed_case", action="store", default="",
-        help="失败录屏从第几次失败开始录制视频"
-    )
-    parser.addoption(
-        "--send_pms", action="store", default="", help="用例数据回填"
-    )
-    parser.addoption(
-        "--task_id", action="store", default="", help="测试单id"
-    )
-    parser.addoption(
-        "--trigger", action="store", default="", help="数据回填的触发者"
-    )
-    parser.addoption(
-        "--suite_id", action="store", default="", help="pms的测试套件ID"
-    )
-    parser.addoption(
-        "--pms_user", action="store", default="", help="登录pms的账号"
-    )
-    parser.addoption(
-        "--pms_password", action="store", default="", help="登录pms的密码"
-    )
-    parser.addoption(
-        "--top", action="store", default="", help="过程中记录top命令中的值"
-    )
-    parser.addoption(
-        "--duringfail", action="store_true", dest="duringfail", default=False,
+        "--duringfail",
+        action="store_true",
+        dest="duringfail",
+        default=False,
         help="出现错误时立即显示",
     )
-    parser.addoption(
-        "--repeat", action="store", default=1, type=int, help="用例重复执行的次数"
-    )
-    parser.addoption(
-        "--export_csv_file", action="store", default="", help="导出csv文件"
-    )
-    parser.addoption(
-        "--line", action="store", default="", help="业务线(CI)"
-    )
-    parser.addoption(
-        "--app_name", action="store", default="", help="执行的应用名称"
-    )
+    parser.addoption("--repeat", action="store", default=1, type=int, help="用例重复执行的次数")
+    parser.addoption("--export_csv_file", action="store", default="", help="导出csv文件")
+    parser.addoption("--line", action="store", default="", help="业务线(CI)")
+    parser.addoption("--app_name", action="store", default="", help="执行的应用名称")
     parser.addoption(
         "--autostart", action="store", default="", help="重启类场景开启letmego执行方案"
     )
@@ -205,13 +179,13 @@ def pytest_configure(config):
 def pytest_sessionstart(session):
     """pytest_sessionstart"""
     if (
-            CmdCtl.run_cmd(
-                "gsettings get com.deepin.dde.appearance gtk-theme",
-                interrupt=False,
-                out_debug_flag=False,
-                command_log=False,
-            ).strip("'")
-            != GlobalConfig.SYS_THEME
+        CmdCtl.run_cmd(
+            "gsettings get com.deepin.dde.appearance gtk-theme",
+            interrupt=False,
+            out_debug_flag=False,
+            command_log=False,
+        ).strip("'")
+        != GlobalConfig.SYS_THEME
     ):
         CmdCtl.run_cmd(
             f"gsettings set com.deepin.dde.appearance gtk-theme {GlobalConfig.SYS_THEME}",
@@ -234,9 +208,7 @@ def pytest_sessionstart(session):
     suite_id = session.config.option.suite_id
     if write_json(session):
         session.case_res_path = Send2Pms.case_res_path(task_id or suite_id)
-        session.data_send_result_csv = Send2Pms.data_send_result_csv(
-            task_id or suite_id
-        )
+        session.data_send_result_csv = Send2Pms.data_send_result_csv(task_id or suite_id)
 
     if user and password and async_send(session):
         session.all_thread_task = []
@@ -283,8 +255,8 @@ def pytest_collection_modifyitems(session):
 
     walk_dir = (
         f"{GlobalConfig.APPS_PATH}/{session.config.option.app_name}"
-        if session.config.option.app_name and exists(
-            f"{GlobalConfig.APPS_PATH}/{session.config.option.app_name}")
+        if session.config.option.app_name
+        and exists(f"{GlobalConfig.APPS_PATH}/{session.config.option.app_name}")
         else GlobalConfig.APPS_PATH
     )
     csv_path_dict, no_youqu_mark = walk_apps(walk_dir)
@@ -306,17 +278,13 @@ def pytest_collection_modifyitems(session):
         if not (user and password):
             raise ValueError("pms_user 或 pms_password 未传入")
     if suite_id:
-        suite_runs_ids, suit_id_deque = get_runs_id_deque(
-            user, password, Suite, "suite", suite_id
-        )
+        suite_runs_ids, suit_id_deque = get_runs_id_deque(user, password, Suite, "suite", suite_id)
         print(
             f"{LN}测试套件: https://pms.uniontech.com/zentao/testsuite-view-{suite_id}.html"
             f"{LN}关联的用例:{LN}{f'{LN}'.join([runs_id_cmd_log(i) for i in suite_runs_ids])}"
         )
     elif task_id:
-        task_runs_ids, task_id_deque = get_runs_id_deque(
-            user, password, Task, "task", task_id
-        )
+        task_runs_ids, task_id_deque = get_runs_id_deque(user, password, Task, "task", task_id)
         print(
             f"{LN}测试单: https://pms.uniontech.com/testtask-cases-{task_id}.html"
             f"{LN}关联的用例:{LN}{f'{LN}'.join([runs_id_cmd_log(i) for i in task_runs_ids])}"
@@ -387,23 +355,15 @@ def pytest_collection_modifyitems(session):
                 # 将index重置
                 skip_index = fixed_index = removed_index = pms_id_index = None
             # 如果是想通过测试单跑或者测试套件跑用例，但是csv文件里面又没有保存“PMS用例ID”列，直接不跑
-            if (task_id or suite_id) and containers[csv_path][
-                ConfStr.PMS_ID_INDEX.value
-            ] is None:
+            if (task_id or suite_id) and containers[csv_path][ConfStr.PMS_ID_INDEX.value] is None:
                 session.items.remove(item)
                 continue
             tags = containers.get(csv_path).get(_id)
             if tags:
                 try:
-                    if containers[csv_path][
-                        ConfStr.REMOVED_INDEX.value
-                    ] is not None and tags[
+                    if containers[csv_path][ConfStr.REMOVED_INDEX.value] is not None and tags[
                         containers[csv_path][ConfStr.REMOVED_INDEX.value]
-                    ].strip(
-                        '"'
-                    ).startswith(
-                        f"{ConfStr.REMOVED.value}-"
-                    ):
+                    ].strip('"').startswith(f"{ConfStr.REMOVED.value}-"):
                         session.items.remove(item)
                         continue
                 except IndexError as exc:
@@ -419,32 +379,29 @@ def pytest_collection_modifyitems(session):
                         if index == containers[csv_path][ConfStr.SKIP_INDEX.value]:
                             # 标签是以 “skip-” 开头, noskip 用于解除所有的skip
                             if not session.config.option.noskip and tag.startswith(
-                                    f"{ConfStr.SKIP.value}-"
+                                f"{ConfStr.SKIP.value}-"
                             ):
                                 # 标签以 “fixed-” 开头, ifixed表示ignore fixed, 用于忽略所有的fixed
                                 # 1. 不给ifixed参数时，只要标记了fixed的用例，即使标记了skip-，也会执行；
                                 # 2. 给ifixed 参数时(--ifixed yes)，fixed不生效，仅通过skip跳过用例；
                                 try:
                                     if (
-                                            not session.config.option.ifixed
-                                            and containers[csv_path][
-                                        ConfStr.FIXED_INDEX.value
-                                    ]
-                                            is not None
-                                            and tags[
-                                        containers[csv_path][
-                                            ConfStr.FIXED_INDEX.value
-                                        ]
-                                    ]
-                                            .strip('"')
-                                            .startswith(f"{ConfStr.FIXED.value}-")
+                                        not session.config.option.ifixed
+                                        and containers[csv_path][ConfStr.FIXED_INDEX.value]
+                                        is not None
+                                        and tags[containers[csv_path][ConfStr.FIXED_INDEX.value]]
+                                        .strip('"')
+                                        .startswith(f"{ConfStr.FIXED.value}-")
                                     ):
                                         continue
                                 except IndexError:
                                     # 如果访问越界，说明这行没有fixed标签或者标签写错位置了，所以正常跳过
                                     pass
                                 add_mark(item, ConfStr.SKIP.value, (tag,), {})
-                            elif not session.config.option.noskip and f"{ConfStr.SKIPIF.value}_" in tag:
+                            elif (
+                                not session.config.option.noskip
+                                and f"{ConfStr.SKIPIF.value}_" in tag
+                            ):
                                 tag_list = tag.split("&&")
                                 for _tag in tag_list:
                                     skip_method, param = _tag.strip(" ").split("-", maxsplit=1)
@@ -458,7 +415,8 @@ def pytest_collection_modifyitems(session):
                                         )
                                     else:
                                         logger.error(
-                                            f"未找到判断是否跳过的自定义方法 <{skip_method}>")
+                                            f"未找到判断是否跳过的自定义方法 <{skip_method}>"
+                                        )
                                         add_mark(
                                             item,
                                             ConfStr.SKIP.value,
@@ -467,10 +425,7 @@ def pytest_collection_modifyitems(session):
                                         )
                         else:  # 非跳过列
                             # 处理 pms id
-                            if (
-                                    containers[csv_path][ConfStr.PMS_ID_INDEX.value]
-                                    == index
-                            ):
+                            if containers[csv_path][ConfStr.PMS_ID_INDEX.value] == index:
                                 if suite_runs_ids:
                                     if tag not in suit_id_deque:
                                         session.items.remove(item)
@@ -576,8 +531,8 @@ def pytest_collection_finish(session):
                     items_timeout += item_timeout
                     break
         session.sessiontimeout = (
-                                         (session.item_count - _n) * session.config.option.timeout
-                                 ) + items_timeout
+            (session.item_count - _n) * session.config.option.timeout
+        ) + items_timeout
         _min, sec = divmod(int(session.sessiontimeout), 60)
         hour, _min = divmod(_min, 60)
         print(
@@ -604,9 +559,9 @@ def pytest_collection_finish(session):
         if not exists(GlobalConfig.REPORT_PATH):
             makedirs(GlobalConfig.REPORT_PATH)
         with open(
-                f"{GlobalConfig.REPORT_PATH}/{session.config.option.export_csv_file}",
-                "w+",
-                encoding="utf-8",
+            f"{GlobalConfig.REPORT_PATH}/{session.config.option.export_csv_file}",
+            "w+",
+            encoding="utf-8",
         ) as _f:
             _f.writelines(execute2)
 
@@ -617,9 +572,7 @@ def pytest_runtest_setup(item):
         letmego.conf.setting.EXECUTION_COUNT = item.execution_count
 
     print()  # 处理首行日志换行的问题
-    current_item_count = (
-        f"[{item.session.items.index(item) + 1}/{item.session.item_count}] "
-    )
+    current_item_count = f"[{item.session.items.index(item) + 1}/{item.session.item_count}] "
     try:
         current_item_percent = "{:.0f}%".format(
             int(item.session.items.index(item) + 1) / int(item.session.item_count) * 100
@@ -627,9 +580,7 @@ def pytest_runtest_setup(item):
     except:
         current_item_percent = ""
     try:
-        rerun_text = (
-            f" | <重跑第{item.execution_count - 1}次>" if item.execution_count > 1 else ""
-        )
+        rerun_text = f" | <重跑第{item.execution_count - 1}次>" if item.execution_count > 1 else ""
     except AttributeError:
         rerun_text = ""
     logger.info(
@@ -700,9 +651,7 @@ def pytest_runtest_makereport(item, call):
                     allure.dynamic.severity(LabelType.L3.value)
             elif mark.args[0] == FixedCsvTitle.pms_case_id.value:
                 # if mark.name:
-                testcase_url = (
-                    f"https://pms.uniontech.com/testcase-view-{mark.name}.html"
-                )
+                testcase_url = f"https://pms.uniontech.com/testcase-view-{mark.name}.html"
                 allure.dynamic.testcase(testcase_url)
                 logger.info(testcase_url)
             else:
@@ -765,9 +714,7 @@ def pytest_runtest_makereport(item, call):
                                 # 非图像识别错误
                                 pass
                             try:
-                                template = (
-                                    f"{splitext(item.record['image_path'])[0]}_ocr_.png"
-                                )
+                                template = f"{splitext(item.record['image_path'])[0]}_ocr_.png"
                                 CmdCtl.run_cmd(f"cp {item.record['ocr']} {template}")
                                 allure.attach.file(
                                     template,
@@ -843,16 +790,14 @@ def pytest_sessionfinish(session):
                         default_result["result"] = "fail"
                     item_name = item.nodeid.split("[")[0]
                     if not execute.get(item_name) or (
-                            item.outcome != ConfStr.PASSED.value
-                            and execute.get(item_name).get("result") == "pass"
+                        item.outcome != ConfStr.PASSED.value
+                        and execute.get(item_name).get("result") == "pass"
                     ):
                         execute[item_name] = default_result
                 except AttributeError:
                     pass
         if execute:
-            with open(
-                    f"{GlobalConfig.ROOT_DIR}/ci_result.json", "w", encoding="utf-8"
-            ) as _f:
+            with open(f"{GlobalConfig.ROOT_DIR}/ci_result.json", "w", encoding="utf-8") as _f:
                 _f.write(dumps(execute, indent=2, ensure_ascii=False))
 
     if session.config.option.pms_user and session.config.option.pms_password:
