@@ -8,6 +8,7 @@ import sys
 from os import environ
 
 environ["DISPLAY"] = ":0"
+environ["XAUTHORITY"] = "/home/uos/.Xauthority"
 from setting.globalconfig import SystemPath
 
 for i in SystemPath:

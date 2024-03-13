@@ -13,6 +13,7 @@ from argparse import ArgumentParser
 
 os.environ["DISPLAY"] = ":0"
 os.environ["PIPENV_VERBOSITY"] = "-1"
+os.environ["XAUTHORITY"] = "/home/uos/.Xauthority"
 
 from setting.globalconfig import SystemPath
 
