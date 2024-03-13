@@ -3,6 +3,7 @@
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
 import os
+from time import sleep
 from setting import conf
 
 
@@ -31,6 +32,8 @@ def sslclone(
     )
     print(clone_cmd)
     os.system(clone_cmd)
+    # relax
+    sleep(2)
 
 
 def clone(
@@ -49,3 +52,5 @@ def clone(
     )
     print(clone_cmd)
     os.system(clone_cmd)
+    # relax
+    sleep(2)
