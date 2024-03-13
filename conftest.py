@@ -6,8 +6,11 @@
 # pylint: disable=C0114,W0621,C0411,C0412,R1706,E0401
 import sys
 from os import environ
+from setting.globalconfig import GlobalConfig
 
 environ["DISPLAY"] = ":0"
+environ["XAUTHORITY"] = f"/home/{GlobalConfig.USERNAME}/.Xauthority"
+
 from setting.globalconfig import SystemPath
 
 for i in SystemPath:
@@ -39,8 +42,6 @@ import pytest
 from _pytest.mark import Mark
 from _pytest.terminal import TerminalReporter
 from funnylog.conf import setting as log_setting
-
-from setting.globalconfig import GlobalConfig
 
 letmego.conf.setting.PASSWORD = GlobalConfig.PASSWORD
 letmego.conf.setting.RUNNING_MAN_FILE = f"{GlobalConfig.REPORT_PATH}/_running_man.log"
@@ -282,7 +283,8 @@ def pytest_collection_modifyitems(session):
 
     walk_dir = (
         f"{GlobalConfig.APPS_PATH}/{session.config.option.app_name}"
-        if session.config.option.app_name and exists(f"{GlobalConfig.APPS_PATH}/{session.config.option.app_name}")
+        if session.config.option.app_name and exists(
+            f"{GlobalConfig.APPS_PATH}/{session.config.option.app_name}")
         else GlobalConfig.APPS_PATH
     )
     csv_path_dict, no_youqu_mark = walk_apps(walk_dir)
@@ -442,7 +444,7 @@ def pytest_collection_modifyitems(session):
                                     # 如果访问越界，说明这行没有fixed标签或者标签写错位置了，所以正常跳过
                                     pass
                                 add_mark(item, ConfStr.SKIP.value, (tag,), {})
-                            elif not session.config.option.noskip and  f"{ConfStr.SKIPIF.value}_" in tag:
+                            elif not session.config.option.noskip and f"{ConfStr.SKIPIF.value}_" in tag:
                                 tag_list = tag.split("&&")
                                 for _tag in tag_list:
                                     skip_method, param = _tag.strip(" ").split("-", maxsplit=1)
@@ -455,7 +457,8 @@ def pytest_collection_modifyitems(session):
                                             {"reason": _tag},
                                         )
                                     else:
-                                        logger.error(f"未找到判断是否跳过的自定义方法 <{skip_method}>")
+                                        logger.error(
+                                            f"未找到判断是否跳过的自定义方法 <{skip_method}>")
                                         add_mark(
                                             item,
                                             ConfStr.SKIP.value,

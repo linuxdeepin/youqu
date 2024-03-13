@@ -28,6 +28,7 @@ from src.button_center import ButtonCenter
 from src import logger, log
 from setting.globalconfig import GlobalConfig
 
+
 # pylint: disable=too-many-public-methods
 @log
 class AssertCommon:
@@ -324,8 +325,8 @@ class AssertCommon:
         else:
             GlobalConfig.SCREEN_CACHE = (
                 os.popen("qdbus org.kde.KWin /Screenshot screenshotFullscreen")
-                    .read()
-                    .strip("\n")
+                .read()
+                .strip("\n")
             )
         color_list = ImageUtils.find_image_color(GlobalConfig.SCREEN_CACHE)
         proportion = round(color_list.count(exp_color) / len(color_list), 2)
@@ -406,8 +407,23 @@ class AssertCommon:
             pause: [int, float] = None,
             timeout: [int, float] = None,
             max_match_number: int = None,
+            mode: str = "all",
     ):
-        """断言文案存在"""
+        """
+        断言文案存在
+        :param args:
+            目标字符,识别一个字符串或多个字符串,并返回其在图片中的坐标;
+            如果不传参，返回图片中识别到的所有字符串。
+        :param picture_abspath: 要识别的图片路径，如果不传默认截取全屏识别。
+        :param similarity: 匹配度。
+        :param return_first: 只返回第一个,默认为 False,返回识别到的所有数据。
+        :param lang: `ch`, `en`, `fr`, `german`, `korean`, `japan`
+        :param network_retry: 连接服务器重试次数
+        :param pause: 重试间隔时间,单位秒
+        :param timeout: 最大匹配超时,单位秒
+        :param max_match_number: 最大匹配次数
+        :param mode: "all" or "any"，all 表示识别所有目标字符，any 表示识别任意一个目标字符，默认值为 all
+        """
         pic = None
         if picture_abspath is not None:
             pic = picture_abspath + ".png"
@@ -428,14 +444,23 @@ class AssertCommon:
             )
         if isinstance(res, tuple):
             pass
-        elif isinstance(res, dict) and False in res.values():
-            res = filter(lambda x: x[1] is False, res.items())
-            raise AssertionError(
-                (
-                    f"通过OCR未识别到：{dict(res)}",
-                    f"{pic if pic else GlobalConfig.SCREEN_CACHE}",
+        elif isinstance(res, dict):
+            mode = mode.lower()
+            if mode == "all" and False in res.values():
+                res = filter(lambda x: x[1] is False, res.items())
+                raise AssertionError(
+                    (
+                        f"通过OCR未识别到：{dict(res)}",
+                        f"{pic if pic else GlobalConfig.SCREEN_CACHE}",
+                    )
                 )
-            )
+            elif mode == "any" and len(res) == list(res.values()).count(False):
+                raise AssertionError(
+                    (
+                        f"通过OCR未识别到：{args}中的任意一个",
+                        f"{pic if pic else GlobalConfig.SCREEN_CACHE}",
+                    )
+                )
 
     @staticmethod
     def assert_ocr_not_exist(
