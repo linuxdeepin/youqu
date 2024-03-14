@@ -578,7 +578,7 @@ class ButtonCenter:
         :return: int 窗口数量
         """
         if GlobalConfig.IS_X11:
-            cmd = f"xdotool search --classname {name}"
+            cmd = f"xdotool search --classname --onlyvisible {name}"
             app_id = CmdCtl.run_cmd(
                 cmd, interrupt=False, out_debug_flag=False, command_log=False
             ).strip()
