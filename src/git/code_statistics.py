@@ -78,7 +78,7 @@ class CodeStatistics(Commit):
         fix_method_num = 0
         git_files = self.get_git_files(start_commit_id, end_commit_id)
         for git_file in git_files:
-            filepath = git_file.get("file").split(" ")[-1].strip("b/")
+            filepath = "/".join(git_file.get("file").split(" ")[-1].split("/")[1:])
             filename = filepath.split("/")[-1]
 
             if not filename.endswith(".py"):
