@@ -13,12 +13,12 @@ def git_config():
 
 
 def sslclone(
-        url: str = None,
-        user: str = None,
-        password: str = None,
-        branch: str = None,
-        depth: [str, int] = None,
-        **kwargs,
+    url: str = None,
+    user: str = None,
+    password: str = None,
+    branch: str = None,
+    depth: [str, int] = None,
+    **kwargs,
 ):
     branch = branch or conf.BRANCH
     depth = depth or conf.DEPTH
@@ -36,12 +36,7 @@ def sslclone(
     sleep(2)
 
 
-def clone(
-        url: str = None,
-        branch: str = "",
-        depth: [str, int] = "",
-        **kwargs
-):
+def clone(url: str = None, branch: str = "", depth: [str, int] = "", **kwargs):
     branch = branch or conf.BRANCH
     depth = depth or conf.DEPTH
     git_config()

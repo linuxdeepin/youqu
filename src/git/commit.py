@@ -36,10 +36,27 @@ class Commit:
 
     @property
     def git_logs(self) -> list:
-        git_logs = re.findall(
-            r"commit (.*?)\nAuthor: (.*?)\nDate:   (.*?)\n",
-            os.popen(f"cd {conf.APPS_PATH}/{self.app_name} && git log {self.branch}").read(),
+        # git_logs = re.findall(
+        #     r"commit (.*?)\nAuthor: (.*?)\nDate:   (.*?)\n",
+        #     os.popen(f"cd {conf.APPS_PATH}/{self.app_name} && git log {self.branch}").read(),
+        # )
+        # return git_logs
+        _git_logs = (
+            os.popen(f"cd {conf.APPS_PATH}/{self.app_name} && git log {self.branch}")
+            .read()
+            .splitlines()
         )
+        git_logs = []
+        tmp = []
+        for line in _git_logs:
+            if line.startswith("commit "):
+                tmp.append(line.split(" ")[1].strip())
+            elif line.startswith("Author:"):
+                tmp.append(line.split("Author: ")[-1])
+            elif line.startswith("Date: "):
+                tmp.append(line.split("Date: ")[1].strip())
+                git_logs.append(tmp)
+                tmp = []
         return git_logs
 
     def commit_id(self):
@@ -58,7 +75,8 @@ class Commit:
 
         if commit_ids:
             commit_id_pairs = [
-                [commit_ids[i][0], commit_ids[i + 1][0], commit_ids[i + 1][1], commit_ids[i + 1][2]] for i in range(len(commit_ids) - 1)
+                [commit_ids[i][0], commit_ids[i + 1][0], commit_ids[i + 1][1], commit_ids[i + 1][2]]
+                for i in range(len(commit_ids) - 1)
             ]
             return commit_id_pairs
 

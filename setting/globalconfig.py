@@ -178,8 +178,6 @@ class _GlobalConfig:
     GIT_PASSWORD = log_cli.get("GIT_PASSWORD", default="")
     BRANCH = log_cli.get("BRANCH", default="")
     DEPTH = log_cli.get("DEPTH", default="")
-    START_COMMIT_ID = log_cli.get("START_COMMIT_ID", default="")
-    END_COMMIT_ID = log_cli.get("END_COMMIT_ID", default="")
     START_DATE = log_cli.get("STAR_TDATE", default="")
     END_DATE = log_cli.get("END_DATE", default="")
 

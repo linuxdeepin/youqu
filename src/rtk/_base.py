@@ -71,8 +71,6 @@ class Args(Enum):
     pms_link_csv = "pms_link_csv"
     send2task = "send2task"
     url = "url"
-    start_commit_id = "start_commit_id"
-    end_commit_id = "end_commit_id"
     startdate = "startdate"
     enddate = "enddate"
     user = "user"

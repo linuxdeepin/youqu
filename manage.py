@@ -81,8 +81,6 @@ class Manage:
         pms_link_csv=None,
         send2task=None,
         url=None,
-        commit1=None,
-        commit2=None,
         startdate=None,
         enddate=None,
         git_user=None,
@@ -134,8 +132,6 @@ class Manage:
         self.default_pms_link_csv = pms_link_csv
         self.default_send2task = send2task
         self.default_url = url
-        self.default_start_commit_id = commit1
-        self.default_end_commit_id = commit2
         self.default_startdate = startdate
         self.default_enddate = enddate
         self.default_git_user = git_user
@@ -512,8 +508,6 @@ class Manage:
         sub_parser_csv.add_argument("-l", "--url", default="", help="git仓库地址")
         sub_parser_csv.add_argument("-b", "--branch", default="", help="分支")
         sub_parser_csv.add_argument("-d", "--depth", default="", help="git仓库克隆深度")
-        sub_parser_csv.add_argument("-c1", "--start_commit_id", default="", help="start_commit_id")
-        sub_parser_csv.add_argument("-c2", "--end_commit_id", default="", help="end_commit_id")
         sub_parser_csv.add_argument("-s", "--startdate", default="", help="统计开始时间")
         sub_parser_csv.add_argument("-e", "--enddate", default="", help="统计结束时间")
         args = parser.parse_args()
@@ -526,8 +520,6 @@ class Manage:
             Args.password.value: args.password or self.default_git_password,
             Args.branch.value: args.branch or self.default_branch,
             Args.depth.value: args.depth or self.default_depth,
-            Args.start_commit_id.value: args.start_commit_id or self.default_start_commit_id,
-            Args.end_commit_id.value: args.end_commit_id or self.default_end_commit_id,
             Args.startdate.value: args.startdate or self.default_startdate,
             Args.enddate.value: args.enddate or self.default_enddate,
         }
@@ -550,17 +542,7 @@ class Manage:
         if all(
             [
                 git_kwargs.get(Args.app_name.value),
-                any(
-                    [
-                        all(
-                            [
-                                git_kwargs.get(Args.start_commit_id.value),
-                                git_kwargs.get(Args.end_commit_id.value),
-                            ]
-                        ),
-                        git_kwargs.get(Args.startdate.value),
-                    ]
-                ),
+                git_kwargs.get(Args.startdate.value),
             ]
         ):
             from src.git.code_statistics import CodeStatistics

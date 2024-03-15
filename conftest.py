@@ -19,7 +19,6 @@ for i in SystemPath:
     if i.value not in sys.path:
         sys.path.append(i.value)
 
-from os import popen
 from os import system
 from os import remove
 from os import makedirs
@@ -199,7 +198,7 @@ def pytest_sessionstart(session):
         else GlobalConfig.DisplayServer.x11
     )
     logger.info(f"当前系统显示协议为 {_display.title()}")
-    popen("gsettings set com.deepin.dde.dock position bottom")
+    # popen("gsettings set com.deepin.dde.dock position bottom")
     session.config.option.start_time = datetime.now()
 
     user = session.config.option.pms_user
