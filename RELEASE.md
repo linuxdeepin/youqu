@@ -1,10 +1,11 @@
 # 版本更新记录
 
-## 2.5.1（dev）
+## 2.5.2（dev）
 
 **Fix**
 
 - 修复统计用例和方法数量功能在子项目为 `gitlab` 时，无法获取到 `commit` 详细记录的问题；[@mikigo](https://github.com/mikigo)
+- 修复基于 `Python` 标准库`difflib` 做 `commit` 文件对比时，输出原始数据错误的问题；[@mikigo](https://github.com/mikigo)
 
 ## 2.5.1（2024/03/14）
 

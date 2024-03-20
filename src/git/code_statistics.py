@@ -5,7 +5,6 @@
 import os
 import json
 from copy import deepcopy
-from difflib import unified_diff
 from datetime import datetime
 
 from setting import conf
@@ -61,20 +60,7 @@ class CodeStatistics(Commit):
         for filepath in git_files:
             filename = filepath.split("/")[-1]
             print("filepath:", filepath, "\n")
-            start_code = (
-                os.popen(f"cd {self.repo_path}/;git show {start_commit_id}:{filepath}")
-                .read()
-                .splitlines()
-                or ""
-            )
-            end_code = (
-                os.popen(f"cd {self.repo_path}/;git show {end_commit_id}:{filepath}")
-                .read()
-                .splitlines()
-                or ""
-            )
-            dif_gen = unified_diff(start_code, end_code, fromfile="start", tofile="end")
-            dif_txt = "\n".join(dif_gen)
+            dif_txt = os.popen(f"cd {self.repo_path}/;git diff {start_commit_id}..{end_commit_id} {filepath}").read()
             print("=" * 100)
             # case
             if filename.startswith("test_"):
@@ -236,10 +222,10 @@ class CodeStatistics(Commit):
 
 
 if __name__ == "__main__":
-    app_name = "apps/autotest_deepin_downloader"
+    app_name = "apps/autotest_public"
     CodeStatistics(
         app_name=app_name,
         branch="master",
-        startdate="2024-02-25",
+        startdate="2024-03-04",
         # enddate="2024-02-23",
     ).codex()
