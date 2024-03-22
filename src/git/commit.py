@@ -36,11 +36,6 @@ class Commit:
 
     @property
     def git_logs(self) -> list:
-        # git_logs = re.findall(
-        #     r"commit (.*?)\nAuthor: (.*?)\nDate:   (.*?)\n",
-        #     os.popen(f"cd {conf.APPS_PATH}/{self.app_name} && git log {self.branch}").read(),
-        # )
-        # return git_logs
         _git_logs = (
             os.popen(f"cd {conf.APPS_PATH}/{self.app_name} && git log {self.branch}")
             .read()
@@ -50,42 +45,34 @@ class Commit:
         tmp = []
         for line in _git_logs:
             if line.startswith("commit "):
+                if tmp:
+                    git_logs.append(tmp)
+                    tmp = []
                 tmp.append(line.split(" ")[1].strip())
             elif line.startswith("Author:"):
                 tmp.append(line.split("Author: ")[-1])
             elif line.startswith("Date: "):
                 tmp.append(line.split("Date: ")[1].strip())
-                git_logs.append(tmp)
-                tmp = []
         return git_logs
 
     def commit_id(self):
         commit_ids = deque()
-        flag = False
         for commit_id, author, _time_str in self.git_logs:
             time_str = " ".join(_time_str.split(" ")[:-1])
             git_dt = datetime.strptime(time_str, "%a %b %d %H:%M:%S %Y")
 
             if self.startdate <= git_dt <= self.enddate:
                 commit_ids.appendleft([commit_id, author, git_dt])
-            elif git_dt < self.startdate:
-                if flag is False:
-                    commit_ids.appendleft([commit_id, None, None])
-                    flag = True
 
-        if commit_ids:
-            commit_id_pairs = [
-                [commit_ids[i][0], commit_ids[i + 1][0], commit_ids[i + 1][1], commit_ids[i + 1][2]]
-                for i in range(len(commit_ids) - 1)
-            ]
-            return commit_id_pairs
+        if not commit_ids:
+            raise ValueError(f"{self.startdate} 到 {self.enddate} 没有获取到有效的 commit id")
 
-        raise ValueError(f"{self.startdate} 到 {self.enddate} 没有获取到有效的 commit id")
+        return commit_ids
 
 
 if __name__ == "__main__":
     Commit(
-        app_name="apps/autotest_deepin_downloader",
-        branch="master",
-        startdate="2024-02-27",
+        app_name="apps/autotest_deepin_kwin_UI",
+        branch="at-develop/eagle",
+        startdate="2024-03-20",
     ).commit_id()

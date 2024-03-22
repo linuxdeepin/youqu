@@ -10,6 +10,7 @@ from datetime import datetime
 from setting import conf
 from src.rtk._base import transform_app_name
 from src.git.commit import Commit
+from src.depends.colorama import Fore
 
 
 class CodeStatistics(Commit):
@@ -35,9 +36,9 @@ class CodeStatistics(Commit):
         for i in range(100):
             self.ignore_txt.append(" " * i + "#")
 
-    def get_git_files(self, end_commit_id, max_width=10000):
+    def get_git_files(self, commit_id, max_width=10000):
         git_files = []
-        _files = os.popen(f"cd {self.repo_path};git show --stat={max_width} {end_commit_id}").read()
+        _files = os.popen(f"cd {self.repo_path};git show --stat={max_width} {commit_id}").read()
         files = _files.split("\n")
         for file_info in files:
             if "| " not in file_info:
@@ -47,7 +48,7 @@ class CodeStatistics(Commit):
                 git_files.append(file_path)
         return git_files
 
-    def compare_files(self, start_commit_id, end_commit_id, author, git_dt: datetime):
+    def compare_files(self, commit_id, author, git_dt: datetime):
         _fix_debug = []
         _new_debug = []
         new_test_case_num = 0
@@ -56,61 +57,29 @@ class CodeStatistics(Commit):
         new_method_num = 0
         del_method_num = 0
         fix_method_num = 0
-        git_files = self.get_git_files(end_commit_id=end_commit_id)
+        git_files = self.get_git_files(commit_id=commit_id)
         for filepath in git_files:
             filename = filepath.split("/")[-1]
-            print("filepath:", filepath, "\n")
-            dif_txt = os.popen(f"cd {self.repo_path}/;git diff {start_commit_id}..{end_commit_id} {filepath}").read()
-            print("=" * 100)
+            dif_texts = os.popen(f"cd {self.repo_path}/;git show {commit_id} {filepath}").read()
+            print(Fore.GREEN, "=" * 100, Fore.RESET)
+            print(filepath, "\n", dif_texts)
+            dif_lines = dif_texts.splitlines()
             # case
             if filename.startswith("test_"):
-                _contents = dif_txt.splitlines()
-                contents = _contents[6:]
-                added = reduced = unchanged = False
-                for line in contents:
-                    if line.startswith("+"):
-                        added = True
-                    elif line.startswith("-"):
-                        reduced = True
-                    else:
-                        if line.startswith(tuple(self.ignore_txt)):
-                            continue
-                        unchanged = True
-
-                if all(
-                    [
-                        added is True,
-                        reduced is False,
-                        unchanged is False,
-                    ]
-                ):
-                    new_test_case_num += 1
-                if all(
-                    [
-                        added is False,
-                        reduced is True,
-                        unchanged is False,
-                    ]
-                ):
-                    del_test_case_num += 1
-                if all(
-                    [
-                        any(
-                            [
-                                added is True,
-                                reduced is True,
-                            ]
-                        ),
-                        unchanged is True,
-                    ]
-                ):
+                for line in dif_lines:
+                    if line.startswith("--- /dev/null"):
+                        new_test_case_num += 1
+                        break
+                    elif line.startswith("+++ /dev/null"):
+                        del_test_case_num += 1
+                        break
+                else:
                     fix_test_case_num += 1
             # method
             else:
-                print(dif_txt)
                 methods = []
                 method_info = {}
-                for line in dif_txt.splitlines():
+                for line in dif_lines:
                     if line.startswith(("---", "+++", "@@", "@")):
                         continue
                     if "def " in line:
@@ -155,8 +124,7 @@ class CodeStatistics(Commit):
                                     break
 
         res = {
-            "start_commit_id": start_commit_id,
-            "end_commit_id": end_commit_id,
+            "commit_id": commit_id,
             "author": author,
             "git_dt": git_dt.strftime("%Y-%m-%d"),
             "branch": self.branch,
@@ -174,14 +142,14 @@ class CodeStatistics(Commit):
             os.makedirs(conf.REPORT_PATH)
         result_file = os.path.join(
             conf.REPORT_PATH,
-            f"{self.app_name}_git_compare_result{f'_detail' if detail else ''}.json",
+            f"{self.app_name}_git_commit_result{f'_detail' if detail else ''}.json",
         )
         with open(result_file, "w", encoding="utf-8") as f:
             f.write(json.dumps(res, ensure_ascii=False, indent=4, default=None))
 
         with open(result_file, "r", encoding="utf-8") as f:
             print(f.read())
-        print(f"数据结果报告：{result_file}")
+        print(f"{Fore.GREEN}数据结果{'详细' if detail else '汇总'}报告：{result_file}{Fore.RESET}")
 
     def codex(self):
         results = None
@@ -189,10 +157,8 @@ class CodeStatistics(Commit):
         if self.startdate:
             commit_id_pairs = self.commit_id()
             results = {}
-            for i, (_start_commit_id, _end_commit_id, _author, git_dt) in enumerate(
-                commit_id_pairs
-            ):
-                _res = self.compare_files(_start_commit_id, _end_commit_id, _author, git_dt)
+            for i, (commit_id, _author, git_dt) in enumerate(commit_id_pairs):
+                _res = self.compare_files(commit_id, _author, git_dt)
                 res = deepcopy(_res)
                 results_detail.append(_res)
                 author = res["author"]
@@ -202,7 +168,8 @@ class CodeStatistics(Commit):
                 new_method_num = res["新增方法"]
                 del_method_num = res["删除方法"]
                 fix_method_num = res["修改方法"]
-                commit_new = res["end_commit_id"]
+                commit_id = res["commit_id"]
+                _git_dt = res["git_dt"]
                 if results.get(author) is None:
                     results[author] = res
                 else:
@@ -212,20 +179,22 @@ class CodeStatistics(Commit):
                     results[author]["新增方法"] += new_method_num
                     results[author]["删除方法"] += del_method_num
                     results[author]["修改方法"] += fix_method_num
-                    results[author]["end_commit_id"] = commit_new
+                    results[author]["commit_id"] = commit_id
+                    results[author]["git_dt_end"] = _git_dt
 
         if results is None:
             raise ValueError()
+        print(Fore.GREEN, "=" * 100, Fore.RESET)
         self.write_result(results)
         if results_detail:
             self.write_result(results_detail, detail=True)
 
 
 if __name__ == "__main__":
-    app_name = "apps/autotest_public"
+    app_name = "apps/autotest_deepin_kwin_UI"
     CodeStatistics(
         app_name=app_name,
-        branch="master",
-        startdate="2024-03-04",
+        branch="at-develop/eagle",
+        startdate="2024-01-01",
         # enddate="2024-02-23",
     ).codex()
