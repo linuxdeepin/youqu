@@ -10,6 +10,7 @@ import os
 
 from src.custom_exception import ShellExecutionFailed
 from src import logger
+from setting import conf
 
 
 class CmdCtl:
@@ -66,6 +67,16 @@ class CmdCtl:
         if data[-1:] == "\n":
             data = data[:-1]
         return exitcode, data
+
+    @classmethod
+    def sudo_run_cmd(cls, command, interrupt=True, timeout=25, out_debug_flag=True, command_log=True):
+        cls.run_cmd(
+            f"echo '{conf.PASSWORD}' | sudo -S {command}",
+            interrupt=interrupt,
+            timeout=timeout,
+            out_debug_flag=out_debug_flag,
+            command_log=command_log
+        )
 
     @classmethod
     def run_cmd(

@@ -59,7 +59,7 @@ def _exclude():
     return exclude_str
 
 
-def _transfer_to_client(ip, password, user, filename, transfer_app=None):
+def _transfer_to_client(ip, password, user, filename, transfer_appname=None):
     os.system(
         f'''sshpass -p '{password}' ssh {user}@{ip} "mkdir -p ~/{client_project_path}"'''
     )
@@ -67,10 +67,10 @@ def _transfer_to_client(ip, password, user, filename, transfer_app=None):
         f"sshpass -p '{password}' rsync -av -e ssh {_exclude()} {conf.ROOT_DIR}/* "
         f"{user}@{ip}:~/{client_project_path}/"
     )
-    if transfer_app:
+    if transfer_appname:
         os.system(f'''sshpass -p '{password}' ssh {user}@{ip} "mkdir -p ~/{client_project_path}/apps''')
         os.system(
-            f"sshpass -p '{password}' scp -r {transfer_app} {user}@{ip}:~/{client_project_path}/apps/{transfer_app}")
+            f"sshpass -p '{password}' scp -r {transfer_appname} {user}@{ip}:~/{client_project_path}/apps/{transfer_appname}")
     if not os.popen(
             f'''sshpass -p "{password}" ssh {user}@{ip} "cd ~/{client_project_path}/ && ls env_ok_{filename}"'''
     ).read().strip():
@@ -103,7 +103,7 @@ def check_rpc_started(filename):
             if not user or not ip:
                 raise ValueError("user and ip are required")
             password = kwargs.get('password') or (args[2] if len(args) >= 3 else conf.PASSWORD)
-            transfer_app = kwargs.get('transfer_app')
+            transfer_app = kwargs.get('transfer_appname')
             tool_status = os.popen(
                 f'''sshpass -p '{password}' ssh {user}@{ip} "ps -aux |  grep {filename} | grep -v grep"'''
             ).read()

@@ -21,7 +21,7 @@ from src.remotectl.base import check_rpc_started
 
 
 @check_rpc_started(basename(__file__))
-def remote_ctl(user=None, ip=None, password=None, transfer_app_path=None):
+def remote_ctl(user=None, ip=None, password=None, transfer_appname=None):
     r = zerorpc.Client(timeout=50, heartbeat=None)
     r.connect(f"tcp://{ip}:4243")
     return r
