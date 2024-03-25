@@ -219,3 +219,9 @@ class DogtailUtils(MouseKey):
             return elements[index]
         except IndexError:
             raise ElementNotFound(f"{expr}, index:{index}") from IndexError
+
+    def find_element_by_attr_and_click(self, expr, index=0):
+        self.find_element_by_attr(expr, index).click()
+
+    def find_element_by_attr_and_right_click(self, expr, index=0):
+        self.find_element_by_attr(expr, index).click(3)

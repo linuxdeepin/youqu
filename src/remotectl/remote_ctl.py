@@ -16,15 +16,14 @@ except ImportError:
     import zerorpc
 
 sys.path.append(dirname(dirname(dirname(os.path.abspath(__file__)))))
-
 from setting import conf
 from src.remotectl.base import check_rpc_started
 
 
 @check_rpc_started(basename(__file__))
-def remote_dogtail_ctl(user=None, ip=None, password=None):
+def remote_ctl(user=None, ip=None, password=None, transfer_app_path=None):
     r = zerorpc.Client(timeout=50, heartbeat=None)
-    r.connect(f"tcp://{ip}:4242")
+    r.connect(f"tcp://{ip}:4243")
     return r
 
 
@@ -32,8 +31,8 @@ if __name__ == '__main__':
     from os import environ
 
     environ["XAUTHORITY"] = f"/home/{conf.USERNAME}/.Xauthority"
-    from src.dogtail_utils import DogtailUtils
+    from src import Src
 
-    server = zerorpc.Server(DogtailUtils())
-    server.bind("tcp://0.0.0.0:4242")
+    server = zerorpc.Server(Src())
+    server.bind("tcp://0.0.0.0:4243")
     server.run()
