@@ -364,6 +364,12 @@ $ youqu manage.py remote -a ... --parallel no
 
 ------------
 
-[__Star History__]()
+[__Github Star History__]()
 
 [![Stargazers over time](https://starchart.cc/linuxdeepin/deepin-autotest-framework.svg)](https://starchart.cc/linuxdeepin/deepin-autotest-framework)
+
+
+
+[__Gitee Info__]()
+
+[![deepin-community/deepin-autotest-framework](https://gitee.com/deepin-community/deepin-autotest-framework/widgets/widget_card.svg?colors=4183c4,ffffff,ffffff,e3e9ed,666666,9b9b9b)](https://gitee.com/deepin-community/deepin-autotest-framework)
