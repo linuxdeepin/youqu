@@ -3,10 +3,22 @@
 # SPDX-License-Identifier: GPL-2.0-only
 
 tag=$(echo "$(cat ./CURRENT | grep "tag = ")" | cut -d "=" -f2 | python3 -c "s=input();print(s.strip())")
-
 ROOT_DIR=`pwd`
+
 config_pwd=$(cat ./setting/globalconfig.ini | grep "PASSWORD = ")
 PASSWORD=$(echo "${config_pwd}" | cut -d "=" -f2 | python3 -c "s=input();print(s.strip())")
+while getopts ":p:" opt
+do
+    case $opt in
+        p)
+            PASSWORD=$OPTARG
+            ;;
+        ?)
+            echo "there is unrecognized parameter."
+            exit 1
+            ;;
+    esac
+done
 DISPLAY_SERVER=$(cat ~/.xsession-errors | grep XDG_SESSION_TYPE | head -n 1 | cut -d "=" -f2)
 PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
 flag_feel="\n**** (・_・) ****\n"
@@ -20,6 +32,8 @@ check_status(){
         echo -e "$1\t安装成功 √"
     else
         echo -e "$1\t安装失败 ×"
+        echo "PASSWORD: ${PASSWORD}"
+        echo "如果密码与实际不符，请使用 -p 选项传入参数：bash env.sh -p xxx，或修改setting/globalconfig.ini中的PASSWORD配置项"
         cat /tmp/env.log
     fi
 }
@@ -39,7 +53,7 @@ wayland_env(){
     libkf5waylandclient5_version=$(apt policy libkf5waylandclient5 | grep "已安装" | python3 -c "s=input();print(s.split('：')[1])")
     sudo apt install -y libkf5wayland-dev=${libkf5waylandclient5_version} > /tmp/env.log 2>&1
     wayland_info="libkf5wayland-dev 可能存在依赖报错，解决方法：\n
-    方案一. 添加镜像对应的ppa仓库源，重新执行；\n
+    方案一. 添加镜像对应的 ppa 仓库源，重新执行；\n
     方案二. sudo aptitude install libkf5wayland-dev,先输 n,再输 y,再输 y \n
     ***方案二可能引入兼容性问题，慎用，在下非常非常非常不推荐。***"
     echo -e ${wayland_info} >> /tmp/env.log 2>&1
