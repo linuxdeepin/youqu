@@ -2,6 +2,11 @@
 
 ## 2.5.2（dev）
 
+**New**
+
+- `env.sh` 增加 `-p` 选项用于传递系统密码；[@mikigo](https://github.com/mikigo)
+- 自动输入 `log` 增加以 `Page` 结尾的 `class` 名称；[@mikigo](https://github.com/mikigo)
+
 **Fix**
 
 - 修复统计用例和方法数量功能在子项目为 `gitlab` 时，无法获取到 `commit` 详细记录的问题；[@mikigo](https://github.com/mikigo)
@@ -12,14 +17,14 @@
 **New**
 
 - `startapp` 初始化应用新增 2 条示例用例和一个方法；[issues #46](https://github.com/linuxdeepin/deepin-autotest-framework/issues/46) by [@mikigo](https://github.com/mikigo)
-- 新增子命令 `youqu manage.py git` 可用于拉取 git 仓库代码到 apps 目录下，支持统计分析仓库新增修复的用例或方法数量；[issues #40](https://github.com/linuxdeepin/deepin-autotest-framework/issues/40) by [@mikigo](https://github.com/mikigo)
+- 新增子命令 `youqu manage.py git` 可用于拉取 `git` 仓库代码到 `apps` 目录下，支持统计分析仓库新增修复的用例或方法数量；[issues #40](https://github.com/linuxdeepin/deepin-autotest-framework/issues/40) by [@mikigo](https://github.com/mikigo)
 - 更新[贡献者名单](https://linuxdeepin.github.io/deepin-autotest-framework/#_4)；
 
 **Fix**
 
 - 修复 `env.sh` 中 Python 虚拟环境的解释器版本没有动态获取系统中的 Python 版本的问题；[PR #51](https://github.com/linuxdeepin/deepin-autotest-framework/pull/51) by [@saifeiLee](https://github.com/saifeiLee)
-- 修复wayland环境下XAUTHORITY环境变量缺失问题；[PR #55](https://github.com/linuxdeepin/deepin-autotest-framework/pull/55) by [@DarkLii](https://github.com/DarkLii)
-- assert_ocr_exist新增any匹配模式，即任意一个匹配成功则通过；[PR #55](https://github.com/linuxdeepin/deepin-autotest-framework/pull/55) by [@DarkLii](https://github.com/DarkLii)
+- 修复 `wayland` 环境下 `XAUTHORITY` 环境变量缺失问题；[PR #55](https://github.com/linuxdeepin/deepin-autotest-framework/pull/55) by [@DarkLii](https://github.com/DarkLii)
+- `assert_ocr_exist` 新增 `any` 匹配模式，即任意一个匹配成功则通过；[PR #55](https://github.com/linuxdeepin/deepin-autotest-framework/pull/55) by [@DarkLii](https://github.com/DarkLii)
 
 ## 2.5.0（2024/03/04）
 
@@ -30,7 +35,7 @@
 **Fix**
 
 - 修复 `startapp` 初始化工程中的错误；[@mikigo](https://github.com/mikigo)
-- 修复 skip 用例在收集阶段报错；[issues #44](https://github.com/linuxdeepin/deepin-autotest-framework/issues/44) by [@mikigo](https://github.com/mikigo)
+- 修复 `skip` 用例在收集阶段报错；[issues #44](https://github.com/linuxdeepin/deepin-autotest-framework/issues/44) by [@mikigo](https://github.com/mikigo)
 
 ## 2.4.6（2024/02/26）
 
@@ -38,8 +43,8 @@
 
 - 计算收集用例数量剔除 `skip` 和 `skipif` 的用例数量；[@mikigo](https://github.com/mikigo)
 - 报告新增显示当前目录；[@mikigo](https://github.com/mikigo)
-- 启用 Ruff 代码检查；[issues #38](https://github.com/linuxdeepin/deepin-autotest-framework/issues/38) by [@mikigo](https://github.com/mikigo)
-- 新增定制依赖功能支持应用库定义 deb 形式 Python 包；[issues #37](https://github.com/linuxdeepin/deepin-autotest-framework/issues/37) by [@mikigo](https://github.com/mikigo)
+- 启用 `Ruff` 代码检查；[issues #38](https://github.com/linuxdeepin/deepin-autotest-framework/issues/38) by [@mikigo](https://github.com/mikigo)
+- 新增定制依赖功能支持应用库定义 `deb` 形式 `Python` 包；[issues #37](https://github.com/linuxdeepin/deepin-autotest-framework/issues/37) by [@mikigo](https://github.com/mikigo)
 
 **Fix**
 
