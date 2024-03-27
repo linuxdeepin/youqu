@@ -96,6 +96,13 @@ if [ "${requirements}" != "" ]; then
     done
 fi
 
+cd ${ROOT_DIR}/src/utils/
+webui=$(python3 sub_webui.py)
+if [ "${webui}" != "" ]; then
+    sudo pip3 install playwright -i ${pypi_mirror}
+    playwright install chromium
+fi
+
 sudo pip3 install -U auto_uos --extra-index-url ${pypi_mirror} -i http://10.20.52.221:8081 --trusted-host=10.20.52.221 \
 > /tmp/env.log 2>&1
 check_status auto_uos

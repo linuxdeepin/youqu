@@ -344,9 +344,13 @@ def position(x=None, y=None):
     result = popen(
         "dbus-send --session --dest=com.deepin.Autotool --print-reply  /com/deepin/Autotool com.deepin.Autotool.getPos | grep double | awk \'{printf \"%d\\n\",$2}\'"
     ).split("\n")
-    posx = int(result[0].strip())
-    posy = int(result[1].strip())
-
+    try:
+        posx = int(result[0].strip())
+        posy = int(result[1].strip())
+    except ValueError as e:
+        print(e)
+        print(result)
+        raise ValueError
     if x is not None:  # If set, the x parameter overrides the return value.
         posx = int(x)
     if y is not None:  # If set, the y parameter overrides the return value.

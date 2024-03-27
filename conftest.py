@@ -177,21 +177,21 @@ def pytest_configure(config):
 
 def pytest_sessionstart(session):
     """pytest_sessionstart"""
-    if (
-        CmdCtl.run_cmd(
-            "gsettings get com.deepin.dde.appearance gtk-theme",
-            interrupt=False,
-            out_debug_flag=False,
-            command_log=False,
-        ).strip("'")
-        != GlobalConfig.SYS_THEME
-    ):
-        CmdCtl.run_cmd(
-            f"gsettings set com.deepin.dde.appearance gtk-theme {GlobalConfig.SYS_THEME}",
-            interrupt=False,
-            out_debug_flag=False,
-            command_log=False,
-        )
+    # if (
+    #         CmdCtl.run_cmd(
+    #             "gsettings get com.deepin.dde.appearance gtk-theme",
+    #             interrupt=False,
+    #             out_debug_flag=False,
+    #             command_log=False,
+    #         ).strip("'")
+    #         != GlobalConfig.SYS_THEME
+    # ):
+    #     CmdCtl.run_cmd(
+    #         f"gsettings set com.deepin.dde.appearance gtk-theme {GlobalConfig.SYS_THEME}",
+    #         interrupt=False,
+    #         out_debug_flag=False,
+    #         command_log=False,
+    #     )
     _display = (
         GlobalConfig.DisplayServer.wayland
         if GlobalConfig.IS_WAYLAND
@@ -255,7 +255,7 @@ def pytest_collection_modifyitems(session):
     walk_dir = (
         f"{GlobalConfig.APPS_PATH}/{session.config.option.app_name}"
         if session.config.option.app_name
-        and exists(f"{GlobalConfig.APPS_PATH}/{session.config.option.app_name}")
+           and exists(f"{GlobalConfig.APPS_PATH}/{session.config.option.app_name}")
         else GlobalConfig.APPS_PATH
     )
     csv_path_dict, no_youqu_mark = walk_apps(walk_dir)
@@ -378,19 +378,19 @@ def pytest_collection_modifyitems(session):
                         if index == containers[csv_path][ConfStr.SKIP_INDEX.value]:
                             # 标签是以 “skip-” 开头, noskip 用于解除所有的skip
                             if not session.config.option.noskip and tag.startswith(
-                                f"{ConfStr.SKIP.value}-"
+                                    f"{ConfStr.SKIP.value}-"
                             ):
                                 # 标签以 “fixed-” 开头, ifixed表示ignore fixed, 用于忽略所有的fixed
                                 # 1. 不给ifixed参数时，只要标记了fixed的用例，即使标记了skip-，也会执行；
                                 # 2. 给ifixed 参数时(--ifixed yes)，fixed不生效，仅通过skip跳过用例；
                                 try:
                                     if (
-                                        not session.config.option.ifixed
-                                        and containers[csv_path][ConfStr.FIXED_INDEX.value]
-                                        is not None
-                                        and tags[containers[csv_path][ConfStr.FIXED_INDEX.value]]
-                                        .strip('"')
-                                        .startswith(f"{ConfStr.FIXED.value}-")
+                                            not session.config.option.ifixed
+                                            and containers[csv_path][ConfStr.FIXED_INDEX.value]
+                                            is not None
+                                            and tags[containers[csv_path][ConfStr.FIXED_INDEX.value]]
+                                            .strip('"')
+                                            .startswith(f"{ConfStr.FIXED.value}-")
                                     ):
                                         continue
                                 except IndexError:
@@ -398,8 +398,8 @@ def pytest_collection_modifyitems(session):
                                     pass
                                 add_mark(item, ConfStr.SKIP.value, (tag,), {})
                             elif (
-                                not session.config.option.noskip
-                                and f"{ConfStr.SKIPIF.value}_" in tag
+                                    not session.config.option.noskip
+                                    and f"{ConfStr.SKIPIF.value}_" in tag
                             ):
                                 tag_list = tag.split("&&")
                                 for _tag in tag_list:
@@ -530,8 +530,8 @@ def pytest_collection_finish(session):
                     items_timeout += item_timeout
                     break
         session.sessiontimeout = (
-            (session.item_count - _n) * session.config.option.timeout
-        ) + items_timeout
+                                         (session.item_count - _n) * session.config.option.timeout
+                                 ) + items_timeout
         _min, sec = divmod(int(session.sessiontimeout), 60)
         hour, _min = divmod(_min, 60)
         print(
@@ -558,9 +558,9 @@ def pytest_collection_finish(session):
         if not exists(GlobalConfig.REPORT_PATH):
             makedirs(GlobalConfig.REPORT_PATH)
         with open(
-            f"{GlobalConfig.REPORT_PATH}/{session.config.option.export_csv_file}",
-            "w+",
-            encoding="utf-8",
+                f"{GlobalConfig.REPORT_PATH}/{session.config.option.export_csv_file}",
+                "w+",
+                encoding="utf-8",
         ) as _f:
             _f.writelines(execute2)
 
@@ -789,8 +789,8 @@ def pytest_sessionfinish(session):
                         default_result["result"] = "fail"
                     item_name = item.nodeid.split("[")[0]
                     if not execute.get(item_name) or (
-                        item.outcome != ConfStr.PASSED.value
-                        and execute.get(item_name).get("result") == "pass"
+                            item.outcome != ConfStr.PASSED.value
+                            and execute.get(item_name).get("result") == "pass"
                     ):
                         execute[item_name] = default_result
                 except AttributeError:
@@ -970,3 +970,24 @@ def walk_apps(walk_dir):
             if file.endswith(".csv") and file != "case_list.csv":
                 csv_path_dict[splitext(file)[0]] = f"{root}/{file}"
     return csv_path_dict, no_youqu_mark
+
+
+@pytest.fixture(scope='session')
+def page():
+    from playwright.sync_api import sync_playwright
+    driver = sync_playwright().start()
+    browser = driver.chromium.launch(headless=False)
+    context = browser.new_context(
+        ignore_https_errors=True,
+        viewport={
+            "width": 1920,
+            "height": 1080,
+        },
+    )
+    _page = context.new_page()
+
+    yield _page
+
+    context.close()
+    browser.close()
+    driver.stop()

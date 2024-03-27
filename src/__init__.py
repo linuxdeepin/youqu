@@ -10,6 +10,10 @@ import sys
 
 from funnylog import log as log
 from funnylog import logger as logger
+from funnylog.conf import setting as log_setting
+from setting.globalconfig import GlobalConfig
+
+log_setting.LOG_FILE_PATH = GlobalConfig.REPORT_PATH
 
 from setting.globalconfig import SystemPath
 

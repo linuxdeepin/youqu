@@ -77,7 +77,7 @@ def _transfer_to_client(ip, password, user, filename, transfer_appname=None):
         os.system(
             f"sshpass -p '{password}' ssh {user}@{ip} "
             f'"cd ~/{client_project_path}/ && '
-            f'bash env.sh && touch env_ok_{filename}"'
+            f'bash env.sh -p {password} && touch env_ok_{filename}"'
         )
 
 

@@ -12,12 +12,11 @@ import traceback
 from argparse import ArgumentParser
 
 from setting.globalconfig import GlobalConfig
+from setting.globalconfig import SystemPath
 
 os.environ["DISPLAY"] = ":0"
 os.environ["PIPENV_VERBOSITY"] = "-1"
 os.environ["XAUTHORITY"] = f"/home/{GlobalConfig.USERNAME}/.Xauthority"
-
-from setting.globalconfig import SystemPath
 
 for i in SystemPath:
     if i.value in sys.path:
@@ -25,6 +24,9 @@ for i in SystemPath:
     sys.path.append(i.value)
 
 from funnylog import logger
+from funnylog.conf import setting as log_setting
+
+log_setting.LOG_FILE_PATH = GlobalConfig.REPORT_PATH
 
 
 # pylint: disable=too-many-instance-attributes,broad-except
@@ -35,57 +37,57 @@ class Manage:
 
     # pylint: disable=too-many-arguments,too-many-locals,too-many-statements
     def __init__(
-        self,
-        app=None,
-        keywords=None,
-        tags=None,
-        rerun=None,
-        record_failed_case=None,
-        clean=None,
-        report_formats=None,
-        max_fail=None,
-        log_level=None,
-        timeout=None,
-        resolution=None,
-        debug=None,
-        noskip=None,
-        ifixed=None,
-        send_pms=None,
-        task_id=None,
-        trigger=None,
-        case_file=None,
-        branch=None,
-        deb_path=None,
-        pms_user=None,
-        pms_password=None,
-        suite_id=None,
-        pms_info_file=None,
-        top=None,
-        lastfailed=None,
-        duringfail=None,
-        repeat=None,
-        project_name=None,
-        build_location=None,
-        line=None,
-        client=None,
-        send_code=None,
-        build_env=None,
-        client_password=None,
-        parallel=None,
-        autostart=None,
-        pyid2csv=None,
-        export_csv_file=None,
-        pms2csv=None,
-        csv2pms=None,
-        csv_name=None,
-        pms_link_csv=None,
-        send2task=None,
-        url=None,
-        startdate=None,
-        enddate=None,
-        git_user=None,
-        git_password=None,
-        depth=None,
+            self,
+            app=None,
+            keywords=None,
+            tags=None,
+            rerun=None,
+            record_failed_case=None,
+            clean=None,
+            report_formats=None,
+            max_fail=None,
+            log_level=None,
+            timeout=None,
+            resolution=None,
+            debug=None,
+            noskip=None,
+            ifixed=None,
+            send_pms=None,
+            task_id=None,
+            trigger=None,
+            case_file=None,
+            branch=None,
+            deb_path=None,
+            pms_user=None,
+            pms_password=None,
+            suite_id=None,
+            pms_info_file=None,
+            top=None,
+            lastfailed=None,
+            duringfail=None,
+            repeat=None,
+            project_name=None,
+            build_location=None,
+            line=None,
+            client=None,
+            send_code=None,
+            build_env=None,
+            client_password=None,
+            parallel=None,
+            autostart=None,
+            pyid2csv=None,
+            export_csv_file=None,
+            pms2csv=None,
+            csv2pms=None,
+            csv_name=None,
+            pms_link_csv=None,
+            send2task=None,
+            url=None,
+            startdate=None,
+            enddate=None,
+            git_user=None,
+            git_password=None,
+            depth=None,
     ):
         self.default_app = app
         self.default_keywords = keywords
@@ -329,7 +331,7 @@ class Manage:
             Args.tags.value: args.tags or self.default_tags,
             Args.reruns.value: args.rerun or self.default_rerun,
             Args.record_failed_case.value: args.record_failed_case
-            or self.default_record_failed_case,
+                                           or self.default_record_failed_case,
             Args.clean.value: args.clean or self.default_clean,
             Args.report_formats.value: args.report_formats or self.default_report_formats,
             Args.max_fail.value: args.max_fail or self.default_max_fail,
@@ -422,9 +424,9 @@ class Manage:
                 pms_link_csv=pms_kwargs.get(Args.pms_link_csv.value),
             ).write_new_csv()
         elif (
-            pms_kwargs.get(Args.send2task.value)
-            and pms_kwargs.get(Args.task_id.value)
-            and pms_kwargs.get(Args.trigger.value) == "hand"
+                pms_kwargs.get(Args.send2task.value)
+                and pms_kwargs.get(Args.task_id.value)
+                and pms_kwargs.get(Args.trigger.value) == "hand"
         ):
             from src.pms.send2pms import Send2Pms
 
@@ -474,8 +476,8 @@ class Manage:
             Args.keywords.value: args.keywords or self.default_keywords,
             Args.tags.value: args.tags or self.default_tags,
             Args.pyid2csv.value: args.pyid2csv
-            or self.default_pyid2csv
-            or GlobalConfig.PY_ID_TO_CSV,
+                                 or self.default_pyid2csv
+                                 or GlobalConfig.PY_ID_TO_CSV,
             Args.export_csv_file.value: args.export_csv_file or self.default_export_csv_file,
             "collection_only": True,
         }
@@ -528,10 +530,10 @@ class Manage:
 
         if git_kwargs.get(Args.url.value):
             if all(
-                [
-                    git_kwargs.get(Args.user.value),
-                    git_kwargs.get(Args.password.value),
-                ]
+                    [
+                        git_kwargs.get(Args.user.value),
+                        git_kwargs.get(Args.password.value),
+                    ]
             ):
                 from src.git.clone import sslclone as git_clone
             else:
@@ -540,10 +542,10 @@ class Manage:
             git_clone(**git_kwargs)
 
         if all(
-            [
-                git_kwargs.get(Args.app_name.value),
-                git_kwargs.get(Args.startdate.value),
-            ]
+                [
+                    git_kwargs.get(Args.app_name.value),
+                    git_kwargs.get(Args.startdate.value),
+                ]
         ):
             from src.git.code_statistics import CodeStatistics
 

@@ -1,16 +1,17 @@
 # 版本更新记录
 
-## 2.5.2（dev）
+## 2.5.2（2024/03/27）
 
 **New**
 
 - `env.sh` 增加 `-p` 选项用于传递系统密码；[@mikigo](https://github.com/mikigo)
-- 自动输入 `log` 增加以 `Page` 结尾的 `class` 名称；[@mikigo](https://github.com/mikigo)
+- 自动输入日志增加以 `Page` 结尾的 `class` 名称，以适应 `Web UI` 类自动化；[@mikigo](https://github.com/mikigo)
 
 **Fix**
 
 - 修复统计用例和方法数量功能在子项目为 `gitlab` 时，无法获取到 `commit` 详细记录的问题；[@mikigo](https://github.com/mikigo)
 - 修复基于 `Python` 标准库`difflib` 做 `commit` 文件对比时，输出原始数据错误的问题；[@mikigo](https://github.com/mikigo)
+- 修复域管环境下，写日志文件报权限不够的问题；[@mikigo](https://github.com/mikigo)
 
 ## 2.5.1（2024/03/14）
 
