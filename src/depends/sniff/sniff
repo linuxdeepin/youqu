@@ -27,7 +27,7 @@ sys_path.append(dn(dn(dn(dn(abspath(__file__))))))
 from setting.globalconfig import GlobalConfig
 
 if GlobalConfig.IS_WAYLAND:
-    environ["XAUTHORITY"] = f"/home/{GlobalConfig.USERNAME}/.Xauthority"
+    environ["XAUTHORITY"] = f"{GlobalConfig.HOME}/.Xauthority"
 
 from src.depends.dogtail.config import config
 

@@ -103,6 +103,12 @@ if [ "${webui}" != "" ]; then
     playwright install chromium
 fi
 
+cd ${ROOT_DIR}/src/utils/
+remote=$(python3 sub_remote.py)
+if [ "${remote}" != "" ]; then
+    sudo pip3 install zerorpc -i ${pypi_mirror}
+fi
+
 sudo pip3 install -U auto_uos --extra-index-url ${pypi_mirror} -i http://10.20.52.221:8081 --trusted-host=10.20.52.221 \
 > /tmp/env.log 2>&1
 check_status auto_uos

@@ -11,7 +11,7 @@ from setting.globalconfig import GlobalConfig
 
 environ["DISPLAY"] = ":0"
 environ["PIPENV_VERBOSITY"] = "-1"
-environ["XAUTHORITY"] = f"/home/{GlobalConfig.USERNAME}/.Xauthority"
+environ["XAUTHORITY"] = f"{GlobalConfig.HOME}/.Xauthority"
 
 from setting.globalconfig import SystemPath
 

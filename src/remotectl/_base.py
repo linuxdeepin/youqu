@@ -41,8 +41,9 @@ def _feeling_good(cmd):
     subprocess.Popen(cmd, shell=True)
 
 
-def _base_env_check(password):
-    sudo = f"echo '{password}' | sudo -S"
+def _base_env_check():
+    sudo = f"echo '{conf.PASSWORD}' | sudo -S"
+    os.system("rm -rf ~/.ssh/known_hosts")
     if "StrictHostKeyChecking no" not in os.popen("cat /etc/ssh/ssh_config").read():
         os.system(
             f'{sudo} sed -i "s/#   StrictHostKeyChecking ask/ StrictHostKeyChecking no/g" /etc/ssh/ssh_config'
@@ -59,7 +60,15 @@ def _exclude():
     return exclude_str
 
 
-def _transfer_to_client(ip, password, user, filename, transfer_appname=None):
+def _transfer_appname(ip, password, user, transfer_appname):
+    os.system(f'''sshpass -p '{password}' ssh {user}@{ip} "mkdir -p ~/{client_project_path}/apps"''')
+    os.system(
+        f"sshpass -p '{password}' rsync -av -e ssh --exclude='__pycache__' "
+        f"{conf.APPS_PATH}/{transfer_appname} {user}@{ip}:~/{client_project_path}/apps/{transfer_appname}"
+    )
+
+
+def _transfer_to_client(ip, password, user):
     os.system(
         f'''sshpass -p '{password}' ssh {user}@{ip} "mkdir -p ~/{client_project_path}"'''
     )
@@ -67,17 +76,13 @@ def _transfer_to_client(ip, password, user, filename, transfer_appname=None):
         f"sshpass -p '{password}' rsync -av -e ssh {_exclude()} {conf.ROOT_DIR}/* "
         f"{user}@{ip}:~/{client_project_path}/"
     )
-    if transfer_appname:
-        os.system(f'''sshpass -p '{password}' ssh {user}@{ip} "mkdir -p ~/{client_project_path}/apps''')
-        os.system(
-            f"sshpass -p '{password}' scp -r {transfer_appname} {user}@{ip}:~/{client_project_path}/apps/{transfer_appname}")
     if not os.popen(
-            f'''sshpass -p "{password}" ssh {user}@{ip} "cd ~/{client_project_path}/ && ls env_ok_{filename}"'''
+            f'''sshpass -p "{password}" ssh {user}@{ip} "cd ~/{client_project_path}/ && ls env_ok"'''
     ).read().strip():
         os.system(
             f"sshpass -p '{password}' ssh {user}@{ip} "
             f'"cd ~/{client_project_path}/ && '
-            f'bash env.sh -p {password} && touch env_ok_{filename}"'
+            f'bash env.sh -p {password} && touch env_ok"'
         )
 
 
@@ -103,13 +108,16 @@ def check_rpc_started(filename):
             if not user or not ip:
                 raise ValueError("user and ip are required")
             password = kwargs.get('password') or (args[2] if len(args) >= 3 else conf.PASSWORD)
-            transfer_app = kwargs.get('transfer_appname')
+            transfer_appname = kwargs.get('transfer_appname')
+
+            _base_env_check()
+            if transfer_appname:
+                _transfer_appname(ip, password, user, transfer_appname)
             tool_status = os.popen(
                 f'''sshpass -p '{password}' ssh {user}@{ip} "ps -aux |  grep {filename} | grep -v grep"'''
             ).read()
             if not tool_status:
-                _base_env_check(password)
-                _transfer_to_client(ip, password, user, filename, transfer_app)
+                _transfer_to_client(ip, password, user)
                 _start_client_service(ip, password, user, filename)
 
             return func(*args, **kwargs)
@@ -117,3 +125,27 @@ def check_rpc_started(filename):
         return wrapper
 
     return deco
+
+
+def remote_client(ip, port):
+    try:
+        import zerorpc
+    except ImportError:
+        raise ImportError("Please install zerorpc")
+
+    r = zerorpc.Client(timeout=50, heartbeat=None)
+    try:
+        r.connect(f"tcp://{ip}:{port}")
+        return r
+    except Exception as e:
+        raise e
+
+
+def remote_server(obj, port):
+    try:
+        import zerorpc
+    except ImportError:
+        raise ImportError("Please install zerorpc")
+    server = zerorpc.Server(obj)
+    server.bind(f"tcp://0.0.0.0:{port}")
+    server.run()

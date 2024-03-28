@@ -15,6 +15,7 @@ from os.path import dirname
 from os.path import join
 from platform import machine
 from time import strftime
+import pathlib
 
 
 # pylint: disable=C0116,C0103,C0103,C0115,R0903
@@ -184,6 +185,7 @@ class _GlobalConfig:
     # ====================== 动态获取变量 ======================
     # username
     USERNAME = getuser()
+    HOME = str(pathlib.Path.home())
     # IP
     OS_VERSION = GetCfg("/etc/os-version", "Version")
     HOST_IP = str(popen("hostname -I |awk '{print $1}'").read()).strip("\n").strip()
