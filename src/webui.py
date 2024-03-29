@@ -2,8 +2,13 @@
 # _*_ coding:utf-8 _*_
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
+from typing import Union
+
 try:
-    from playwright.sync_api import Page
+    from playwright.sync_api import Page, APIResponse, PageAssertions, APIResponseAssertions
+    from playwright.sync_api import LocatorAssertions
+    from playwright.sync_api import expect as _expect
+    from playwright.sync_api import Locator
 except ImportError:
     print("Please install playwright")
 
@@ -21,3 +26,12 @@ class WebUI:
 
     def click_element(self, element):
         self.page.click(element)
+
+
+class WebExpext:
+
+    @staticmethod
+    def expext(
+            locator: Union[Page, Locator, APIResponse]
+    ) -> Union[PageAssertions, LocatorAssertions, APIResponseAssertions]:
+        return _expect(locator)
