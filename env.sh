@@ -61,13 +61,13 @@ if [ $? = 0 ]; then
 else
     echo -e "pipenv\t安装失败 ×"
     cat /tmp/env.log
-    exit 520
+    exit 120
 fi
 cd ${ROOT_DIR}/
 pipenv --python ${PYTHON_VERSION} > /tmp/env.log 2>&1
 if [ $? != 0 ]; then
     echo -e "AT环境创建失败"
-    exit 521
+    exit 121
 fi
 python_virtualenv_path=$(pipenv --venv)
 whitelist_path=`echo "${python_virtualenv_path}" | sed "s/\/home\/$USER\//\//"`

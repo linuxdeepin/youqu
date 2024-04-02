@@ -88,6 +88,7 @@ class Manage:
             git_user=None,
             git_password=None,
             depth=None,
+            slaves=None
     ):
         self.default_app = app
         self.default_keywords = keywords
@@ -139,6 +140,7 @@ class Manage:
         self.default_git_user = git_user
         self.default_git_password = git_password
         self.default_depth = depth
+        self.default_slaves = slaves
         from src.depends.cfonts import say
 
         say(GlobalConfig.PROJECT_NAME)
@@ -322,6 +324,7 @@ class Manage:
         sub_parser_run.add_argument("--build_location", default="", help="构建地区（写入json文件）")
         sub_parser_run.add_argument("--line", default="", help="执行的业务线（写入json文件）")
         sub_parser_run.add_argument("--autostart", default="", help="重启类场景开启letmego执行方案")
+        sub_parser_run.add_argument("--slaves", default="", help="远程测试机")
         args = parser.parse_args()
         from src.rtk._base import Args
 
@@ -358,6 +361,7 @@ class Manage:
             Args.build_location.value: args.build_location or self.default_build_location,
             Args.line.value: args.line or self.default_line,
             Args.autostart.value: args.autostart or self.default_autostart,
+            Args.slaves.value: args.slaves or self.default_slaves,
         }
         if local_kwargs.get(Args.autostart.value) or GlobalConfig.AUTOSTART:
             import letmego

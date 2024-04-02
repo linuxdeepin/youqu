@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # _*_ coding:utf-8 _*_
-
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
-
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
 from configparser import RawConfigParser  # 解决读取log报错
@@ -68,6 +66,10 @@ class _GlobalConfig:
     # Default does not exist
     REPORT_PATH = join(ROOT_DIR, DirName.REPORT)
 
+    # username
+    USERNAME = getuser()
+    HOME = str(pathlib.Path.home())
+
     # ====================== GLOBAL CONFIG INI ======================
     # Get config file object
     GLOBAL_CONFIG_FILE_PATH = join(SETTING_PATH, "globalconfig.ini")
@@ -114,6 +116,10 @@ class _GlobalConfig:
     OPENCV_PAUSE = run_cfg.get("OPENCV_PAUSE", default=1)
     OPENCV_TIMEOUT = run_cfg.get("OPENCV_TIMEOUT", default=5)
     OPENCV_MAX_MATCH_NUMBER = run_cfg.get("OPENCV_MAX_MATCH_NUMBER", default=100)
+
+    SLAVES = run_cfg.get("SLAVES", default="")
+    USER_DATE_DIR = run_cfg.get("USER_DATE_DIR", default="").replace("{{HOME}}", HOME)
+    EXECUTABLE_PATH = run_cfg.get("EXECUTABLE_PATH", default="")
 
     # [report]
     report_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "report")
@@ -183,9 +189,6 @@ class _GlobalConfig:
     END_DATE = log_cli.get("END_DATE", default="")
 
     # ====================== 动态获取变量 ======================
-    # username
-    USERNAME = getuser()
-    HOME = str(pathlib.Path.home())
     # IP
     OS_VERSION = GetCfg("/etc/os-version", "Version")
     HOST_IP = str(popen("hostname -I |awk '{print $1}'").read()).strip("\n").strip()

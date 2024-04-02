@@ -2,19 +2,44 @@
 # _*_ coding:utf-8 _*_
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
+from funnylog import logger
+
 from src.remotectl._remote_dogtail_ctl import remote_dogtail_ctl as remote_dogtail_ctl
 from src.remotectl._remote_other_ctl import remote_other_ctl as remote_other_ctl
 from src.dogtail_utils import DogtailUtils
 from src import Src
+from src.shortcut import ShortCut
 from setting import conf
 
 
-class Remote:
+class Remote(ShortCut):
+
     def __init__(self, ip, user, password, transfer_appname=None):
         self.user = user
         self.ip = ip
         self.password = password
         self.transfer_appname = transfer_appname
+
+    def __getattribute__(self, item):
+        if hasattr(ShortCut, item):
+            delattr(ShortCut, item)
+        return super().__getattribute__(item)
+
+    def __getattr__(self, item):
+        def impl(*args, **kwargs):
+            ar = ""
+            if args:
+                for arg in args:
+                    ar += f"'{arg}', "
+            if kwargs:
+                for k, v in kwargs.items():
+                    ar += f"{k}='{v}', "
+            logger.debug(
+                f"Remote(user='{self.user}', ip='{self.ip}', password='{self.password}').rctl.{item}({ar.rstrip(', ')})"
+            )
+            getattr(self.rctl, item)(*args, **kwargs)
+
+        return impl
 
     @property
     def rdog(self) -> DogtailUtils:
@@ -27,18 +52,6 @@ class Remote:
     def rctl(self) -> Src:
         return remote_other_ctl(user=self.user, ip=self.ip, password=self.password)
 
-    def click(self, x=None, y=None):
-        self.rctl.click(_x=x, _y=y)
-
-    def right_click(self, x=None, y=None):
-        self.rctl.right_click(_x=x, _y=y)
-
-    def double_click(self, x=None, y=None):
-        self.rctl.double_click(_x=x, _y=y)
-
-    def hot_key(self, *args):
-        self.rctl.hot_key(*args)
-
     @property
     def rctl_plus(self) -> Src:
         return remote_other_ctl(
@@ -48,3 +61,7 @@ class Remote:
     def find_image(self, image_path):
         _image_path = image_path.replace(conf.HOME, "~", Maximum=1)
         return self.rctl_plus.find_image(_image_path)
+
+
+if __name__ == '__main__':
+    Remote(ip="10.8.11.12", user="autotest", password="123").hot_key("ctrl", "alt", 't')

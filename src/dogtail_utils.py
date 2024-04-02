@@ -6,9 +6,10 @@
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114,C0103
 import re
+from typing import Union
 
 from setting.globalconfig import GlobalConfig
-from src  import logger
+from src import logger
 from src.cmdctl import CmdCtl
 from src.custom_exception import ElementNotFound
 from src.custom_exception import ApplicationStartError
@@ -18,6 +19,7 @@ try:
     from src.depends.dogtail.tree import root
     from src.depends.dogtail.tree import predicate
     from src.depends.dogtail.tree import config
+    from src.depends.dogtail.tree import Node
 
     config.childrenLimit = 1000
     # config.logDebugToStdOut = False
@@ -61,7 +63,7 @@ class DogtailUtils(MouseKey):
                 logger.error(search_app)
                 raise ApplicationStartError(self.name) from SearchError
 
-    def app_element(self, *args, **kwargs):
+    def app_element(self, *args, **kwargs) -> Node:
         """
          获取app元素的对象
         :return: 元素的对象
@@ -168,7 +170,6 @@ class DogtailUtils(MouseKey):
         return node, element
 
     def __trace(self, element, result, expr):
-        """trace"""
         if expr.startswith("//"):
             name = expr[2:]
             node, element = self.__evalx(name, element, recursive=True)
@@ -188,7 +189,7 @@ class DogtailUtils(MouseKey):
             raise ElementNotFound(expr) from SearchError
         return result
 
-    def find_elements_by_attr(self, expr):
+    def find_elements_by_attr(self, expr) -> Union[list, bool]:
         """
          通过层级获取元素
         :param expr: 元素定位 $/xx.xxx//xxx,  $根节点  /当前子节点， //递归查找子节点
@@ -205,10 +206,10 @@ class DogtailUtils(MouseKey):
         logger.debug(f"元素 {result}")
         return result
 
-    def find_element_by_attr(self, expr, index=0):
+    def find_element_by_attr(self, expr, index=0) -> Node:
         """
          查找界面元素
-        :param expr: 匹配格式
+        :param expr: 匹配格式 元素定位 $/xxx//xxx,  $根节点  /当前子节点， //递归查找子节点
         :param index: 匹配结果索引
         :return: 元素对象
         """

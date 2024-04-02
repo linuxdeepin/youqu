@@ -28,10 +28,10 @@ class WebUI:
         self.page.click(element)
 
 
-class WebExpext:
+class WebAssert:
 
     @staticmethod
-    def expext(
+    def assert_locator(
             locator: Union[Page, Locator, APIResponse]
     ) -> Union[PageAssertions, LocatorAssertions, APIResponseAssertions]:
         return _expect(locator)

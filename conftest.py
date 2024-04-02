@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0301,R0912,C0413,R0914,W0212,R1702,R0915
 # pylint: disable=C0114,W0621,C0411,C0412,R1706,E0401
+import re
 import sys
 from os import environ
 
@@ -144,6 +145,7 @@ def pytest_addoption(parser):
     parser.addoption("--export_csv_file", action="store", default="", help="导出csv文件")
     parser.addoption("--line", action="store", default="", help="业务线(CI)")
     parser.addoption("--app_name", action="store", default="", help="执行的应用名称")
+    parser.addoption("--slaves", action="store", default="", help="远程测试机")
     parser.addoption(
         "--autostart", action="store", default="", help="重启类场景开启letmego执行方案"
     )
@@ -973,21 +975,66 @@ def walk_apps(walk_dir):
 
 
 @pytest.fixture(scope='session')
-def page():
+def default_page():
     from playwright.sync_api import sync_playwright
     driver = sync_playwright().start()
-    browser = driver.chromium.launch(headless=False)
+    browser = driver.chromium.launch(
+        headless=False,
+        args=[
+            '--start-maximized',
+        ],
+    )
     context = browser.new_context(
         ignore_https_errors=True,
-        viewport={
-            "width": 1920,
-            "height": 1080,
-        },
+        no_viewport=True,
     )
     _page = context.new_page()
-
     yield _page
-
     context.close()
     browser.close()
     driver.stop()
+
+
+@pytest.fixture(scope='session')
+def page():
+    from playwright.sync_api import sync_playwright
+    driver = sync_playwright().start()
+    browser = driver.chromium.launch_persistent_context(
+        user_data_dir=GlobalConfig.USER_DATE_DIR,
+        executable_path=GlobalConfig.EXECUTABLE_PATH,
+        ignore_https_errors=True,
+        no_viewport=True,
+        slow_mo=500,
+        headless=False,
+        bypass_csp=True,
+        args=[
+            '--disable-blink-features=AutomationControlled',
+            '--start-maximized',
+        ],
+
+    )
+    _page = browser.pages[0]
+    yield _page
+    browser.close()
+    driver.stop()
+
+
+@pytest.fixture(scope="session")
+def slaves(pytestconfig):
+    _slaves = pytestconfig.getoption("slaves") or GlobalConfig.SLAVES
+    s = []
+    if _slaves:
+        for slave in _slaves.split("/"):
+            slave_info = re.findall(r"^(.+?)@(\d+\.\d+\.\d+\.\d+):{0,1}(.*?)$", slave)
+            if slave_info:
+                user, ip, password = slave_info[0]
+                s.append(
+                    {
+                        "user": user,
+                        "ip": ip,
+                        "password": password or GlobalConfig.PASSWORD,
+                    }
+                )
+    if not s:
+        raise EnvironmentError("No slaves found")
+    return s
