@@ -9,10 +9,11 @@ from src.remotectl._remote_other_ctl import remote_other_ctl as remote_other_ctl
 from src.dogtail_utils import DogtailUtils
 from src import Src
 from src.shortcut import ShortCut
+from src.cmdctl import CmdCtl
 from setting import conf
 
 
-class Remote(ShortCut):
+class Remote(ShortCut, CmdCtl):
 
     def __init__(self, ip, user, password, transfer_appname=None):
         self.user = user
@@ -23,6 +24,8 @@ class Remote(ShortCut):
     def __getattribute__(self, item):
         if hasattr(ShortCut, item):
             delattr(ShortCut, item)
+        if hasattr(CmdCtl, item):
+            delattr(CmdCtl, item)
         return super().__getattribute__(item)
 
     def __getattr__(self, item):
@@ -64,4 +67,4 @@ class Remote(ShortCut):
 
 
 if __name__ == '__main__':
-    Remote(ip="10.8.11.12", user="autotest", password="123").hot_key("ctrl", "alt", 't')
+    Remote(ip="10.8.11.12", user="autotest", password="123").ctrl_alt_t()
