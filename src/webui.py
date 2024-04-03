@@ -5,10 +5,13 @@
 from typing import Union
 
 try:
-    from playwright.sync_api import Page, APIResponse, PageAssertions, APIResponseAssertions
+    from playwright.sync_api import Page
     from playwright.sync_api import LocatorAssertions
     from playwright.sync_api import expect as _expect
     from playwright.sync_api import Locator
+    from playwright.sync_api import APIResponse
+    from playwright.sync_api import PageAssertions
+    from playwright.sync_api import APIResponseAssertions
 except ImportError:
     print("Please install playwright")
 
