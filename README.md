@@ -3,10 +3,10 @@
     <img src="./docs/logo.png" width="520" alt="YouQu">
   </a>
 </p>
-
 <p align="center">
-    <em>有趣，一个使用简单且功能强大的自动化测试基础框架。</em>
+    <em>有趣（YouQu），一个使用简单且功能强大的自动化测试基础框架。</em>
 </p>
+
 
 [![GitHub issues](https://img.shields.io/github/issues/linuxdeepin/deepin-autotest-framework?color=%23F79431)](https://github.com/linuxdeepin/deepin-autotest-framework/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/linuxdeepin/deepin-autotest-framework?color=%23F79431)](https://github.com/linuxdeepin/deepin-autotest-framework/pulls)
@@ -30,38 +30,45 @@
 
 ---
 
-**文档**: <a href="https://linuxdeepin.github.io/deepin-autotest-framework" target="_blank">https://linuxdeepin.github.io/deepin-autotest-framework</a>
-
-**源码**: <a href="https://github.com/linuxdeepin/deepin-autotest-framework" target="_blank">https://github.com/linuxdeepin/deepin-autotest-framework</a>
+<a href="https://linuxdeepin.github.io/deepin-autotest-framework" target="_blank">在线文档</a> / <a href="http://youqu.uniontech.com" target="_blank">内网文档</a> / <a href="https://github.com/linuxdeepin/deepin-autotest-framework" target="_blank">GitHub</a> / <a href="https://gitee.com/deepin-community/deepin-autotest-framework" target="_blank">Gitee</a>
 
 ---
 
-有趣（YouQu）是深度科技开源的一个用于 `Deepin/UOS` 操作系统（Linux）的自动化测试框架，采用结构分层的设计理念，支持多元化元素定位和断言、用例标签化管理和执行、强大的日志和报告输出等特色功能，同时完美兼容 X11、Wayland 显示协议，环境部署简单，操作易上手。
+有趣（YouQu）是深度公司开源的一个用于 Linux 操作系统的自动化测试框架，支持多元化元素定位和断言、用例标签化管理和执行、强大的日志和报告输出等特色功能，同时完美兼容 X11、Wayland 显示协议，环境部署简单，操作易上手。
 
-### 爱上 “有趣” 的 18 个理由
+## 有趣（YouQu）能做什么
 
-1. 核心库提供了统一的接口，编写方法时只需要导入一个包就可以使用到核心库提供的所有功能；
-2. 公共库封装了很多常用模块的相关方法，比如：任务栏的操作、桌面的操作、右键菜单的操作等等；
-3. 除了常用的属性定位、图像识别以外，我们还提供基于 `UI` 的元素定位方案，其使用简单且高效，效果一定能惊讶到你；
-4. 对属性定位的方法进行了二次封装，将编写属性定位的方法变得简单而优雅；
-5. 对图像识别定位技术进行功能升级，除了支持单个坐标返回，还支持同一界面下多个相同元素返回多个坐标的功能；
-6. 提供用例标签化管理、批量跳过和批量条件跳过的功能，你想不到一个 `csv` 文件原来能干这么多事情；
-7. 提供了功能强大的执行器入口，让你可以方便的在本地执行任何用例集的用例，其丰富的自定义配置项，满足你对执行器所有的幻想；
-8. 提供远程执行的功能，可以控制多台机器并行跑，或者分布式跑，这种付费功能现在免费给你用；
-9. 提供自动输出日志的功能，你再也不用为每个方法单独写输出日志的代码，一切我们给你搞定了，日志输出不仅内容丰富，颜值也绝对在线，我们还自己设计了一款终端输出主题叫《五彩斑斓的黑》；
-10. 提供一键部署自动化测试环境的功能，让你再也不用为环境部署而烦恼；
-11. 提供自动生成多种报告的功能，你想输出什么报告形式都行，而且我们在报告中还加入了失败录屏和失败截图的功能；
-12. 对断言进行了二次封装，提供更友好化的错误提示，让定位问题精准高效；
-13. 不仅支持单条用例超时控制，而且还支持动态控制用例批量执行的总时间，确保 `CI` 环境下能顺畅运行；
-14. 支持本地文件测试套执行、`PMS` 测试套执行、标签化执行方案，满足你各种场景下的执行需求；
-15. 支持基于深度学习的 `OCR` 功能，可定位可断言，中文识别的天花板；
-16. 完美兼容 `Wayland`  和 `X11`，真正做到一套代码，随处执行；
-17. 支持多种方式的数据回填功能，其中异步回填的方案，完美解决了数据回填的耗时问题；
-18. 支持重启交互场景用例的执行，使用方法优雅简洁；
+- [x] Linux 桌面应用 UI 自动化测试
+- [x] Linux 桌面应用 D-Bus/Gsettings 接口自动化测试
+- [x] 命令行自动化测试
+- [x] HTTP 接口自动化测试
+- [x] Web UI 自动化测试
+- [ ] Linux 桌面应用性能自动化测试
 
-------------------------
+<details>
+	<summary style="color: #FF9933">爱上 “有趣（YouQu）” 的 N 个理由</summary>
+	<ul>
+        <li>无处不在的代码补全，让编写自动化测试用例成为一种享受；</li>
+        <li>核心库提供了统一的接口，编写方法时只需要导入一个包就可以使用到核心库提供的所有功能；</li>
+        <li>除了常用的属性定位、图像识别以外，我们还提供基于 UI 的元素定位方案，其使用简单且高效，效果一定能惊讶到你；</li>
+        <li>对属性定位的方法进行了二次封装，将编写属性定位的方法变得简单而优雅；</li>
+        <li>对图像识别定位技术进行功能升级，除了支持单个坐标返回，还支持同一界面下多个相同元素返回多个坐标的功能；</li>
+        <li>提供用例标签化管理、批量跳过和批量条件跳过的功能，你想不到一个 csv 文件原来能干这么多事情；</li>
+        <li>提供了功能强大的执行器入口，让你可以方便的在本地执行任何用例集的用例，其丰富的自定义配置项，满足你对执行器所有的幻想；</li>
+        <li>提供远程执行的功能，可以控制多台机器并行跑，或者分布式跑，这种付费功能现在免费给你用；</li>
+        <li>提供自动输出日志的功能，你再也不用为每个方法单独写输出日志的代码，一切我们给你搞定了，日志输出不仅内容丰富，颜值也绝对在线，我们还自己设计了一款终端输出主题叫《五彩斑斓的黑》；</li>
+        <li>提供一键部署自动化测试环境的功能，让你再也不用为环境部署而烦恼；</li>
+        <li>提供自动生成多种报告的功能，你想输出什么报告形式都行，而且我们在报告中还加入了失败录屏和失败截图的功能；</li>
+        <li>对断言进行了二次封装，提供更友好化的错误提示，让定位问题精准高效；</li>
+        <li>不仅支持单条用例超时控制，而且还支持动态控制用例批量执行的总时间，确保 CI 环境下能顺畅运行；</li>
+        <li>支持本地文件测试套执行、PMS 测试套执行、标签化执行方案，满足你各种场景下的执行需求；</li>
+        <li>支持基于深度学习的 OCR 功能，可定位可断言，中文识别的天花板；</li>
+        <li>完美兼容 Wayland  和 X11，真正做到一套代码，随处执行；</li>
+        <li>支持多种方式的数据回填功能，其中异步回填的方案，完美解决了数据回填的耗时问题；</li>
+        <li>支持重启交互场景用例的执行，使用方法优雅简洁；</li>
+    </ul>
+</details>
 
-统信公司内网还可以访问【[内网文档](http://youqu.uniontech.com/)】，文档内容一样，访问速度更快哦~~
 
 ## 安装使用
 
@@ -95,9 +102,12 @@ The project: [my_project],has been created by youqu-x.x.x
 <div class="termy">
 
 ```console
-// 如果你的测试机密码不是 `1` ，那你需要在全局配置文件 `globalconfig.ini` 里面将 `PASSWORD` 配置项修改为当前测试机的密码。
 $ cd my_project
+// 使用的默认密码是 1 ，您可以在修改配置文件 setting/globalconfig.ini 里面的 PASSWORD 配置项
 $ bash env.sh
+---> 100%
+// 也可以使用 -p 选项传入密码
+$ bash env.sh -p ${my_password}
 ---> 100%
 ```
 
