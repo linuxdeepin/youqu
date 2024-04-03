@@ -46,7 +46,7 @@
 - [ ] Linux 桌面应用性能自动化测试
 
 <details>
-	<summary style="color: #FF9933">爱上 “有趣（YouQu）” 的 N 个理由</summary>
+	<summary style="color: #FF9933">点击查看爱上 “有趣（YouQu）” 的 N 个理由</summary>
 	<ul>
         <li>无处不在的代码补全，让编写自动化测试用例成为一种享受；</li>
         <li>核心库提供了统一的接口，编写方法时只需要导入一个包就可以使用到核心库提供的所有功能；</li>
@@ -68,6 +68,7 @@
         <li>支持重启交互场景用例的执行，使用方法优雅简洁；</li>
     </ul>
 </details>
+
 
 
 ## 安装使用
