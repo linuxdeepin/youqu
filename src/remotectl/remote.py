@@ -20,16 +20,18 @@ class Remote(ShortCut, CmdCtl):
         self.ip = ip
         self.password = password
         self.transfer_appname = transfer_appname
+        self.tmp_obj = None
 
     def __getattribute__(self, item):
         if not item.startswith("__") and not item.endswith("__"):
             for cls_obj in [ShortCut, CmdCtl]:
                 if hasattr(cls_obj, item):
+                    self.tmp_obj = {"cls_obj": cls_obj, "item_obj": getattr(cls_obj, item)}
                     delattr(cls_obj, item)
         return super().__getattribute__(item)
 
     def __getattr__(self, item):
-        def impl(*args, **kwargs):
+        def func(*args, **kwargs):
             ar = ""
             if args:
                 for arg in args:
@@ -40,9 +42,14 @@ class Remote(ShortCut, CmdCtl):
             logger.debug(
                 f"Remote(user='{self.user}', ip='{self.ip}', password='{self.password}').rctl.{item}({ar.rstrip(', ')})"
             )
+
             getattr(self.rctl, item)(*args, **kwargs)
 
-        return impl
+            self.remote_method_has_arguments = True
+            if self.tmp_obj:
+                setattr(self.tmp_obj["cls_obj"], item, self.tmp_obj["item_obj"])
+
+        return func
 
     @property
     def rdog(self) -> DogtailUtils:
@@ -67,4 +74,5 @@ class Remote(ShortCut, CmdCtl):
 
 
 if __name__ == '__main__':
-    Remote(ip="10.8.11.12", user="autotest", password="123").ctrl_alt_t()
+    r = Remote(ip="10.8.11.12", user="autotest", password="123")
+    r.ctrl_alt_t()

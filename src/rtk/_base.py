@@ -76,6 +76,7 @@ class Args(Enum):
     user = "user"
     password = "password"
     depth = "depth"
+    slaves = "slaves"
 
 
 def  transform_app_name(app_name):
