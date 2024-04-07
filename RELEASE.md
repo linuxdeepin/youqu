@@ -7,8 +7,8 @@
 - 新增尝鲜版 `Web UI` 自动化测试功能：[@mikigo](https://github.com/mikigo)
 
 	- 框架为 `Web UI`自动化测试提供一个 `fixture` 对象：`page`，它默认使用系统自带的浏览器进行测试，如果需要指定其他第三方的浏览器，提供配置项可以指定浏览器对应的路径。
-	- 还提供一个 `fixture` 对象：`default_page`，它使用 `playwright` 最新的 `chromium` 浏览器进行测试。
-	- 重写了 `playwright` 的断言语句，以保持统一的断言语句风格。
+	- 还提供一个 `fixture` 对象：`native_page`，它使用 `playwright` 最新的 `chromium` 浏览器进行测试。
+	- 重写了 `Playwright` 的断言语句，以保持统一的断言语句风格。
 	
 - 新增远程控制功能，在用例步骤中操作远程机器，且远程操作方法实现了编辑器代码补全。[@mikigo](https://github.com/mikigo)
 - 新增命令行入参或配置文件传入远程机器的 `user`、`ip`、`password` 信息，用例中通过框架提供的 `fixture` 对象：`slaves` 获取数据，供用例层使用。[@mikigo](https://github.com/mikigo)

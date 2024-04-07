@@ -975,7 +975,7 @@ def walk_apps(walk_dir):
 
 
 @pytest.fixture(scope='session')
-def default_page():
+def native_page():
     from playwright.sync_api import sync_playwright
     driver = sync_playwright().start()
     browser = driver.chromium.launch(
