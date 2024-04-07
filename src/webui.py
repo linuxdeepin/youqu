@@ -2,9 +2,13 @@
 # _*_ coding:utf-8 _*_
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
+from contextlib import contextmanager
 from typing import Union
 
+from setting.globalconfig import GlobalConfig
+
 try:
+    from playwright.sync_api import sync_playwright
     from playwright.sync_api import Page
     from playwright.sync_api import LocatorAssertions
     from playwright.sync_api import expect as _expect
@@ -38,3 +42,26 @@ class WebAssert:
             locator: Union[Page, Locator, APIResponse]
     ) -> Union[PageAssertions, LocatorAssertions, APIResponseAssertions]:
         return _expect(locator)
+
+
+@contextmanager
+def debug_page():
+    driver = sync_playwright().start()
+    browser = driver.chromium.launch_persistent_context(
+        user_data_dir=GlobalConfig.USER_DATE_DIR,
+        executable_path=GlobalConfig.EXECUTABLE_PATH,
+        ignore_https_errors=True,
+        no_viewport=True,
+        slow_mo=500,
+        headless=False,
+        bypass_csp=True,
+        args=[
+            '--disable-blink-features=AutomationControlled',
+            '--start-maximized',
+        ],
+
+    )
+    _page = browser.pages[0]
+    yield _page
+    browser.close()
+    driver.stop()

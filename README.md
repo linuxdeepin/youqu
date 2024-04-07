@@ -104,7 +104,7 @@ The project: [my_project],has been created by youqu-x.x.x
 
 ```console
 $ cd my_project
-// 使用的默认密码是 1 ，您可以在修改配置文件 setting/globalconfig.ini 里面的 PASSWORD 配置项
+// 使用的默认密码是 1 ，您可以修改配置文件 setting/globalconfig.ini 里面的 PASSWORD 配置项
 $ bash env.sh
 ---> 100%
 // 也可以使用 -p 选项传入密码

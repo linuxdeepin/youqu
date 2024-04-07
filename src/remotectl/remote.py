@@ -22,10 +22,10 @@ class Remote(ShortCut, CmdCtl):
         self.transfer_appname = transfer_appname
 
     def __getattribute__(self, item):
-        if hasattr(ShortCut, item):
-            delattr(ShortCut, item)
-        if hasattr(CmdCtl, item):
-            delattr(CmdCtl, item)
+        if not item.startswith("__") and not item.endswith("__"):
+            for cls_obj in [ShortCut, CmdCtl]:
+                if hasattr(cls_obj, item):
+                    delattr(cls_obj, item)
         return super().__getattribute__(item)
 
     def __getattr__(self, item):
