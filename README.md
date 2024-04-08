@@ -25,12 +25,12 @@
 
 [![Hits](https://hits.sh/github.com/linuxdeepin/deepin-autotest-framework.svg?style=flat&label=Github_Hits&color=blue)](https://github.com/linuxdeepin/deepin-autotest-framework)
 [![Hits](https://hits.sh/linuxdeepin.github.io/deepin-autotest-framework.svg?style=flat&label=YouQu_Hits&color=blue)](https://linuxdeepin.github.io/deepin-autotest-framework)
-[![Hits](https://hits.sh/youqu.uniontech.com.svg?style=flat&label=YouQu内网_Hits&color=blue)](http://youqu.uniontech.com/)
+[![Hits](https://hits.sh/deepin-community.gitee.io/deepin-autotest-framework.svg?style=flat&label=YouQu Gitee_Hits&color=blue)](https://deepin-community.gitee.io/deepin-autotest-framework/)
 [![Hits](https://hits.sh/pypi.org/project/youqu.svg?style=flat&label=PyPI_Hits&color=blue)](https://pypi.org/project/youqu/)
 
 ---
 
-<a href="https://linuxdeepin.github.io/deepin-autotest-framework" target="_blank">在线文档</a> / <a href="http://youqu.uniontech.com" target="_blank">内网文档</a> / <a href="https://github.com/linuxdeepin/deepin-autotest-framework" target="_blank">GitHub</a> / <a href="https://gitee.com/deepin-community/deepin-autotest-framework" target="_blank">Gitee</a>
+<a href="https://linuxdeepin.github.io/deepin-autotest-framework" target="_blank">在线文档</a> / <a href="https://deepin-community.gitee.io/deepin-autotest-framework/" target="_blank">在线文档（国内加速）</a> / <a href="https://github.com/linuxdeepin/deepin-autotest-framework" target="_blank">GitHub</a> / <a href="https://gitee.com/deepin-community/deepin-autotest-framework" target="_blank">Gitee</a>
 
 ---
 
