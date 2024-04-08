@@ -24,8 +24,8 @@
 [![Downloads](https://static.pepy.tech/badge/youqu)](https://pepy.tech/project/youqu)
 
 [![Hits](https://hits.sh/github.com/linuxdeepin/deepin-autotest-framework.svg?style=flat&label=Github_Hits&color=blue)](https://github.com/linuxdeepin/deepin-autotest-framework)
-[![Hits](https://hits.sh/linuxdeepin.github.io/deepin-autotest-framework.svg?style=flat&label=YouQu_Hits&color=blue)](https://linuxdeepin.github.io/deepin-autotest-framework)
-[![Hits](https://hits.sh/deepin-community.gitee.io/deepin-autotest-framework.svg?style=flat&label=YouQu Gitee_Hits&color=blue)](https://deepin-community.gitee.io/deepin-autotest-framework/)
+[![Hits](https://hits.sh/linuxdeepin.github.io/deepin-autotest-framework.svg?style=flat&label=GitHub_Pages_Hits&color=blue)](https://linuxdeepin.github.io/deepin-autotest-framework)
+[![Hits](https://hits.sh/deepin-community.gitee.io/deepin-autotest-framework.svg?style=flat&label=Gitee_Pages_Hits&color=blue)](https://deepin-community.gitee.io/deepin-autotest-framework/)
 [![Hits](https://hits.sh/pypi.org/project/youqu.svg?style=flat&label=PyPI_Hits&color=blue)](https://pypi.org/project/youqu/)
 
 ---
