@@ -1,4 +1,4 @@
-site_name: YouQu Docs
+site_name: YouQu
 copyright: Copyright © 2024 UnionTech Software Technology Co., Ltd. All Rights Reserved.
 theme:
   name: material
@@ -43,7 +43,7 @@ theme:
   icon:
     repo: fontawesome/brands/github
 
-repo_name: youqu
+repo_name: YouQu
 repo_url: https://github.com/linuxdeepin/deepin-autotest-framework
 
 markdown_extensions:
@@ -157,15 +157,12 @@ nav:
     - 智能化功能测试.md
     - 智能化性能测试.md
 
-  - 框架生态:
-      - 框架生态.md
+  - 框架生态: 框架生态.md
 
   - 视频教程: videos.md
 
-  - 版本更新:
-    - RELEASE.md
+  - 版本更新: RELEASE.md
 
   - 常见问题: 常见问题.md
 
-  - 留言:
-      - comments.md
+  - 留言: comments.md
