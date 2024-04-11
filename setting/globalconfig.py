@@ -8,6 +8,7 @@ from enum import Enum
 from enum import unique
 from getpass import getuser
 from os import popen
+from os import getenv
 from os.path import abspath
 from os.path import dirname
 from os.path import join
@@ -189,13 +190,13 @@ class _GlobalConfig:
     END_DATE = log_cli.get("END_DATE", default="")
 
     # ====================== 动态获取变量 ======================
+    version_cfg = GetCfg("/etc/os-version", "Version")
+    VERSION = (version_cfg.get("EditionName[zh_CN]") or "") + (
+            version_cfg.get("MinorVersion") or ""
+    )
     # IP
-    OS_VERSION = GetCfg("/etc/os-version", "Version")
     HOST_IP = str(popen("hostname -I |awk '{print $1}'").read()).strip("\n").strip()
     PRODUCT_INFO = popen("cat /etc/product-info").read()
-    VERSION = (OS_VERSION.get("EditionName[zh_CN]") or "") + (
-            OS_VERSION.get("MinorVersion") or ""
-    )
     # machine type
     # e.g. x86_64
     SYS_ARCH = machine()
@@ -226,11 +227,14 @@ class _GlobalConfig:
         .read()
         .split("=")[-1]
         .strip("\n")
-    )
+    ) or getenv("XDG_SESSION_TYPE")
 
     class DisplayServer:
         wayland = "wayland"
         x11 = "x11"
+
+    if DISPLAY_SERVER not in (DisplayServer.x11, DisplayServer.wayland):
+        raise EnvironmentError(f"DISPLAY_SERVER: {DISPLAY_SERVER} why?")
 
     IS_X11 = DISPLAY_SERVER == DisplayServer.x11
     IS_WAYLAND = DISPLAY_SERVER == DisplayServer.wayland

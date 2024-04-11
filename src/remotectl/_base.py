@@ -60,8 +60,11 @@ def _exclude():
     return exclude_str
 
 
+def _ssh(ip, password, user):
+    return f"sshpass -p '{password}' ssh {user}@{ip}"
+
+
 def _transfer_appname(ip, password, user, transfer_appname):
-    os.system(f'''sshpass -p '{password}' ssh {user}@{ip} "mkdir -p ~/{client_project_path}/apps"''')
     os.system(
         f"sshpass -p '{password}' rsync -av -e ssh --exclude='__pycache__' "
         f"{conf.APPS_PATH}/{transfer_appname} {user}@{ip}:~/{client_project_path}/apps/{transfer_appname}"
@@ -70,25 +73,29 @@ def _transfer_appname(ip, password, user, transfer_appname):
 
 def _transfer_to_client(ip, password, user):
     os.system(
-        f'''sshpass -p '{password}' ssh {user}@{ip} "mkdir -p ~/{client_project_path}"'''
+        f'''{_ssh(ip, password, user)} "mkdir -p ~/{client_project_path}"'''
     )
     os.system(
         f"sshpass -p '{password}' rsync -av -e ssh {_exclude()} {conf.ROOT_DIR}/* "
         f"{user}@{ip}:~/{client_project_path}/"
     )
+    os.system(
+        f'''{_ssh(ip, password, user)} "cd ~/{client_project_path}/ && mkdir apps && touch apps/__init__.py"'''
+    )
+    os.system(
+        f'''{_ssh(ip, password, user)} "cd ~/{client_project_path}/apps/ && touch REMOTE"'''
+    )
     if not os.popen(
-            f'''sshpass -p "{password}" ssh {user}@{ip} "cd ~/{client_project_path}/ && ls env_ok"'''
+            f'''{_ssh(ip, password, user)} "cd ~/{client_project_path}/ && ls env_ok"'''
     ).read().strip():
         os.system(
-            f"sshpass -p '{password}' ssh {user}@{ip} "
-            f'"cd ~/{client_project_path}/ && '
-            f'bash env.sh -p {password} && touch env_ok"'
+            f'{_ssh(ip, password, user)} "cd ~/{client_project_path}/ && bash env.sh -p {password} && touch env_ok"'
         )
 
 
 def _start_client_service(ip, password, user, filename):
     _cmd = (
-        f"nohup sshpass -p '{password}' ssh {user}@{ip} "
+        f"nohup {_ssh(ip, password, user)} "
         f'"cd ~/{client_project_path}/src/remotectl/ && '
         f'pipenv run python {filename}" > /tmp/{filename}.log 2>&1 &'
     )
@@ -114,7 +121,7 @@ def check_rpc_started(filename):
             if transfer_appname:
                 _transfer_appname(ip, password, user, transfer_appname)
             tool_status = os.popen(
-                f'''sshpass -p '{password}' ssh {user}@{ip} "ps -aux |  grep {filename} | grep -v grep"'''
+                f'''{_ssh(ip, password, user)} "ps -aux |  grep {filename} | grep -v grep"'''
             ).read()
             if not tool_status:
                 _transfer_to_client(ip, password, user)
