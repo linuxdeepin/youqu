@@ -30,7 +30,11 @@
 
 ---
 
-<a href="https://linuxdeepin.github.io/deepin-autotest-framework" target="_blank">在线文档</a> / <a href="https://deepin-community.gitee.io/deepin-autotest-framework/" target="_blank">在线文档（国内加速）</a> / <a href="https://github.com/linuxdeepin/deepin-autotest-framework" target="_blank">GitHub</a> / <a href="https://gitee.com/deepin-community/deepin-autotest-framework" target="_blank">Gitee</a>
+<a href="https://github.com/linuxdeepin/deepin-autotest-framework" target="_blank">GitHub</a> / <a href="https://gitee.com/deepin-community/deepin-autotest-framework" target="_blank">Gitee</a>
+
+<a href="https://linuxdeepin.github.io/deepin-autotest-framework" target="_blank">在线文档</a> / <a href="https://deepin-community.gitee.io/deepin-autotest-framework/" target="_blank">在线文档（国内加速）</a> / <a href="http://youqu.uniontech.com/" target="_blank">在线文档（公司内网）</a> 
+
+<a href="http://youqu.uniontech.com/docs" target="_blank">知识库（公司内网）</a> / <a href="http://youqu.uniontech.com/tool" target="_blank">工具库（公司内网）</a>
 
 ---
 
