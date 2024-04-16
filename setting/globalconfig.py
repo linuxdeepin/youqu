@@ -122,6 +122,17 @@ class _GlobalConfig:
     USER_DATE_DIR = run_cfg.get("USER_DATE_DIR", default="").replace("{{HOME}}", HOME)
     EXECUTABLE_PATH = run_cfg.get("EXECUTABLE_PATH", default="")
 
+    # [remote]
+    remote_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "remote")
+    SEND_CODE = remote_cfg.get("SEND_CODE", default="yes")
+    BUILD_ENV = remote_cfg.get("BUILD_ENV", default="no")
+    CLIENT_PASSWORD = remote_cfg.get("CLIENT_PASSWORD", default="1")
+    PARALLEL = remote_cfg.get("PARALLEL", default="yes")
+    CLEAN_SERVER_REPORT_DIR = remote_cfg.get("CLEAN_SERVER_REPORT_DIR", default="no")
+    CLEAN_CLIENT_REPORT_DIR = remote_cfg.get("CLEAN_CLIENT_REPORT_DIR", default="yes")
+    SCAN = remote_cfg.get("SCAN", default="300")
+    CLIENTS = remote_cfg.get("CLIENTS", default="")
+
     # [report]
     report_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "report")
     REPORT_TITLE = report_cfg.get("REPORT_TITLE", default="YouQu Report")
@@ -223,11 +234,11 @@ class _GlobalConfig:
     # 显示服务器
     # 直接读环境变量XDG_SESSION_TYPE会有问题，采用读文件的方式获取
     DISPLAY_SERVER = (
-        popen("cat ~/.xsession-errors | grep XDG_SESSION_TYPE | head -n 1")
-        .read()
-        .split("=")[-1]
-        .strip("\n")
-    ) or getenv("XDG_SESSION_TYPE")
+                         popen("cat ~/.xsession-errors | grep XDG_SESSION_TYPE | head -n 1")
+                         .read()
+                         .split("=")[-1]
+                         .strip("\n")
+                     ) or getenv("XDG_SESSION_TYPE")
 
     class DisplayServer:
         wayland = "wayland"
