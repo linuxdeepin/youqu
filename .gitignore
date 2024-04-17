@@ -11,3 +11,5 @@ Pipfile
 Pipfile.lock
 site
 public
+node_modules/
+docs/.vitepress/cache/

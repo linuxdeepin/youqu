@@ -1,0 +1,26 @@
+#{
+#  "repositories": [
+#    {
+#      "url": "",
+#      "branch_or_tag": "",
+#      "depth": "",
+#      "path_to": "",
+#      "user": "",
+#      "password": ""
+#    }
+#  ],
+#  "execution_mode": "",
+#  "clients": "",
+#  "slaves": "",
+#  "keywords": "",
+#  "tags": "",
+#  "pms_case_file_path": ""
+#}
+
+[repositories]
+url = ""
+branch_or_tag = ""
+depth = ""
+path_to = ""
+user = ""
+password = ""

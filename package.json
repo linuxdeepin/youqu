@@ -1,0 +1,22 @@
+{
+  "devDependencies": {
+    "busuanzi.pure.js": "^1.0.3",
+    "markdown-it-mathjax3": "^4.3.2",
+    "vitepress": "1.0.0-rc.36",
+    "vitepress-markdown-timeline": "^1.2.1"
+  },
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "pre": "vitepress preview docs"
+  },
+  "dependencies": {
+    "@mermaid-js/mermaid-mindmap": "9.3.0",
+    "medium-zoom": "^1.1.0",
+    "mermaid": "^9.1.0",
+    "vite-plugin-vitepress-auto-sidebar": "^1.6.2",
+    "vitepress-plugin-back-to-top": "^1.0.1",
+    "vitepress-plugin-comment-with-giscus": "^1.1.11",
+    "vitepress-plugin-mermaid": "^2.0.10"
+  }
+}
