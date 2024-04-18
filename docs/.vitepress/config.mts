@@ -25,9 +25,31 @@ export default withMermaid(
             // https://vitepress.dev/reference/default-theme-config
             siteTitle: "官方中文文档",
             nav: [
-                {text: '快速开始', link: '/快速开始'},
-                {text: '功能介绍', link: '/框架功能介绍'},
+                {text: '指南', link: '/快速开始'},
+                {text: '框架设计', link: '/AT基础框架设计方案'},
             ],
+
+            sidebar: {
+                "/快速开始/": [
+                    {
+                        text: "快速开始",
+                        items: [
+                            {text: "YouQu是什么", link: "/快速开始"},
+                        ]
+                    },
+                    {
+                        text: "框架功能介绍",
+                        items: [
+                            {text: "环境部署", link: "/框架功能介绍/环境部署"},
+                            {text: "全局配置", link: "/框架功能介绍/全局配置"},
+                        ]
+                    },
+                ],
+                "框架设计": [
+                    {text: "AT基础框架设计方案", link: "/框架设计/AT基础框架设计方案"},
+                    {text: "AT应用库设计方案", link: "/框架设计/AT应用库设计方案"},
+                ]
+            },
             search: {
                 provider: 'local'
             },
