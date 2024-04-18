@@ -5,7 +5,7 @@ import timeline from "vitepress-markdown-timeline";
 // https://vitepress.dev/reference/site-config
 export default withMermaid(
     defineConfig({
-                // base: '/docs/',
+        // base: '/docs/',
         lang: 'zh-CN',
         title: "YouQu | Linux自动化测试利器",
         description: "",
@@ -26,6 +26,7 @@ export default withMermaid(
             siteTitle: "官方中文文档",
             nav: [
                 {text: '快速开始', link: '/快速开始'},
+                {text: '功能介绍', link: '/框架功能介绍'},
             ],
             search: {
                 provider: 'local'

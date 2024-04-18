@@ -17,7 +17,6 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/youqu?color=%23F79431)
 ![Static Badge](https://img.shields.io/badge/UOS%2FDeepin/Ubuntu/Debian-Platform?style=flat&label=OS&color=%23F79431)
 ![Static Badge](https://img.shields.io/badge/Linux-Platform?style=flat&label=Platform&color=%23F79431)
-![Built with Material for MkDocs](https://img.shields.io/badge/Material_for_MkDocs-526CFE?style=flat&logo=MaterialForMkDocs&logoColor=white&color=%23F79431)
 
 [![Downloads](https://static.pepy.tech/badge/youqu/week)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu/month)](https://pepy.tech/project/youqu)
@@ -32,9 +31,7 @@
 
 <a href="https://github.com/linuxdeepin/deepin-autotest-framework" target="_blank">GitHub</a> / <a href="https://gitee.com/deepin-community/deepin-autotest-framework" target="_blank">Gitee</a>
 
-<a href="https://linuxdeepin.github.io/deepin-autotest-framework" target="_blank">在线文档</a> / <a href="https://deepin-community.gitee.io/deepin-autotest-framework/" target="_blank">在线文档（国内加速）</a> / <a href="http://youqu.uniontech.com/" target="_blank">在线文档（公司内网）</a> 
-
-<a href="http://youqu.uniontech.com/docs" target="_blank">知识库（公司内网）</a> / <a href="http://youqu.uniontech.com/tool" target="_blank">工具库（公司内网）</a>
+<a href="https://linuxdeepin.github.io/deepin-autotest-framework" target="_blank">在线文档</a>
 
 ---
 
