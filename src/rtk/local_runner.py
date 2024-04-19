@@ -90,7 +90,7 @@ class LocalRunner:
         logger("INFO")
         try:
             github_tags = RequestX().open_url(
-                f"https://api.github.com/repos/linuxdeepin/deepin-autotest-framework/tags",
+                f"https://api.github.com/repos/linuxdeepin/youqu/tags",
                 timeout=1
             )
             latest_tag = json.loads(github_tags)[0].get("name")

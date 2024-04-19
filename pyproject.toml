@@ -9,7 +9,7 @@ authors = [
     { name = "mikigo", email = "huangmingqiang@uniontech.com" },
 ]
 
-description = "deepin-autotest-framework"
+description = "youqu"
 readme = "youqu/README.md"
 requires-python = ">=3.7"
 classifiers = [
@@ -32,5 +32,5 @@ packages = [
 ]
 
 [project.urls]
-Source = "https://github.com/linuxdeepin/deepin-autotest-framework"
-Documentation = "https://linuxdeepin.github.io/deepin-autotest-framework"
+Source = "https://github.com/linuxdeepin/youqu"
+Documentation = "https://linuxdeepin.github.io/youqu"

@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://linuxdeepin.github.io/deepin-autotest-framework/">
+  <a href="https://linuxdeepin.github.io/youqu/">
     <img src="./docs/assets/logo.png" width="520" alt="YouQu">
   </a>
 </p>
@@ -8,9 +8,9 @@
 </p>
 
 
-[![GitHub issues](https://img.shields.io/github/issues/linuxdeepin/deepin-autotest-framework?color=%23F79431)](https://github.com/linuxdeepin/deepin-autotest-framework/issues)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/linuxdeepin/deepin-autotest-framework?color=%23F79431)](https://github.com/linuxdeepin/deepin-autotest-framework/pulls)
-[![GitHub Discussions](https://img.shields.io/github/discussions/linuxdeepin/deepin-autotest-framework?color=%23F79431)](https://github.com/linuxdeepin/deepin-autotest-framework/discussions)
+[![GitHub issues](https://img.shields.io/github/issues/linuxdeepin/youqu?color=%23F79431)](https://github.com/linuxdeepin/youqu/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/linuxdeepin/youqu?color=%23F79431)](https://github.com/linuxdeepin/youqu/pulls)
+[![GitHub Discussions](https://img.shields.io/github/discussions/linuxdeepin/youqu?color=%23F79431)](https://github.com/linuxdeepin/youqu/discussions)
 
 [![PyPI](https://img.shields.io/pypi/v/youqu?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu%2F&color=%23F79431)](https://pypi.org/project/youqu/)
 ![PyPI - License](https://img.shields.io/pypi/l/youqu?color=%23F79431)
@@ -22,16 +22,16 @@
 [![Downloads](https://static.pepy.tech/badge/youqu/month)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu)](https://pepy.tech/project/youqu)
 
-[![Hits](https://hits.sh/github.com/linuxdeepin/deepin-autotest-framework.svg?style=flat&label=Github_Hits&color=blue)](https://github.com/linuxdeepin/deepin-autotest-framework)
-[![Hits](https://hits.sh/linuxdeepin.github.io/deepin-autotest-framework.svg?style=flat&label=GitHub_Pages_Hits&color=blue)](https://linuxdeepin.github.io/deepin-autotest-framework)
-[![Hits](https://hits.sh/deepin-community.gitee.io/deepin-autotest-framework.svg?style=flat&label=Gitee_Pages_Hits&color=blue)](https://deepin-community.gitee.io/deepin-autotest-framework/)
+[![Hits](https://hits.sh/github.com/linuxdeepin/youqu.svg?style=flat&label=Github_Hits&color=blue)](https://github.com/linuxdeepin/youqu)
+[![Hits](https://hits.sh/linuxdeepin.github.io/youqu.svg?style=flat&label=GitHub_Pages_Hits&color=blue)](https://linuxdeepin.github.io/youqu)
+[![Hits](https://hits.sh/deepin-community.gitee.io/youqu.svg?style=flat&label=Gitee_Pages_Hits&color=blue)](https://deepin-community.gitee.io/youqu/)
 [![Hits](https://hits.sh/pypi.org/project/youqu.svg?style=flat&label=PyPI_Hits&color=blue)](https://pypi.org/project/youqu/)
 
 ---
 
-<a href="https://github.com/linuxdeepin/deepin-autotest-framework" target="_blank">GitHub</a> / <a href="https://gitee.com/deepin-community/deepin-autotest-framework" target="_blank">Gitee</a>
+<a href="https://github.com/linuxdeepin/youqu" target="_blank">GitHub</a> / <a href="https://gitee.com/deepin-community/youqu" target="_blank">Gitee</a>
 
-<a href="https://linuxdeepin.github.io/deepin-autotest-framework" target="_blank">在线文档</a>
+<a href="https://linuxdeepin.github.io/youqu" target="_blank">在线文档</a>
 
 ---
 
@@ -216,7 +216,7 @@ $ youqu manage.py run --app apps/autotest_deepin_music --keywords "xxx" --tags "
 
 </div>
 
-更多参数请查看【[命令行参数](https://linuxdeepin.github.io/deepin-autotest-framework/%E6%A1%86%E6%9E%B6%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D/%E6%89%A7%E8%A1%8C%E7%AE%A1%E7%90%86%E5%99%A8/#21)】
+更多参数请查看【[命令行参数](https://linuxdeepin.github.io/youqu/%E6%A1%86%E6%9E%B6%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D/%E6%89%A7%E8%A1%8C%E7%AE%A1%E7%90%86%E5%99%A8/#21)】
 
 #### 2.2. 配置文件
 
@@ -224,7 +224,7 @@ $ youqu manage.py run --app apps/autotest_deepin_music --keywords "xxx" --tags "
 
 在配置文件 `setting/globalconfig.ini` 里面支持配置对执行的一些参数进行配置，配置完成之后，直接在命令行执行 `manage.py` 就好了。
 
-详细配置项请查看【[配置项](https://linuxdeepin.github.io/deepin-autotest-framework/%E6%A1%86%E6%9E%B6%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D/%E6%89%A7%E8%A1%8C%E7%AE%A1%E7%90%86%E5%99%A8/#22)】
+详细配置项请查看【[配置项](https://linuxdeepin.github.io/youqu/%E6%A1%86%E6%9E%B6%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D/%E6%89%A7%E8%A1%8C%E7%AE%A1%E7%90%86%E5%99%A8/#22)】
 
 ### 3. 远程执行
 
@@ -365,23 +365,23 @@ $ youqu manage.py remote -a ... --parallel no
 
 ## 贡献者
 
-[贡献文档](https://github.com/linuxdeepin/deepin-autotest-framework/blob/master/CONTRIBUTING.md) 
+[贡献文档](https://github.com/linuxdeepin/youqu/blob/master/CONTRIBUTING.md) 
 
 --8<-- "docs/contributors.html"
 
 
 ## 开源许可证
 
-有趣 在 [GPL-2.0-only](https://github.com/linuxdeepin/deepin-autotest-framework/blob/master/LICENSE) 下发布。
+有趣 在 [GPL-2.0-only](https://github.com/linuxdeepin/youqu/blob/master/LICENSE) 下发布。
 
 ------------
 
 [__Github Star History__]()
 
-[![Stargazers over time](https://starchart.cc/linuxdeepin/deepin-autotest-framework.svg)](https://starchart.cc/linuxdeepin/deepin-autotest-framework)
+[![Stargazers over time](https://starchart.cc/linuxdeepin/youqu.svg)](https://starchart.cc/linuxdeepin/youqu)
 
 
 
 [__Gitee Info__]()
 
-[![deepin-community/deepin-autotest-framework](https://gitee.com/deepin-community/deepin-autotest-framework/widgets/widget_card.svg?colors=4183c4,ffffff,ffffff,e3e9ed,666666,9b9b9b)](https://gitee.com/deepin-community/deepin-autotest-framework)
+[![deepin-community/youqu](https://gitee.com/deepin-community/youqu/widgets/widget_card.svg?colors=4183c4,ffffff,ffffff,e3e9ed,666666,9b9b9b)](https://gitee.com/deepin-community/youqu)

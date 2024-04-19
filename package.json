@@ -15,7 +15,7 @@
     "medium-zoom": "^1.1.0",
     "mermaid": "^9.1.0",
     "vitepress-plugin-back-to-top": "^1.0.1",
-    "vitepress-plugin-comment-with-giscus": "^1.1.11",
+    "vitepress-plugin-comment-with-giscus": "^1.1.12",
     "vitepress-plugin-mermaid": "^2.0.10"
   }
 }

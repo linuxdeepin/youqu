@@ -43,11 +43,12 @@ class Remote(ShortCut, CmdCtl):
                 f"Remote(user='{self.user}', ip='{self.ip}', password='{self.password}').rctl.{item}({ar.rstrip(', ')})"
             )
 
-            getattr(self.rctl, item)(*args, **kwargs)
+            value = getattr(self.rctl, item)(*args, **kwargs)
 
             self.remote_method_has_arguments = True
             if self.tmp_obj:
                 setattr(self.tmp_obj["cls_obj"], item, self.tmp_obj["item_obj"])
+            return value
 
         return func
 

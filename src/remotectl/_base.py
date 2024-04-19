@@ -67,7 +67,7 @@ def _ssh(ip, password, user):
 def _transfer_appname(ip, password, user, transfer_appname):
     os.system(
         f"sshpass -p '{password}' rsync -av -e ssh --exclude='__pycache__' "
-        f"{conf.APPS_PATH}/{transfer_appname} {user}@{ip}:~/{client_project_path}/apps/{transfer_appname}"
+        f"{conf.APPS_PATH}/{transfer_appname} {user}@{ip}:~/{client_project_path}/apps/"
     )
 
 

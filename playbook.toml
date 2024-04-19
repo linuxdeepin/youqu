@@ -17,7 +17,7 @@
 #  "pms_case_file_path": ""
 #}
 
-[repositories]
+[[repositories]]
 url = ""
 branch_or_tag = ""
 depth = ""

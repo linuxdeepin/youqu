@@ -44,7 +44,7 @@ theme:
     repo: fontawesome/brands/github
 
 repo_name: YouQu
-repo_url: https://github.com/linuxdeepin/deepin-autotest-framework
+repo_url: https://github.com/linuxdeepin/youqu
 
 markdown_extensions:
   - toc:
@@ -106,7 +106,7 @@ extra:
     - icon: fontawesome/brands/python
       link: https://pypi.org/project/youqu
       name: pypi
-  homepage: https://linuxdeepin.github.io/deepin-autotest-framework
+  homepage: https://linuxdeepin.github.io/youqu
 
 extra_javascript:
   - '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js'

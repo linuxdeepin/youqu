@@ -10,7 +10,7 @@
 
 ## 向 YouQu 提交 Issues
 
-Issues 提交地址：https://github.com/linuxdeepin/deepin-autotest-framework/issues
+Issues 提交地址：https://github.com/linuxdeepin/youqu/issues
 
 ## 向 YouQu 仓库提交代码
 
