@@ -1,4 +1,4 @@
-## Wayland 适配
+# Wayland 适配
 
 `Wayland` 下自动化主要问题是 `X11` 下的键鼠操作方法无法使用，比如 `Xdotool`、 `PyAutoGUI`、`Xwininfo` 等等；
 

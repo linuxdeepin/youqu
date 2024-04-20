@@ -70,8 +70,6 @@
     </ul>
 </details>
 
-
-
 ## 安装使用
 
 从 PyPI 安装:
@@ -83,7 +81,6 @@ $ sudo pip3 install youqu
 
 创建项目:
 
-
 ```shell
 $ youqu-startproject my_project
 ```
@@ -92,11 +89,9 @@ $ youqu-startproject my_project
 
 安装依赖:
 
-
-
-
 ```shell
 $ cd my_project
+
 # 使用的默认密码是 1 ，您可以修改配置文件 setting/globalconfig.ini 里面的 PASSWORD 配置项
 $ bash env.sh
 
@@ -321,11 +316,9 @@ $ sudo systemctl enable ssh
 $ youqu manage.py remote -a ... --parallel no
 ```
 
-## 贡献者
+## 贡献
 
 [贡献文档](https://github.com/linuxdeepin/youqu/blob/master/CONTRIBUTING.md) 
-
---8<-- "docs/contributors.html"
 
 
 ## 开源许可证

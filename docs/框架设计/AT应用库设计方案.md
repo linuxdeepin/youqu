@@ -1,9 +1,8 @@
+---
+Author: mikigo
+---
+
 # AT 应用库设计方案
-```shell
-# =================================================
-# Author  : mikigo
-# =================================================
-```
 
 ## 一、目标
 
@@ -74,9 +73,9 @@ autotest_dde_file_manager  # 应用仓库
 
 - 模块划分
 
-    按照文件管理器的界面区域划分为：==TitleWidget 、RightViewWidget、LeftViewWidget 、PopWidget== ；
+    按照文件管理器的界面区域划分为：TitleWidget 、RightViewWidget、LeftViewWidget 、PopWidget ；
 
-    文管界面分为四个区域：==标题栏、右边视图区域、左边视图区域、弹窗[^1]==；
+    文管界面分为四个区域：标题栏、右边视图区域、左边视图区域、弹窗[^1]；
 
 	[^1]: 设置界面弹窗、保险箱弹窗、删除确认弹窗、及各种网络弹窗.
 

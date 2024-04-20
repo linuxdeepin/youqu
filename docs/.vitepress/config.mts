@@ -65,6 +65,7 @@ export default withMermaid(
                             {text: "属性定位", link: "/指南/元素定位/属性定位"},
                             {text: "OCR识别", link: "/指南/元素定位/OCR识别"},
                             {text: "相对坐标定位", link: "/指南/元素定位/相对坐标定位"},
+                            {text: "去干扰识别", link: "/指南/元素定位/去干扰识别"},
                         ]
                     },
                     {
@@ -78,12 +79,12 @@ export default withMermaid(
                     },
                     {
                         text: "特色功能",
-                        collapsed: false,
+                        collapsed: true,
                         items: [
                             {text: "标签化管理", link: "/指南/特色功能/标签化管理"},
+                            {text: "标签自动同步", link: "/指南/特色功能/标签自动同步"},
                             {text: "全自动日志", link: "/指南/特色功能/全自动日志"},
                             {text: "失败录屏", link: "/指南/特色功能/失败录屏"},
-                            {text: "标签自动同步", link: "/指南/特色功能/标签自动同步"},
                             {text: "Wayland适配", link: "/指南/特色功能/Wayland适配"},
                             {text: "重启类场景", link: "/指南/特色功能/重启类场景"},
                             {text: "数据回填", link: "/指南/特色功能/数据回填"},
@@ -91,7 +92,7 @@ export default withMermaid(
                     },
                 ],
                 "/框架设计/": [
-                    {text: "AT应用库设计方案", link: "/框架设计/自动化测试架构设计v1.0"},
+                    {text: "自动化测试架构设计规划", link: "/框架设计/自动化测试架构设计v1.0"},
                     {text: "AT基础框架设计方案", link: "/框架设计/AT基础框架设计方案"},
                     {text: "AT应用库设计方案", link: "/框架设计/AT应用库设计方案"},
                 ]

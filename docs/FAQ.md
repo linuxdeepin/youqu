@@ -1,9 +1,4 @@
----
-hide:
-    - navigation
----
-
-## 1. 提交代码时提示邮箱或者名称不对
+## 提交代码时提示邮箱或者名称不对
 
 重新配置邮箱或者名称，然后重置生效：
 
@@ -13,7 +8,7 @@ git commit --amend --reset-author
 
 ---------------
 
-## 2. 怎么回滚到之前的版本
+## 怎么回滚到之前的版本
 
 (1)查询历史提交记录
 
@@ -39,7 +34,7 @@ git reset --hard ${hash}
 
 ---------------------------
 
-## 3. 解决 git status 中文显示的问题
+## 解决 git status 中文显示的问题
 
 ```shell
 git config --global core.quotePath false
@@ -47,7 +42,7 @@ git config --global core.quotePath false
 
 ---------------------
 
-## 4. `apps` 目录下颜色有些是黄色的
+## apps 目录下颜色有些是黄色的
 
 在 `Pycharm` 中 `apps` 目录下应用库文件是黄色的，编辑器识别不到代码新增和修改；
 
@@ -61,7 +56,7 @@ git config --global core.quotePath false
 
 ------------------------------
 
-## 5. 执行 `env.sh` 报错 `$'\r':未找到命令`
+## 执行 `env.sh` 报错 `$'\r':未找到命令`
 
 出现这个问题你应该是在 windows 上打开或编辑过 `env.sh` 脚本，windows下的换行是回车符+换行符，也就是`\r\n`，而 `Linxu` 下是换行符 `\n`，`Linux` 下不识别 `\r`，因此报错。
 
@@ -74,7 +69,7 @@ sudo sed -i 's/\r//' env.sh
 
 ---------------------------
 
-## 6. 怎样为单独某一条用例配置执行超时时间
+## 怎样为单独某一条用例配置执行超时时间
 
 在用例脚本中添加装饰器，如下：
 
@@ -86,7 +81,7 @@ def test_xxx_001():
 
 -----------------------
 
-## 7. 如何修复子仓库 master 分支游离头（detached head）
+## 如何修复子仓库 master 分支游离头（detached head）
 
 修复所有子仓库默认master 分支游离头
 
