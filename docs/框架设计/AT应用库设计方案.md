@@ -16,7 +16,7 @@ AT 应用库改造是基于自动化测试基础框架进行用例方法和业�
 
 整体仍然遵循 PO 设计理念，根据业务需要，将文管业务层进行 3 层划分：
 
-???+ note "应用库架构图（文件管理器）"
+应用库架构图（文件管理器）
 	![](https://pic.imgdb.cn/item/64f054c3661c6c8e54ff47db.png)
 
 ### 2、目录结构
@@ -75,11 +75,11 @@ autotest_dde_file_manager  # 应用仓库
 
     按照文件管理器的界面区域划分为：TitleWidget 、RightViewWidget、LeftViewWidget 、PopWidget ；
 
-    文管界面分为四个区域：标题栏、右边视图区域、左边视图区域、弹窗[^1]；
+    文管界面分为四个区域：标题栏、右边视图区域、左边视图区域、弹窗（设置界面弹窗、保险箱弹窗、删除确认弹窗、及各种网络弹窗）；
 
-	[^1]: 设置界面弹窗、保险箱弹窗、删除确认弹窗、及各种网络弹窗.
+	.
 
-	???+ note "主界面区域划分"
+	主界面区域划分
     	![](https://pic.imgdb.cn/item/64f054c3661c6c8e54ff4806.png)
 	???+ note "弹窗区域"
     	![](https://pic.imgdb.cn/item/64f054c8661c6c8e54ff4d1b.png)
@@ -89,10 +89,10 @@ autotest_dde_file_manager  # 应用仓库
 
     ```python title="标题栏" hl_lines="1 3"
     from apps.autotest_dde_file_manager.widget import BaseWidget
-  
+    
     class TitleWidget(BaseWidget):
       """标题栏方法类"""
-  
+    
       def click_xxx_in_title_by_ui(self):
           # self.dog.find_element_by_attr("xxxx").click()
           self.click(*self.ui.btn_center("xxx"))
@@ -150,9 +150,9 @@ autotest_dde_file_manager  # 应用仓库
     ```python hl_lines="2 4 7"
     from apps.dde_file_manager.widget.dfm_widget import DfmWidget
     from public.assert import Assert
-  
+    
     class DfmAssert(Assert):
-  
+    
         def assert_file_exists_in_desktop(self, file_name):
             self.assert_file_exists(f"~/Desktop{file_name}")
             ...
@@ -264,7 +264,7 @@ class TestDdeFileManager(BaseCase):
 
 在 `BaseWidget` 里面把该写的都写好，你可以参考上面的设计理念来写。
 
-如果你嫌麻烦，你可以参考文件管理器的实际工程代码 `autotest_dde_file_manager` :   [https://gerrit.uniontech.com/admin/repos/autotest_dde_file_manager](https://gerrit.uniontech.com/admin/repos/autotest_dde_file_manager ) 
+如果你嫌麻烦，你可以参考文件管理器的实际工程代码 [autotest_dde_file_manager](https://gerrit.uniontech.com/admin/repos/autotest_dde_file_manager)
 
 3.2. 操作层
 

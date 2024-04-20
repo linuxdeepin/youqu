@@ -18,21 +18,21 @@ hero:
       alt: YouQu
 
 features:
-  - icon: 📝
+  - icon: 💻
     title: Linux 桌面 UI 自动化测试
-    details: 用热情的笔触描绘生活的点点滴滴，记录下我们共同成长的足迹。
-  - icon: 💡
+    details: 提升Linux桌面应用品质，确保用户体验的一致性，选择我们的UI自动化测试服务。
+  - icon: 🚌
     title: Linux DBus/Gsettings 接口自动化测试
-    details: 让知识的火花在分享中绽放，点燃我们追求卓越的热情。
+    details: 专业自动化测试D-Bus和Gsettings接口，为Linux桌面应用的稳定性和可靠性保驾护航。
   - icon: 🚀
     title: 命令行自动化测试
-    details: 拥抱成长的旅程，让热情的阳光照耀我们不断前行的道路。
-  - icon: 🚀
+    details: 高效命令行自动化测试，让Linux软件开发和维护更加轻松便捷。
+  - icon: 🌏
     title: HTTP 接口自动化测试
-    details: 拥抱成长的旅程，让热情的阳光照耀我们不断前行的道路。
-  - icon: 🚀
+    details: 保障HTTP接口的响应速度和数据传输安全，我们的自动化测试是您的明智之选。
+  - icon: 🐵
     title: Web UI 自动化测试
-    details: 拥抱成长的旅程，让热情的阳光照耀我们不断前行的道路。
+    details: Web UI自动化测试，优化用户体验，提升Web应用的稳定性和可靠性。
 ---
 
 <style>
