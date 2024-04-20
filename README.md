@@ -1,11 +1,12 @@
 <p align="center">
   <a href="https://linuxdeepin.github.io/youqu/">
-    <img src="./docs/assets/logo.png" width="520" alt="YouQu">
+    <img src="./docs/logo.png" width="520" alt="YouQu">
   </a>
 </p>
 <p align="center">
     <em>有趣（YouQu），一个使用简单且功能强大的自动化测试基础框架。</em>
 </p>
+
 
 
 [![GitHub issues](https://img.shields.io/github/issues/linuxdeepin/youqu?color=%23F79431)](https://github.com/linuxdeepin/youqu/issues)
@@ -24,7 +25,6 @@
 
 [![Hits](https://hits.sh/github.com/linuxdeepin/youqu.svg?style=flat&label=Github_Hits&color=blue)](https://github.com/linuxdeepin/youqu)
 [![Hits](https://hits.sh/linuxdeepin.github.io/youqu.svg?style=flat&label=GitHub_Pages_Hits&color=blue)](https://linuxdeepin.github.io/youqu)
-[![Hits](https://hits.sh/deepin-community.gitee.io/youqu.svg?style=flat&label=Gitee_Pages_Hits&color=blue)](https://deepin-community.gitee.io/youqu/)
 [![Hits](https://hits.sh/pypi.org/project/youqu.svg?style=flat&label=PyPI_Hits&color=blue)](https://pypi.org/project/youqu/)
 
 ---
@@ -40,7 +40,7 @@
 ## 有趣（YouQu）能做什么
 
 - [x] Linux 桌面应用 UI 自动化测试
-- [x] Linux 桌面应用 D-Bus/Gsettings 接口自动化测试
+- [x] Linux 桌面应用 DBus/Gsettings 接口自动化测试
 - [x] 命令行自动化测试
 - [x] HTTP 接口自动化测试
 - [x] Web UI 自动化测试
@@ -76,44 +76,33 @@
 
 从 PyPI 安装:
 
-<div class="termy">
 
-```console
+```shell
 $ sudo pip3 install youqu
----> 100%
 ```
-
-</div>
 
 创建项目:
 
-<div class="termy">
 
-```console
+```shell
 $ youqu-startproject my_project
----> 100%
-The project: [my_project],has been created by youqu-x.x.x
 ```
-
-</div>
 
 如果 `youqu-startproject` 后面不加参数，默认的项目名称为：`youqu` ；
 
 安装依赖:
 
-<div class="termy">
 
-```console
+
+
+```shell
 $ cd my_project
-// 使用的默认密码是 1 ，您可以修改配置文件 setting/globalconfig.ini 里面的 PASSWORD 配置项
+# 使用的默认密码是 1 ，您可以修改配置文件 setting/globalconfig.ini 里面的 PASSWORD 配置项
 $ bash env.sh
----> 100%
-// 也可以使用 -p 选项传入密码
-$ bash env.sh -p ${my_password}
----> 100%
-```
 
-</div>
+# 也可以使用 -p 选项传入密码
+$ bash env.sh -p ${my_password}
+```
 
 -------------------------------
 
@@ -121,7 +110,7 @@ $ bash env.sh -p ${my_password}
 
 如果您已经有一个可用的 `APP` 工程，将应用库放到基础框架下 `apps` 目录下，像这样：
 
-```shell hl_lines="3"
+```shell
 my_project
 ├── apps
 │   ├── autotest_deepin_music  # 应用库
@@ -134,14 +123,10 @@ my_project
 
 创建一个 APP 工程：
 
-<div class="termy">
 
-```console
+```shell
 $ youqu manage.py startapp autotest_deepin_some
----> 100%
 ```
-
-</div>
 
 这样在 `apps` 目录下会创建一个子项目工程 `autotest_deepin_some`，同时新建好工程模板目录和模板文件：
 
@@ -186,35 +171,26 @@ apps
 
 ### 2. 本地执行
 
-<div class="termy">
 
-```console
+```shell
 $ youqu manage.py run
 ```
-
-</div>
 
 #### 2.1. 命令行参数
 
 通过命令行参数配置参数，使用 `-h` 或 `--help` 可以查看所有支持的命令行参数：
 
-<div class="termy">
 
-```console
+```shell
 $ youqu manage.py run -h
 ```
 
-</div>
-
 在一些 CI 环境下使用命令行参数会更加方便：
 
-<div class="termy">
 
-```console
+```shell
 $ youqu manage.py run --app apps/autotest_deepin_music --keywords "xxx" --tags "xxx"
 ```
-
-</div>
 
 更多参数请查看【[命令行参数](https://linuxdeepin.github.io/youqu/%E6%A1%86%E6%9E%B6%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D/%E6%89%A7%E8%A1%8C%E7%AE%A1%E7%90%86%E5%99%A8/#21)】
 
@@ -232,13 +208,10 @@ $ youqu manage.py run --app apps/autotest_deepin_music --keywords "xxx" --tags "
 
 使用 `remote` 命令：
 
-<div class="termy">
 
-```console
+```shell
 $ youqu manage.py remote
 ```
-
-</div>
 
 #### 3.1. 远程多机器分布式异步执行
 
@@ -277,13 +250,10 @@ ip = 10.8.11.xx
 
 然后在命令行：
 
-<div class="termy">
 
-```console
+```shell
 $ youqu manage.py remote
 ```
-
-</div>
 
 这样运行是从配置文件去读取相关配置。
 
@@ -310,36 +280,27 @@ $ youqu manage.py remote
 
 在命令行这样运行：
 
-<div class="termy">
 
-```console
+```shell
 $ youqu manage.py remote -a apps/autotest_deepin_music -c uos@10.8.13.x3/uos@10.8.13.x4 -k "xxx" -t "xxx"
 ```
-
-</div>
 
 所有用例执行完之后会在 `report` 目录下回收各个测试机执行的测试报告。
 
 注意：如果远程机器没有搭建自动化测试环境，记得加上参数 `-e` ：
 
-<div class="termy">
 
-```console
+```shell
 $ youqu manage.py remote -a ... -e
 ```
 
-</div>
-
 执行前确保远程机器已经开启了 ssh 服务，否则会提示无法连接，如果没有开启，请手动开启：
 
-<div class="termy">
 
-```console
+```shell
 $ sudo systemctl restart ssh
 $ sudo systemctl enable ssh
 ```
-
-</div>
 
 配置文件其他相关配置项详细说明，请查看配置文件中的注释内容。
 
@@ -355,13 +316,10 @@ $ sudo systemctl enable ssh
 
 使用方法和前面一样，只是需要增加一个参数 `--parallel`：
 
-<div class="termy">
 
-```console
+```shell
 $ youqu manage.py remote -a ... --parallel no
 ```
-
-</div>
 
 ## 贡献者
 
