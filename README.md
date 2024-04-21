@@ -29,15 +29,15 @@
 
 ---
 
-<a href="https://github.com/linuxdeepin/youqu" target="_blank">GitHub</a> / <a href="https://gitee.com/deepin-community/youqu" target="_blank">Gitee</a>
+<a href="https://github.com/linuxdeepin/youqu" target="_blank">GitHub</a> | <a href="https://gitee.com/deepin-community/youqu" target="_blank">Gitee</a>
 
-<a href="https://linuxdeepin.github.io/youqu" target="_blank">在线文档</a>
+<a href="https://linuxdeepin.github.io/youqu" target="_blank">中文在线文档</a>
 
 ---
 
-有趣（YouQu）是深度公司开源的一个用于 Linux 操作系统的自动化测试框架，支持多元化元素定位和断言、用例标签化管理和执行、强大的日志和报告输出等特色功能，同时完美兼容 X11、Wayland 显示协议，环境部署简单，操作易上手。
+YouQu（有趣）是深度公司开源的一个用于 Linux 操作系统的自动化测试框架，支持多元化元素定位和断言、用例标签化管理和执行、强大的日志和报告输出等特色功能，同时完美兼容 X11、Wayland 显示协议，环境部署简单，操作易上手。
 
-## 有趣（YouQu）能做什么
+## YouQu（有趣）能做什么
 
 - [x] Linux 桌面应用 UI 自动化测试
 - [x] Linux 桌面应用 DBus/Gsettings 接口自动化测试
