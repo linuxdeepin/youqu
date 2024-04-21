@@ -99,7 +99,7 @@ $ bash env.sh
 $ bash env.sh -p ${my_password}
 ```
 
-**【APP工程】**
+## 创建工程
 
 如果您已经有一个可用的 `APP` 工程，将应用库放到基础框架下 `apps` 目录下，像这样：
 
@@ -112,10 +112,7 @@ my_project
 
 如果您还没有 `APP` 工程，建议使用框架提供的脚手架功能创建一个全新的 `APP` 工程。
 
-## 创建工程
-
-创建一个 APP 工程：
-
+**创建一个 APP 工程**
 
 ```shell
 $ youqu manage.py startapp autotest_deepin_some
