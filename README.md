@@ -200,53 +200,7 @@ $ youqu manage.py run --app apps/autotest_deepin_music --keywords "xxx" --tags "
 $ youqu manage.py remote
 ```
 
-#### 3.1. 远程多机器分布式异步执行
-
-![](https://pic.imgdb.cn/item/64f6d3c0661c6c8e549f8ca5.png)
-
-多机器分布式异步执行就是由本地 YouQu 作为服务端，控制远程 N 台机器执行相同的用例，执行完之后所有测试机的测试结果会返回给服务端 report 目录下；
-
-远程执行同样通过配置文件 `setting/globalconfig.ini` 进行用例相关配置；
-
-需要重点说一下远程执行时的测试机信息配置，在配置文件 `setting/remote.ini`  里面配置测试机的用户名、IP、密码。
-
-```ini
-;=============================== CLIENT LIST =====================================
-; 测试机配置列表
-;[client{number}]     ;测试机别名，有多少台测试机就写多少个 client，别名必须包含 client 字符，且不能重复。
-;user =               ;测试机 user
-;ip =                 ;测试机 ip
-;password = 1         ;测试机的密码, 可以不配置此项，默认取 CLIENT_PASSWORD 的值；
-                      ;如果你所有测试机密码都相同，那么只需要配置 CLIENT_PASSWORD 就可以了
-;=================================================================================
-
-[client1]
-user = uos
-ip = 10.8.15.xx
-
-[client2]
-user = uos
-ip = 10.8.15.xx
-
-[client3]
-user = uos
-ip = 10.8.11.xx
-```
-
-有多少台机器就像这样参考上面的格式写就行了。
-
-然后在命令行：
-
-
-```shell
-$ youqu manage.py remote
-```
-
-这样运行是从配置文件去读取相关配置。
-
-如果你不想通过配置文件，你仍然通过命令行参数进行传参，
-
-以下为 `python3 manage.py remote` 提供的一些参数选项：
+以下为 `remote` 提供的一些参数选项：
 
 ```coffeescript
   -h, --help            show this help message and exit
@@ -263,7 +217,7 @@ $ youqu manage.py remote
                         动分配给各个测试机执行。
 ```
 
-==除了这些特有参数以外，它同样支持本地执行的所有参数；==
+除了这些特有参数以外，它同样支持本地执行的所有参数；
 
 在命令行这样运行：
 
@@ -290,23 +244,6 @@ $ sudo systemctl enable ssh
 ```
 
 配置文件其他相关配置项详细说明，请查看配置文件中的注释内容。
-
-#### 3.2. 远程多机器分布式异步负载均衡执行
-
-多机器分布式异步负载均衡执行也是用本地作为服务端控制远程机器执行，但远程机器执行的用例不同，而是所有远程机器执行的用例之和，为你想要执行的用例集；
-
-似乎有点难以理解，我用大白话举例描述下：
-
-服务端想要执行 10 条用例，现在远程机器有 5 台，然后服务端就先拿着第 1 条用例给远程 1 号机执行，拿第 2 条用例给远程 2 号机执行...，如此循环直到所有用例执行完，这就是负载均衡执行。
-
-![](https://pic.imgdb.cn/item/64f6d694661c6c8e54a1025b.png)
-
-使用方法和前面一样，只是需要增加一个参数 `--parallel`：
-
-
-```shell
-$ youqu manage.py remote -a ... --parallel no
-```
 
 ## 贡献
 

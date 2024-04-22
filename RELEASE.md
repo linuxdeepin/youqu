@@ -13,6 +13,12 @@
 - 新增远程控制功能，在用例步骤中操作远程机器，且远程操作方法实现了编辑器代码补全。[@mikigo](https://github.com/mikigo)
 - 新增命令行入参或配置文件传入远程机器的 `user`、`ip`、`password` 信息，用例中通过框架提供的 `fixture` 对象：`slaves` 获取数据，供用例层使用。[@mikigo](https://github.com/mikigo)
 
+**Fix**
+
+- 修复使用远程执行命令时，返回值为None； [@mikigo](https://github.com/mikigo)
+- 修复实例化远程类时，传入transfer_appname="xxx"参数后，远程路径错误的问题； [@mikigo](https://github.com/mikigo)
+- 修复 `CmdCtl.sudo_run_cmd("xxx")` 方法没有返回值；[PR #62](https://github.com/linuxdeepin/youqu/pull/62) by [@DarkLii](https://github.com/DarkLii)
+
 ## 2.5.2（2024/03/27）
 
 **New**
