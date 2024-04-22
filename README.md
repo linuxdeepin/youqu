@@ -28,7 +28,7 @@
 
 <a href="https://github.com/linuxdeepin/youqu" target="_blank">GitHub</a> | <a href="https://gitee.com/deepin-community/youqu" target="_blank">Gitee</a>
 
-<a href="https://linuxdeepin.github.io/youqu" target="_blank">中文在线文档</a>
+<a href="https://linuxdeepin.github.io/youqu" target="_blank">在线文档</a> | <a href="https://deepin-community.gitee.io/youqu/" target="_blank">在线文档（国内加速）</a>
 
 ---
 

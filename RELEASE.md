@@ -4,6 +4,8 @@
 
 **New**
 
+- YouQu 在线文档 **3.0** 版本上线，重新整理了章节结构和排版，界面UI也进行了优化调整。[@mikigo](https://github.com/mikigo)
+
 - 新增尝鲜版 `Web UI` 自动化测试功能：[@mikigo](https://github.com/mikigo)
 
 	- 框架为 `Web UI`自动化测试提供一个 `fixture` 对象：`page`，它默认使用系统自带的浏览器进行测试，如果需要指定其他第三方的浏览器，提供配置项可以指定浏览器对应的路径。
@@ -15,8 +17,8 @@
 
 **Fix**
 
-- 修复使用远程执行命令时，返回值为None； [@mikigo](https://github.com/mikigo)
-- 修复实例化远程类时，传入transfer_appname="xxx"参数后，远程路径错误的问题； [@mikigo](https://github.com/mikigo)
+- 修复使用远程执行命令时，返回值为 `None`； [@mikigo](https://github.com/mikigo)
+- 修复实例化远程类时，传入 `transfer_appname="xxx"` 参数后，远程路径错误的问题； [@mikigo](https://github.com/mikigo)
 - 修复 `CmdCtl.sudo_run_cmd("xxx")` 方法没有返回值；[PR #62](https://github.com/linuxdeepin/youqu/pull/62) by [@DarkLii](https://github.com/DarkLii)
 
 ## 2.5.2（2024/03/27）
