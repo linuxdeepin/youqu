@@ -17,6 +17,8 @@
 
 **Fix**
 
+- 修复远程调用报错后，本地再次调用报属性找不到的问题； [@mikigo](https://github.com/mikigo)
+
 - 修复使用远程执行命令时，返回值为 `None`； [@mikigo](https://github.com/mikigo)
 - 修复实例化远程类时，传入 `transfer_appname="xxx"` 参数后，远程路径错误的问题； [@mikigo](https://github.com/mikigo)
 - 修复 `CmdCtl.sudo_run_cmd("xxx")` 方法没有返回值；[PR #62](https://github.com/linuxdeepin/youqu/pull/62) by [@DarkLii](https://github.com/DarkLii)
