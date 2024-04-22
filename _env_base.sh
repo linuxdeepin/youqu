@@ -34,14 +34,13 @@ PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.v
 flag_feel="\n**** (・_・) ****\n"
 whitelist="/usr/share/deepin-elf-verify/whitelist"
 pypi_mirror="https://pypi.tuna.tsinghua.edu.cn/simple"
-echo "${PASSWORD}" | sudo -S su  > /dev/null 2>&1
-
+echo ${PASSWORD}
+echo "${PASSWORD}" | sudo -S su
 check_status(){
     if [ $? = 0 ]; then
         echo -e "$1\t安装成功 √"
     else
         echo -e "$1\t安装失败 ×"
-        echo "PASSWORD: ${PASSWORD}"
         echo "如果密码与实际不符，请使用 -p 选项传入参数：bash env.sh -p xxx，或修改setting/globalconfig.ini中的PASSWORD配置项"
         cat /tmp/env.log
     fi

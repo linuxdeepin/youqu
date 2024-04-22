@@ -42,12 +42,14 @@ class Remote(ShortCut, CmdCtl):
             logger.debug(
                 f"Remote(user='{self.user}', ip='{self.ip}', password='{self.password}').rctl.{item}({ar.rstrip(', ')})"
             )
-
-            value = getattr(self.rctl, item)(*args, **kwargs)
-
-            self.remote_method_has_arguments = True
-            if self.tmp_obj:
-                setattr(self.tmp_obj["cls_obj"], item, self.tmp_obj["item_obj"])
+            value = None
+            try:
+                value = getattr(self.rctl, item)(*args, **kwargs)
+            finally:
+                if self.tmp_obj:
+                    setattr(self.tmp_obj["cls_obj"], item, self.tmp_obj["item_obj"])
+                if value is None:
+                    raise ValueError
             return value
 
         return func
@@ -75,5 +77,5 @@ class Remote(ShortCut, CmdCtl):
 
 
 if __name__ == '__main__':
-    r = Remote(ip="10.8.11.12", user="autotest", password="123")
+    r = Remote(ip="", user="", password="")
     r.ctrl_alt_t()

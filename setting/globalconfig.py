@@ -124,12 +124,12 @@ class _GlobalConfig:
 
     # [remote]
     remote_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "remote")
-    SEND_CODE = remote_cfg.get("SEND_CODE", default="yes")
-    BUILD_ENV = remote_cfg.get("BUILD_ENV", default="no")
+    SEND_CODE = remote_cfg.get_bool("SEND_CODE", default=True)
+    BUILD_ENV = remote_cfg.get_bool("BUILD_ENV", default=False)
     CLIENT_PASSWORD = remote_cfg.get("CLIENT_PASSWORD", default="1")
-    PARALLEL = remote_cfg.get("PARALLEL", default="yes")
-    CLEAN_SERVER_REPORT_DIR = remote_cfg.get("CLEAN_SERVER_REPORT_DIR", default="no")
-    CLEAN_CLIENT_REPORT_DIR = remote_cfg.get("CLEAN_CLIENT_REPORT_DIR", default="yes")
+    PARALLEL = remote_cfg.get_bool("PARALLEL", default=True)
+    CLEAN_SERVER_REPORT_DIR = remote_cfg.get_bool("CLEAN_SERVER_REPORT_DIR", default=False)
+    CLEAN_CLIENT_REPORT_DIR = remote_cfg.get_bool("CLEAN_CLIENT_REPORT_DIR", default=True)
     SCAN = remote_cfg.get("SCAN", default="300")
     CLIENTS = remote_cfg.get("CLIENTS", default="")
 
@@ -238,7 +238,7 @@ class _GlobalConfig:
                          .read()
                          .split("=")[-1]
                          .strip("\n")
-                     ) or getenv("XDG_SESSION_TYPE")
+                     ) or ("x11" if getenv("XDG_SESSION_TYPE") == "tty" else getenv("XDG_SESSION_TYPE"))
 
     class DisplayServer:
         wayland = "wayland"

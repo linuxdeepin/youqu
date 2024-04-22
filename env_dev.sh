@@ -31,7 +31,10 @@ env(){
         )
     fi
 
-    echo -e "${flag_feel}安装 deb 包\n"
+    if [ ${debian_platform} == false ]; then
+        deb_array[${#deb_array[@]}]=java-1.8.0-openjdk
+    fi
+
     for deb in ${deb_array[*]}
     do
         sudo ${yq} install -y ${deb} > /tmp/env.log 2>&1
@@ -53,7 +56,6 @@ env(){
 }
 env
 
-echo -e "${flag_feel}安装 pip 包\n"
 init_pip
 
 pip_array=(

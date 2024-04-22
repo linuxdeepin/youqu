@@ -39,7 +39,6 @@ env(){
         )
     fi
 
-    echo -e "${flag_feel}安装 deb 包\n"
     for deb in ${deb_array[*]}
     do
         sudo apt install -y ${deb} > /tmp/env.log 2>&1
@@ -52,7 +51,6 @@ env(){
 }
 env
 
-echo -e "${flag_feel}安装 pip 包\n"
 init_pip
 
 sudo pip3 install pipenv > /tmp/env.log 2>&1

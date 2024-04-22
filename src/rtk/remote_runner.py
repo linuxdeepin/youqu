@@ -38,6 +38,7 @@ from src.cmdctl import CmdCtl
 from src import logger
 from src.rtk._base import Args
 from src.rtk._base import transform_app_name
+from setting import conf
 
 
 class RemoteRunner:
@@ -56,53 +57,39 @@ class RemoteRunner:
         self.remote_kwargs = remote_kwargs
         self.local_kwargs = local_kwargs
         logger("INFO")
-        conf = ConfigParser()
-        conf.read(f"{GlobalConfig.SETTING_PATH}/remote.ini")
-        self.parallel = conf.getboolean("remote", "PARALLEL")
-        self.clean_server_report_dir = conf.getboolean(
-            "remote", "CLEAN_SERVER_REPORT_DIR"
-        )
-        self.clean_client_report_dir = conf.getboolean(
-            "remote", "CLEAN_CLIENT_REPORT_DIR"
-        )
-        self.send_code = conf.getboolean("remote", "SEND_CODE")
-        self.scan = conf.getint("remote", "SCAN")
-        self.client_env = conf.getboolean("remote", "BUILD_ENV")
-        self.client_password = conf.get("remote", "CLIENT_PASSWORD")
+        self.parallel = conf.PARALLEL
+        self.clean_server_report_dir = conf.CLEAN_SERVER_REPORT_DIR
+        self.clean_client_report_dir = conf.CLEAN_CLIENT_REPORT_DIR
+        self.send_code = conf.SEND_CODE
+        self.scan = int(conf.SCAN)
+        self.client_env = conf.BUILD_ENV
+        self.client_password = conf.CLIENT_PASSWORD
 
         self._default = {
             Args.client_password.value: remote_kwargs.get("client_password") or self.client_password,
         }
 
-        self.ini_client_dict = {
-            op: [
-                conf.get(op, "user"),
-                conf.get(op, "ip"),
-                conf.get(op, "password", fallback=self._default.get(Args.client_password.value)),
-            ]
-            for op in filter(lambda x: "client" in x, conf.sections())
-        }
-
-        cli_client_dict = {}
-        if remote_kwargs.get("clients"):
-            clients = remote_kwargs.get("clients").split("/")
+        client_dict = {}
+        _client = remote_kwargs.get("clients") or conf.CLIENTS
+        if _client:
+            clients = _client.split("/")
             for index, client in enumerate(clients):
                 client_info = re.findall(r"^(.+?)@(\d+\.\d+\.\d+\.\d+):{0,1}(.*?)$", client)
                 if client_info:
                     _c = list(client_info[0])
                     if _c[2] == "":
                         _c[2] = self._default.get(Args.client_password.value)
-                    cli_client_dict[f"client{index + 1}"] = _c
+                    client_dict[f"client{index + 1}"] = _c
 
-        if not cli_client_dict and not self.ini_client_dict:
+        else:
             raise ValueError(
-                "未获取到测试机信息,请检查 setting/remote.ini 中 CLIENT LIST 是否配置，"
+                "未获取到测试机信息,请检查 setting/globalconfig.ini 中 CLIENT LIST 是否配置，"
                 "或通过命令行 remote -c user@ip:password 传入。"
             )
 
         self.default = {
             Args.app_name.value: transform_app_name(local_kwargs.get("app_name") or GlobalConfig.APP_NAME),
-            Args.clients.value: cli_client_dict or self.ini_client_dict,
+            Args.clients.value: client_dict,
             Args.send_code.value: remote_kwargs.get("send_code") or self.send_code,
             Args.build_env.value: remote_kwargs.get("build_env") or self.client_env,
             Args.parallel.value: remote_kwargs.get("parallel") or self.parallel,
