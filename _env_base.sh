@@ -19,13 +19,22 @@ do
             ;;
     esac
 done
+
+debian_platform=false
+yq=apt
+if command -v apt &> /dev/null; then
+    debian_platform=true
+    yq=apt
+else
+    yq=yum
+fi
+
 DISPLAY_SERVER=$(cat ~/.xsession-errors | grep XDG_SESSION_TYPE | head -n 1 | cut -d "=" -f2)
 PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
 flag_feel="\n**** (・_・) ****\n"
 whitelist="/usr/share/deepin-elf-verify/whitelist"
 pypi_mirror="https://pypi.tuna.tsinghua.edu.cn/simple"
 echo "${PASSWORD}" | sudo -S su  > /dev/null 2>&1
-
 
 check_status(){
     if [ $? = 0 ]; then
@@ -113,10 +122,10 @@ system_env(){
 }
 
 init_pip(){
+    sudo pip3 config set global.index-url ${pypi_mirror} > /tmp/env.log 2>&1
     sudo pip3 install -U pip > /tmp/env.log 2>&1
     sudo pip3 cache purge > /tmp/env.log 2>&1
     sudo pip3 config set global.timeout 10000 > /tmp/env.log 2>&1
-    sudo pip3 config set global.index-url ${pypi_mirror} > /tmp/env.log 2>&1
 }
 
 install_py_deb(){

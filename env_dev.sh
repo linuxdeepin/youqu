@@ -4,7 +4,10 @@
 source ./_env_base.sh
 
 env(){
-    sudo apt update
+
+    if [ ${debian_platform} == true ]; then
+        sudo apt update
+    fi
 
     deb_array=(
         python3-pip
@@ -31,7 +34,7 @@ env(){
     echo -e "${flag_feel}安装 deb 包\n"
     for deb in ${deb_array[*]}
     do
-        sudo apt install -y ${deb} > /tmp/env.log 2>&1
+        sudo ${yq} install -y ${deb} > /tmp/env.log 2>&1
         check_status ${deb}
     done
 
@@ -39,7 +42,7 @@ env(){
     sub_py_debs=$(python3 sub_deb.py)
     for spd in ${sub_py_debs[*]}
     do
-        sudo apt install -y ${spd} > /tmp/env.log 2>&1
+        sudo ${yq} install -y ${spd} > /tmp/env.log 2>&1
         check_status ${spd}
     done
 
