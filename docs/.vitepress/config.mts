@@ -12,6 +12,7 @@ export default withMermaid(
         description: "",
         head: [
             ['meta', {name: 'referrer', content: 'no-referrer-when-downgrade'}],
+            ['link', { rel: 'icon', href: "/youqu/favicon.ico" }],
         ],
         vite: {
             publicDir: "assets",

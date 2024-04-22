@@ -9,13 +9,16 @@ hero:
   actions:
     - theme: brand
       text: YouQu是什么？
-      link: /简介/YouQu是什么
+      link: /指南/简介/YouQu是什么
     - theme: alt
       text: 快速开始
-      link: /简介/快速开始
+      link: /指南/简介/快速开始
     - theme: alt
       text: GitHub
       link: "https://github.com/linuxdeepin/youqu"
+    - theme: alt
+      text: Gitee
+      link: "https://gitee.com/deepin-community/youqu"
   image:
       src: /logo.png
       alt: YouQu
