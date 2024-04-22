@@ -69,10 +69,11 @@ class CmdCtl:
         return exitcode, data
 
     @classmethod
-    def sudo_run_cmd(cls, command, interrupt=True, timeout=25, out_debug_flag=True, command_log=True, password=None):
+    def sudo_run_cmd(cls, command, interrupt=True, timeout=25, out_debug_flag=True,
+                     command_log=True, password=None):
         if password is None:
             password = conf.PASSWORD
-        cls.run_cmd(
+        return cls.run_cmd(
             f"echo '{password}' | sudo -S {command}",
             interrupt=interrupt,
             timeout=timeout,
