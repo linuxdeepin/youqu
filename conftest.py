@@ -645,18 +645,19 @@ def pytest_runtest_makereport(item, call):
         for mark in item.own_markers:
             if mark.name == "parametrize":
                 continue
-            if mark.args[0] == FixedCsvTitle.case_level.value:
-                try:
-                    allure.dynamic.severity(LabelType[mark.name].value)
-                except KeyError:
-                    allure.dynamic.severity(LabelType.L3.value)
-            elif mark.args[0] == FixedCsvTitle.pms_case_id.value:
-                # if mark.name:
-                testcase_url = f"https://pms.uniontech.com/testcase-view-{mark.name}.html"
-                allure.dynamic.testcase(testcase_url)
-                logger.info(testcase_url)
-            else:
-                allure.dynamic.tag(mark.name)
+            if mark.args:
+                if mark.args[0] == FixedCsvTitle.case_level.value:
+                    try:
+                        allure.dynamic.severity(LabelType[mark.name].value)
+                    except KeyError:
+                        allure.dynamic.severity(LabelType.L3.value)
+                elif mark.args[0] == FixedCsvTitle.pms_case_id.value:
+                    # if mark.name:
+                    testcase_url = f"https://pms.uniontech.com/testcase-view-{mark.name}.html"
+                    allure.dynamic.testcase(testcase_url)
+                    logger.info(testcase_url)
+                else:
+                    allure.dynamic.tag(mark.name)
     if report.when == "call":
         logger.info(f"运行结果: {str(report.outcome).upper()}")
         if write_json(item.session):

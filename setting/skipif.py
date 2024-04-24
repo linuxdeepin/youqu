@@ -70,7 +70,7 @@ def skipif_os_version(args: str):
     """
     _skip_key = args.split("&")
     for key in _skip_key:
-        if key == GlobalConfig.OS_VERSION.get("MinorVersion"):
+        if key == GlobalConfig.version_cfg.get("MinorVersion"):
             return True
     return False
 

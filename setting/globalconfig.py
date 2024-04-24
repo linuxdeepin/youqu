@@ -238,7 +238,7 @@ class _GlobalConfig:
                          .read()
                          .split("=")[-1]
                          .strip("\n")
-                     ) or ("x11" if getenv("XDG_SESSION_TYPE") == "tty" else getenv("XDG_SESSION_TYPE"))
+                     ) or ("x11" if popen("ps -ef | grep -v grep | grep kwin_x11").read() else "wayland")
 
     class DisplayServer:
         wayland = "wayland"

@@ -15,7 +15,7 @@ env(){
         scrot
         python3-tk
         python3-pyatspi
-        openjdk-8-jdk
+        openjdk-11-jdk-headless
         python3-opencv
     )
 
@@ -27,12 +27,14 @@ env(){
         deb_array=(
             python3-pip
             sshpass
-            openjdk-8-jdk
+            openjdk-11-jdk-headless
         )
     fi
 
     if [ ${debian_platform} == false ]; then
-        deb_array[${#deb_array[@]}]=java-1.8.0-openjdk
+        deb_array[${#deb_array[@]}]=java-11-openjdk-headless
+        deb_array[${#deb_array[@]}]=python3-tkinter
+        deb_array[${#deb_array[@]}]=xdotool
     fi
 
     for deb in ${deb_array[*]}

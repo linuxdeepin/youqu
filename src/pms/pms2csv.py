@@ -88,17 +88,17 @@ class Pms2Csv(_Base):
             case_from = case.get("caseSource")
             device_type = case.get("deviceType")
             online_obj = case.get("lineCD")
-            if case_type:
-                res_data[case_id] = {
-                    "case_level": f"L{case_level}",
-                    "case_type": case_type,
-                    "case_from": "BUG" if case_from == "是" else "",
-                    "device_type": device_type.split("(")[0]
-                    if device_type and device_type != "null"
-                    else "",
-                    "online_obj": "CICD" if online_obj == "是" else "",
-                    "skip_reason": "skip-下线CD" if online_obj == "否" else None
-                }
+            # if case_type:
+            res_data[case_id] = {
+                "case_level": f"L{case_level}",
+                "case_type": case_type,
+                "case_from": "BUG" if case_from == "是" else "",
+                "device_type": device_type.split("(")[0]
+                if device_type and device_type != "null"
+                else "",
+                "online_obj": "CICD" if online_obj == "是" else "",
+                "skip_reason": "skip-下线CD" if online_obj == "否" else None
+            }
         if not res_data:
             logger.error(f"未从pms获取到数据, {self.config_error_log}")
             raise ValueError

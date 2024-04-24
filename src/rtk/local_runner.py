@@ -144,7 +144,11 @@ class LocalRunner:
             screen = Tk()
             x = screen.winfo_screenwidth()
             y = screen.winfo_screenheight()
-            if self.default.get(Args.resolution.value) not in (f"{x}x{y}", "no"):
+            rls = [i.strip() for i in self.default.get(Args.resolution.value).split(",")]
+            for rl in rls:
+                if rl in (f"{x}x{y}", "no"):
+                    break
+            else:
                 raise ValueError(f"当前分辨率为：{x}x{y},您配置的分辨率为：{GlobalConfig.RESOLUTION}")
 
     @property

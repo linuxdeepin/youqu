@@ -34,20 +34,22 @@ PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.v
 flag_feel="\n**** (・_・) ****\n"
 whitelist="/usr/share/deepin-elf-verify/whitelist"
 pypi_mirror="https://pypi.tuna.tsinghua.edu.cn/simple"
-echo ${PASSWORD}
 echo "${PASSWORD}" | sudo -S su
+
+if [ ! -f "$HOME/.Xauthority" ]; then
+        touch $HOME/.Xauthority
+fi
+
 check_status(){
     if [ $? = 0 ]; then
         echo -e "$1\t安装成功 √"
     else
         echo -e "$1\t安装失败 ×"
-        echo "如果密码与实际不符，请使用 -p 选项传入参数：bash env.sh -p xxx，或修改setting/globalconfig.ini中的PASSWORD配置项"
         cat /tmp/env.log
     fi
 }
 
 wayland_env(){
-    echo -e "${flag_feel}安装 Wayland 上键鼠工具\n"
     deb_array=(g++ build-essential cmake qt5-default qt5-qmake libqt5gui5 libqt5core5a)
     for deb in ${deb_array[*]}
     do
@@ -92,10 +94,6 @@ wayland_env(){
         sudo systemctl restart deepin-elf-verify.service || true
     fi
 
-    if [ ! -f "$HOME/.Xauthority" ]; then
-        touch $HOME/.Xauthority
-    fi
-
     nohup wayland_autotool > /dev/null 2>&1 &
 }
 
@@ -132,7 +130,7 @@ install_py_deb(){
     apt download ${1} > /tmp/env.log 2>&1
     if [ $? != 0 ]; then
         cat /tmp/env.log
-        exit 520
+        exit 120
     fi
     dpkg -x ${1}*.deb ${1}
     cp -r ./${1}/usr/lib/python3/dist-packages/* ${2}/lib/python${PYTHON_VERSION}/site-packages/
