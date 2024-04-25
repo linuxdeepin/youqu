@@ -29,9 +29,8 @@ export default withMermaid(
             nav: [
                 {text: '指南', link: '/指南/简介/YouQu是什么'},
                 {text: '框架设计', link: '/框架设计/AT基础框架设计方案'},
-                {text: 'FAQ', link: '/FAQ'},
-                {text: '更新日志', link: '/RELEASE'},
                 {text: '团队', link: '/team'},
+                {text: '更新日志', link: '/RELEASE'},
                 {
                     text: '插件', items: [
                         {text: "funnylog", link: "https://linuxdeepin.github.io/funnylog/"},

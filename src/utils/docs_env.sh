@@ -23,10 +23,9 @@ if ! command -v node &> /dev/null; then
 elif ! command -v pnpm  &> /dev/null; then
 	npm config set registry https://registry.npmmirror.com
 	npm install -g pnpm
+	sudo rm -rf /usr/local/bin/pnpm; sudo ln -s /opt/${opt_node_dir}/bin/pnpm /usr/local/bin/pnpm
+  sudo rm -rf /usr/local/bin/pnpx; sudo ln -s /opt/${opt_node_dir}/bin/pnpx /usr/local/bin/pnpx
 fi
-
-sudo rm -rf /usr/local/bin/pnpm; sudo ln -s /opt/${opt_node_dir}/bin/pnpm /usr/local/bin/pnpm
-sudo rm -rf /usr/local/bin/pnpx; sudo ln -s /opt/${opt_node_dir}/bin/pnpx /usr/local/bin/pnpx
 
 pnpm add -D vitepress
 pnpm i vitepress-plugin-comment-with-giscus

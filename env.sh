@@ -116,6 +116,7 @@ pip_array=(
     image-center
     allure-custom
     letmego
+    tomli
 )
 
 if [ "${ENV_CUT_FLAG}" = "cut" ]; then
@@ -126,6 +127,7 @@ if [ "${ENV_CUT_FLAG}" = "cut" ]; then
         allure-pytest==2.9.45
         allure-custom
         funnylog
+        tomli
     )
 fi
 

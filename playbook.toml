@@ -1,26 +1,28 @@
-#{
-#  "repositories": [
-#    {
-#      "url": "",
-#      "branch_or_tag": "",
-#      "depth": "",
-#      "path_to": "",
-#      "user": "",
-#      "password": ""
-#    }
-#  ],
-#  "execution_mode": "",
-#  "clients": "",
-#  "slaves": "",
-#  "keywords": "",
-#  "tags": "",
-#  "pms_case_file_path": ""
-#}
-
+# ============ 仓库的信息 ============
 [[repositories]]
+# 仓库的url
 url = ""
+
 branch_or_tag = ""
-depth = ""
-path_to = ""
+
 user = ""
+
 password = ""
+
+depth = "1"
+
+path_to = "apps"
+
+# ============ 仓库的信息 ============
+[play]
+execution_mode = "run"
+
+clients = ""
+
+slaves = ""
+
+keywords = ""
+
+tags = ""
+
+pms_case_file_path = ""

@@ -975,7 +975,7 @@ def walk_apps(walk_dir):
     return csv_path_dict, no_youqu_mark
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='module')
 def native_page():
     from playwright.sync_api import sync_playwright
     driver = sync_playwright().start()
@@ -996,7 +996,7 @@ def native_page():
     driver.stop()
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='module')
 def page():
     from playwright.sync_api import sync_playwright
     driver = sync_playwright().start()
