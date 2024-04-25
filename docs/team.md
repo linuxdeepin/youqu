@@ -97,11 +97,10 @@ const members = [
 <VPTeamPage>
   <VPTeamPageTitle>
     <template #title>
-      Our Team
+      YouQu Team
     </template>
     <template #lead>
-      The development of YouQu is guided by an international
-      team, some of whom have chosen to be featured below.
+      包括代码贡献者和提供过重要建议或帮助的朋友
     </template>
   </VPTeamPageTitle>
   <VPTeamMembers

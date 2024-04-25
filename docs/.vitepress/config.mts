@@ -1,4 +1,3 @@
-
 import {defineConfig} from 'vitepress'
 import {withMermaid} from "vitepress-plugin-mermaid";
 import timeline from "vitepress-markdown-timeline";
@@ -12,7 +11,7 @@ export default withMermaid(
         description: "",
         head: [
             ['meta', {name: 'referrer', content: 'no-referrer-when-downgrade'}],
-            ['link', { rel: 'icon', href: "/youqu/favicon.ico" }],
+            ['link', {rel: 'icon', href: "/youqu/favicon.ico"}],
         ],
         vite: {
             publicDir: "assets",
@@ -28,15 +27,16 @@ export default withMermaid(
             siteTitle: "",
             nav: [
                 {text: '指南', link: '/指南/简介/YouQu是什么'},
-                {text: '框架设计', link: '/框架设计/AT基础框架设计方案'},
+                {text: '规划', link: '/规划/框架设计/AT基础框架设计方案'},
+                {text: '实践(编写中)', link: '/实践/Linux桌面UI自动化测试/初始化工程'},
                 {text: '团队', link: '/team'},
                 {text: '更新日志', link: '/RELEASE'},
                 {
                     text: '插件', items: [
-                        {text: "funnylog", link: "https://linuxdeepin.github.io/funnylog/"},
-                        {text: "letmego", link: "https://linuxdeepin.github.io/letmego/"},
-                        {text: "pdocr-rpc", link: "https://linuxdeepin.github.io/pdocr-rpc/"},
-                        {text: "image-center", link: "https://linuxdeepin.github.io/image-center/"},
+                        {text: "日志系统 funnylog", link: "https://linuxdeepin.github.io/funnylog/"},
+                        {text: "重启方案 letmego", link: "https://linuxdeepin.github.io/letmego/"},
+                        {text: "文字识别 pdocr-rpc", link: "https://linuxdeepin.github.io/pdocr-rpc/"},
+                        {text: "图像识别 image-center", link: "https://linuxdeepin.github.io/image-center/"},
                     ]
                 },
             ],
@@ -73,9 +73,10 @@ export default withMermaid(
                         text: "框架必备",
                         collapsed: false,
                         items: [
+                            {text: "断言", link: "/指南/框架必备/断言"},
+                            {text: "键鼠操作", link: "/指南/框架必备/键鼠操作"},
                             {text: "执行管理器", link: "/指南/框架必备/执行管理器"},
                             {text: "测试报告", link: "/指南/框架必备/测试报告"},
-                            {text: "键鼠操作", link: "/指南/框架必备/键鼠操作"},
                         ]
                     },
                     {
@@ -92,10 +93,64 @@ export default withMermaid(
                         ]
                     },
                 ],
-                "/框架设计/": [
-                    {text: "自动化测试架构设计规划", link: "/框架设计/自动化测试架构设计v1.0"},
-                    {text: "AT基础框架设计方案", link: "/框架设计/AT基础框架设计方案"},
-                    {text: "AT应用库设计方案", link: "/框架设计/AT应用库设计方案"},
+                "/规划/": [
+                    {
+                        text: "框架设计",
+                        collapsed: false,
+                        items: [
+                            {text: "自动化测试架构设计规划", link: "/规划/框架设计/自动化测试架构设计v1.0"},
+                            {text: "AT基础框架设计方案", link: "/规划/框架设计/AT基础框架设计方案"},
+                            {text: "AT应用库设计方案", link: "/规划/框架设计/AT应用库设计方案"},
+                        ]
+                    },
+                    {text: "未来规划", link: "/规划/未来规划"}
+                ],
+                "/实践/": [
+                    {
+                        text: "Linux桌面UI自动化测试",
+                        collapsed: false,
+                        items: [
+                            {text: "初始化工程", link: "/实践/Linux桌面UI自动化测试/初始化工程"},
+                            {text: "环境部署", link: "/实践/Linux桌面UI自动化测试/环境部署"},
+                            {text: "分层结构", link: "/实践/Linux桌面UI自动化测试/分层结构"},
+                        ]
+                    },
+                    {
+                        text: "DBus接口自动化测试",
+                        collapsed: true,
+                        items: [
+                            {text: "初始化工程", link: "/实践/DBus接口自动化测试/初始化工程"},
+                            {text: "环境部署", link: "/实践/DBus接口自动化测试/环境部署"},
+                            {text: "分层结构", link: "/实践/DBus接口自动化测试/分层结构"},
+                        ]
+                    },
+                    {
+                        text: "命令行自动化测试",
+                        collapsed: true,
+                        items: [
+                            {text: "初始化工程", link: "/实践/命令行自动化测试/初始化工程"},
+                            {text: "环境部署", link: "/实践/命令行自动化测试/环境部署"},
+                            {text: "分层结构", link: "/实践/命令行自动化测试/分层结构"},
+                        ]
+                    },
+                    {
+                        text: "HTTP接口自动化测试",
+                        collapsed: true,
+                        items: [
+                            {text: "初始化工程", link: "/实践/HTTP接口自动化测试/初始化工程"},
+                            {text: "环境部署", link: "/实践/HTTP接口自动化测试/环境部署"},
+                            {text: "分层结构", link: "/实践/HTTP接口自动化测试/分层结构"},
+                        ]
+                    },
+                    {
+                        text: "WebUI自动化测试",
+                        collapsed: true,
+                        items: [
+                            {text: "初始化工程", link: "/实践/WebUI自动化测试"},
+                            {text: "环境部署", link: "/实践/WebUI自动化测试"},
+                            {text: "分层结构", link: "/实践/WebUI自动化测试"},
+                        ]
+                    },
                 ]
             },
             search: {
