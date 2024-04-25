@@ -1,5 +1,7 @@
 set -e
+ROOT_DIR=$(dirname "$(dirname "$(pwd)")")
 
+cd ${ROOT_DIR}
 # check path
 docs_path="$( cd "$( dirname "$0")" && pwd)"
 if [[ "${docs_path}" != "${PWD}" ]]; then
