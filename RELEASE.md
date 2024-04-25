@@ -1,5 +1,13 @@
 # 版本更新记录
 
+## 2.5.4（dev）
+
+**New**
+
+- 将项目根目录下 `_env_base.sh` 移动到 `setting` 目录下，简化项目根目录下文件目录结构；
+- 将项目根目录下 `pylint.sh` 移动到 `src/utils` 目录下，一方面 YouQu 目前已经启用了更先进的 Ruff，Pylint 后续默认不再使用，但考虑到有些同学仍然后使用 Pylint 的需求，因此暂留。
+- 添加 `CODE_OF_CONDUCT.md`。
+
 ## 2.5.3（2024/04/24）
 
 **New**

@@ -1,11 +1,12 @@
 <p align="center">
-  <a href="https://linuxdeepin.github.io/youqu/">
+  <a href="https://pic.imgdb.cn/item/653093a4c458853aef34d674.png">
     <img src="./docs/logo.png" width="520" alt="YouQu">
   </a>
 </p>
 <p align="center">
     <em>YouQu（有趣），一个使用简单且功能强大的自动化测试基础框架。</em>
 </p>
+
 
 
 

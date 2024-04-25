@@ -3,9 +3,10 @@
 # SPDX-License-Identifier: GPL-2.0-only
 
 tag=$(echo "$(cat ./CURRENT | grep "tag = ")" | cut -d "=" -f2 | python3 -c "s=input();print(s.strip())")
-ROOT_DIR=`pwd`
+SETTING_DIR=`pwd`
+ROOT_DIR=$(dirname ${SETTING_DIR})
 
-config_pwd=$(cat ./setting/globalconfig.ini | grep "PASSWORD = ")
+config_pwd=$(cat ${ROOT_DIR}/setting/globalconfig.ini | grep "PASSWORD = ")
 PASSWORD=$(echo "${config_pwd}" | cut -d "=" -f2 | python3 -c "s=input();print(s.strip())")
 while getopts ":p:" opt
 do
@@ -29,11 +30,11 @@ else
     yq=yum
 fi
 
-DISPLAY_SERVER=$(cat ~/.xsession-errors | grep XDG_SESSION_TYPE | head -n 1 | cut -d "=" -f2)
+DISPLAY_SERVER=$(cat ${HOME}/.xsession-errors | grep XDG_SESSION_TYPE | head -n 1 | cut -d "=" -f2)
 PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
-flag_feel="\n**** (・_・) ****\n"
 whitelist="/usr/share/deepin-elf-verify/whitelist"
 pypi_mirror="https://pypi.tuna.tsinghua.edu.cn/simple"
+
 echo "${PASSWORD}" | sudo -S su
 
 if [ ! -f "$HOME/.Xauthority" ]; then
