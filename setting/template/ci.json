@@ -4,6 +4,7 @@
   "line": "",
   "total": 0,
   "fail": 0,
+  "skip": 0,
   "block": 0,
   "pass": 0,
   "pass_rate": ""

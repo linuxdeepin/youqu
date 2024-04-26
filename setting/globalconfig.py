@@ -8,10 +8,10 @@ from enum import Enum
 from enum import unique
 from getpass import getuser
 from os import popen
-from os import getenv
 from os.path import abspath
 from os.path import dirname
 from os.path import join
+from os.path import exists
 from platform import machine
 from time import strftime
 import pathlib
@@ -201,13 +201,17 @@ class _GlobalConfig:
     END_DATE = log_cli.get("END_DATE", default="")
 
     # ====================== 动态获取变量 ======================
-    version_cfg = GetCfg("/etc/os-version", "Version")
-    VERSION = (version_cfg.get("EditionName[zh_CN]") or "") + (
-            version_cfg.get("MinorVersion") or ""
-    )
+    VERSION = ""
+    if exists("/etc/os-version"):
+        version_cfg = GetCfg("/etc/os-version", "Version")
+        VERSION = (version_cfg.get("EditionName[zh_CN]") or "") + (
+                version_cfg.get("MinorVersion") or ""
+        )
     # IP
     HOST_IP = str(popen("hostname -I |awk '{print $1}'").read()).strip("\n").strip()
-    PRODUCT_INFO = popen("cat /etc/product-info").read()
+    PRODUCT_INFO = ""
+    if exists("cat /etc/product-info"):
+        PRODUCT_INFO = popen("cat /etc/product-info").read()
     # machine type
     # e.g. x86_64
     SYS_ARCH = machine()

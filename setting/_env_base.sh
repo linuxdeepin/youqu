@@ -2,11 +2,10 @@
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
 
-tag=$(echo "$(cat ./CURRENT | grep "tag = ")" | cut -d "=" -f2 | python3 -c "s=input();print(s.strip())")
-SETTING_DIR=`pwd`
+SETTING_DIR=$(dirname $(realpath "${BASH_SOURCE[0]}"))
 ROOT_DIR=$(dirname ${SETTING_DIR})
-
-config_pwd=$(cat ${ROOT_DIR}/setting/globalconfig.ini | grep "PASSWORD = ")
+tag=$(echo "$(cat ${ROOT_DIR}/CURRENT | grep "tag = ")" | cut -d "=" -f2 | python3 -c "s=input();print(s.strip())")
+config_pwd=$(cat ${ROOT_DIR}/setting/globalconfig.ini | grep -v "CLIENT_PASSWORD" | grep "PASSWORD = ")
 PASSWORD=$(echo "${config_pwd}" | cut -d "=" -f2 | python3 -c "s=input();print(s.strip())")
 while getopts ":p:" opt
 do

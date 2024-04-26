@@ -24,7 +24,7 @@ export default withMermaid(
 
         themeConfig: {
             // https://vitepress.dev/reference/default-theme-config
-            siteTitle: "",
+            siteTitle: false,
             nav: [
                 {text: '指南', link: '/指南/简介/YouQu是什么'},
                 {text: '规划', link: '/规划/框架设计/AT基础框架设计方案'},

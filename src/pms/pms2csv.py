@@ -275,7 +275,7 @@ class Pms2Csv(_Base):
             new_csv_tags = new_csv_file_tags.get(csv_file)
             with open(csv_file, "w+", encoding="utf-8") as f:
                 for tags in new_csv_tags:
-                    f.write(",".join(tags) + "\n")
+                    f.write(",".join(["" if i is None else i for i in tags]) + "\n")
             logger.info(f"同步完成: {csv_file}")
 
 

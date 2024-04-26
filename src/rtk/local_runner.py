@@ -439,23 +439,10 @@ class LocalRunner:
         passed = res.get("pass", 0)
         failed = total - passed
         pass_rate = f"{round((passed / total) * 100, 1)}%" if passed else "0%"
-        return total, failed, passed, pass_rate
+        return total, failed, passed, skiped, pass_rate
 
     @classmethod
     def write_json(cls, project_name=None, build_location=None, line=None):
-        """
-         写json报告
-        {
-          "project_name": "",
-          "build_location": "",
-          "line": "",
-          "total": "",
-          "fail": "",
-          "block": "",
-          "pass": "",
-          "pass_rate": ""
-        }
-        """
         json_tpl_path = f"{GlobalConfig.SETTING_PATH}/template/ci.json"
         if not exists(json_tpl_path):
             raise FileNotFoundError
@@ -473,6 +460,7 @@ class LocalRunner:
             results["total"],
             results["fail"],
             results["pass"],
+            results["skip"],
             results["pass_rate"],
         ) = cls.get_result(ci_result_path)
 

@@ -73,8 +73,6 @@ LN = "\n"
 
 
 class LabelType(Enum):
-    """用例级别对应报告级别"""
-
     L1 = allure.severity_level.BLOCKER
     L2 = allure.severity_level.CRITICAL
     L3 = allure.severity_level.NORMAL
@@ -82,12 +80,10 @@ class LabelType(Enum):
 
 
 def add_mark(item, name: str = "", args: tuple = (), kwargs: dict = None):
-    """add mark"""
     item.own_markers.append(Mark(name=name, args=args, kwargs=kwargs))
 
 
 def write_json(session):
-    """write json"""
     return bool(
         session.config.option.send_pms
         and (session.config.option.task_id or session.config.option.suite_id)
@@ -95,12 +91,10 @@ def write_json(session):
 
 
 def auto_send(session):
-    """auto send"""
     return bool(session.config.option.send_pms and session.config.option.trigger)
 
 
 def async_send(session):
-    """async send"""
     return bool(
         session.config.option.send_pms == ConfStr.ASYNC.value
         and session.config.option.trigger == ConfStr.AUTO.value
@@ -108,7 +102,6 @@ def async_send(session):
 
 
 def finish_send(session):
-    """finish send"""
     return bool(
         session.config.option.send_pms == ConfStr.FINISH.value
         and session.config.option.trigger == ConfStr.AUTO.value
@@ -152,7 +145,6 @@ def pytest_addoption(parser):
 
 
 def pytest_cmdline_main(config):
-    """pytest_cmdline_main"""
     # 初始化log配置，以解决allure报告日志格式问题
     log_info = logger(config.option.log_level)
     config.option.log_level = config.option.log_level
@@ -167,7 +159,6 @@ def pytest_addhooks(pluginmanager):
 
 @pytest.mark.trylast
 def pytest_configure(config):
-    """pytest_configure"""
     if hasattr(config, "workerinput"):
         return  # xdist worker
     reporter = config.pluginmanager.getplugin("terminalreporter")
@@ -178,29 +169,12 @@ def pytest_configure(config):
 
 
 def pytest_sessionstart(session):
-    """pytest_sessionstart"""
-    # if (
-    #         CmdCtl.run_cmd(
-    #             "gsettings get com.deepin.dde.appearance gtk-theme",
-    #             interrupt=False,
-    #             out_debug_flag=False,
-    #             command_log=False,
-    #         ).strip("'")
-    #         != GlobalConfig.SYS_THEME
-    # ):
-    #     CmdCtl.run_cmd(
-    #         f"gsettings set com.deepin.dde.appearance gtk-theme {GlobalConfig.SYS_THEME}",
-    #         interrupt=False,
-    #         out_debug_flag=False,
-    #         command_log=False,
-    #     )
     _display = (
         GlobalConfig.DisplayServer.wayland
         if GlobalConfig.IS_WAYLAND
         else GlobalConfig.DisplayServer.x11
     )
     logger.info(f"当前系统显示协议为 {_display.title()}")
-    # popen("gsettings set com.deepin.dde.dock position bottom")
     session.config.option.start_time = datetime.now()
 
     user = session.config.option.pms_user
@@ -232,7 +206,6 @@ def pytest_sessionstart(session):
 
 @pytest.hookimpl(trylast=True)
 def pytest_generate_tests(metafunc):
-    """pytest generate tests"""
     repeat = metafunc.config.option.repeat
     marks = metafunc.definition.get_closest_marker("repeat")
     if marks is not None:
@@ -252,8 +225,6 @@ def pytest_generate_tests(metafunc):
 
 
 def pytest_collection_modifyitems(session):
-    """pytest collection modifyitems"""
-
     walk_dir = (
         f"{GlobalConfig.APPS_PATH}/{session.config.option.app_name}"
         if session.config.option.app_name
@@ -477,7 +448,6 @@ def pytest_collection_modifyitems(session):
 
 
 def pytest_collection_finish(session):
-    """pytest collection finish"""
     session.item_count = len(session.items)
 
     pop_skip_case_from_items = session.items[:]
@@ -568,7 +538,6 @@ def pytest_collection_finish(session):
 
 
 def pytest_runtest_setup(item):
-    """pytest runtest setup"""
     if hasattr(item, "execution_count"):
         letmego.conf.setting.EXECUTION_COUNT = item.execution_count
 
@@ -618,12 +587,10 @@ def pytest_runtest_setup(item):
 
 # pylint: disable=unused-argument
 def pytest_runtest_call(item):
-    """pytest runtest call"""
     logger.info(f"{FLAG_FEEL} case body {FLAG_FEEL}")
 
 
 def pytest_runtest_teardown(item):
-    """pytest runtest teardown"""
     logger.info(f"{FLAG_FEEL} teardown {FLAG_FEEL}")
     sessiontimeout = item.session.sessiontimeout
     if sessiontimeout:
@@ -638,7 +605,6 @@ def pytest_runtest_teardown(item):
 
 @pytest.hookimpl(hookwrapper=True, tryfirst=True)
 def pytest_runtest_makereport(item, call):
-    """pytest_runtest_makereport"""
     out = yield
     report = out.get_result()
     if report.when == "setup":
@@ -740,7 +706,6 @@ def pytest_runtest_makereport(item, call):
 
 
 def pytest_report_teststatus(report, config):
-    """pytest report teststatus"""
     # 在 setup 和 teardown 阶段处理 error 和 skip
     if report.when in ("setup", "teardown"):
         if report.failed:
@@ -773,15 +738,14 @@ def pytest_report_teststatus(report, config):
 
 
 def pytest_sessionfinish(session):
-    """pytest session finish"""
     if session.config.option.allure_report_dir:
         AllureReportExtend.environment_info(session)
-        terminalreporter = session.config.pluginmanager.get_plugin("terminalreporter")
+        tr = session.config.pluginmanager.get_plugin("terminalreporter")
         execute = {}
-        for _, items in terminalreporter.stats.items():
+        for _, items in tr.stats.items():
             for item in items:
-                default_result = {"result": "blocked", "longrepr": "None"}
-                try:
+                if hasattr(item, "outcome"):
+                    default_result = {"result": "blocked", "longrepr": "None"}
                     if item.outcome == ConfStr.PASSED.value:
                         default_result["result"] = "pass"
                     elif item.outcome == ConfStr.SKIPPED.value:
@@ -790,14 +754,13 @@ def pytest_sessionfinish(session):
                         continue
                     else:
                         default_result["result"] = "fail"
-                    item_name = item.nodeid.split("::")[0]
+                    default_result["longrepr"] = item.longreprtext
+                    item_name = item.fspath
                     if not execute.get(item_name) or (
                             item.outcome != ConfStr.PASSED.value
                             and execute.get(item_name).get("result") == "pass"
                     ):
                         execute[item_name] = default_result
-                except AttributeError:
-                    pass
         if execute:
             with open(f"{GlobalConfig.ROOT_DIR}/ci_result.json", "w", encoding="utf-8") as _f:
                 _f.write(dumps(execute, indent=2, ensure_ascii=False))

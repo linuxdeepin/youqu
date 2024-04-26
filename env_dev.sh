@@ -35,6 +35,7 @@ env(){
         deb_array[${#deb_array[@]}]=java-11-openjdk-headless
         deb_array[${#deb_array[@]}]=python3-tkinter
         deb_array[${#deb_array[@]}]=xdotool
+        deb_array[${#deb_array[@]}]=opencv
     fi
 
     for deb in ${deb_array[*]}
@@ -86,6 +87,10 @@ if [ "${ENV_CUT_FLAG}" = "cut" ]; then
         tomli
     )
 fi
+
+if [ ${debian_platform} == false ]; then
+        pip_array[${#pip_array[@]}]=numpy
+    fi
 
 for p in ${pip_array[*]}
 do
