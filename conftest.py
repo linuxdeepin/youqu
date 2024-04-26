@@ -790,7 +790,7 @@ def pytest_sessionfinish(session):
                         continue
                     else:
                         default_result["result"] = "fail"
-                    item_name = item.nodeid.split("[")[0]
+                    item_name = item.nodeid.split("::")[0]
                     if not execute.get(item_name) or (
                             item.outcome != ConfStr.PASSED.value
                             and execute.get(item_name).get("result") == "pass"
@@ -821,7 +821,7 @@ def pytest_sessionfinish(session):
     if not session.config.option.collectonly and session.config.option.top:
         session.p.terminate()
         system(
-            f"ps -aux | grep '{GlobalConfig.top_cmd}' | "
+            f"ps -ef | grep '{GlobalConfig.top_cmd}' | "
             "cut -c 9-15 | xargs kill -9 > /dev/null 2>&1"
         )
         session.p.close()
