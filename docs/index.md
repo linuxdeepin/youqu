@@ -33,10 +33,10 @@ features:
   - icon: 🚀
     title: 命令行自动化测试
     details: 高效命令行自动化测试，让Linux软件开发和维护更加轻松便捷。
-  - icon: 🌏
+  - icon: ️🕷️
     title: HTTP 接口自动化测试
     details: 保障HTTP接口的响应速度和数据传输安全，我们的自动化测试是您的明智之选。
-  - icon: 🐵
+  - icon: 🌏
     title: Web UI 自动化测试
     details: Web UI自动化测试，优化用户体验，提升Web应用的稳定性和可靠性。
 ---

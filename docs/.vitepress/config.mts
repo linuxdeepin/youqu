@@ -163,7 +163,7 @@ export default withMermaid(
                 {icon: 'github', link: 'https://github.com/linuxdeepin/youqu'}
             ],
             footer: {
-                copyright: `版权所有 © 2023-${new Date().getFullYear()} 统信软件`
+                copyright: `版权所有 © 2020-${new Date().getFullYear()} 统信软件`
             },
             //大纲显示2-3级标题
             outline: [2, 4],
