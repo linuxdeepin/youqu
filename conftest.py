@@ -739,7 +739,6 @@ def pytest_report_teststatus(report, config):
 
 def pytest_sessionfinish(session):
     if session.config.option.allure_report_dir:
-        AllureReportExtend.environment_info(session)
         tr = session.config.pluginmanager.get_plugin("terminalreporter")
         execute = {}
         for _, items in tr.stats.items():
@@ -761,6 +760,7 @@ def pytest_sessionfinish(session):
                             and execute.get(item_name).get("result") == "pass"
                     ):
                         execute[item_name] = default_result
+        AllureReportExtend.environment_info(session, execute)
         if execute:
             with open(f"{GlobalConfig.ROOT_DIR}/ci_result.json", "w", encoding="utf-8") as _f:
                 _f.write(dumps(execute, indent=2, ensure_ascii=False))

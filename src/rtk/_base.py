@@ -1,14 +1,19 @@
 #!/usr/bin/env python3
 # _*_ coding:utf-8 _*_
-
+import json
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
 import os
+from collections import Counter
 from enum import Enum
 from enum import unique
+from os.path import exists
+
 from setting import conf
+from setting.globalconfig import GlobalConfig
+from src import sleep
 
 
 # pylint: disable=C0103
@@ -79,7 +84,7 @@ class Args(Enum):
     slaves = "slaves"
 
 
-def  transform_app_name(app_name):
+def transform_app_name(app_name):
     """转换 app_name"""
     if not app_name:
         return None
@@ -91,3 +96,49 @@ def  transform_app_name(app_name):
         if dir_name == app_name:
             return app_name
     raise NotADirectoryError(f"{app_name} 目录不存在")
+
+
+def collect_result(results):
+    res = Counter([results.get(i).get("result") for i in results])
+    total = sum(res.values())
+    skiped = res.get("skip", 0)
+    total = total - skiped
+    passed = res.get("pass", 0)
+    failed = total - passed
+    pass_rate = f"{round((passed / total) * 100, 1)}%" if passed else "0%"
+    return total, failed, passed, skiped, pass_rate
+
+def get_result(ci_result):
+    with open(ci_result, "r", encoding="utf-8") as _f:
+        results_dict = json.load(_f)
+    return collect_result(results_dict)
+
+
+def write_json(project_name=None, build_location=None, line=None):
+    json_tpl_path = f"{GlobalConfig.SETTING_PATH}/template/ci.json"
+    if not exists(json_tpl_path):
+        raise FileNotFoundError
+    with open(json_tpl_path, "r", encoding="utf-8") as _f:
+        results = json.load(_f)
+
+    results["project_name"] = project_name
+    results["build_location"] = build_location
+    results["line"] = line
+    ci_result_path = f"{GlobalConfig.ROOT_DIR}/ci_result.json"
+    if not exists(ci_result_path):
+        return
+
+    (
+        results["total"],
+        results["fail"],
+        results["pass"],
+        results["skip"],
+        results["pass_rate"],
+    ) = get_result(ci_result_path)
+
+    json_res_path = f"{GlobalConfig.ROOT_DIR}/{project_name}_at.json"
+    with open(json_res_path, "w+", encoding="utf-8") as _f:
+        _f.write(json.dumps(results, indent=2, ensure_ascii=False))
+    sleep(1)
+    with open(json_res_path, "r", encoding="utf-8") as _f:
+        print("CICD数据结果:\n", _f.read())

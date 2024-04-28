@@ -6,9 +6,10 @@
 # pylint: disable=C0114,C0103,R0903
 import os
 from tkinter import Tk
+from functools import partial
 
 from setting.globalconfig import GlobalConfig
-from src.dbus_utils import DbusUtils
+from src.rtk._base import collect_result
 
 
 def wf(f, t):
@@ -16,11 +17,9 @@ def wf(f, t):
 
 
 class AllureReportExtend:
-    """AllureReportExtend"""
 
     @staticmethod
-    def environment_info(session):
-        """写入环境变量"""
+    def environment_info(session, execute):
         try:
             allure_path = session.config.option.allure_report_dir
         except TypeError:
@@ -33,34 +32,33 @@ class AllureReportExtend:
             "environment.properties"
         )
         with open(allure_fspath_path, "w+", encoding="utf-8") as _f:
-            wf(_f, f"网络地址={GlobalConfig.USERNAME}@{GlobalConfig.HOST_IP}")
-            wf(_f, f"系统信息={GlobalConfig.PRODUCT_INFO}")
-            wf(_f, f"镜像版本={GlobalConfig.VERSION}")
-            wf(_f, f"目录={GlobalConfig.ROOT_DIR}")
+            w = partial(wf, _f)
+
+            py_case_info = ""
+            if execute:
+                total, failed, passed, skiped, _ = collect_result(execute)
+                py_case_info = f"{total}/{passed}/{failed}/{skiped}"
+
+            w(f"PMS用例维度(总数/通过/失败/跳过)={py_case_info}")
+            w(f"网络地址={GlobalConfig.USERNAME}@{GlobalConfig.HOST_IP}")
+            w(f"镜像版本={GlobalConfig.VERSION}")
+            w(f"目录={GlobalConfig.ROOT_DIR}")
 
             screen = Tk()
-            wf(_f, f"分辨率={screen.winfo_screenwidth()}x{screen.winfo_screenheight()}")
+            w(f"分辨率={screen.winfo_screenwidth()}x{screen.winfo_screenheight()}")
 
-            _display = GlobalConfig.DisplayServer.wayland if GlobalConfig.IS_WAYLAND else GlobalConfig.DisplayServer.x11
-            wf(_f, f"显示协议={_display.title()}")
+            w(f"显示协议={GlobalConfig.DISPLAY_SERVER.title()}")
 
-            cpu_info = os.popen("cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c").read().replace(" ", "")
-            if not cpu_info:
-                cpu_info = os.popen("cat /proc/cpuinfo | grep Hardware").read()
-            wf(_f, f"CPU信息={cpu_info}")
+            cpu_info = os.popen(
+                f"echo '{GlobalConfig.PASSWORD}' | sudo -S dmidecode -s  processor-version"
+            ).readlines()[0].strip("\n")
+            w(f"CPU信息={cpu_info}")
 
-            mem_info = os.popen("cat /proc/meminfo | grep MemTotal").read()
-            wf(_f, f"内存信息={mem_info}")
+            mem_info = os.popen(
+                f'''echo '{GlobalConfig.PASSWORD}' | sudo -S dmidecode|grep -A16 'Memory Device' | grep -v "Memory Device Mapped Address" | grep "Range Size"'''
+            ).readlines()
+            MEM_TOTAL = sum([int(i.split(":")[1].rstrip(" GB\n").strip()) for i in mem_info])
+            w(f"内存信息={MEM_TOTAL}G")
 
             os_info = os.popen("uname -a").read()
-            wf(_f, f"内核信息={os_info}")
-
-            try:
-                language_code = DbusUtils(
-                    "com.deepin.daemon.LangSelector",
-                    "/com/deepin/daemon/LangSelector",
-                    "com.deepin.daemon.LangSelector",
-                ).get_session_properties_value("CurrentLocale")
-                wf(_f, f"系统语言={GlobalConfig.LANGUAGE_INI.get(language_code, default=language_code)}")
-            except Exception:
-                pass
+            w(f"内核信息={os_info}")

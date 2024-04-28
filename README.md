@@ -87,6 +87,8 @@ $ youqu-startproject my_project
 
 如果 `youqu-startproject` 后面不加参数，默认的项目名称为：`youqu` ；
 
+![](./docs/assets/install.gif)
+
 ## 安装依赖
 
 安装部署 YouQu 执行所需环境： 

@@ -9,7 +9,6 @@
 import json
 import re
 import sys
-from collections import Counter
 from os import chdir
 from os import environ
 from os import listdir
@@ -19,7 +18,6 @@ from os.path import exists
 from os.path import expanduser
 from os.path import isfile
 from os.path import join
-from time import sleep
 from tkinter import Tk
 
 import pytest
@@ -36,7 +34,7 @@ al_setting.report_language = GlobalConfig.REPORT_LANGUAGE
 import letmego
 
 from src import logger
-from src.rtk._base import Args
+from src.rtk._base import Args, write_json
 from src.requestx import RequestX
 from src.rtk._base import transform_app_name
 
@@ -157,7 +155,6 @@ class LocalRunner:
 
     @staticmethod
     def make_dir(dirs):
-        """make_dir"""
         try:
             dirs = expanduser(dirs)
             if not exists(dirs):
@@ -168,7 +165,6 @@ class LocalRunner:
     # 报告
     @classmethod
     def make_allure_report(cls, cmd, fmt, proj_path=None):
-        """make_allure_report"""
         allure_report_path = f"{proj_path}/report/allure"
         if proj_path is None:
             allure_report_path = join(GlobalConfig.ALLURE_REPORT_PATH, fmt)
@@ -177,7 +173,6 @@ class LocalRunner:
 
     @classmethod
     def make_xml_report(cls, app_dir, case_file, cmd, fmt, proj_path=None):
-        """make_xml_report"""
         xml_report_path = f"{proj_path}/report/xml"
         if proj_path is None:
             xml_report_path = join(GlobalConfig.XML_REPORT_PATH, fmt)
@@ -192,11 +187,6 @@ class LocalRunner:
         )
 
     def create_pytest_cmd(self, app_dir, default=None, proj_path=None):
-        """
-         创建 Pytest 及其命令行参数
-        :param app_dir:
-        :return:
-        """
         if default is None:
             default = self.default
         keywords_or_marker = True
@@ -337,11 +327,6 @@ class LocalRunner:
             sys.setrecursionlimit(len_tags + 100)
 
     def change_working_dir(self):
-        """
-         切换工作区间
-        :param app_name:
-        :return:
-        """
         app_name: str = self.default.get(Args.app_name.value)
         if app_name:
             applications = listdir(GlobalConfig.APPS_PATH)
@@ -355,10 +340,6 @@ class LocalRunner:
         return GlobalConfig.APPS_PATH
 
     def local_run(self):
-        """
-         执行用例
-        :return:
-        """
         if not self.default.get(Args.autostart.value):
             # 备份 allure 报告
             allure_report_path = join(GlobalConfig.ALLURE_REPORT_PATH, "allure")
@@ -382,8 +363,9 @@ class LocalRunner:
 
         if self.collection_only:
             return
+
         if self.project_name and self.build_location and self.line:
-            self.write_json(
+            write_json(
                 project_name=self.project_name,
                 build_location=self.build_location,
                 line=self.line,
@@ -424,58 +406,7 @@ class LocalRunner:
                 copy_to=f"{GlobalConfig.REPORT_PATH}/_running_man_{GlobalConfig.TIME_STRING}.log"
             )
 
-    @classmethod
-    def get_result(cls, ci_result):
-        """
-         获取结果
-        :return:
-        """
-        with open(ci_result, "r", encoding="utf-8") as _f:
-            results_dict = json.load(_f)
-        res = Counter([results_dict.get(i).get("result") for i in results_dict])
-        total = sum(res.values())
-        skiped = res.get("skip", 0)
-        total = total - skiped
-        passed = res.get("pass", 0)
-        failed = total - passed
-        pass_rate = f"{round((passed / total) * 100, 1)}%" if passed else "0%"
-        return total, failed, passed, skiped, pass_rate
-
-    @classmethod
-    def write_json(cls, project_name=None, build_location=None, line=None):
-        json_tpl_path = f"{GlobalConfig.SETTING_PATH}/template/ci.json"
-        if not exists(json_tpl_path):
-            raise FileNotFoundError
-        with open(json_tpl_path, "r", encoding="utf-8") as _f:
-            results = json.load(_f)
-
-        results["project_name"] = project_name
-        results["build_location"] = build_location
-        results["line"] = line
-        ci_result_path = f"{GlobalConfig.ROOT_DIR}/ci_result.json"
-        if not exists(ci_result_path):
-            return
-
-        (
-            results["total"],
-            results["fail"],
-            results["pass"],
-            results["skip"],
-            results["pass_rate"],
-        ) = cls.get_result(ci_result_path)
-
-        json_res_path = f"{GlobalConfig.ROOT_DIR}/{project_name}_at.json"
-        with open(json_res_path, "w+", encoding="utf-8") as _f:
-            _f.write(json.dumps(results, indent=2, ensure_ascii=False))
-        sleep(1)
-        with open(json_res_path, "r", encoding="utf-8") as _f:
-            print("CICD数据结果:\n", _f.read())
-
     def install_deb(self):
-        """
-         安装本地 deb 包
-        :return:
-        """
         logger.info("安装deb包")
         system(
             f"cd {self.default.get(Args.deb_path.value)}/ && echo {GlobalConfig.PASSWORD} | sudo -S dpkg -i *.deb"
