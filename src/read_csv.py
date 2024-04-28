@@ -9,7 +9,7 @@
 import os
 import csv
 
-from src  import logger
+from src import logger
 
 
 class ReadCsv:

@@ -38,9 +38,7 @@ class Pms2Csv(_Base):
         conf = ConfigParser()
         conf.read(GlobalConfig.GLOBAL_CONFIG_FILE_PATH)
         ini_csv_names = conf.options("pmsctl-pms_link_csv")
-        ini_csv_pms_map = GetCfg(
-            GlobalConfig.GLOBAL_CONFIG_FILE_PATH, "pmsctl-pms_link_csv"
-        )
+        ini_csv_pms_map = GetCfg(GlobalConfig.GLOBAL_CONFIG_FILE_PATH, "pmsctl-pms_link_csv")
         cli_csv_pms_map = {}
         cli_csv_names = []
         if pms_link_csv:
@@ -59,9 +57,7 @@ class Pms2Csv(_Base):
         if not self.csv_names:
             raise ValueError(self.config_error_log)
 
-        self.pms_mark = GetCfg(
-            f"{GlobalConfig.SETTING_PATH}/pmsmark.ini", "pms-mark-to-csv-mark"
-        )
+        self.pms_mark = GetCfg(f"{GlobalConfig.SETTING_PATH}/pmsmark.ini", "pms-mark-to-csv-mark")
 
     def get_data_from_pms(self, app_case_id):
         """获取pms上数据"""
@@ -97,7 +93,7 @@ class Pms2Csv(_Base):
                 if device_type and device_type != "null"
                 else "",
                 "online_obj": "CICD" if online_obj == "是" else "",
-                "skip_reason": "skip-下线CD" if online_obj == "否" else None
+                "skip_reason": "skip-下线CD" if online_obj == "否" else None,
             }
         if not res_data:
             logger.error(f"未从pms获取到数据, {self.config_error_log}")
@@ -112,14 +108,9 @@ class Pms2Csv(_Base):
             os.makedirs(csv_bak_path)
         for root, _, files in os.walk(self.walk_dir):
             for file in files:
-                if (
-                    file.endswith(".csv")
-                    and os.path.splitext(file)[0] in self.csv_names
-                ):
+                if file.endswith(".csv") and os.path.splitext(file)[0] in self.csv_names:
                     csv_path_dict[os.path.splitext(file)[0]] = f"{root}/{file}"
-                    os.system(
-                        f"cp {root}/{file} {csv_bak_path}/{GlobalConfig.TIME_STRING}_{file}"
-                    )
+                    os.system(f"cp {root}/{file} {csv_bak_path}/{GlobalConfig.TIME_STRING}_{file}")
         if not csv_path_dict:
             raise ValueError(f"{self.walk_dir} 目录下未找对应的到csv文件，{self.config_error_log}")
 
@@ -192,9 +183,7 @@ class Pms2Csv(_Base):
                 skip_reason_index = skip_reason_name.get("head_index")
 
             new_csv_tags = []
-            new_csv_tags.append(
-                [i.get("head_name") for i in list(csv_head_dict.values())]
-            )
+            new_csv_tags.append([i.get("head_name") for i in list(csv_head_dict.values())])
             for csv_case_id in csv_tags_dict:
                 for pms_case_id in pms_tags_dict:
                     if pms_case_id == csv_case_id:
@@ -208,15 +197,13 @@ class Pms2Csv(_Base):
                         flag = False
                         if (
                             pms_case_id_index
-                            and csv_tags_dict[csv_case_id][pms_case_id_index]
-                            != pms_case_id
+                            and csv_tags_dict[csv_case_id][pms_case_id_index] != pms_case_id
                         ):
                             csv_tags_dict[csv_case_id][pms_case_id_index] = pms_case_id
                             flag = True
                         if (
                             case_level_index
-                            and csv_tags_dict[csv_case_id][case_level_index]
-                            != case_level
+                            and csv_tags_dict[csv_case_id][case_level_index] != case_level
                         ):
                             csv_tags_dict[csv_case_id][case_level_index] = case_level
                             flag = True
@@ -234,22 +221,19 @@ class Pms2Csv(_Base):
                             flag = True
                         if (
                             device_type_index
-                            and csv_tags_dict[csv_case_id][device_type_index]
-                            != device_type
+                            and csv_tags_dict[csv_case_id][device_type_index] != device_type
                         ):
                             csv_tags_dict[csv_case_id][device_type_index] = device_type
                             flag = True
                         if (
                             online_obj_index
-                            and csv_tags_dict[csv_case_id][online_obj_index]
-                            != online_obj
+                            and csv_tags_dict[csv_case_id][online_obj_index] != online_obj
                         ):
                             csv_tags_dict[csv_case_id][online_obj_index] = online_obj
                             flag = True
                         if (
                             skip_reason_index
-                            and csv_tags_dict[csv_case_id][skip_reason_index]
-                            != skip_reason
+                            and csv_tags_dict[csv_case_id][skip_reason_index] != skip_reason
                         ):
                             if skip_reason:
                                 csv_tags_dict[csv_case_id][skip_reason_index] = skip_reason
@@ -257,9 +241,7 @@ class Pms2Csv(_Base):
 
                         new_tags = csv_tags_dict[csv_case_id]
                         if flag:
-                            logger.info(
-                                f"pms case id: {pms_case_id}, new tags:{new_tags}"
-                            )
+                            logger.info(f"pms case id: {pms_case_id}, new tags:{new_tags}")
                         new_csv_tags.append(new_tags)
                         break
                 else:

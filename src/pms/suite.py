@@ -10,7 +10,7 @@ import json
 import re
 from collections import deque
 
-from src  import logger
+from src import logger
 from src.pms._base import _Base
 from src.pms._base import _unicode_to_cn
 from src.pms._base import MAX_CASE_NUMBER

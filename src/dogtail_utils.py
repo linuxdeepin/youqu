@@ -36,12 +36,11 @@ class DogtailUtils(MouseKey):
     """
     通过属性进行元素定位和操作。
     """
+
     # pylint: disable=too-many-arguments,too-many-locals,too-many-public-methods
     __author__ = "Mikigo <huangmingqiang@uniontech.com>, Litao <litaoa@uniontech.com>"
 
-    def __init__(
-            self, name=None, description=None, number=-1, check_start=True, key: dict = None
-    ):
+    def __init__(self, name=None, description=None, number=-1, check_start=True, key: dict = None):
         if GlobalConfig.NO_DOGTAIL:
             raise EnvironmentError("Dogtail 及其相关依赖存在问题,调用相关方法失败~")
         config.logDebugToStdOut = False
@@ -53,9 +52,7 @@ class DogtailUtils(MouseKey):
             else:
                 self.obj = root
             if number > 0:
-                self.obj = self.obj.findChildren(
-                    predicate.GenericPredicate(**key)
-                )[number]
+                self.obj = self.obj.findChildren(predicate.GenericPredicate(**key))[number]
 
         except SearchError:
             if check_start:
@@ -128,11 +125,7 @@ class DogtailUtils(MouseKey):
             f"""{"左键" if button == 1 else f"{'右键' if button == 3 else '鼠标中健'}"} 点击元素 {element}"""
         )
         mouse_click = (
-            self.click
-            if button == 1
-            else self.right_click
-            if button == 3
-            else self.middle_click
+            self.click if button == 1 else self.right_click if button == 3 else self.middle_click
         )
         mouse_click(*self.element_center(element))
 
@@ -164,9 +157,7 @@ class DogtailUtils(MouseKey):
         if name == "*":
             element = element.children
         else:
-            element = element.findChildren(
-                predicate.GenericPredicate(name), recursive=recursive
-            )
+            element = element.findChildren(predicate.GenericPredicate(name), recursive=recursive)
         return node, element
 
     def __trace(self, element, result, expr):
@@ -179,7 +170,7 @@ class DogtailUtils(MouseKey):
         else:
             return False
         try:
-            next_node = name[node.end() - 1:]
+            next_node = name[node.end() - 1 :]
             if next_node != "/":
                 for i in element:
                     self.__trace(i, result, next_node)

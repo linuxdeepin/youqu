@@ -50,9 +50,7 @@ def filter_image(action):
     if filter_img.getbbox() is None:
         print(f"{before_img_path}、{after_img_path}两张图片相同")
         return None
-    res_img = (
-        splitext(GlobalConfig.SCREEN_CACHE)[0] + f'_{strftime("%Y%m%d%H%M%S")}.png'
-    )
+    res_img = splitext(GlobalConfig.SCREEN_CACHE)[0] + f'_{strftime("%Y%m%d%H%M%S")}.png'
     filter_img.save(res_img)
     return res_img
 

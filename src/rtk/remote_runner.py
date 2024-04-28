@@ -50,9 +50,9 @@ class RemoteRunner:
     __author__ = "Mikigo <huangmingqiang@uniontech.com>"
 
     def __init__(
-            self,
-            remote_kwargs: dict = None,
-            local_kwargs: dict = None,
+        self,
+        remote_kwargs: dict = None,
+        local_kwargs: dict = None,
     ):
         self.remote_kwargs = remote_kwargs
         self.local_kwargs = local_kwargs
@@ -66,7 +66,8 @@ class RemoteRunner:
         self.client_password = conf.CLIENT_PASSWORD
 
         self._default = {
-            Args.client_password.value: remote_kwargs.get("client_password") or self.client_password,
+            Args.client_password.value: remote_kwargs.get("client_password")
+            or self.client_password,
         }
 
         client_dict = {}
@@ -88,7 +89,9 @@ class RemoteRunner:
             )
 
         self.default = {
-            Args.app_name.value: transform_app_name(local_kwargs.get("app_name") or GlobalConfig.APP_NAME),
+            Args.app_name.value: transform_app_name(
+                local_kwargs.get("app_name") or GlobalConfig.APP_NAME
+            ),
             Args.clients.value: client_dict,
             Args.send_code.value: remote_kwargs.get("send_code") or self.send_code,
             Args.build_env.value: remote_kwargs.get("build_env") or self.client_env,
@@ -98,22 +101,24 @@ class RemoteRunner:
         if "/home/" not in GlobalConfig.ROOT_DIR:
             raise EnvironmentError
         self.server_project_path = "/".join(GlobalConfig.ROOT_DIR.split("/")[3:])
-        self.client_report_path = (
-            lambda x: f"/home/{x}/{self.server_project_path}/report"
+        self.client_report_path = lambda x: f"/home/{x}/{self.server_project_path}/report"
+        self.client_allure_report_path = (
+            lambda x: f"/home/{x}/{self.server_project_path}/{GlobalConfig.report_cfg.get('ALLURE_REPORT_PATH', default='report')}/allure".replace(
+                "//", "/"
+            )
         )
-        self.client_allure_report_path = lambda \
-                x: f"/home/{x}/{self.server_project_path}/{GlobalConfig.report_cfg.get('ALLURE_REPORT_PATH', default='report')}/allure".replace(
-            "//", "/"
+        self.client_pms_json_report_path = (
+            lambda x, y: f"/home/{x}/{self.server_project_path}/report/pms_{y}"
         )
-        self.client_pms_json_report_path =  lambda x, y: f"/home/{x}/{self.server_project_path}/report/pms_{y}"
 
-        self.client_xml_report_path = lambda \
-                x: f"/home/{x}/{self.server_project_path}/{GlobalConfig.report_cfg.get('XML_REPORT_PATH', default='report')}/xml".replace(
-            "//", "/"
+        self.client_xml_report_path = (
+            lambda x: f"/home/{x}/{self.server_project_path}/{GlobalConfig.report_cfg.get('XML_REPORT_PATH', default='report')}/xml".replace(
+                "//", "/"
+            )
         )
         self.client_list = list(self.default.get(Args.clients.value).keys())
         _pty = "t"
-        if len(self.client_list) >=2:
+        if len(self.client_list) >= 2:
             _pty = "T"
         self.ssh = f"sshpass -p '%s' ssh -{_pty}"
         self.scp = "sshpass -p '%s' scp -r"
@@ -292,16 +297,19 @@ class RemoteRunner:
                 continue
 
             _tmp_args.extend(i)
-        cmd.extend([
-            f"~/{self.server_project_path}/{real_app_name}",
-            "&&",
-            "pipenv",
-            "run",
-        ])
+        cmd.extend(
+            [
+                f"~/{self.server_project_path}/{real_app_name}",
+                "&&",
+                "pipenv",
+                "run",
+            ]
+        )
         from src.rtk.local_runner import LocalRunner
+
         lr = LocalRunner(debug=True)
-        lr_args = {k:v for k, v in lr.export_default.items() if v}
-        rr_args = {k:v for k, v in self.local_kwargs.items() if v}
+        lr_args = {k: v for k, v in lr.export_default.items() if v}
+        rr_args = {k: v for k, v in self.local_kwargs.items() if v}
         lr_args.update(rr_args)
         if all(
             [
@@ -316,7 +324,11 @@ class RemoteRunner:
             self.pms_user = lr_args.get(Args.pms_user.value)
             self.pms_password = lr_args.get(Args.pms_password.value)
             self.server_json_dir_id = lr_args.get(Args.task_id.value)
-        pytest_cmd = lr.create_pytest_cmd(real_app_name.replace("apps/", ""), default=lr_args, proj_path=f"/home/{user}/{self.server_project_path}")
+        pytest_cmd = lr.create_pytest_cmd(
+            real_app_name.replace("apps/", ""),
+            default=lr_args,
+            proj_path=f"/home/{user}/{self.server_project_path}",
+        )
 
         cmd.extend(pytest_cmd)
         cmd.append('"')
@@ -333,9 +345,7 @@ class RemoteRunner:
         :return:
         """
         app_dir = (
-            self.default.get(Args.app_name.value)
-            if self.default.get(Args.app_name.value)
-            else ""
+            self.default.get(Args.app_name.value) if self.default.get(Args.app_name.value) else ""
         )
         cmd = [
             "pytest",
@@ -476,7 +486,7 @@ class RemoteRunner:
         executor = ThreadPoolExecutor()
         for client in client_list[:-1]:
             user, _ip, password = self.default.get(Args.clients.value).get(client)
-            _p3 = executor.submit(self.run_pytest_cmd,  user, _ip, password)
+            _p3 = executor.submit(self.run_pytest_cmd, user, _ip, password)
             _ps.append(_p3)
             sleep(1)
         user, _ip, password = self.default.get(Args.clients.value).get(client_list[-1])
@@ -545,7 +555,8 @@ class RemoteRunner:
         client_list = list(self.default.get(Args.clients.value).keys())
         self.pre_env()
         logger.info(
-            "\n测试机列表:\n" + "\n".join([str(i) for i in self.default.get(Args.clients.value).items()])
+            "\n测试机列表:\n"
+            + "\n".join([str(i) for i in self.default.get(Args.clients.value).items()])
         )
         if self.default.get(Args.build_env.value):
             self.mul_do(self.send_code_and_env, client_list)

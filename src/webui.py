@@ -21,7 +21,6 @@ except ImportError:
 
 
 class WebUI:
-
     def __init__(self, page: Page):
         self.page = page
 
@@ -36,10 +35,9 @@ class WebUI:
 
 
 class WebAssert:
-
     @staticmethod
     def assert_locator(
-            locator: Union[Page, Locator, APIResponse]
+        locator: Union[Page, Locator, APIResponse],
     ) -> Union[PageAssertions, LocatorAssertions, APIResponseAssertions]:
         return _expect(locator)
 
@@ -56,10 +54,9 @@ def debug_page():
         headless=False,
         bypass_csp=True,
         args=[
-            '--disable-blink-features=AutomationControlled',
-            '--start-maximized',
+            "--disable-blink-features=AutomationControlled",
+            "--start-maximized",
         ],
-
     )
     _page = browser.pages[0]
     yield _page

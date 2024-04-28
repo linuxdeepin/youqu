@@ -17,7 +17,6 @@ def wf(f, t):
 
 
 class AllureReportExtend:
-
     @staticmethod
     def environment_info(session, execute):
         try:
@@ -27,9 +26,7 @@ class AllureReportExtend:
         if not allure_path:
             return
         allure_fspath_path = os.path.join(
-            session.config.invocation_dir,
-            allure_path,
-            "environment.properties"
+            session.config.invocation_dir, allure_path, "environment.properties"
         )
         with open(allure_fspath_path, "w+", encoding="utf-8") as _f:
             w = partial(wf, _f)
@@ -49,9 +46,13 @@ class AllureReportExtend:
 
             w(f"显示协议={GlobalConfig.DISPLAY_SERVER.title()}")
 
-            cpu_info = os.popen(
-                f"echo '{GlobalConfig.PASSWORD}' | sudo -S dmidecode -s  processor-version"
-            ).readlines()[0].strip("\n")
+            cpu_info = (
+                os.popen(
+                    f"echo '{GlobalConfig.PASSWORD}' | sudo -S dmidecode -s  processor-version"
+                )
+                .readlines()[0]
+                .strip("\n")
+            )
             w(f"CPU信息={cpu_info}")
 
             mem_info = os.popen(

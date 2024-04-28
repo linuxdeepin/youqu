@@ -183,6 +183,58 @@ $ youqu manage.py run
 $ youqu manage.py run -h
 ```
 
+```shell
+optional arguments:
+  -h, --help            show this help message and exit
+  -a APP, --app APP     应用名称：apps/autotest_deepin_music 或
+                        autotest_deepin_music
+  -k KEYWORDS, --keywords KEYWORDS
+                        用例的关键词,支持and/or/not逻辑组合
+  -t TAGS, --tags TAGS  用例的标签,支持and/or/not逻辑组合
+  --rerun RERUN         失败重跑次数
+  --record_failed_case RECORD_FAILED_CASE
+                        失败录屏从第几次失败开始录制视频
+  --clean {yes,}        清理环境
+  --report_formats REPORT_FORMATS
+                        测试报告格式
+  --max_fail MAX_FAIL   最大失败率
+  --log_level LOG_LEVEL
+                        日志输出级别
+  --timeout TIMEOUT     单条用例超时时间
+  --resolution RESOLUTION
+                        检查分辨率
+  --debug DEBUG         调试模式
+  --noskip {yes,}       csv文件里面标记了skip跳过的用例不生效
+  --ifixed {yes,}       fixed不生效，仅通过skip跳过用例
+  --send_pms {,async,finish}
+                        数据回填
+  --task_id TASK_ID     测试单ID
+  --trigger {,auto,hand}
+                        触发者
+  -f CASE_FILE, --case_file CASE_FILE
+                        根据文件执行用例
+  --deb_path DEB_PATH   需要安装deb包的本地路径
+  -u PMS_USER, --pms_user PMS_USER
+                        pms 用户名
+  -p PMS_PASSWORD, --pms_password PMS_PASSWORD
+                        pms 密码
+  --suite_id SUITE_ID   pms 测试套ID
+  --pms_info_file PMS_INFO_FILE
+                        pms 信息文件
+  --top TOP             过程中记录top命令中的值
+  --lastfailed          仅执行上次失败用例
+  --duringfail          测试过程中立即显示报错
+  --repeat REPEAT       指定用例执行次数
+  --project_name PROJECT_NAME
+                        工程名称（写入json文件）
+  --build_location BUILD_LOCATION
+                        构建地区（写入json文件）
+  --line LINE           执行的业务线（写入json文件）
+  --autostart AUTOSTART
+                        重启类场景开启letmego执行方案
+  --slaves SLAVES       远程测试机
+```
+
 在一些 CI 环境下使用命令行参数会更加方便：
 
 
@@ -190,15 +242,13 @@ $ youqu manage.py run -h
 $ youqu manage.py run --app apps/autotest_deepin_music --keywords "xxx" --tags "xxx"
 ```
 
-更多参数请查看【[命令行参数](https://linuxdeepin.github.io/youqu/%E6%A1%86%E6%9E%B6%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D/%E6%89%A7%E8%A1%8C%E7%AE%A1%E7%90%86%E5%99%A8/#21)】
-
 #### 2.2. 配置文件
 
 通过配置文件配置参数
 
 在配置文件 `setting/globalconfig.ini` 里面支持配置对执行的一些参数进行配置，配置完成之后，直接在命令行执行 `manage.py` 就好了。
 
-详细配置项请查看【[配置项](https://linuxdeepin.github.io/youqu/%E6%A1%86%E6%9E%B6%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D/%E6%89%A7%E8%A1%8C%E7%AE%A1%E7%90%86%E5%99%A8/#22)】
+详细配置项请查看[配置项](https://github.com/linuxdeepin/youqu/blob/master/setting/globalconfig.ini)
 
 ### 3. 远程执行
 

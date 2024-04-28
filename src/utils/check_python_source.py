@@ -14,11 +14,12 @@ from http import cookiejar
 
 class RequestX:
     """RequestX"""
+
     def __init__(
-            self,
-            login_url=None,
-            headers=None,
-            data=None,
+        self,
+        login_url=None,
+        headers=None,
+        data=None,
     ):
         self.login_url = login_url
         self.headers = headers

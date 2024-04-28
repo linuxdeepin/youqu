@@ -24,6 +24,7 @@ import ctypes
 
 class Geometry(ctypes.Structure):
     """sub structure"""
+
     _fields_ = [
         ("x", ctypes.c_int),
         ("y", ctypes.c_int),
@@ -34,6 +35,7 @@ class Geometry(ctypes.Structure):
 
 class WindowState(ctypes.Structure):
     """window structure"""
+
     _fields_ = [
         ("pid", ctypes.c_int),  # 4
         ("windowId", ctypes.c_int),  # 4
@@ -57,6 +59,7 @@ class dtk_array(ctypes.Structure):
 
 class WindowStructure(ctypes.Structure):
     """window structure"""
+
     _fields_ = [
         ("pid", ctypes.c_int),
         ("windowId", ctypes.c_int),
@@ -95,12 +98,7 @@ class WaylandWindowInfo:
             resourceName = os.popen(f"cat /proc/{ws.contents.pid}/cmdline").read().strip("\x00")
         return {
             "name": resourceName,
-            "wininfo": (
-                window_info.x,
-                window_info.y,
-                window_info.width,
-                window_info.height
-            ),
+            "wininfo": (window_info.x, window_info.y, window_info.width, window_info.height),
         }
 
     def window_info(self):
@@ -122,13 +120,15 @@ class WaylandWindowInfo:
             window_info = windows_pointer[i]
             resource_name = window_info.resourceName.decode("utf-8")
             if not resource_name:
-                resource_name = os.popen(f"cat /proc/{window_info.pid}/cmdline").read().strip("\x00")
+                resource_name = (
+                    os.popen(f"cat /proc/{window_info.pid}/cmdline").read().strip("\x00")
+                )
             _info = {
                 "location": (
                     window_info.Geometry.x,
                     window_info.Geometry.y,
                     window_info.Geometry.width,
-                    window_info.Geometry.height
+                    window_info.Geometry.height,
                 ),
                 "pid": window_info.pid,
                 "window_id": window_info.windowId,
@@ -147,7 +147,7 @@ class WaylandWindowInfo:
         return res
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     wwininfo = WaylandWindowInfo()
     wwininfo.library.InitDtkWmDisplay()
     for i in range(100):

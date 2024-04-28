@@ -11,7 +11,7 @@ def read_toml(file_path):
     return toml_dict
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from setting import conf
 
-    read_toml(f'{conf.ROOT_DIR}/playbook.toml')
+    read_toml(f"{conf.ROOT_DIR}/playbook.toml")

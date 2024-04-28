@@ -50,9 +50,7 @@ class Send2Pms(_Base):
         }
         bytes_data = urlencode(data).encode("utf-8")
         # post请求接口
-        res = self.rx.session.open(
-            fullurl=run_case_html_url, data=bytes_data, timeout=10
-        )
+        res = self.rx.session.open(fullurl=run_case_html_url, data=bytes_data, timeout=10)
         status_code = res.status
         return status_code
 

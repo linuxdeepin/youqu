@@ -46,10 +46,10 @@ def _unicode_to_cn(in_str):
     """
     local_in_str_replace = (
         in_str.replace(r"\"", '"')
-            .replace(r"\/", "/")
-            .replace(r"\\u", r"\u")
-            .replace(r"\\n", "")
-            .replace(r"\\r", "")
+        .replace(r"\/", "/")
+        .replace(r"\\u", r"\u")
+        .replace(r"\\n", "")
+        .replace(r"\\r", "")
     )
     if isinstance(local_in_str_replace, bytes):
         local_temp = str(local_in_str_replace, encoding="utf-8")
@@ -58,10 +58,10 @@ def _unicode_to_cn(in_str):
         local_out = local_in_str_replace.encode("utf-8").decode("unicode_escape")
     return (
         local_out.replace('"data":"{', '"data":{')
-            .replace('","md5"', ',"md5"')
-            .replace(":null", ':"null"')
-            .replace(":true", ':"true"')
-            .replace(":false", ':"false"')
+        .replace('","md5"', ',"md5"')
+        .replace(":null", ':"null"')
+        .replace(":true", ':"true"')
+        .replace(":false", ':"false"')
     )
 
 
@@ -114,15 +114,18 @@ def write_case_result(item, report):
 
         if item.execution_count >= 2:
             if (
-                    case_res_from_json.get("result") == "fail"
-                    and case_result_tpl["result"] == "pass"
-                    and case_res_from_json.get("item") == case_result_tpl["item"]
+                case_res_from_json.get("result") == "fail"
+                and case_result_tpl["result"] == "pass"
+                and case_res_from_json.get("item") == case_result_tpl["item"]
             ):
                 case_result_tpl["result"] = "cover-pass"
                 with open(abs_json_file_path, "w+", encoding="utf-8") as _f:
                     _f.write(json.dumps(case_result_tpl, indent=2, ensure_ascii=False))
         else:
-            if case_res_from_json.get("result") in ("pass", "cover-pass") and case_result_tpl["result"] == "fail":
+            if (
+                case_res_from_json.get("result") in ("pass", "cover-pass")
+                and case_result_tpl["result"] == "fail"
+            ):
                 with open(abs_json_file_path, "w+", encoding="utf-8") as _f:
                     _f.write(json.dumps(case_result_tpl, indent=2, ensure_ascii=False))
     else:

@@ -17,15 +17,18 @@ def sslclone(
     user: str = None,
     password: str = None,
     branch: str = None,
+    path_to: str = None,
     depth: [str, int] = None,
     **kwargs,
 ):
     branch = branch or conf.BRANCH
     depth = depth or conf.DEPTH
+    if path_to is None:
+        path_to = "apps"
     git_config()
     clone_cmd = (
         f"cd {conf.ROOT_DIR}/src/utils && "
-        f"bash sslclone.sh {conf.APPS_PATH} "
+        f"bash sslclone.sh {conf.ROOT_DIR}/{path_to} "
         f"{url or conf.GIT_URL} "
         f"{user or conf.GTI_USER} {password or conf.GIT_PASSWORD} "
         f"{branch or ''} {depth or ''}"
@@ -36,12 +39,14 @@ def sslclone(
     sleep(2)
 
 
-def clone(url: str = None, branch: str = "", depth: [str, int] = "", **kwargs):
+def clone(url: str = None, branch: str = "", path_to: str = None, depth: [str, int] = "", **kwargs):
     branch = branch or conf.BRANCH
     depth = depth or conf.DEPTH
+    if path_to is None:
+        path_to = "apps"
     git_config()
     clone_cmd = (
-        f"cd {conf.APPS_PATH} && git clone "
+        f"cd {conf.ROOT_DIR}/{path_to} && git clone "
         f"{url or conf.GIT_URL} "
         f"{f'-b {branch}' if branch else ''} {f'--depth {depth}' if depth else ''}"
     )

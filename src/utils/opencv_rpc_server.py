@@ -86,10 +86,7 @@ def match_image_by_opencv(template_path, source_path, rate=None, multiple=False)
     loc_list = list(zip(*loc))
     for i in range(0, len(loc_list) - 1):
         tmp_list_in.append(loc_list[i])
-        if (
-                loc_list[i + 1][0] != loc_list[i][0]
-                or (loc_list[i + 1][1] - loc_list[i][1]) > 1
-        ):
+        if loc_list[i + 1][0] != loc_list[i][0] or (loc_list[i + 1][1] - loc_list[i][1]) > 1:
             tmp_list_out.append(tmp_list_in)
             tmp_list_in = []
             continue

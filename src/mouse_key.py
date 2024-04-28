@@ -21,7 +21,7 @@ from setting.globalconfig import GlobalConfig
 class HiddenPrints:
     def __enter__(self):
         self._original_stdout = sys.stdout
-        sys.stdout = open(os.devnull, 'w')
+        sys.stdout = open(os.devnull, "w")
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         sys.stdout.close()
@@ -151,9 +151,7 @@ class MouseKey:
         :param _y:
         :return:
         """
-        logger.debug(
-            f"鼠标右键坐标 {(_x, _y) if _x else cls.current_location(out_log=False)}"
-        )
+        logger.debug(f"鼠标右键坐标 {(_x, _y) if _x else cls.current_location(out_log=False)}")
         pyautogui.rightClick(x=_x, y=_y)
         sleep(1)
 
@@ -166,9 +164,7 @@ class MouseKey:
         :param interval: 两次点击的间隔，默认 0.3s
         :return:
         """
-        logger.debug(
-            f"鼠标左键双击坐标 {(_x, _y) if _x else cls.current_location(out_log=False)}"
-        )
+        logger.debug(f"鼠标左键双击坐标 {(_x, _y) if _x else cls.current_location(out_log=False)}")
         pyautogui.doubleClick(x=_x, y=_y, interval=interval)
         # CmdCtl.run_cmd(f"xdotool mousemove {_x} {_y} click --repeat 2 1")
         sleep(1)
@@ -181,9 +177,7 @@ class MouseKey:
         :param _y:
         :return:
         """
-        logger.debug(
-            f"鼠标三连击坐标 {(_x, _y) if _x else cls.current_location(out_log=False)}"
-        )
+        logger.debug(f"鼠标三连击坐标 {(_x, _y) if _x else cls.current_location(out_log=False)}")
         pyautogui.tripleClick(x=_x, y=_y, interval=0.3)
         sleep(1)
 
@@ -210,9 +204,7 @@ class MouseKey:
         :return:
         """
         logger.debug(f"鼠标从当前位置拖拽到相对坐标 ({_x, _y})")
-        pyautogui.dragRel(
-            xOffset=int(_x), yOffset=int(_y), duration=0.4, mouseDownUp=True
-        )
+        pyautogui.dragRel(xOffset=int(_x), yOffset=int(_y), duration=0.4, mouseDownUp=True)
         sleep(1)
 
     @classmethod
@@ -260,11 +252,12 @@ class MouseKey:
 
     @classmethod
     def input_message(
-            cls, message,
-            delay_time: int = 300,
-            interval: [int, float] = 0.2,
-            wayland_shift: bool = False,
-            _ydotool: bool = False
+        cls,
+        message,
+        delay_time: int = 300,
+        interval: [int, float] = 0.2,
+        wayland_shift: bool = False,
+        _ydotool: bool = False,
     ):
         """
          输入字符串
@@ -284,9 +277,7 @@ class MouseKey:
 
         if GlobalConfig.IS_X11:
             if check_chinese():
-                CmdCtl.run_cmd(
-                    f"xdotool type --delay {delay_time} '{message}'", timeout=60
-                )
+                CmdCtl.run_cmd(f"xdotool type --delay {delay_time} '{message}'", timeout=60)
             else:
                 pyautogui.typewrite(message=str(message), interval=interval)
         # wayland上
@@ -313,6 +304,7 @@ class MouseKey:
                 for key in message:
                     if _ydotool:
                         from src import ydotool
+
                         ydotool.press(key)
                     else:
                         pyautogui.press(key, interval=interval)
@@ -328,6 +320,7 @@ class MouseKey:
         logger.debug(f"点击键盘上指定的按键<{key}>, 间隔<{interval}>")
         if _ydotool:
             from src import ydotool
+
             ydotool.press(key)
         else:
             pyautogui.press(key, interval=interval)

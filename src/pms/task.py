@@ -26,7 +26,9 @@ class Task(_Base):
         try:
             res_dict = json.loads(res_str)
         except json.decoder.JSONDecodeError:
-            raise EnvironmentError(f"{task_json_url} 未获取到有效数据！\n 请检查你的PMS账号密码是否正确。")
+            raise EnvironmentError(
+                f"{task_json_url} 未获取到有效数据！\n 请检查你的PMS账号密码是否正确。"
+            )
         runs = res_dict.get("data").get("runs")
         runs_ids = deque()
         for run_case_id in runs:

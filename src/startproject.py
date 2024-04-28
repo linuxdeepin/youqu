@@ -38,8 +38,10 @@ def cli():
         youqu_version = conf.get("current", "tag")
     except NoSectionError:
         youqu_version = None
-    print(f"The project: [\033[0;32m{project_name}\033[0m],has been created by youqu{f'-{youqu_version}' if youqu_version else ''}")
+    print(
+        f"The project: [\033[0;32m{project_name}\033[0m],has been created by youqu{f'-{youqu_version}' if youqu_version else ''}"
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cli()

@@ -14,7 +14,6 @@ from setting import conf
 
 
 class Remote(ShortCut, CmdCtl):
-
     def __init__(self, ip, user, password, transfer_appname=None):
         self.user = user
         self.ip = ip
@@ -68,7 +67,10 @@ class Remote(ShortCut, CmdCtl):
     @property
     def rctl_plus(self) -> Src:
         return remote_other_ctl(
-            user=self.user, ip=self.ip, password=self.password, transfer_appname=self.transfer_appname
+            user=self.user,
+            ip=self.ip,
+            password=self.password,
+            transfer_appname=self.transfer_appname,
         )
 
     def find_image(self, image_path):
@@ -76,6 +78,6 @@ class Remote(ShortCut, CmdCtl):
         return self.rctl_plus.find_image(_image_path)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     r = Remote(ip="", user="", password="")
     r.ctrl_alt_t()

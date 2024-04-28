@@ -45,51 +45,51 @@ class LocalRunner:
     """
     本地执行器
     """
+
     __author__ = "Mikigo <huangmingqiang@uniontech.com>"
 
     def __init__(
-            self,
-            app_name=None,
-            keywords=None,
-            tags=None,
-            report_formats=None,
-            max_fail=None,
-            reruns=None,
-            record_failed_case=None,
-            clean=None,
-            log_level=None,
-            timeout=None,
-            debug=False,
-            noskip=None,
-            ifixed=None,
-            send_pms=None,
-            task_id=None,
-            suite_id=None,
-            trigger=None,
-            resolution=None,
-            case_file=None,
-            deb_path=None,
-            pms_user=None,
-            pms_password=None,
-            pms_info_file=None,
-            top=None,
-            lastfailed=None,
-            duringfail=None,
-            repeat=None,
-            project_name=None,
-            build_location=None,
-            line=None,
-            collection_only=None,
-            autostart=None,
-            export_csv_file=None,
-            slaves=None,
-            **kwargs,
+        self,
+        app_name=None,
+        keywords=None,
+        tags=None,
+        report_formats=None,
+        max_fail=None,
+        reruns=None,
+        record_failed_case=None,
+        clean=None,
+        log_level=None,
+        timeout=None,
+        debug=False,
+        noskip=None,
+        ifixed=None,
+        send_pms=None,
+        task_id=None,
+        suite_id=None,
+        trigger=None,
+        resolution=None,
+        case_file=None,
+        deb_path=None,
+        pms_user=None,
+        pms_password=None,
+        pms_info_file=None,
+        top=None,
+        lastfailed=None,
+        duringfail=None,
+        repeat=None,
+        project_name=None,
+        build_location=None,
+        line=None,
+        collection_only=None,
+        autostart=None,
+        export_csv_file=None,
+        slaves=None,
+        **kwargs,
     ):
         logger("INFO")
         try:
             github_tags = RequestX().open_url(
-                f"https://api.github.com/repos/linuxdeepin/youqu/tags",
-                timeout=1
+                f"https://api.github.com/repos/linuxdeepin/youqu/tags", timeout=1
             )
             latest_tag = json.loads(github_tags)[0].get("name")
             if GlobalConfig.current_tag != latest_tag:
@@ -98,7 +98,9 @@ class LocalRunner:
         except Exception:
             pass
         self.default = {
-            Args.app_name.value: transform_app_name(app_name if app_name or case_file else GlobalConfig.APP_NAME),
+            Args.app_name.value: transform_app_name(
+                app_name if app_name or case_file else GlobalConfig.APP_NAME
+            ),
             Args.keywords.value: keywords or GlobalConfig.KEYWORDS,
             Args.tags.value: tags or GlobalConfig.TAGS,
             Args.report_formats.value: report_formats or GlobalConfig.REPORT_FORMAT,
@@ -121,9 +123,7 @@ class LocalRunner:
             Args.duringfail.value: duringfail or GlobalConfig.DURING_FAIL,
             Args.repeat.value: repeat or GlobalConfig.REPEAT,
             Args.top.value: top or GlobalConfig.TOP,
-            Args.pms_user.value: (pms_user or GlobalConfig.PMS_USER)
-            if not pms_info_file
-            else None,
+            Args.pms_user.value: (pms_user or GlobalConfig.PMS_USER) if not pms_info_file else None,
             Args.pms_password.value: (pms_password or GlobalConfig.PMS_PASSWORD)
             if not pms_info_file
             else None,
@@ -147,7 +147,9 @@ class LocalRunner:
                 if rl in (f"{x}x{y}", "no"):
                     break
             else:
-                raise ValueError(f"当前分辨率为：{x}x{y},您配置的分辨率为：{GlobalConfig.RESOLUTION}")
+                raise ValueError(
+                    f"当前分辨率为：{x}x{y},您配置的分辨率为：{GlobalConfig.RESOLUTION}"
+                )
 
     @property
     def export_default(self):
@@ -177,11 +179,7 @@ class LocalRunner:
         if proj_path is None:
             xml_report_path = join(GlobalConfig.XML_REPORT_PATH, fmt)
             cls.make_dir(xml_report_path)
-        report_name = (
-            case_file.replace("/", "_").replace(".", "_")
-            if case_file
-            else app_dir
-        )
+        report_name = case_file.replace("/", "_").replace(".", "_") if case_file else app_dir
         cmd.append(
             f"--junit-xml={xml_report_path}/{report_name}{'-' if report_name else ''}{GlobalConfig.TIME_STRING}.xml"
         )
@@ -196,9 +194,7 @@ class LocalRunner:
             keywords_or_marker = False
         # 通过文件存放pms信息,Jenkins环境下不希望明文显示密码等信息,可信息存放在文件中
         elif default.get(Args.pms_info_file.value):
-            pms_info_file_path = (
-                f"{GlobalConfig.ROOT_DIR}/{default.get(Args.pms_info_file.value)}"
-            )
+            pms_info_file_path = f"{GlobalConfig.ROOT_DIR}/{default.get(Args.pms_info_file.value)}"
             if not exists(pms_info_file_path):
                 logger.error(pms_info_file_path)
                 raise FileNotFoundError
@@ -207,17 +203,13 @@ class LocalRunner:
             cmd.extend(["--pms_password", pms_cfg.get("PMS_PASSWORD", default="")])
             keywords_or_marker = False
         # 通过pms测试套执行用例
-        elif default.get(Args.pms_user.value) and default.get(
-                Args.pms_password.value
-        ):
+        elif default.get(Args.pms_user.value) and default.get(Args.pms_password.value):
             cmd.extend(["--pms_user", default.get(Args.pms_user.value)])
             cmd.extend(["--pms_password", default.get(Args.pms_password.value)])
             keywords_or_marker = False
         # 通过本地测试套
         elif default.get(Args.case_file.value):
-            file_path = (
-                f"{GlobalConfig.ROOT_DIR}/{default.get(Args.case_file.value)}"
-            )
+            file_path = f"{GlobalConfig.ROOT_DIR}/{default.get(Args.case_file.value)}"
             if (not exists(file_path)) or (not isfile(file_path)):
                 logger.error(f"{file_path} 文件不存在.")
                 raise FileNotFoundError
@@ -290,7 +282,7 @@ class LocalRunner:
             report_formats = [i.strip() for i in report_formats.split(",")]
             # allure
             if (GlobalConfig.ReportFormat.ALLURE in report_formats) and (
-                    GlobalConfig.ReportFormat.JSON not in report_formats
+                GlobalConfig.ReportFormat.JSON not in report_formats
             ):
                 self.make_allure_report(cmd, GlobalConfig.ReportFormat.ALLURE, proj_path)
             # xml
@@ -304,20 +296,16 @@ class LocalRunner:
                 )
             # json
             if (GlobalConfig.ReportFormat.ALLURE not in report_formats) and (
-                    GlobalConfig.ReportFormat.JSON in report_formats
+                GlobalConfig.ReportFormat.JSON in report_formats
             ):
                 self.make_allure_report(cmd, GlobalConfig.ReportFormat.ALLURE, proj_path)
-                self.make_dir(
-                    join(GlobalConfig.REPORT_PATH, GlobalConfig.ReportFormat.JSON)
-                )
+                self.make_dir(join(GlobalConfig.REPORT_PATH, GlobalConfig.ReportFormat.JSON))
             # allure json
             if (GlobalConfig.ReportFormat.ALLURE in report_formats) and (
-                    GlobalConfig.ReportFormat.JSON in report_formats
+                GlobalConfig.ReportFormat.JSON in report_formats
             ):
                 self.make_allure_report(cmd, GlobalConfig.ReportFormat.ALLURE, proj_path)
-                self.make_dir(
-                    join(GlobalConfig.REPORT_PATH, GlobalConfig.ReportFormat.JSON)
-                )
+                self.make_dir(join(GlobalConfig.REPORT_PATH, GlobalConfig.ReportFormat.JSON))
         return cmd
 
     @staticmethod
@@ -370,22 +358,17 @@ class LocalRunner:
                 build_location=self.build_location,
                 line=self.line,
             )
-        allure_report_path = join(
-            GlobalConfig.ALLURE_REPORT_PATH, GlobalConfig.ReportFormat.ALLURE
-        )
+        allure_report_path = join(GlobalConfig.ALLURE_REPORT_PATH, GlobalConfig.ReportFormat.ALLURE)
         allure_html_report_path = join(GlobalConfig.ALLURE_REPORT_PATH, "allure_html")
 
-        json_report_path = join(
-            GlobalConfig.ALLURE_REPORT_PATH, GlobalConfig.ReportFormat.JSON
-        )
+        json_report_path = join(GlobalConfig.ALLURE_REPORT_PATH, GlobalConfig.ReportFormat.JSON)
 
         if self.default.get(Args.report_formats.value):
             report_formats = [
-                i.strip()
-                for i in self.default.get(Args.report_formats.value).split(",")
+                i.strip() for i in self.default.get(Args.report_formats.value).split(",")
             ]
             if (GlobalConfig.ReportFormat.ALLURE in report_formats) or (
-                    GlobalConfig.ReportFormat.JSON in report_formats
+                GlobalConfig.ReportFormat.JSON in report_formats
             ):
                 if exists(allure_html_report_path):
                     system(f"rm -rf {allure_html_report_path}")

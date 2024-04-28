@@ -12,11 +12,12 @@ from setting.globalconfig import GlobalConfig
 
 try:
     import numpy as np
+
     GET_NP_FROM_RPC = False
 except ModuleNotFoundError:
     GET_NP_FROM_RPC = True
 
-from src  import logger
+from src import logger
 
 
 class Calculate:

@@ -25,7 +25,7 @@ def remote_other_ctl(user=None, ip=None, password=None, transfer_appname=None):
     return remote_client(ip=ip, port=port)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from src import Src
 
     remote_server(Src(), port)

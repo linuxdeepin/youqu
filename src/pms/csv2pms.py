@@ -6,6 +6,7 @@
 # SPDX-License-Identifier: GPL-2.0-only
 import json
 import os
+
 # from concurrent.futures import ALL_COMPLETED
 # from concurrent.futures import ThreadPoolExecutor
 # from concurrent.futures import wait
@@ -19,26 +20,19 @@ from src.rtk._base import transform_app_name
 
 __all__ = []
 
+
 class Csv2Pms(_Base):
     __author__ = "mikigo<huangmingqiang@uniontech.com>"
 
     config_error_log = "请检查您传递的 '命令行参数' 或 setting/globalconfig.ini 里的配置项"
 
-    def __init__(
-            self,
-            app_name: str = None,
-            user: str = None,
-            password: str = None,
-            csv_name=None
-    ):
+    def __init__(self, app_name: str = None, user: str = None, password: str = None, csv_name=None):
         super().__init__(user=user, password=password)
         self.username = user
         self.password = user
         self.base_url = "https://pms.uniontech.com"
         self.walk_dir = (
-            f"{conf.APPS_PATH}/{transform_app_name(app_name)}"
-            if app_name
-            else conf.APPS_PATH
+            f"{conf.APPS_PATH}/{transform_app_name(app_name)}" if app_name else conf.APPS_PATH
         )
         self.csv_name = csv_name or conf.CSV_NAME_TO_PMS
 
@@ -74,7 +68,7 @@ class Csv2Pms(_Base):
         csv_head_index_map, taglines = self.get_csv_info()
 
         def csv_map(x):
-            return csv_head_index_map.get(x).get('head_index')
+            return csv_head_index_map.get(x).get("head_index")
 
         def push(value, index):
             sleep(1)
@@ -83,12 +77,17 @@ class Csv2Pms(_Base):
             case_res = json.loads(self.rx.open_url(case_url, timeout=10))
             case_data = json.loads(case_res.get("data"))
             case_title = case_data.get("title")
-            rel_case_title = case_title.split(case_id)[-1].rstrip(f"{case_data.get('libName')}").strip(" - ").strip(" ")
+            rel_case_title = (
+                case_title.split(case_id)[-1]
+                .rstrip(f"{case_data.get('libName')}")
+                .strip(" - ")
+                .strip(" ")
+            )
 
             edit_url = f"{self.base_url}/testcase-edit-{case_id}.html"
             data = {
-                'title': rel_case_title,
-                'isAutomation': '是',
+                "title": rel_case_title,
+                "isAutomation": "是",
             }
             try:
                 if value[csv_map(FixedCsvTitle.device_type.name)] == "PPL":
@@ -111,11 +110,7 @@ class Csv2Pms(_Base):
             except AttributeError:
                 pass
             bytes_data = urlencode(data).encode("utf-8")
-            res = self.rx.session.open(
-                fullurl=edit_url,
-                data=bytes_data,
-                timeout=10
-            )
+            res = self.rx.session.open(fullurl=edit_url, data=bytes_data, timeout=10)
             print(f"({index}) {case_id} {data} {res.status}")
 
         # tasks = []

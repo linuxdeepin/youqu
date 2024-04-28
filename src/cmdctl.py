@@ -15,6 +15,7 @@ from setting import conf
 
 class CmdCtl:
     """命令行工具"""
+
     # pylint: disable=too-many-arguments,too-many-locals,too-many-public-methods
     # clean_env也要用
     GREP_LIST = (
@@ -69,8 +70,15 @@ class CmdCtl:
         return exitcode, data
 
     @classmethod
-    def sudo_run_cmd(cls, command, interrupt=False, timeout=25, out_debug_flag=True,
-                     command_log=True, password=None):
+    def sudo_run_cmd(
+        cls,
+        command,
+        interrupt=False,
+        timeout=25,
+        out_debug_flag=True,
+        command_log=True,
+        password=None,
+    ):
         if password is None:
             password = conf.PASSWORD
         return cls.run_cmd(
@@ -78,13 +86,11 @@ class CmdCtl:
             interrupt=interrupt,
             timeout=timeout,
             out_debug_flag=out_debug_flag,
-            command_log=command_log
+            command_log=command_log,
         )
 
     @classmethod
-    def run_cmd(
-            cls, command, interrupt=False, timeout=25, out_debug_flag=True, command_log=True
-    ):
+    def run_cmd(cls, command, interrupt=False, timeout=25, out_debug_flag=True, command_log=True):
         """
          执行shell命令
         :param command: shell 命令
@@ -230,8 +236,7 @@ class CmdCtl:
         :param app_name: 应用名字
         """
         cls.run_cmd(
-            f"gsettings set com.deepin.dtk:/dtk/deepin/{app_name}/ "
-            "palette-type UnknownType"
+            f"gsettings set com.deepin.dtk:/dtk/deepin/{app_name}/ " "palette-type UnknownType"
         )
 
     @classmethod
@@ -246,6 +251,4 @@ class CmdCtl:
         cmd = ""
         for i in cls.GREP_LIST:
             cmd += f"grep -v {i} | "
-        os.system(
-            f"ps -ef | grep {process} | {cmd}cut -c 9-15 | xargs kill -9 > /dev/null 2>&1"
-        )
+        os.system(f"ps -ef | grep {process} | {cmd}cut -c 9-15 | xargs kill -9 > /dev/null 2>&1")

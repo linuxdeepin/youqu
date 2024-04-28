@@ -38,23 +38,21 @@ class AssertCommon:
 
     @staticmethod
     def assert_image_exist(
-            widget: str,
-            rate: float = None,
-            multiple: bool = False,
-            picture_abspath: str = None,
-            network_retry: int = None,
-            pause: [int, float] = None,
-            timeout: [int, float] = None,
-            match_number: int = None,
+        widget: str,
+        rate: float = None,
+        multiple: bool = False,
+        picture_abspath: str = None,
+        network_retry: int = None,
+        pause: [int, float] = None,
+        timeout: [int, float] = None,
+        match_number: int = None,
     ):
         """
          期望界面存在模板图片
         :param widget: 图片路径 例：apps/autotest_app/assert_res/1.png
         :param rate: 匹配相似度
         """
-        logger.info(
-            f"屏幕上匹配图片< {f'***{widget[-40:]}' if len(widget) >= 40 else widget} >"
-        )
+        logger.info(f"屏幕上匹配图片< {f'***{widget[-40:]}' if len(widget) >= 40 else widget} >")
 
         try:
             ImageUtils.find_image(
@@ -74,11 +72,11 @@ class AssertCommon:
 
     @classmethod
     def assert_image_exist_during_time(
-            cls,
-            widget: str,
-            screen_time: Union[float, int],
-            rate: float = None,
-            pause: Union[int, float] = None,
+        cls,
+        widget: str,
+        screen_time: Union[float, int],
+        rate: float = None,
+        pause: Union[int, float] = None,
     ):
         """
         在一段时间内截图多张图片进行识别，其中有一张图片识别成功即返回结果;
@@ -88,9 +86,7 @@ class AssertCommon:
         :param rate: 识别率；
         :param pause: 截取屏幕图片的间隔时间，默认不间隔；
         """
-        logger.info(
-            f"屏幕上匹配图片< {f'***{widget[-40:]}' if len(widget) >= 40 else widget} >"
-        )
+        logger.info(f"屏幕上匹配图片< {f'***{widget[-40:]}' if len(widget) >= 40 else widget} >")
         try:
             ImageUtils.get_during(widget, screen_time, rate, pause)
         except TemplateElementNotFound as exc:
@@ -100,14 +96,14 @@ class AssertCommon:
 
     @staticmethod
     def assert_image_not_exist(
-            widget: str,
-            rate: float = None,
-            multiple: bool = False,
-            picture_abspath: str = None,
-            network_retry: int = None,
-            pause: [int, float] = None,
-            timeout: [int, float] = None,
-            match_number: int = None,
+        widget: str,
+        rate: float = None,
+        multiple: bool = False,
+        picture_abspath: str = None,
+        network_retry: int = None,
+        pause: [int, float] = None,
+        timeout: [int, float] = None,
+        match_number: int = None,
     ):
         """
          期望界面不存在模板图片
@@ -324,9 +320,7 @@ class AssertCommon:
             pyscreenshot.grab().save(GlobalConfig.SCREEN_CACHE)
         else:
             GlobalConfig.SCREEN_CACHE = (
-                os.popen("qdbus org.kde.KWin /Screenshot screenshotFullscreen")
-                .read()
-                .strip("\n")
+                os.popen("qdbus org.kde.KWin /Screenshot screenshotFullscreen").read().strip("\n")
             )
         color_list = ImageUtils.find_image_color(GlobalConfig.SCREEN_CACHE)
         proportion = round(color_list.count(exp_color) / len(color_list), 2)
@@ -398,16 +392,16 @@ class AssertCommon:
 
     @staticmethod
     def assert_ocr_exist(
-            *args,
-            picture_abspath=None,
-            similarity=0.6,
-            return_first=False,
-            lang="ch",
-            network_retry: int = None,
-            pause: [int, float] = None,
-            timeout: [int, float] = None,
-            max_match_number: int = None,
-            mode: str = "all",
+        *args,
+        picture_abspath=None,
+        similarity=0.6,
+        return_first=False,
+        lang="ch",
+        network_retry: int = None,
+        pause: [int, float] = None,
+        timeout: [int, float] = None,
+        max_match_number: int = None,
+        mode: str = "all",
     ):
         """
         断言文案存在
@@ -464,15 +458,15 @@ class AssertCommon:
 
     @staticmethod
     def assert_ocr_not_exist(
-            *args,
-            picture_abspath=None,
-            similarity=0.6,
-            return_first=False,
-            lang="ch",
-            network_retry: int = None,
-            pause: [int, float] = None,
-            timeout: [int, float] = None,
-            max_match_number: int = None,
+        *args,
+        picture_abspath=None,
+        similarity=0.6,
+        return_first=False,
+        lang="ch",
+        network_retry: int = None,
+        pause: [int, float] = None,
+        timeout: [int, float] = None,
+        max_match_number: int = None,
     ):
         """断言文案不存在"""
         pic = None

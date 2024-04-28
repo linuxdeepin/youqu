@@ -25,7 +25,7 @@ def remote_dogtail_ctl(user=None, ip=None, password=None):
     return remote_client(ip=ip, port=dogtail_port)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from src.dogtail_utils import DogtailUtils
 
     remote_server(DogtailUtils(), dogtail_port)

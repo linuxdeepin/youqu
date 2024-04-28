@@ -16,7 +16,7 @@ from setting.globalconfig import FixedCsvTitle
 
 
 class StartApp:
-    def __init__(self, app_name:str):
+    def __init__(self, app_name: str):
         self.app_name = app_name.strip("/")
 
     def copy_template_to_apps(self):
@@ -32,9 +32,7 @@ class StartApp:
         if not os.path.exists(app_name_path):
             os.makedirs(app_name_path)
         os.system(
-            "cp -r "
-            f"{GlobalConfig.SETTING_PATH}/template/app_template/* "
-            f"{app_name_path}/"
+            "cp -r " f"{GlobalConfig.SETTING_PATH}/template/app_template/* " f"{app_name_path}/"
         )
         os.system(
             "cp -r "
@@ -73,13 +71,9 @@ class StartApp:
                         if "${app_name}" in code:
                             code = re.sub(r"\${app_name}", app_name, code)
                         if "${APP-NAME}" in code:
-                            code = re.sub(
-                                r"\${APP-NAME}", app_name.replace("_", "-"), code
-                            )
+                            code = re.sub(r"\${APP-NAME}", app_name.replace("_", "-"), code)
                         if "${AppName}" in code:
-                            code = re.sub(
-                                r"\${AppName}", app_name.title().replace("_", ""), code
-                            )
+                            code = re.sub(r"\${AppName}", app_name.title().replace("_", ""), code)
                         if "${USER}" in code:
                             code = re.sub(r"\${USER}", GlobalConfig.USERNAME, code)
                         if "${DATE}" in code:
@@ -88,7 +82,9 @@ class StartApp:
                             code = re.sub(r"\${TIME}", strftime("%H:%M:%S"), code)
                         if "${FIXEDCSVTITLE}" in code:
                             code = re.sub(
-                                r"\${FIXEDCSVTITLE}", ",".join([i.value for i in FixedCsvTitle]), code
+                                r"\${FIXEDCSVTITLE}",
+                                ",".join([i.value for i in FixedCsvTitle]),
+                                code,
                             )
                         new_codes.append(code)
                     with open(f"{root}/{file}", "w") as f:
@@ -97,9 +93,7 @@ class StartApp:
                 if file == "control":
                     conf = ConfigParser()
                     conf.read(f"{root}/{file}")
-                    conf.set(
-                        "Depends", "autotest-basic-frame", GlobalConfig.current_tag
-                    )
+                    conf.set("Depends", "autotest-basic-frame", GlobalConfig.current_tag)
                     with open(f"{root}/{file}", "w", encoding="utf-8") as f:
                         conf.write(f)
 

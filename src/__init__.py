@@ -50,14 +50,14 @@ class Src(
     """src"""
 
     def __init__(
-            self,
-            name=None,
-            description=None,
-            config_path=None,
-            number=-1,
-            check_start=True,
-            ui_name=None,
-            **kwargs,
+        self,
+        name=None,
+        description=None,
+        config_path=None,
+        number=-1,
+        check_start=True,
+        ui_name=None,
+        **kwargs,
     ):
         """dogtail or button center param
         :param kwargs: app_name, desc, number

@@ -1,28 +1,41 @@
 # ============ 仓库的信息 ============
 [[repositories]]
+
 # 仓库的url
 url = ""
 
+# 仓库的分支或Tag
 branch_or_tag = ""
 
+# 访问仓库的用户名
 user = ""
 
+# 访问仓库的密码
 password = ""
 
+# 克隆深度 git clone xxxx --depth 1
 depth = "1"
 
+# 仓库克隆到路径, 默认克隆到apps目录下
 path_to = "apps"
 
-# ============ 仓库的信息 ============
+# ============ 执行策略 ============
 [play]
+
+# 执行的模式：run、remote
 execution_mode = "run"
 
+# 远程执行, 输入远程机器的机器信息：user@ip:password, 多个机器用"/"连接
 clients = ""
 
+# 多端交互式控制, 输入远程机器的机器信息：user@ip:password, 多个机器用"/"连接
 slaves = ""
 
+# 需要执行用例的关键词表达式
 keywords = ""
 
+# 需要执行用例的标签表达式
 tags = ""
 
+# PMS用例导出文件路径
 pms_case_file_path = ""

@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 # _*_ coding:utf-8 _*_
-import json
-# SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
-
 # SPDX-License-Identifier: GPL-2.0-only
-# pylint: disable=C0114
+# SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+import json
 import os
 from collections import Counter
 from enum import Enum
@@ -16,23 +14,8 @@ from setting.globalconfig import GlobalConfig
 from src import sleep
 
 
-# pylint: disable=C0103
-
-
-@unique
-class SubCmd(Enum):
-    """SubCmd"""
-    run = "run"
-    remote = "remote"
-    pmsctl = "pmsctl"
-    csvctl = "csvctl"
-    startapp = "startapp"
-    git = "git"
-
-
 @unique
 class Args(Enum):
-    """Args"""
     app_name = "app_name"
     keywords = "keywords"
     tags = "tags"
@@ -81,11 +64,13 @@ class Args(Enum):
     user = "user"
     password = "password"
     depth = "depth"
+    path_to = "path_to"
+    execution_mode = "execution_mode"
     slaves = "slaves"
+    pms_case_file_path = "pms_case_file_path"
 
 
 def transform_app_name(app_name):
-    """转换 app_name"""
     if not app_name:
         return None
     if "-" in app_name:
@@ -107,6 +92,7 @@ def collect_result(results):
     failed = total - passed
     pass_rate = f"{round((passed / total) * 100, 1)}%" if passed else "0%"
     return total, failed, passed, skiped, pass_rate
+
 
 def get_result(ci_result):
     with open(ci_result, "r", encoding="utf-8") as _f:

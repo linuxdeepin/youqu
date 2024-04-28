@@ -13,7 +13,7 @@ import errno
 
 from src.mouse_key import MouseKey
 from setting.globalconfig import GlobalConfig
-from src  import logger
+from src import logger
 from contextlib import contextmanager
 
 
@@ -23,7 +23,9 @@ def recording_screen(name):
     :param name: 视频名称
     :return:
     """
-    record_path = f'{GlobalConfig.ROOT_DIR}/report/record/{time.strftime("%Y-%m-%d", time.localtime())}/'
+    record_path = (
+        f'{GlobalConfig.ROOT_DIR}/report/record/{time.strftime("%Y-%m-%d", time.localtime())}/'
+    )
     if not os.path.exists(record_path):
         os.makedirs(record_path)
     width, height = MouseKey.screen_size()
@@ -40,10 +42,7 @@ def recording_screen(name):
         logger.info(f"录屏路径存放  {path}")
 
     with open(os.devnull, "w", encoding="utf-8") as dev_null:
-        with sp.Popen(
-            cmd, stdin=sp.PIPE, stdout=dev_null, stderr=dev_null, close_fds=True
-        ) as proc:
-
+        with sp.Popen(cmd, stdin=sp.PIPE, stdout=dev_null, stderr=dev_null, close_fds=True) as proc:
             time.sleep(0.5)
             if proc.poll() is not None:
                 raise RuntimeError("ffmpeg did not start")

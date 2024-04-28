@@ -34,9 +34,7 @@ class CsvControl:
                     csv_path_dict[os.path.splitext(file)[0]] = f"{root}/{file}"
                 if file.startswith("test_") and file.endswith(".py"):
                     case_name = []
-                    _case_name = re.findall(
-                        r"test_(.*?)_(\d+)_\d+.py|test_(.*?)_(\d+).py", file
-                    )
+                    _case_name = re.findall(r"test_(.*?)_(\d+)_\d+.py|test_(.*?)_(\d+).py", file)
                     if _case_name:
                         _case_name = _case_name[0]
                         if isinstance(_case_name, tuple):
@@ -76,7 +74,9 @@ class CsvControl:
                         try:
                             csv_case_id = f"{int(tag[0]):0>3}"
                         except ValueError as e:
-                            raise ValueError(f"文件：{csv_path} 里面似乎格式有点问题,出现了一个报错：{e}")
+                            raise ValueError(
+                                f"文件：{csv_path} 里面似乎格式有点问题,出现了一个报错：{e}"
+                            )
                         for py_case in py_case_paths:
                             py_case_id = py_case[-1]
                             if csv_case_id == py_case_id:

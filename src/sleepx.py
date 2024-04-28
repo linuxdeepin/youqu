@@ -7,7 +7,7 @@
 # pylint: disable=C0114
 from time import sleep as slp
 from setting.globalconfig import GlobalConfig
-from src  import logger
+from src import logger
 
 
 def sleep(second: [float, int]):
@@ -21,7 +21,5 @@ def sleep(second: [float, int]):
     sys_arch = GlobalConfig.SYS_ARCH
     multiple = float(GlobalConfig.slp_cfg.get(sys_arch))
     mult_sec = second * multiple
-    logger.debug(
-        f"sleep {second} s [{sys_arch} * {multiple} = {mult_sec}]"
-    )
+    logger.debug(f"sleep {second} s [{sys_arch} * {multiple} = {mult_sec}]")
     slp(mult_sec)

@@ -72,9 +72,7 @@ def _transfer_appname(ip, password, user, transfer_appname):
 
 
 def _transfer_to_client(ip, password, user):
-    os.system(
-        f'''{_ssh(ip, password, user)} "mkdir -p ~/{client_project_path}"'''
-    )
+    os.system(f'''{_ssh(ip, password, user)} "mkdir -p ~/{client_project_path}"''')
     os.system(
         f"sshpass -p '{password}' rsync -av -e ssh {_exclude()} {conf.ROOT_DIR}/* "
         f"{user}@{ip}:~/{client_project_path}/"
@@ -82,12 +80,12 @@ def _transfer_to_client(ip, password, user):
     os.system(
         f'''{_ssh(ip, password, user)} "cd ~/{client_project_path}/ && mkdir apps && touch apps/__init__.py"'''
     )
-    os.system(
-        f'''{_ssh(ip, password, user)} "cd ~/{client_project_path}/apps/ && touch REMOTE"'''
-    )
-    if not os.popen(
-            f'''{_ssh(ip, password, user)} "cd ~/{client_project_path}/ && ls env_ok"'''
-    ).read().strip():
+    os.system(f'''{_ssh(ip, password, user)} "cd ~/{client_project_path}/apps/ && touch REMOTE"''')
+    if (
+        not os.popen(f'''{_ssh(ip, password, user)} "cd ~/{client_project_path}/ && ls env_ok"''')
+        .read()
+        .strip()
+    ):
         os.system(
             f'{_ssh(ip, password, user)} "cd ~/{client_project_path}/ && bash env.sh -p {password} && touch env_ok"'
         )
@@ -109,13 +107,12 @@ def check_rpc_started(filename):
     def deco(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-
-            user = kwargs.get('user') or args[0]
-            ip = kwargs.get('ip') or args[1]
+            user = kwargs.get("user") or args[0]
+            ip = kwargs.get("ip") or args[1]
             if not user or not ip:
                 raise ValueError("user and ip are required")
-            password = kwargs.get('password') or (args[2] if len(args) >= 3 else conf.PASSWORD)
-            transfer_appname = kwargs.get('transfer_appname')
+            password = kwargs.get("password") or (args[2] if len(args) >= 3 else conf.PASSWORD)
+            transfer_appname = kwargs.get("transfer_appname")
 
             _base_env_check()
             if transfer_appname:

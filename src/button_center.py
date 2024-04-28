@@ -23,10 +23,13 @@ class ButtonCenter:
     """
     根据应用程序中控件元素的相对坐标，通过配置元素的x、y、w和h来定位元素在屏幕中的位置，并返回用于鼠标和键盘操作的坐标。
     """
+
     # pylint: disable=too-many-arguments,too-many-locals,too-many-public-methods
     __author__ = "Mikigo <huangmingqiang@uniontech.com>, Litao <litaoa@uniontech.com>"
 
-    def __init__(self, app_name: str, config_path: str, number: int = -1, pause: int = 1, retry: int = 1):
+    def __init__(
+        self, app_name: str, config_path: str, number: int = -1, pause: int = 1, retry: int = 1
+    ):
         """
         :param app_name: 系统应用软件包，例如，dde-file-manager
         :param config_path: ui 定位配置文件路径（绝对路径）
@@ -48,12 +51,16 @@ class ButtonCenter:
         if GlobalConfig.IS_X11:
             try:
                 # Get window_operate ID based on package name
-                app_id = CmdCtl.run_cmd(
-                    f"xdotool search --classname --onlyvisible {self.app_name}",
-                    interrupt=False,
-                    out_debug_flag=False,
-                    command_log=False,
-                ).strip().split("\n")
+                app_id = (
+                    CmdCtl.run_cmd(
+                        f"xdotool search --classname --onlyvisible {self.app_name}",
+                        interrupt=False,
+                        out_debug_flag=False,
+                        command_log=False,
+                    )
+                    .strip()
+                    .split("\n")
+                )
                 app_id_list = [int(_id) for _id in app_id if _id]
                 app_id_list.sort()
                 logger.debug(f"app_id_list: {app_id_list}")
@@ -113,12 +120,16 @@ class ButtonCenter:
                 self.wwininfo = WaylandWindowInfo()
                 if hasattr(self.wwininfo.library, "GetAllWindowStatesList"):
                     app_window_info = self.window_info()
-                    window_x, window_y, window_width, window_height = app_window_info.get("location")
+                    window_x, window_y, window_width, window_height = app_window_info.get(
+                        "location"
+                    )
                 else:
                     app_window_info = self.window_info()
                     name = app_window_info.get("name")
                     if name != self.app_name:
-                        raise ValueError(f"您想要获取的窗口为：{self.app_name}, 但实际获取的窗口为：{name}")
+                        raise ValueError(
+                            f"您想要获取的窗口为：{self.app_name}, 但实际获取的窗口为：{name}"
+                        )
                     window_x, window_y, window_width, window_height = app_window_info.get("wininfo")
             logger.debug(
                 f"窗口左上角坐标 {window_x, window_y},获取窗口大小 {window_width}*{window_height}"
@@ -144,7 +155,9 @@ class ButtonCenter:
             else:
                 self.wwininfo = WaylandWindowInfo()
                 if hasattr(self.wwininfo.library, "GetAllWindowStatesList"):
-                    window_x, window_y, window_width, window_height = app_window_info.get("location")
+                    window_x, window_y, window_width, window_height = app_window_info.get(
+                        "location"
+                    )
                 else:
                     window_x, window_y, window_width, window_height = app_window_info.get("wininfo")
             logger.debug(f"窗口左上角坐标 {window_x, window_y}")
@@ -165,7 +178,9 @@ class ButtonCenter:
             else:
                 self.wwininfo = WaylandWindowInfo()
                 if hasattr(self.wwininfo.library, "GetAllWindowStatesList"):
-                    window_x, window_y, window_width, window_height = app_window_info.get("location")
+                    window_x, window_y, window_width, window_height = app_window_info.get(
+                        "location"
+                    )
                 else:
                     window_x, window_y, window_width, window_height = app_window_info.get("wininfo")
             logger.debug(f"获取窗口大小 {window_width}*{window_height}")
@@ -327,9 +342,7 @@ class ButtonCenter:
         logger.debug(f"右上角按钮的中心坐标 {b_x, b_y}")
         return b_x, b_y
 
-    def btn_center_by_left_bottom(
-            self, button_x, button_y, button_w, button_h
-    ) -> tuple:
+    def btn_center_by_left_bottom(self, button_x, button_y, button_w, button_h) -> tuple:
         """
          根据左下角的坐标按钮的中心坐标
         :param button_x: 控件左下角相对于窗口左下角的横向距离
@@ -344,9 +357,7 @@ class ButtonCenter:
         logger.debug(f"左下角按钮的中心坐标 {b_x, b_y}")
         return b_x, b_y
 
-    def btn_center_by_right_bottom(
-            self, button_x, button_y, button_w, button_h
-    ) -> tuple:
+    def btn_center_by_right_bottom(self, button_x, button_y, button_w, button_h) -> tuple:
         """
          根据右下角的坐标按钮的中心坐标
         :param button_x: 控件右下角相对于窗口右下角的横向距离
@@ -422,12 +433,12 @@ class ButtonCenter:
         return b_x, b_y, button_w, button_h
 
     def btn_center(
-            self,
-            btn_name,
-            offset_x=None,
-            multiplier_x=None,
-            offset_y=None,
-            multiplier_y=None,
+        self,
+        btn_name,
+        offset_x=None,
+        multiplier_x=None,
+        offset_y=None,
+        multiplier_y=None,
     ) -> tuple:
         """
          获取元素的中心坐标
@@ -483,13 +494,9 @@ class ButtonCenter:
             btn_y = btn_y + button_y / 2
         if btn_x and btn_y:
             if offset_x:
-                btn_x = btn_x + int(offset_x) * (
-                    int(multiplier_x) if multiplier_x else 1
-                )
+                btn_x = btn_x + int(offset_x) * (int(multiplier_x) if multiplier_x else 1)
             if offset_y:
-                btn_y = btn_y + int(offset_y) * (
-                    int(multiplier_y) if multiplier_y else 1
-                )
+                btn_y = btn_y + int(offset_y) * (int(multiplier_y) if multiplier_y else 1)
             logger.debug(f"[{btn_name}] 坐标：{str(btn_x)}, {str(btn_y)})")
             return btn_x, btn_y
         raise NoSetReferencePoint(
@@ -497,12 +504,12 @@ class ButtonCenter:
         )
 
     def btn_size(
-            self,
-            btn_name: str,
-            offset_x: [int, float] = None,
-            multiplier_x: [int, float] = None,
-            offset_y: [int, float] = None,
-            multiplier_y: [int, float] = None,
+        self,
+        btn_name: str,
+        offset_x: [int, float] = None,
+        multiplier_x: [int, float] = None,
+        offset_y: [int, float] = None,
+        multiplier_y: [int, float] = None,
     ) -> tuple:
         """
          获取元素的左上角坐标及长宽
@@ -532,9 +539,7 @@ class ButtonCenter:
             "right_center",
         )
         if direction in default_point:
-            btn_x, btn_y, button_w, button_y = getattr(self, f"btn_pic_by_{direction}")(
-                *position
-            )
+            btn_x, btn_y, button_w, button_y = getattr(self, f"btn_pic_by_{direction}")(*position)
         elif direction in default_boundary_point:
             window_x, window_y = getattr(self, f"window_{direction}_position")()
             btn_x = window_x + position[0] - (0 if position[0] > 0 else position[2])
@@ -544,13 +549,9 @@ class ButtonCenter:
             btn_x, btn_y, button_w, button_y = self.window_location_and_sizes()
         if btn_x != "" and btn_y != "":
             if offset_x:
-                btn_x = btn_x + int(offset_x) * (
-                    int(multiplier_x) if multiplier_x else 1
-                )
+                btn_x = btn_x + int(offset_x) * (int(multiplier_x) if multiplier_x else 1)
             if offset_y:
-                btn_y = btn_y + int(offset_y) * (
-                    int(multiplier_y) if multiplier_y else 1
-                )
+                btn_y = btn_y + int(offset_y) * (int(multiplier_y) if multiplier_y else 1)
             logger.debug(
                 f"[{btn_name}] 左上角坐标：{str(btn_x)}, {str(btn_y)}), 长宽 {button_w, button_y}"
             )
@@ -631,12 +632,16 @@ class ButtonCenter:
         """
         if GlobalConfig.IS_X11:
             try:
-                app_id = CmdCtl.run_cmd(
-                    f"xdotool search --classname --onlyvisible {app_name}",
-                    interrupt=False,
-                    out_debug_flag=False,
-                    command_log=False,
-                ).strip().split("\n")
+                app_id = (
+                    CmdCtl.run_cmd(
+                        f"xdotool search --classname --onlyvisible {app_name}",
+                        interrupt=False,
+                        out_debug_flag=False,
+                        command_log=False,
+                    )
+                    .strip()
+                    .split("\n")
+                )
                 app_id_list = [int(_id) for _id in app_id if _id]  # to int
                 app_id_list.sort()
                 return app_id_list[-1]

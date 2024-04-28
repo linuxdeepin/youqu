@@ -9,7 +9,7 @@ import os
 from copy import deepcopy
 
 from setting.globalconfig import GlobalConfig
-from src  import logger
+from src import logger
 
 
 class FileCtl:
@@ -18,6 +18,7 @@ class FileCtl:
     Realize the addition, deletion, modification
     and query of documents.
     """
+
     # pylint: disable=too-many-arguments,too-many-branches,too-many-nested-blocks
     __author__ = "Mikigo <huangmingqiang@uniontech.com>, Litao <litaoa@uniontech.com>"
 
@@ -81,13 +82,10 @@ class FileCtl:
                                 )
                 elif not ignores and not includes:
                     os.system(
-                        f"echo '{GlobalConfig.PASSWORD}' | "
-                        f"sudo -S rm -rf {abs_file_path}/*"
+                        f"echo '{GlobalConfig.PASSWORD}' | " f"sudo -S rm -rf {abs_file_path}/*"
                     )
                 else:
-                    logger.info(
-                        "This deletion mode is not supported for the time being!"
-                    )
+                    logger.info("This deletion mode is not supported for the time being!")
             # else:
             #     logger.info(f"There are no files in the directory <{path}!>")
         else:
@@ -108,9 +106,7 @@ class FileCtl:
         os.system(f"mv {old_abs_path} {new_abs_path}")
 
     @staticmethod
-    def move_files(
-        path: str, file_name: str, new_path: str = None, new_file_name: str = None
-    ):
+    def move_files(path: str, file_name: str, new_path: str = None, new_file_name: str = None):
         """
          移动文件
         :param path: 旧路径
@@ -200,7 +196,6 @@ class FileCtl:
         logger.error(f"{parent_dir} is not exists!")
         return []
 
-
     @classmethod
     def __check_not_includes(
         cls, not_includes, endwith, file, files_list, include, startwith, abs_path, root
@@ -210,18 +205,12 @@ class FileCtl:
             for not_include in not_includes:
                 if not_include in file:
                     continue
-                cls.__check_startwith(
-                    endwith, file, files_list, include, startwith, abs_path, root
-                )
+                cls.__check_startwith(endwith, file, files_list, include, startwith, abs_path, root)
         else:
-            cls.__check_startwith(
-                endwith, file, files_list, include, startwith, abs_path, root
-            )
+            cls.__check_startwith(endwith, file, files_list, include, startwith, abs_path, root)
 
     @classmethod
-    def __check_startwith(
-        cls, endwith, file, files_list, include, startwith, abs_path, root
-    ):
+    def __check_startwith(cls, endwith, file, files_list, include, startwith, abs_path, root):
         """Filter criteria for function 'find_files' parameter 'startwith'"""
         if not startwith:
             cls.__check_endwith(endwith, file, files_list, include, abs_path, root)
