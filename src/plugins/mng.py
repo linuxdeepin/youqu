@@ -1,25 +1,13 @@
-from enum import Enum
-from enum import unique
-
+from setting.subcmd import SubCmd
 from setting.globalconfig import GlobalConfig
 
 
-@unique
-class SubCmd(Enum):
-    run = "run"
-    remote = "remote"
-    playbook = "playbook"
-    pmsctl = "pmsctl"
-    csvctl = "csvctl"
-    startapp = "startapp"
-    git = "git"
-
-
 def help_tip():
+    color = "34"
     return (
-        f"\033[0;32mmanage.py\033[0m 支持 \033[0;32m{[i.value for i in SubCmd]}\033[0m 命令, "
-        "\n您需要传入一个命令,可以使用 \033[0;32m-h\033[0m 或 \033[0;32m--help\033[0m 查看每个命令参数的详细使用说明,"
-        "\n比如: \033[0;32myouqu manage.py run -h\033[0m \n"
+        f"\033[1;{color}mmanage.py\033[0m 支持 \033[1;{color}m{[i.value for i in SubCmd]}\033[0m 命令, "
+        f"\n您需要传入一个命令,可以使用 \033[1;{color}m-h\033[0m 或 \033[1;{color}m--help\033[0m 查看每个命令参数的详细使用说明,"
+        f"\n比如: \033[1;{color}myouqu manage.py run -h\033[0m \n"
     )
 
 

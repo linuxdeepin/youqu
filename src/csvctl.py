@@ -13,7 +13,6 @@ from src.rtk._base import transform_app_name
 
 
 class CsvControl:
-    """csv control"""
 
     def __init__(self, app_name=None):
         self.walk_dir = (
@@ -24,7 +23,6 @@ class CsvControl:
         self.csv_path_dict, self.py_path_dict = self.scan_csv_and_py()
 
     def scan_csv_and_py(self):
-        """scan csv and case py"""
         csv_path_dict = {}
         py_path_dict = {}
         for root, _, files in os.walk(self.walk_dir):
@@ -55,7 +53,6 @@ class CsvControl:
         return csv_path_dict, py_path_dict
 
     def delete_mark_in_csv_if_not_exists_py(self):
-        """delete mark in csv if not exists case py"""
         res = self.scan_csv_and_py()
         if res is None:
             return
@@ -147,7 +144,7 @@ class CsvControl:
                     else:
                         with open(csv_path, "a+", encoding="utf-8") as f:
                             f.write(f"{case_id}{comma_num * ','}" + "\n")
-        print("Complete synchronization of automated test script id to csv file")
+        print("完成自动化用例脚本同步到CSV文件。")
 
 
 if __name__ == "__main__":

@@ -289,13 +289,12 @@ class ConfStr(Enum):
 @unique
 class FixedCsvTitle(Enum):
     case_id = "脚本ID"
-    pms_case_id = "PMS用例ID"
+    pms_case_id = "*PMS用例ID"
     case_level = "用例级别"
     case_type = "用例类型"
-    device_type = "设备类型"
+    device_type = "*设备类型"
     case_from = "一二级bug自动化"
-    online_obj = "上线对象"
-    test_level = "测试级别"
+    online_obj = "*上线对象"
     skip_reason = "跳过原因"
     fixed = "确认修复"
     removed = "废弃用例"

@@ -47,8 +47,6 @@ class Remote(ShortCut, CmdCtl):
             finally:
                 if self.tmp_obj:
                     setattr(self.tmp_obj["cls_obj"], item, self.tmp_obj["item_obj"])
-                if value is None:
-                    raise ValueError
             return value
 
         return func

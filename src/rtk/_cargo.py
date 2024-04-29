@@ -3,7 +3,7 @@ from funnylog import logger
 from setting.globalconfig import GlobalConfig
 
 
-def local_runner(self, parser, sub_parser_run):
+def local_runner(parser, sub_parser_run, cmd_args):
     """本地执行"""
     sub_parser_run.add_argument(
         "-a",
@@ -75,38 +75,38 @@ def local_runner(self, parser, sub_parser_run):
     from src.rtk._base import Args
 
     local_kwargs = {
-        Args.app_name.value: args.app or self.default_app,
-        Args.keywords.value: args.keywords or self.default_keywords,
-        Args.tags.value: args.tags or self.default_tags,
-        Args.reruns.value: args.rerun or self.default_rerun,
-        Args.record_failed_case.value: args.record_failed_case or self.default_record_failed_case,
-        Args.clean.value: args.clean or self.default_clean,
-        Args.report_formats.value: args.report_formats or self.default_report_formats,
-        Args.max_fail.value: args.max_fail or self.default_max_fail,
-        Args.log_level.value: args.log_level or self.default_log_level,
-        Args.timeout.value: args.timeout or self.default_timeout,
-        Args.debug.value: args.debug or self.default_debug,
-        Args.noskip.value: args.noskip or self.default_noskip,
-        Args.ifixed.value: args.ifixed or self.default_ifixed,
-        Args.send_pms.value: args.send_pms or self.default_send_pms,
-        Args.task_id.value: args.task_id or self.default_task_id,
-        Args.trigger.value: args.trigger or self.default_trigger,
-        Args.resolution.value: args.resolution or self.default_resolution,
-        Args.case_file.value: args.case_file or self.default_case_file,
-        Args.deb_path.value: args.deb_path or self.default_deb_path,
-        Args.pms_user.value: args.pms_user or self.default_pms_user,
-        Args.pms_password.value: args.pms_password or self.default_pms_password,
-        Args.suite_id.value: args.suite_id or self.default_suite_id,
-        Args.pms_info_file.value: args.pms_info_file or self.default_pms_info_file,
-        Args.top.value: args.top or self.default_top,
-        Args.lastfailed.value: args.lastfailed or self.default_lastfailed,
-        Args.duringfail.value: args.duringfail or self.default_duringfail,
-        Args.repeat.value: args.repeat or self.default_repeat,
-        Args.project_name.value: args.project_name or self.default_project_name,
-        Args.build_location.value: args.build_location or self.default_build_location,
-        Args.line.value: args.line or self.default_line,
-        Args.autostart.value: args.autostart or self.default_autostart,
-        Args.slaves.value: args.slaves or self.default_slaves,
+        Args.app_name.value: args.app,
+        Args.keywords.value: args.keywords,
+        Args.tags.value: args.tags,
+        Args.reruns.value: args.rerun,
+        Args.record_failed_case.value: args.record_failed_case,
+        Args.clean.value: args.clean,
+        Args.report_formats.value: args.report_formats,
+        Args.max_fail.value: args.max_fail,
+        Args.log_level.value: args.log_level,
+        Args.timeout.value: args.timeout,
+        Args.debug.value: args.debug,
+        Args.noskip.value: args.noskip,
+        Args.ifixed.value: args.ifixed,
+        Args.send_pms.value: args.send_pms,
+        Args.task_id.value: args.task_id,
+        Args.trigger.value: args.trigger,
+        Args.resolution.value: args.resolution,
+        Args.case_file.value: args.case_file,
+        Args.deb_path.value: args.deb_path,
+        Args.pms_user.value: args.pms_user,
+        Args.pms_password.value: args.pms_password,
+        Args.suite_id.value: args.suite_id,
+        Args.pms_info_file.value: args.pms_info_file,
+        Args.top.value: args.top,
+        Args.lastfailed.value: args.lastfailed,
+        Args.duringfail.value: args.duringfail,
+        Args.repeat.value: args.repeat,
+        Args.project_name.value: args.project_name,
+        Args.build_location.value: args.build_location,
+        Args.line.value: args.line,
+        Args.autostart.value: args.autostart,
+        Args.slaves.value: args.slaves,
     }
     if local_kwargs.get(Args.autostart.value) or GlobalConfig.AUTOSTART:
         import letmego
@@ -115,12 +115,12 @@ def local_runner(self, parser, sub_parser_run):
         letmego.register_autostart_service(
             user=GlobalConfig.USERNAME,
             working_directory=GlobalConfig.ROOT_DIR,
-            cmd=f"pipenv run python manage.py {' '.join(self.cmd_args)}",
+            cmd=f"pipenv run python manage.py {' '.join(cmd_args)}",
         )
     return local_kwargs, args
 
 
-def remote_runner(self, parser, sub_parser_remote):
+def remote_runner(parser, sub_parser_remote):
     sub_parser_remote.add_argument(
         "-c",
         "--clients",
@@ -160,15 +160,15 @@ def remote_runner(self, parser, sub_parser_remote):
         ),
     )
 
-    local_kwargs, args = local_runner(self, parser, sub_parser_remote)
+    local_kwargs, args = local_runner(parser, sub_parser_remote)
     from src.rtk._base import Args
 
     remote_kwargs = {
-        Args.clients.value: args.clients or self.default_client,
-        Args.send_code.value: args.send_code or self.default_send_code,
-        Args.build_env.value: args.build_env or self.default_build_env,
-        Args.client_password.value: args.client_password or self.default_client_password,
-        Args.parallel.value: args.parallel or self.default_parallel,
+        Args.clients.value: args.clients,
+        Args.send_code.value: args.send_code,
+        Args.build_env.value: args.build_env,
+        Args.client_password.value: args.client_password,
+        Args.parallel.value: args.parallel,
     }
     _remote_kwargs = {
         "remote_kwargs": remote_kwargs,
@@ -177,7 +177,7 @@ def remote_runner(self, parser, sub_parser_remote):
     return _remote_kwargs
 
 
-def csv_control(self, parser=None, sub_parser_csv=None):
+def csv_control(parser=None, sub_parser_csv=None):
     sub_parser_csv.add_argument(
         "-a",
         "--app",
@@ -201,11 +201,11 @@ def csv_control(self, parser=None, sub_parser_csv=None):
     from src.rtk._base import Args
 
     csv_kwargs = {
-        Args.app_name.value: args.app or self.default_app,
-        Args.keywords.value: args.keywords or self.default_keywords,
-        Args.tags.value: args.tags or self.default_tags,
-        Args.pyid2csv.value: args.pyid2csv or self.default_pyid2csv or GlobalConfig.PY_ID_TO_CSV,
-        Args.export_csv_file.value: args.export_csv_file or self.default_export_csv_file,
+        Args.app_name.value: args.app,
+        Args.keywords.value: args.keywords,
+        Args.tags.value: args.tags,
+        Args.pyid2csv.value: args.pyid2csv,
+        Args.export_csv_file.value: args.export_csv_file,
         "collection_only": True,
     }
     if csv_kwargs.get(Args.pyid2csv.value) or GlobalConfig.PY_ID_TO_CSV:
@@ -225,15 +225,15 @@ def csv_control(self, parser=None, sub_parser_csv=None):
         )
 
 
-def playbook_control(parser=None, sub_parser_playbook=None):
+def playbook_control(parser, sub_parser_playbook):
+    sub_parser_playbook.add_argument("-l", "--url", default="", help="git仓库地址")
     sub_parser_playbook.add_argument("-u", "--user", default="", help="git仓库用户名")
     sub_parser_playbook.add_argument("-p", "--password", default="", help="git仓库地密码")
-    sub_parser_playbook.add_argument("-l", "--url", default="", help="git仓库地址")
     sub_parser_playbook.add_argument("-b", "--branch_or_tag", default="", help="分支或Tag")
     sub_parser_playbook.add_argument("-d", "--depth", default="", help="git仓库克隆深度")
     sub_parser_playbook.add_argument("-o", "--path_to", default="", help="仓库克隆到路径")
     sub_parser_playbook.add_argument(
-        "-e", "--execution_mode", default="", help="执行的模式：run、remote"
+        "-e", "--execution_mode", default="", choices=["", "run", "remote"], help="执行的模式：run、remote"
     )
     sub_parser_playbook.add_argument(
         "-c",
@@ -258,11 +258,11 @@ def playbook_control(parser=None, sub_parser_playbook=None):
     from src.rtk._base import Args
     from src.rtk.playbook import PlayBook
 
-    playbook_kwargs = {
+    playbook_cli_kwargs = {
         Args.url.value: args.url,
         Args.user.value: args.user,
         Args.password.value: args.password,
-        Args.branch.value: args.branch,
+        Args.branch.value: args.branch_or_tag,
         Args.depth.value: args.depth,
         Args.path_to.value: args.path_to,
         Args.execution_mode.value: args.execution_mode,
@@ -272,4 +272,4 @@ def playbook_control(parser=None, sub_parser_playbook=None):
         Args.tags.value: args.tags,
         Args.pms_case_file_path.value: args.pms_case_file_path,
     }
-    PlayBook(**playbook_kwargs)
+    PlayBook(playbook_cli_kwargs)

@@ -38,8 +38,8 @@ class AllureReportExtend:
 
             w(f"PMS用例维度(总数/通过/失败/跳过)={py_case_info}")
             w(f"网络地址={GlobalConfig.USERNAME}@{GlobalConfig.HOST_IP}")
+            w(f"工作目录={GlobalConfig.ROOT_DIR}")
             w(f"镜像版本={GlobalConfig.VERSION}")
-            w(f"目录={GlobalConfig.ROOT_DIR}")
 
             screen = Tk()
             w(f"分辨率={screen.winfo_screenwidth()}x{screen.winfo_screenheight()}")

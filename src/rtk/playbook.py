@@ -11,7 +11,7 @@ from src.rtk.remote_runner import RemoteRunner
 class PlayBook:
     def __init__(self, cli_kwargs):
         cli_url = cli_kwargs.get("url")
-        cli_branch_or_tag = cli_kwargs.get("branch_or_tag")
+        cli_branch_or_tag = cli_kwargs.get("branch")
         cli_user = cli_kwargs.get("user")
         cli_password = cli_kwargs.get("password")
         cli_depth = cli_kwargs.get("depth")
@@ -23,7 +23,7 @@ class PlayBook:
         cli_tags = cli_kwargs.get("tags")
         cli_pms_case_file_path = cli_kwargs.get("pms_case_file_path")
 
-        ts = read_toml(f"{conf.ROOT_DIR}/playbook.toml")
+        ts = read_toml(f"{conf.SETTING_PATH}/playbook.toml")
         if cli_url:
             self.git_clone(
                 cli_url, cli_user, cli_password, cli_branch_or_tag, cli_path_to, cli_depth
