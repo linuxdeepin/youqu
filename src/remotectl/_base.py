@@ -4,14 +4,16 @@
 # SPDX-License-Identifier: GPL-2.0-only
 
 import functools
+import inspect
+import multiprocessing
 import os
 import subprocess
 import sys
 import time
-import multiprocessing
-
 from os.path import dirname
-from os.path import basename
+from socketserver import ThreadingMixIn
+from xmlrpc.client import ServerProxy
+from xmlrpc.server import SimpleXMLRPCServer
 
 sys.path.append(dirname(dirname(dirname(os.path.abspath(__file__)))))
 
@@ -82,9 +84,9 @@ def _transfer_to_client(ip, password, user):
     )
     os.system(f'''{_ssh(ip, password, user)} "cd ~/{client_project_path}/apps/ && touch REMOTE"''')
     if (
-        not os.popen(f'''{_ssh(ip, password, user)} "cd ~/{client_project_path}/ && ls env_ok"''')
-        .read()
-        .strip()
+            not os.popen(f'''{_ssh(ip, password, user)} "cd ~/{client_project_path}/ && ls env_ok"''')
+                    .read()
+                    .strip()
     ):
         os.system(
             f'{_ssh(ip, password, user)} "cd ~/{client_project_path}/ && bash env.sh -p {password} && touch env_ok"'
@@ -153,3 +155,19 @@ def remote_server(obj, port):
     server = zerorpc.Server(obj)
     server.bind(f"tcp://0.0.0.0:{port}")
     server.run()
+
+
+class ThreadXMLRPCServer(ThreadingMixIn, SimpleXMLRPCServer): ...
+
+
+def _remote_client(ip, port):
+    client = ServerProxy(f"http://{ip}:{port}", allow_none=True)
+    return client
+
+
+def _remote_server(obj, port):
+    server = ThreadXMLRPCServer(("0.0.0.0", port), allow_none=True)
+    for func, _ in inspect.getmembers(obj, predicate=inspect.isfunction):
+        if not func.startswith("_"):
+            server.register_function(getattr(obj, func), func)
+    server.serve_forever()

@@ -104,22 +104,13 @@ $ bash env.sh
 
 ## 创建 APP 工程
 
-如果您已经有一个可用的 `APP` 工程，将应用库放到基础框架下 `apps` 目录下，像这样：
-
-```shell
-my_project
-├── apps
-│   ├── autotest_deepin_some  # 应用库
-...
-```
-
-如果您还没有 `APP` 工程，建议使用框架提供的脚手架功能创建一个全新的 `APP` 工程。
-
-**创建一个 APP 工程**
+使用 `startapp` 命令自动创建 APP 工程：
 
 ```shell
 $ youqu manage.py startapp autotest_deepin_some
 ```
+
+自动创建的 APP 工程遵循完整的 PO 设计模式。
 
 在 `apps` 目录下会自动创建一个 APP 工程 `autotest_deepin_some`，同时新建好工程模板目录和模板文件：
 

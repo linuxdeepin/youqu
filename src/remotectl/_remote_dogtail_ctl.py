@@ -14,8 +14,8 @@ from setting import conf
 
 environ["XAUTHORITY"] = f"{conf.HOME}/.Xauthority"
 from src.remotectl._base import check_rpc_started as check_rpc_started
-from src.remotectl._base import remote_client as remote_client
-from src.remotectl._base import remote_server as remote_server
+from src.remotectl._base import _remote_client as remote_client
+from src.remotectl._base import _remote_server as remote_server
 
 dogtail_port = 4242
 

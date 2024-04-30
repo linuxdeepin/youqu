@@ -8,14 +8,7 @@ _my_script_completion() {
             ;;
         "manage.py")
             COMPREPLY=($(compgen -W "run remote playbook pmsctl csvctl startapp git" -- "$cur"))
-            ;;
-        "run")
-            COMPREPLY=($(compgen -W "-a --app -k --keyword -t --tags --slaves" -- "$cur"))
-            ;;
-        "remote")
-            COMPREPLY=($(compgen -W "-c --clients -s --send_code -e -y -a --app -k --keyword -t --tags --slaves" -- "$cur"))
-            ;;
-        *)
+            return 0
             ;;
     esac
 }
