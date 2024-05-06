@@ -167,7 +167,7 @@ def remote_client(ip, port):
 
 def remote_server(obj, port):
     server = ThreadXMLRPCServer(("0.0.0.0", port), allow_none=True)
-    for func, _ in inspect.getmembers(obj, predicate=inspect.isfunction):
+    for func, _ in inspect.getmembers(obj):
         if not func.startswith("_"):
             server.register_function(getattr(obj, func), func)
     server.serve_forever()

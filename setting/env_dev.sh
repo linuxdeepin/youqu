@@ -1,11 +1,11 @@
 #!/bin/bash
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
-source ./setting/_env_base.sh
+source ${ROOT_DIR}/setting/_env_base.sh
 
 env(){
 
-    if [ ${debian_platform} == true ]; then
+    if [ "${debian_platform}" = "true" ]; then
         sudo apt update
     fi
 
@@ -31,7 +31,7 @@ env(){
         )
     fi
 
-    if [ ${debian_platform} == false ]; then
+    if [ "${debian_platform}" = "false" ]; then
         deb_array[${#deb_array[@]}]=java-11-openjdk-headless
         deb_array[${#deb_array[@]}]=python3-tkinter
         deb_array[${#deb_array[@]}]=xdotool

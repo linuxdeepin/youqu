@@ -2,44 +2,6 @@
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
 
-SETTING_DIR=$(dirname $(realpath "${BASH_SOURCE[0]}"))
-ROOT_DIR=$(dirname ${SETTING_DIR})
-tag=$(echo "$(cat ${ROOT_DIR}/CURRENT | grep "tag = ")" | cut -d "=" -f2 | python3 -c "s=input();print(s.strip())")
-config_pwd=$(cat ${ROOT_DIR}/setting/globalconfig.ini | grep -v "CLIENT_PASSWORD" | grep "PASSWORD = ")
-PASSWORD=$(echo "${config_pwd}" | cut -d "=" -f2 | python3 -c "s=input();print(s.strip())")
-while getopts ":p:" opt
-do
-    case $opt in
-        p)
-            PASSWORD=$OPTARG
-            ;;
-        ?)
-            echo "there is unrecognized parameter."
-            exit 1
-            ;;
-    esac
-done
-
-debian_platform=false
-yq=apt
-if command -v apt &> /dev/null; then
-    debian_platform=true
-    yq=apt
-else
-    yq=yum
-fi
-
-DISPLAY_SERVER=$(cat ${HOME}/.xsession-errors | grep XDG_SESSION_TYPE | head -n 1 | cut -d "=" -f2)
-PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
-whitelist="/usr/share/deepin-elf-verify/whitelist"
-pypi_mirror="https://pypi.tuna.tsinghua.edu.cn/simple"
-
-echo "${PASSWORD}" | sudo -S su
-
-if [ ! -f "$HOME/.Xauthority" ]; then
-        touch $HOME/.Xauthority
-fi
-
 check_status(){
     if [ $? = 0 ]; then
         echo -e "$1\t安装成功 √"
