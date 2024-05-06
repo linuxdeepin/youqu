@@ -22,7 +22,6 @@
 [![Downloads](https://static.pepy.tech/badge/youqu/week)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu/month)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu)](https://pepy.tech/project/youqu)
-
 [![Hits](https://hits.sh/github.com/linuxdeepin/youqu.svg?style=flat&label=Github_Hits&color=blue)](https://github.com/linuxdeepin/youqu)
 
 ---
@@ -110,7 +109,7 @@ $ bash env.sh
 $ youqu manage.py startapp autotest_deepin_some
 ```
 
-自动创建的 APP 工程遵循完整的 PO 设计模式。
+自动创建的 APP 工程遵循完整的 PO 设计模式，让你可以专注于用例和方法的编写维护。
 
 在 `apps` 目录下会自动创建一个 APP 工程 `autotest_deepin_some`，同时新建好工程模板目录和模板文件：
 
@@ -145,9 +144,9 @@ my_project
             └── ui.ini  # 相对位移元素定位方案的配置文件
 ```
 
-`autotest_deepin_some` 是你的  APP 工程名称，比如：`autotest_deepin_music` ；
+在你的远程 Git 仓库中，只需要保存 APP 工程这部分代码即可。
 
-在此基础上，你可以快速的开始你的 AT 项目，更重要的是确保创建工程的规范性。
+`autotest_deepin_some` 是你的  APP 工程名称，在此基础上，你可以快速的开始你的 AT 项目，更重要的是确保创建工程的规范性。
 
 `apps` 目录下可以存在任意多个 APP 工程。
 
