@@ -133,7 +133,7 @@ def check_rpc_started(filename):
     return deco
 
 
-def remote_client(ip, port):
+def _remote_client(ip, port):
     try:
         import zerorpc
     except ImportError:
@@ -147,7 +147,7 @@ def remote_client(ip, port):
         raise e
 
 
-def remote_server(obj, port):
+def _remote_server(obj, port):
     try:
         import zerorpc
     except ImportError:
@@ -160,12 +160,12 @@ def remote_server(obj, port):
 class ThreadXMLRPCServer(ThreadingMixIn, SimpleXMLRPCServer): ...
 
 
-def _remote_client(ip, port):
+def remote_client(ip, port):
     client = ServerProxy(f"http://{ip}:{port}", allow_none=True)
     return client
 
 
-def _remote_server(obj, port):
+def remote_server(obj, port):
     server = ThreadXMLRPCServer(("0.0.0.0", port), allow_none=True)
     for func, _ in inspect.getmembers(obj, predicate=inspect.isfunction):
         if not func.startswith("_"):

@@ -101,6 +101,7 @@ export default withMermaid(
                             {text: "初始化项目", link: "/实践/Linux桌面UI自动化测试/初始化项目"},
                             {text: "创建APP工程", link: "/实践/Linux桌面UI自动化测试/创建APP工程"},
                             {text: "创建一条完整的用例", link: "/实践/Linux桌面UI自动化测试/创建一条完整的用例"},
+                            {text: "远程交互式控制", link: "/实践/Linux桌面UI自动化测试/远程交互式控制"},
                         ]
                     },
                     {
