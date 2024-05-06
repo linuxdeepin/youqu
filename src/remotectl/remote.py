@@ -72,10 +72,5 @@ class Remote(ShortCut, CmdCtl):
         )
 
     def find_image(self, image_path):
-        _image_path = image_path.replace(conf.HOME, "~", Maximum=1)
+        _image_path = image_path.replace(conf.HOME, "~", 1)
         return self.rctl_plus.find_image(_image_path)
-
-
-if __name__ == "__main__":
-    r = Remote(ip="", user="", password="")
-    r.ctrl_alt_t()

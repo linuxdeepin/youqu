@@ -73,15 +73,6 @@ class MouseKey:
             logger.debug(f"当前鼠标坐标 {position}")
         return position
 
-    # @classmethod
-    # def input_chinese(cls, text, delay_time=300):
-    #     """
-    #     输入中文
-    #     """
-    #     CmdCtl.run_cmd(f"xdotool type --delay {delay_time} '{text}'", timeout=60)
-    #     logger.debug(f"输入文本 {text}")
-    #     sleep(1)
-
     @classmethod
     def move_to(cls, _x, _y, duration=0.4):
         """
@@ -252,12 +243,12 @@ class MouseKey:
 
     @classmethod
     def input_message(
-        cls,
-        message,
-        delay_time: int = 300,
-        interval: [int, float] = 0.2,
-        wayland_shift: bool = False,
-        _ydotool: bool = False,
+            cls,
+            message,
+            delay_time: int = 300,
+            interval: [int, float] = 0.2,
+            wayland_shift: bool = False,
+            _ydotool: bool = False,
     ):
         """
          输入字符串

@@ -11,7 +11,7 @@ youqu manage.py startapp autotest_my_app
 自动创建 APP 工程，并生成大量模板代码：
 
 ```shell
-autotest_my_app
+autotest_my_project
 ├── apps
 │   ├── autotest_my_app  # 创建的APP工程
 │   │   ├── case  # 用例目录
@@ -55,7 +55,7 @@ autotest_my_app
 最后移除掉一些不相关的文件：
 
 ```shell
-autotest_my_app
+autotest_my_project
 ├── apps
 │   ├── autotest_my_app  # 创建的APP工程
 │   │   ├── case

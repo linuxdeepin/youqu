@@ -29,7 +29,7 @@
 
 <a href="https://github.com/linuxdeepin/youqu" target="_blank">GitHub</a> | <a href="https://gitee.com/deepin-community/youqu" target="_blank">Gitee</a>
 
-<a href="https://linuxdeepin.github.io/youqu" target="_blank">在线文档</a> | <a href="https://deepin-community.gitee.io/youqu/" target="_blank">在线文档（国内加速）</a>
+<a href="https://linuxdeepin.github.io/youqu" target="_blank">在线文档</a>
 
 ---
 
@@ -115,7 +115,7 @@ $ youqu manage.py startapp autotest_deepin_some
 在 `apps` 目录下会自动创建一个 APP 工程 `autotest_deepin_some`，同时新建好工程模板目录和模板文件：
 
 ```shell
-autotest_deepin_some
+my_project
 ├── apps
 │   ├── autotest_deepin_some  # 应用库
 .   .   ├── case  # 用例目录

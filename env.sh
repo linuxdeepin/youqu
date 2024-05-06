@@ -17,9 +17,9 @@ do
             DEV=true
             ;;
         ?)
-            echo -e " 参数说明：\
-            \n\t-p password 指定密码, 如：bash env.sh -p xxx
-            \n\t-D 开发环境部署, 如：bash env.sh -D
+            echo -e " 参数说明:\
+            \n\t-p password 指定密码, 如: bash env.sh -p xxx
+            \n\t-D 开发环境部署, 如: bash env.sh -D
             "
             exit 1
             ;;
