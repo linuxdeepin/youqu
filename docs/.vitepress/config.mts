@@ -1,6 +1,7 @@
 import {defineConfig} from 'vitepress'
 import {withMermaid} from "vitepress-plugin-mermaid";
 import timeline from "vitepress-markdown-timeline";
+import {version} from "../../package.json"
 
 // https://vitepress.dev/reference/site-config
 export default withMermaid(
@@ -29,10 +30,14 @@ export default withMermaid(
                 {text: '指南', link: '/指南/简介/YouQu是什么'},
                 {text: '实践', link: '/实践/Linux桌面UI自动化测试/初始化项目'},
                 {text: '规划', link: '/规划/框架设计/AT基础框架设计方案'},
-                {text: '团队', link: '/team'},
-                {text: '更新日志', link: '/RELEASE'},
                 {
-                    text: '插件', items: [
+                    text: `v${version}`, items: [
+                        {text: "更新日志", link: '/RELEASE'},
+                        {text: "参与贡献", link: '/CONTRIBUTING'},
+                    ]
+                },
+                {
+                    text: '🔌 插件', items: [
                         {text: "日志系统 | funnylog", link: "https://linuxdeepin.github.io/funnylog/"},
                         {text: "重启方案 | letmego", link: "https://linuxdeepin.github.io/letmego/"},
                         {text: "文字识别 | pdocr-rpc", link: "https://linuxdeepin.github.io/pdocr-rpc/"},
@@ -117,7 +122,7 @@ export default withMermaid(
                         text: "DBus接口自动化测试",
                         collapsed: false,
                         items: [
-                            {text: "初始化工程", link: "/实践/DBus接口自动化测试/初始化工程"},
+                            {text: "初始化项目", link: "/实践/DBus接口自动化测试/初始化项目"},
                             {text: "创建APP工程", link: "/实践/DBus接口自动化测试/创建APP工程"},
                             {text: "创建一条完整的用例", link: "/实践/DBus接口自动化测试/创建一条完整的用例"},
                         ]
@@ -126,7 +131,7 @@ export default withMermaid(
                         text: "命令行自动化测试",
                         collapsed: false,
                         items: [
-                            {text: "初始化工程", link: "/实践/命令行自动化测试/初始化工程"},
+                            {text: "初始化项目", link: "/实践/命令行自动化测试/初始化项目"},
                             {text: "创建APP工程", link: "/实践/命令行自动化测试/创建APP工程"},
                             {text: "创建一条完整的用例", link: "/实践/命令行自动化测试/创建一条完整的用例"},
                         ]
@@ -135,9 +140,9 @@ export default withMermaid(
                         text: "HTTP接口自动化测试",
                         collapsed: true,
                         items: [
-                            {text: "初始化工程", link: "/实践/HTTP接口自动化测试/初始化工程"},
-                            {text: "环境部署", link: "/实践/HTTP接口自动化测试/环境部署"},
-                            {text: "分层结构", link: "/实践/HTTP接口自动化测试/分层结构"},
+                            {text: "初始化项目", link: "/实践/HTTP接口自动化测试/初始化项目"},
+                            {text: "创建APP工程", link: "/实践/HTTP接口自动化测试/创建APP工程"},
+                            {text: "创建一条完整的用例", link: "/实践/HTTP接口自动化测试/创建一条完整的用例"},
                         ]
                     },
                 ],

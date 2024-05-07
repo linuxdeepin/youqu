@@ -27,18 +27,27 @@ features:
   - icon: 💻
     title: Linux 桌面 UI 自动化测试
     details: 提升Linux桌面应用品质，确保用户体验的一致性，选择我们的UI自动化测试服务。
-  - icon: 🚌
-    title: Linux DBus/Gsettings 接口自动化测试
-    details: 专业自动化测试D-Bus和Gsettings接口，为Linux桌面应用的稳定性和可靠性保驾护航。
-  - icon: 🚀
-    title: 命令行自动化测试
-    details: 高效命令行自动化测试，让Linux软件开发和维护更加轻松便捷。
-  - icon: ️🕷️
-    title: HTTP 接口自动化测试
-    details: 保障HTTP接口的响应速度和数据传输安全，我们的自动化测试是您的明智之选。
+    link: /实践/Linux桌面UI自动化测试/初始化项目
+    linkText: 查看
   - icon: 🌏
     title: Web UI 自动化测试
     details: Web UI自动化测试，优化用户体验，提升Web应用的稳定性和可靠性。
+    link: /实践/WebUI自动化测试/初始化项目
+    linkText: 查看
+  - icon: 🚌
+    title: Linux DBus/Gsettings 接口自动化测试
+    details: 专业自动化测试D-Bus和Gsettings接口，为Linux桌面应用的稳定性和可靠性保驾护航。
+    link: /实践/DBus接口自动化测试/初始化项目
+    linkText: 查看
+  - icon: 🚀
+    title: 命令行自动化测试
+    details: 高效命令行自动化测试，让Linux软件开发和维护更加轻松便捷。
+    link: /实践/命令行自动化测试/初始化项目
+    linkText: 查看
+  - icon: ️🕷️
+    title: HTTP 接口自动化测试
+    details: 保障HTTP接口的响应速度和数据传输安全，我们的自动化测试是您的明智之选。
+
 ---
 
 <style>
@@ -62,3 +71,111 @@ features:
   }
 }
 </style>
+
+<script setup>
+import {
+  VPTeamPage,
+  VPTeamPageTitle,
+  VPTeamMembers
+} from 'vitepress/theme'
+
+const members = [
+  {
+    avatar: 'https://www.github.com/mikigo.png',
+    name: 'mikigo',
+    title: 'Maintainer',
+    links: [
+      { icon: 'github', link: 'https://github.com/mikigo' },
+      // { icon: 'twitter', link: 'https://twitter.com/mikigo' }
+    ]
+  },
+  {
+    avatar: 'https://www.github.com/githublitao.png',
+    name: 'githublitao',
+    title: 'Developer',
+    links: [
+      { icon: 'github', link: 'https://github.com/githublitao' },
+    ]
+  },
+  {
+    avatar: 'https://www.github.com/zhao-george.png',
+    name: 'zhao-george',
+    title: 'Developer',
+    links: [
+      { icon: 'github', link: 'https://github.com/zhao-george' },
+    ]
+  },
+  {
+    avatar: 'https://www.github.com/saifeiLee.png',
+    name: 'saifeiLee',
+    title: 'Developer',
+    links: [
+      { icon: 'github', link: 'https://github.com/saifeiLee' },
+    ]
+  },
+  {
+    avatar: 'https://www.github.com/DarkLii.png',
+    name: 'DarkLii',
+    title: 'Developer',
+    links: [
+      { icon: 'github', link: 'https://github.com/DarkLii' },
+    ]
+  },
+  {
+    avatar: 'https://www.github.com/rb-union.png',
+    name: 'rb-union',
+    title: 'Helper',
+    links: [
+      { icon: 'github', link: 'https://github.com/rb-union' },
+    ]
+  },
+  {
+    avatar: 'https://www.github.com/Jimijun.png',
+    name: 'Jimijun',
+    title: 'Helper',
+    links: [
+      { icon: 'github', link: 'https://github.com/Jimijun' },
+    ]
+  },
+  {
+    avatar: 'https://www.github.com/king123666.png',
+    name: 'king123666',
+    title: 'Helper',
+    links: [
+      { icon: 'github', link: 'https://github.com/king123666' },
+    ]
+  },
+  {
+    avatar: 'https://www.github.com/momiji33.png',
+    name: 'momiji33',
+    title: 'Helper',
+    links: [
+      { icon: 'github', link: 'https://github.com/momiji33' },
+    ]
+  },
+  {
+    avatar: 'https://www.github.com/lu-xianseng.png',
+    name: 'lu-xianseng',
+    title: 'Helper',
+    links: [
+      { icon: 'github', link: 'https://github.com/lu-xianseng' },
+    ]
+  },
+  
+]
+</script>
+
+<VPTeamPage>
+  <VPTeamPageTitle>
+    <template #title>
+      YouQu Team
+    </template>
+    <template #lead>
+      包括代码贡献者和提供过重要建议或帮助的朋友
+    </template>
+  </VPTeamPageTitle>
+  <VPTeamMembers
+    size="small"
+    :members="members"
+  />
+</VPTeamPage>
