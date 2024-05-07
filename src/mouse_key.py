@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 # _*_ coding:utf-8 _*_
-
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
-
 # SPDX-License-Identifier: GPL-2.0-only
-# pylint: disable=C0114
+
 import os
 import sys
 from time import sleep
@@ -13,8 +11,7 @@ from src import logger
 from src.cmdctl import CmdCtl
 
 os.environ["DISPLAY"] = ":0"
-# pylint: disable=C0103,R0904,C0411
-# pylint: disable=wrong-import-position
+
 from setting.globalconfig import GlobalConfig
 
 

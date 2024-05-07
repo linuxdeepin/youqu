@@ -155,7 +155,7 @@ $ youqu manage.py run -a apps/autotest_deepin_some -k "xxx" -t "yyy"
 
 ### 3. 远程执行
 
-远程执行就是用本地作为服务端控制远程机器执行，远程机器执行的用例相同；
+远程执行就是用本地作为服务端控制远程机器执行，远程机器执行的用例相同。
 
 使用 `remote` 命令：
 
@@ -172,15 +172,3 @@ $ youqu manage.py remote
 ## 开源许可证
 
 有趣 在 [GPL-2.0-only](https://github.com/linuxdeepin/youqu/blob/master/LICENSE) 下发布。
-
-------------
-
-[__Github Star History__]()
-
-[![Stargazers over time](https://starchart.cc/linuxdeepin/youqu.svg)](https://starchart.cc/linuxdeepin/youqu)
-
-
-
-[__Gitee Info__]()
-
-[![deepin-community/youqu](https://gitee.com/deepin-community/youqu/widgets/widget_card.svg?colors=4183c4,ffffff,ffffff,e3e9ed,666666,9b9b9b)](https://gitee.com/deepin-community/youqu)

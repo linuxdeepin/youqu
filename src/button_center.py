@@ -2,7 +2,7 @@
 # _*_ coding:utf-8 _*_
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
-# pylint: disable=C0114
+
 import re
 from configparser import ConfigParser, NoSectionError
 from time import sleep
@@ -24,7 +24,6 @@ class ButtonCenter:
     根据应用程序中控件元素的相对坐标，通过配置元素的x、y、w和h来定位元素在屏幕中的位置，并返回用于鼠标和键盘操作的坐标。
     """
 
-    # pylint: disable=too-many-arguments,too-many-locals,too-many-public-methods
     __author__ = "Mikigo <huangmingqiang@uniontech.com>, Litao <litaoa@uniontech.com>"
 
     def __init__(

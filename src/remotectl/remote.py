@@ -42,7 +42,7 @@ class Remote(ShortCut, CmdCtl):
             if kwargs:
                 for k, v in kwargs.items():
                     ar += f"{k}='{v}', "
-            logger.debug(
+            logger.info(
                 f"Remote(user='{self.user}', ip='{self.ip}', password='{self.password}').rctl.{item}({ar.rstrip(', ')})"
             )
             value = None
