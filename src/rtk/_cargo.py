@@ -3,7 +3,7 @@ from funnylog import logger
 from setting.globalconfig import GlobalConfig
 
 
-def local_runner(parser, sub_parser_run, cmd_args):
+def local_runner(parser, sub_parser_run, cmd_args=None):
     """本地执行"""
     sub_parser_run.add_argument(
         "-a",

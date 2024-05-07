@@ -94,11 +94,7 @@ $ youqu-startproject my_project
 
 ```shell
 $ cd my_project
-
 $ bash env.sh
-# 使用的默认密码是 1；
-# 您可以使用 -p 选项传入密码：bash env.sh -p ${my_password}；
-# 也可以修改配置文件 setting/globalconfig.ini 里面的 PASSWORD 配置项；
 ```
 
 ## 创建 APP 工程
@@ -111,37 +107,13 @@ $ youqu manage.py startapp autotest_deepin_some
 
 自动创建的 APP 工程遵循完整的 PO 设计模式，让你可以专注于用例和方法的编写维护。
 
-在 `apps` 目录下会自动创建一个 APP 工程 `autotest_deepin_some`，同时新建好工程模板目录和模板文件：
+在 `apps` 目录下会自动创建一个 APP 工程：`autotest_deepin_some`，同时新建好工程模板目录和模板文件：
 
 ```shell
 my_project
 ├── apps
-│   ├── autotest_deepin_some  # 应用库
-.   .   ├── case  # 用例目录
-.   .   │   ├── assert_res  # 用例断言所需要的资源
-.   .   │   │   └── readme
-        │   ├── base_case.py  # 用例基类
-        │   ├── __init__.py
-        │   ├── test_mycase_001.py  # 用例示例 1
-        │   └── test_mycase_002.py  # 用例示例 2
-        ├── config.ini  # 应用库配置文件
-        ├── config.py   # 读取配置文件config.ini里面的配置，并提供可调用的配置对象config
-        ├── conftest.py # Fixture 插件库
-        ├── control     # 记录适配YouQu的版本
-        ├── deepin_some_assert.py  # 断言方法类
-        ├── __init__.py
-        ├── mycase.csv  # 用例标签管理文件
-        └── widget  # 方法层
-            ├── base_widget.py  # 方法基类
-            ├── deepin_some_widget.py  # 方法唯一出口类
-            ├── other_widget.py  # 其他方法类
-            ├── other.ini  # 其他配置
-            ├── case_res  # 用例执行所需要的资源
-            │   └── readme
-            ├── __init__.py
-            ├── pic_res  # 图像识别方法所需要的资源
-            │   └── readme
-            └── ui.ini  # 相对位移元素定位方案的配置文件
+│   ├── autotest_deepin_some  # <----- APP 工程
+...     ├── ...
 ```
 
 在你的远程 Git 仓库中，只需要保存 APP 工程这部分代码即可。
@@ -153,7 +125,7 @@ my_project
 运行
 -------
 
-### 1. 工作空间
+### 1. 执行管理器
 
 在项目根目录下有一个 `manage.py` ，它是一个执行器入口，提供了本地执行、远程执行等的功能。
 
@@ -166,79 +138,20 @@ $ youqu manage.py run
 
 #### 2.1. 命令行参数
 
-通过命令行参数配置参数，使用 `-h` 或 `--help` 可以查看所有支持的命令行参数：
-
-
-```shell
-$ youqu manage.py run -h
-```
-
-```shell
-optional arguments:
-  -h, --help            show this help message and exit
-  -a APP, --app APP     应用名称：apps/autotest_deepin_music 或
-                        autotest_deepin_music
-  -k KEYWORDS, --keywords KEYWORDS
-                        用例的关键词,支持and/or/not逻辑组合
-  -t TAGS, --tags TAGS  用例的标签,支持and/or/not逻辑组合
-  --rerun RERUN         失败重跑次数
-  --record_failed_case RECORD_FAILED_CASE
-                        失败录屏从第几次失败开始录制视频
-  --clean {yes,}        清理环境
-  --report_formats REPORT_FORMATS
-                        测试报告格式
-  --max_fail MAX_FAIL   最大失败率
-  --log_level LOG_LEVEL
-                        日志输出级别
-  --timeout TIMEOUT     单条用例超时时间
-  --resolution RESOLUTION
-                        检查分辨率
-  --debug DEBUG         调试模式
-  --noskip {yes,}       csv文件里面标记了skip跳过的用例不生效
-  --ifixed {yes,}       fixed不生效，仅通过skip跳过用例
-  --send_pms {,async,finish}
-                        数据回填
-  --task_id TASK_ID     测试单ID
-  --trigger {,auto,hand}
-                        触发者
-  -f CASE_FILE, --case_file CASE_FILE
-                        根据文件执行用例
-  --deb_path DEB_PATH   需要安装deb包的本地路径
-  -u PMS_USER, --pms_user PMS_USER
-                        pms 用户名
-  -p PMS_PASSWORD, --pms_password PMS_PASSWORD
-                        pms 密码
-  --suite_id SUITE_ID   pms 测试套ID
-  --pms_info_file PMS_INFO_FILE
-                        pms 信息文件
-  --top TOP             过程中记录top命令中的值
-  --lastfailed          仅执行上次失败用例
-  --duringfail          测试过程中立即显示报错
-  --repeat REPEAT       指定用例执行次数
-  --project_name PROJECT_NAME
-                        工程名称（写入json文件）
-  --build_location BUILD_LOCATION
-                        构建地区（写入json文件）
-  --line LINE           执行的业务线（写入json文件）
-  --autostart AUTOSTART
-                        重启类场景开启letmego执行方案
-  --slaves SLAVES       远程测试机
-```
-
 在一些 CI 环境下使用命令行参数会更加方便：
 
 
 ```shell
-$ youqu manage.py run --app apps/autotest_deepin_music --keywords "xxx" --tags "xxx"
+$ youqu manage.py run -a apps/autotest_deepin_some -k "xxx" -t "yyy"
 ```
+
+更多用法可以使用 `-h` 或 `--help` 查看。
 
 #### 2.2. 配置文件
 
 通过配置文件配置参数
 
-在配置文件 `setting/globalconfig.ini` 里面支持配置对执行的一些参数进行配置，配置完成之后，直接在命令行执行 `manage.py` 就好了。
-
-详细配置项请查看[配置项](https://github.com/linuxdeepin/youqu/blob/master/setting/globalconfig.ini)
+在配置文件 [setting/globalconfig.ini](https://github.com/linuxdeepin/youqu/blob/master/setting/globalconfig.ini)  里面支持配置对执行的一些参数进行配置。
 
 ### 3. 远程执行
 
@@ -250,51 +163,6 @@ $ youqu manage.py run --app apps/autotest_deepin_music --keywords "xxx" --tags "
 ```shell
 $ youqu manage.py remote
 ```
-
-以下为 `remote` 提供的一些参数选项：
-
-```coffeescript
-  -h, --help            show this help message and exit
-  -c CLIENTS, --clients CLIENTS
-                        远程机器的user@ip:password,多个机器用'/'连接,如果password不传入,默认取sett
-                        ing/remote.ini中CLIENT_PASSWORD的值,比如: uos@10.8.13.xx:1
-                        或 uos@10.8.13.xx
-  -s, --send_code       发送代码到测试机（不含report目录）
-  -e, --build_env       搭建测试环境,如果为yes，不管send_code是否为yes都会发送代码到测试机.
-  -p CLIENT_PASSWORD, --client_password CLIENT_PASSWORD
-                        测试机密码（全局）
-  -y PARALLEL, --parallel PARALLEL
-                        yes:表示所有测试机并行跑，执行相同的测试用例;no:表示测试机分布式执行，服务端会根据收集到的测试用例自
-                        动分配给各个测试机执行。
-```
-
-除了这些特有参数以外，它同样支持本地执行的所有参数；
-
-在命令行这样运行：
-
-
-```shell
-$ youqu manage.py remote -a apps/autotest_deepin_music -c uos@10.8.13.x3/uos@10.8.13.x4 -k "xxx" -t "xxx"
-```
-
-所有用例执行完之后会在 `report` 目录下回收各个测试机执行的测试报告。
-
-注意：如果远程机器没有搭建自动化测试环境，记得加上参数 `-e` ：
-
-
-```shell
-$ youqu manage.py remote -a ... -e
-```
-
-执行前确保远程机器已经开启了 ssh 服务，否则会提示无法连接，如果没有开启，请手动开启：
-
-
-```shell
-$ sudo systemctl restart ssh
-$ sudo systemctl enable ssh
-```
-
-配置文件其他相关配置项详细说明，请查看配置文件中的注释内容。
 
 ## 贡献
 

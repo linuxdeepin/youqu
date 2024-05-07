@@ -26,7 +26,11 @@ class Remote(ShortCut, CmdCtl):
             for cls_obj in [ShortCut, CmdCtl]:
                 if hasattr(cls_obj, item):
                     self.tmp_obj = {"cls_obj": cls_obj, "item_obj": getattr(cls_obj, item)}
-                    delattr(cls_obj, item)
+                    while True:
+                        if hasattr(cls_obj, item):
+                            delattr(cls_obj, item)
+                        else:
+                            break
         return super().__getattribute__(item)
 
     def __getattr__(self, item):
@@ -47,6 +51,7 @@ class Remote(ShortCut, CmdCtl):
             finally:
                 if self.tmp_obj:
                     setattr(self.tmp_obj["cls_obj"], item, self.tmp_obj["item_obj"])
+                    self.tmp_obj = None
             return value
 
         return func
