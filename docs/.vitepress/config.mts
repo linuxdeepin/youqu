@@ -114,25 +114,25 @@ export default withMermaid(
                         ]
                     },
                     {
-                        text: "DBus接口自动化测试 (Writing)",
-                        collapsed: true,
+                        text: "DBus接口自动化测试",
+                        collapsed: false,
                         items: [
                             {text: "初始化工程", link: "/实践/DBus接口自动化测试/初始化工程"},
-                            {text: "环境部署", link: "/实践/DBus接口自动化测试/环境部署"},
-                            {text: "分层结构", link: "/实践/DBus接口自动化测试/分层结构"},
+                            {text: "创建APP工程", link: "/实践/DBus接口自动化测试/创建APP工程"},
+                            {text: "创建一条完整的用例", link: "/实践/DBus接口自动化测试/创建一条完整的用例"},
                         ]
                     },
                     {
-                        text: "命令行自动化测试 (Writing)",
-                        collapsed: true,
+                        text: "命令行自动化测试",
+                        collapsed: false,
                         items: [
                             {text: "初始化工程", link: "/实践/命令行自动化测试/初始化工程"},
-                            {text: "环境部署", link: "/实践/命令行自动化测试/环境部署"},
-                            {text: "分层结构", link: "/实践/命令行自动化测试/分层结构"},
+                            {text: "创建APP工程", link: "/实践/命令行自动化测试/创建APP工程"},
+                            {text: "创建一条完整的用例", link: "/实践/命令行自动化测试/创建一条完整的用例"},
                         ]
                     },
                     {
-                        text: "HTTP接口自动化测试 (Writing)",
+                        text: "HTTP接口自动化测试",
                         collapsed: true,
                         items: [
                             {text: "初始化工程", link: "/实践/HTTP接口自动化测试/初始化工程"},

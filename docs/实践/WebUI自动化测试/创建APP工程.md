@@ -1,4 +1,4 @@
-## 创建一个 APP 工程
+# 创建一个 APP 工程
 
 使用 startapp 创建一个 APP 工程：
 
