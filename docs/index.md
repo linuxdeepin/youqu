@@ -83,10 +83,12 @@ const members = [
   {
     avatar: 'https://www.github.com/mikigo.png',
     name: 'mikigo',
-    title: 'Maintainer',
+    title: 'Creator',
+    org: 'YouQu',
+    orgLink: 'https://github.com/linuxdeepin/youqu',
     links: [
       { icon: 'github', link: 'https://github.com/mikigo' },
-      // { icon: 'twitter', link: 'https://twitter.com/mikigo' }
+      { icon: 'x', link: 'https://twitter.com/mikigo_' },
     ]
   },
   {
@@ -171,7 +173,7 @@ const members = [
       YouQu Team
     </template>
     <template #lead>
-      包括代码贡献者和提供过重要建议或帮助的朋友
+      感谢以下所有人的贡献与参与
     </template>
   </VPTeamPageTitle>
   <VPTeamMembers

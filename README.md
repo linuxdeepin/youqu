@@ -171,4 +171,4 @@ $ youqu manage.py remote
 
 ## 开源许可证
 
-有趣 在 [GPL-2.0-only](https://github.com/linuxdeepin/youqu/blob/master/LICENSE) 下发布。
+YouQu 在 [GPL-2.0](https://github.com/linuxdeepin/youqu/blob/master/LICENSE) 下发布。
