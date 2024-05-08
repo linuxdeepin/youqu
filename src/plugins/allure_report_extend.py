@@ -43,23 +43,27 @@ class AllureReportExtend:
 
             screen = Tk()
             w(f"分辨率={screen.winfo_screenwidth()}x{screen.winfo_screenheight()}")
-
             w(f"显示协议={GlobalConfig.DISPLAY_SERVER.title()}")
 
-            cpu_info = (
-                os.popen(
-                    f"echo '{GlobalConfig.PASSWORD}' | sudo -S dmidecode -s  processor-version"
+            try:
+                cpu_info = (
+                    os.popen(
+                        f"echo '{GlobalConfig.PASSWORD}' | sudo -S dmidecode -s  processor-version"
+                    )
+                    .readlines()[0]
+                    .strip("\n")
                 )
-                .readlines()[0]
-                .strip("\n")
-            )
-            w(f"CPU信息={cpu_info}")
+                w(f"CPU信息={cpu_info}")
 
-            mem_info = os.popen(
-                f'''echo '{GlobalConfig.PASSWORD}' | sudo -S dmidecode|grep -A16 'Memory Device' | grep -v "Memory Device Mapped Address" | grep "Range Size"'''
-            ).readlines()
-            MEM_TOTAL = sum([int(i.split(":")[1].rstrip(" GB\n").strip()) for i in mem_info])
-            w(f"内存信息={MEM_TOTAL}G")
+
+                mem_info = os.popen(
+                    f'''echo '{GlobalConfig.PASSWORD}' | sudo -S dmidecode|grep -A16 'Memory Device' | '''
+                    'grep -v "Memory Device Mapped Address" | grep "Range Size"'
+                ).readlines()
+                MEM_TOTAL = sum([int(i.split(":")[1].rstrip(" GB\n").strip()) for i in mem_info])
+                w(f"内存信息={MEM_TOTAL}G")
+            except IndexError:
+                ...
 
             os_info = os.popen("uname -a").read()
             w(f"内核信息={os_info}")

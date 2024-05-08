@@ -82,6 +82,7 @@ export default withMermaid(
                             {text: "键鼠操作", link: "/指南/框架必备/键鼠操作"},
                             {text: "执行管理器", link: "/指南/框架必备/执行管理器"},
                             {text: "测试报告", link: "/指南/框架必备/测试报告"},
+                            {text: "Ruff代码检查", link: "/指南/框架必备/Ruff代码检查"},
                         ]
                     },
                     {

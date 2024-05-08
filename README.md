@@ -76,6 +76,17 @@ YouQu（有趣）是深度公司开源的一个用于 Linux 操作系统的自�
 $ sudo pip3 install youqu
 ```
 
+<details> 
+<summary>不加 sudo</summary> 
+<pre>
+其实不加 `sudo` 也是可以的：<br>
+    pip3 install youqu<br>
+但某些情况下可能出现 youqu-startproject 命令无法使用，这是因为不加 sudo 时，安装包路径是在 $HOME/.local/lib/pythonX.X/site-packages，而此路径可能不在环境变量（PATH）中，您可以通过添加环境变量的方式使用 youqu-startproject 命令：<br>
+    export PATH=$PATH:$HOME/.local/lib/pythonX.X/site-packages<br>
+</pre>
+</details>
+
+
 ## 创建项目
 
 您可以在任意目录下，使用 `youqu-startproject` 命令创建一个项目：
