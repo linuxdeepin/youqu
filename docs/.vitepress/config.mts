@@ -3,16 +3,18 @@ import {withMermaid} from "vitepress-plugin-mermaid";
 import timeline from "vitepress-markdown-timeline";
 import {version} from "../../package.json"
 
+console.log(111111111, process.env.VITE_BASE)
+
 // https://vitepress.dev/reference/site-config
 export default withMermaid(
     defineConfig({
-        base: '/youqu/',
+        base: process.env.VITE_BASE,
         lang: 'zh-CN',
         title: "YouQu | Linux自动化测试利器",
         description: "",
         head: [
             ['meta', {name: 'referrer', content: 'no-referrer-when-downgrade'}],
-            ['link', {rel: 'icon', href: "/youqu/favicon.ico"}],
+            ['link', {rel: 'icon', href: `${process.env.VITE_BASE || '/'}favicon.ico`}],
         ],
         vite: {
             publicDir: "assets",
