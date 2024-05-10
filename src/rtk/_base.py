@@ -87,10 +87,9 @@ def collect_result(results):
     res = Counter([results.get(i).get("result") for i in results])
     total = sum(res.values())
     skiped = res.get("skip", 0)
-    total = total - skiped
     passed = res.get("pass", 0)
     failed = total - passed
-    pass_rate = f"{round((passed / total) * 100, 1)}%" if passed else "0%"
+    pass_rate = f"{round((passed / (total - skiped)) * 100, 2)}%" if passed else "0%"
     return total, failed, passed, skiped, pass_rate
 
 
