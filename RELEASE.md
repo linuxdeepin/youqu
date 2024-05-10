@@ -10,6 +10,7 @@
 
 - 修复生成测试报告阶段，机器密码不对时报错；[@mikigo](https://github.com/mikigo)
 - 文档界面UI调整；[@mikigo](https://github.com/mikigo)
+- 修改 HTML 报告中用例总数为包含跳过用例数量；[@mikigo](https://github.com/mikigo)
 
 ## 2.5.4（2024/05/08）
 

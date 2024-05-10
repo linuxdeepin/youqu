@@ -178,13 +178,13 @@ system_env
 
 echo 'pipenv run python "$@"' | sudo tee /usr/bin/youqu > /dev/null 2>&1
 echo "pipenv shell" | sudo tee /usr/bin/youqu-shell > /dev/null 2>&1
-echo "pipenv --rm" | sudo tee /usr/bin/youqu-shell-rm > /dev/null 2>&1
+echo "pipenv --rm" | sudo tee /usr/bin/youqu-rm > /dev/null 2>&1
 sudo chmod +x /usr/bin/youqu
 sudo chmod +x /usr/bin/youqu-shell
 sudo chmod +x /usr/bin/youqu-shell-rm
 
-cp --force ${ROOT_DIR}/src/utils/command_complete.sh ${HOME}/.config/
-echo "source ${HOME}/.config/command_complete.sh" >> $HOME/.bashrc
-source $HOME/.bashrc
+#cp --force ${ROOT_DIR}/src/utils/command_complete.sh ${HOME}/.config/
+#echo "source ${HOME}/.config/command_complete.sh" >> $HOME/.bashrc
+#source $HOME/.bashrc
 
 cd ${ROOT_DIR};youqu manage.py -h
