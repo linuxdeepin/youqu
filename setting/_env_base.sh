@@ -89,7 +89,7 @@ init_pip(){
 
 install_py_deb(){
     rm -rf ${1}*
-    apt download ${1} > /tmp/env.log 2>&1
+    ${yq} download ${1} > /tmp/env.log 2>&1
     if [ $? != 0 ]; then
         cat /tmp/env.log
         exit 120

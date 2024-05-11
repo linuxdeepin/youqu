@@ -15,14 +15,16 @@ echo "
 "
 
 env(){
-    sudo apt update
+    if [ "${debian_platform}" = "true" ]; then
+        sudo apt update
+    fi
 
     deb_array=(
         python3-pip
         python3-tk
         sshpass
         scrot
-        openjdk-8-jdk
+        openjdk-11-jdk-headless
         gir1.2-atspi-2.0
         libatk-adaptor
         at-spi2-core
@@ -35,13 +37,20 @@ env(){
         deb_array=(
             python3-pip
             sshpass
-            openjdk-8-jdk
+            openjdk-11-jdk-headless
         )
+    fi
+
+    if [ "${debian_platform}" = "false" ]; then
+        deb_array[${#deb_array[@]}]=java-11-openjdk-headless
+        deb_array[${#deb_array[@]}]=python3-tkinter
+        deb_array[${#deb_array[@]}]=xdotool
+        deb_array[${#deb_array[@]}]=opencv
     fi
 
     for deb in ${deb_array[*]}
     do
-        sudo apt install -y ${deb} > /tmp/env.log 2>&1
+        sudo ${yq} install -y ${deb} > /tmp/env.log 2>&1
         check_status ${deb}
     done
 
@@ -92,7 +101,7 @@ do
     install_py_deb ${pd} ${python_virtualenv_path}
 done
 
-apt download python3-gi-cairo > /tmp/env.log 2>&1
+${yq} download python3-gi-cairo > /tmp/env.log 2>&1
 dpkg -x python3-gi-cairo*.deb python3-gi-cairo
 cp -r ./python3-gi-cairo/usr/lib/python3/dist-packages/gi/* ${python_virtualenv_path}/lib/python${PYTHON_VERSION}/site-packages/gi/
 rm -rf python3-gi-cairo*

@@ -234,8 +234,13 @@ class _Config(object):
         _Config.options = {}
 
         # 显示服务器
-    DISPLAY_SERVER = os.popen("cat ~/.xsession-errors | grep XDG_SESSION_TYPE | head -n 1").read().split("=")[
-        -1].strip("\n")
+
+    DISPLAY_SERVER = (
+                         os.popen("cat ~/.xsession-errors | grep XDG_SESSION_TYPE | head -n 1")
+                             .read()
+                             .split("=")[-1]
+                             .strip("\n")
+                     ) or ("x11" if os.popen("ps -ef | grep -v grep | grep kwin_x11").read() else "wayland")
 
     class DisplayServer:
         wayland = "wayland"

@@ -36,6 +36,10 @@ else
 fi
 
 DISPLAY_SERVER=$(cat ${HOME}/.xsession-errors | grep XDG_SESSION_TYPE | head -n 1 | cut -d "=" -f2)
+if [ "${DISPLAY_SERVER}" = "" ]; then
+    ps -ef | grep -v grep | grep kwin_x11
+    [ $? = 0 ] && DISPLAY_SERVER=x11 || DISPLAY_SERVER=wayland
+fi
 PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
 whitelist="/usr/share/deepin-elf-verify/whitelist"
 pypi_mirror="https://pypi.tuna.tsinghua.edu.cn/simple"
