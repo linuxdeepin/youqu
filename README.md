@@ -11,18 +11,12 @@
 
 
 [![GitHub issues](https://img.shields.io/github/issues/linuxdeepin/youqu?color=%23F79431)](https://github.com/linuxdeepin/youqu/issues)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/linuxdeepin/youqu?color=%23F79431)](https://github.com/linuxdeepin/youqu/pulls)
-[![GitHub Discussions](https://img.shields.io/github/discussions/linuxdeepin/youqu?color=%23F79431)](https://github.com/linuxdeepin/youqu/discussions)
 
 [![PyPI](https://img.shields.io/pypi/v/youqu?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu%2F&color=%23F79431)](https://pypi.org/project/youqu/)
-![PyPI - License](https://img.shields.io/pypi/l/youqu?color=%23F79431)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/youqu?color=%23F79431)
-![Static Badge](https://img.shields.io/badge/UOS%2FDeepin/Ubuntu/Debian-Platform?style=flat&label=OS&color=%23F79431)
+![Static Badge](https://img.shields.io/badge/UOS%2FDeepin/openEuler-Platform?style=flat&label=OS&color=%23F79431)
 
-[![Downloads](https://static.pepy.tech/badge/youqu/week)](https://pepy.tech/project/youqu)
-[![Downloads](https://static.pepy.tech/badge/youqu/month)](https://pepy.tech/project/youqu)
 [![Downloads](https://static.pepy.tech/badge/youqu)](https://pepy.tech/project/youqu)
-[![Hits](https://hits.sh/github.com/linuxdeepin/youqu.svg?style=flat&label=Github_Hits&color=blue)](https://github.com/linuxdeepin/youqu)
+[![Hits](https://hits.sh/github.com/linuxdeepin/youqu.svg?style=flat&label=visitors&color=blue)](https://github.com/linuxdeepin/youqu)
 
 ---
 
@@ -32,7 +26,7 @@
 
 ---
 
-YouQu（有趣）是深度公司开源的一个用于 Linux 操作系统的自动化测试框架，支持多元化元素定位和断言、用例标签化管理和执行、强大的日志和报告输出等特色功能，同时完美兼容 X11、Wayland 显示协议，环境部署简单，操作易上手。🔥
+YouQu(有趣)是深度公司(Deepin/UOS)开源的一个用于 Linux 操作系统的自动化测试框架，支持多元化元素定位和断言、用例标签化管理和执行、强大的日志和报告输出等特色功能，同时完美兼容 X11、Wayland 显示协议，环境部署简单，操作易上手。🔥
 
 ## YouQu（有趣）能做什么
 
@@ -42,6 +36,7 @@ YouQu（有趣）是深度公司开源的一个用于 Linux 操作系统的自�
 - [x] 🚀 命令行自动化测试
 - [x] 🕷️ HTTP 接口自动化测试
 - [ ] ⏲️ Linux 桌面应用性能自动化测试
+- [ ]    Fuzzy Desktop 桌面模糊测试
 
 ## 安装
 
@@ -98,7 +93,7 @@ $ youqu manage.py startapp autotest_deepin_some
 ```shell
 my_project
 ├── apps
-│   ├── autotest_deepin_some  # <----- APP 工程
+│   ├── autotest_deepin_some  # <-- APP 工程
 ...     ├── ...
 ```
 
