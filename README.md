@@ -11,7 +11,6 @@
 
 
 [![GitHub issues](https://img.shields.io/github/issues/linuxdeepin/youqu?color=%23F79431)](https://github.com/linuxdeepin/youqu/issues)
-
 [![PyPI](https://img.shields.io/pypi/v/youqu?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu%2F&color=%23F79431)](https://pypi.org/project/youqu/)
 ![Static Badge](https://img.shields.io/badge/UOS%2FDeepin/openEuler-Platform?style=flat&label=OS&color=%23F79431)
 
@@ -36,7 +35,7 @@ YouQu(有趣)是深度公司(Deepin/UOS)开源的一个用于 Linux 操作系统
 - [x] 🚀 命令行自动化测试
 - [x] 🕷️ HTTP 接口自动化测试
 - [ ] ⏲️ Linux 桌面应用性能自动化测试
-- [ ]    Fuzzy Desktop 桌面模糊测试
+- [ ]    💥 Fuzzy Desktop 桌面模糊测试
 
 ## 安装
 

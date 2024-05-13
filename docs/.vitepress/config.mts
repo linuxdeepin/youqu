@@ -3,8 +3,6 @@ import {withMermaid} from "vitepress-plugin-mermaid";
 import timeline from "vitepress-markdown-timeline";
 import {version} from "../../package.json"
 
-console.log(111111111, process.env.VITE_BASE)
-
 // https://vitepress.dev/reference/site-config
 export default withMermaid(
     defineConfig({
@@ -90,12 +88,14 @@ export default withMermaid(
                     },
                     {
                         text: "特色功能",
-                        collapsed: true,
+                        collapsed: false,
                         items: [
                             {text: "标签化管理", link: "/指南/特色功能/标签化管理"},
                             {text: "标签自动同步", link: "/指南/特色功能/标签自动同步"},
                             {text: "全自动日志", link: "/指南/特色功能/全自动日志"},
+                            {text: "远程交互式控制", link: "/指南/特色功能/远程交互式控制"},
                             {text: "失败录屏", link: "/指南/特色功能/失败录屏"},
+                            {text: "WebUI", link: "/指南/特色功能/WebUI"},
                             {text: "Wayland适配", link: "/指南/特色功能/Wayland适配"},
                             {text: "重启类场景", link: "/指南/特色功能/重启类场景"},
                             {text: "数据回填", link: "/指南/特色功能/数据回填"},

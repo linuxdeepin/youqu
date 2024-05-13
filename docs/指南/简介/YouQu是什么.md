@@ -24,6 +24,8 @@ YouQu（有趣）是深度公司开源的一个用于 Linux 操作系统的自�
 
 □ ⏲️ Linux 桌面应用性能自动化测试
 
+□ 💥 Fuzzy Desktop 桌面模糊测试
+
 ## 爱上 YouQu 的 N 个理由
 
 - <p style="background: -webkit-linear-gradient(120deg, #bd34fe 30%, #41d1ff);background-clip: text;-webkit-background-clip: text;-webkit-text-fill-color: transparent;"><b>无处不在的代码补全</b></p>
