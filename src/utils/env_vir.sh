@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 
 # SPDX-License-Identifier: GPL-2.0-only
-source ${ROOT_DIR}/setting/_env_base.sh
+source ${ROOT_DIR}/src/utils/_env_base.sh
 echo "
  ██╗   ██╗  ██████╗      ███████╗ ███╗   ██╗ ██╗   ██╗
  ╚██╗ ██╔╝ ██╔═══██╗     ██╔════╝ ████╗  ██║ ██║   ██║
@@ -78,11 +78,13 @@ if [ $? != 0 ]; then
 fi
 python_virtualenv_path=$(pipenv --venv)
 whitelist_path=`echo "${python_virtualenv_path}" | sed "s/\/home\/$USER\//\//"`
-result=`sudo cat ${whitelist} | grep ${whitelist_path}`
-if [ -z "$result" ]; then
-    sudo sed -i '$a\'"${whitelist_path}"'' ${whitelist}
-    sudo sed -i '$a\'"${python_virtualenv_path}"'' ${whitelist}
-    sudo systemctl restart deepin-elf-verify.service || true
+if [ -f "${whitelist}" ]; then
+    result=`sudo cat ${whitelist} | grep ${whitelist_path}`
+    if [ -z "$result" ]; then
+        sudo sed -i '$a\'"${whitelist_path}"'' ${whitelist}
+        sudo sed -i '$a\'"${python_virtualenv_path}"'' ${whitelist}
+        sudo systemctl restart deepin-elf-verify.service || true
+    fi
 fi
 
 py_debs=(

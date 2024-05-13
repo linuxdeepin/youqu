@@ -47,6 +47,12 @@ features:
   - icon: ️🕷️
     title: HTTP 接口自动化测试
     details: 保障HTTP接口的响应速度和数据传输安全，我们的自动化测试是您的明智之选。
+  - icon: ️⏲️
+    title: Linux 桌面应用性能自动化测试
+    details: 保障HTTP接口的响应速度和数据传输安全，我们的自动化测试是您的明智之选。
+  - icon: ️💥
+    title: Fuzzy Desktop 桌面模糊测试
+    details: 保障HTTP接口的响应速度和数据传输安全，我们的自动化测试是您的明智之选。
 
 ---
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
-
+export PIPENV_VERBOSITY=-1
 ROOT_DIR=$(dirname $(realpath "${BASH_SOURCE[0]}"))
 tag=$(echo "$(cat ${ROOT_DIR}/CURRENT | grep "tag = ")" | cut -d "=" -f2 | python3 -c "s=input();print(s.strip())")
 config_pwd=$(cat ${ROOT_DIR}/setting/globalconfig.ini | grep -v "CLIENT_PASSWORD" | grep "PASSWORD = ")
@@ -51,7 +51,7 @@ if [ ! -f "$HOME/.Xauthority" ]; then
 fi
 
 if [ "${DEV}" = "true" ]; then
-    source ./setting/env_dev.sh
+    source ./src/utils/env_dev.sh
 else
-    source ./setting/env_vir.sh
+    source ./src/utils/env_vir.sh
 fi

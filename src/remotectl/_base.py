@@ -139,10 +139,10 @@ def remote_client(ip, port):
     except ImportError:
         raise ImportError("Please install zerorpc")
 
-    r = zerorpc.Client(timeout=50, heartbeat=None)
+    c = zerorpc.Client(timeout=50, heartbeat=None)
     try:
-        r.connect(f"tcp://{ip}:{port}")
-        return r
+        c.connect(f"tcp://{ip}:{port}")
+        return c
     except Exception as e:
         raise e
 
@@ -171,3 +171,7 @@ def _remote_server(obj, port):
         if not func.startswith("_"):
             server.register_function(getattr(obj, func), func)
     server.serve_forever()
+
+if __name__ == '__main__':
+    from src import Src
+    _remote_server(Src(), 4242)
