@@ -6,7 +6,7 @@
 
 ## 实现原理
 
-安装它是个很麻烦的事情，虽然操作很简单，但其实安装包有点大，我们并不希望直接在 `env.sh` 中加入它，这会让整个自动化环境变得非常臃肿；
+安装它是个很麻烦的事情，虽然操作很简单，但其实安装包有点大，这并不符合我们对框架依赖治理的理解，我们并不希望直接在 `env.sh` 中加入它，这会让整个自动化环境变得非常臃肿；
 
 因此，我们想到将它做成一个 `RPC` 服务在其他机器上部署，测试机通过远程调用 `RPC` 服务的方式使用它；
 
@@ -120,99 +120,15 @@ if __name__ == "__main__":
         self.assert_ocr_exist("取消收藏")
 ```
 
-## 服务端部署
+## RPC服务端部署
 
-我们目前是将 `OCR` 服务部署机器性能较一般，如果你觉得现有的 `OCR` 识别性能不够好，恰好你有更好的机器，可以考虑将其私有化部署。
+服务端参考插件 [pdocr-rpc](https://linuxdeepin.github.io/pdocr-rpc/) 文档。
 
-### 1. 环境安装
+## 负载均衡
 
-推荐使用 `pipenv` 进行环境搭建；
+随着 OCR 服务在自动化测试子项目中被广泛使用，单台服务远不能满足业务需求，因此我们需要将 OCR 服务做分布式集群化部署，然后通过负载均衡技术将业务请求分发到 OCR 服务器上。
 
-安装 `pipenv` ：
+### 基于 Nginx 的负载均衡方案为什么不能满足业务需求
 
-```shell
-sudo pip3 install pipenv
-```
-
-新建一个目录作为环境包 `ocr_env`：
-
-```shell
-cd ~
-mkdir ocr_env
-```
-
-创建 `python 3.7` 环境：
-
-```shell
-cd ocr_env
-pipenv --python 3.7
-```
-
-安装 `OCR` 依赖包：
-
-```shell
-pipenv install paddlepaddle -i https://mirror.baidu.com/pypi/simple
-pipenv install "paddleocr>=2.0.1" -i https://mirror.baidu.com/pypi/simple
-```
-
-不出意外，这样就把依赖安装好了。
-
-### 2. 启动服务
-
-将基础框架中的 `scr/ocr/pdocr_rpc_server.py` 文件拷贝到 `ocr_env` 目录，后台执行它就好了：
-
-```shell
-cd ocr_env
-nohup pipenv run python pdocr_rpc_server.py &
-```
-
-### 3. 配置开机自启
-
-你肯定不想每次机器重启之后都需要手动启动服务，因此我们需要配置开机自启。
-
-写开机自启服务文件：
-
-```shell
-sudo vim /lib/systemd/system/ocr.service
-```
-
-`autoocr`  名称你可以自定义，写入以下内容：
-
-```shell
-[Unit]
-Description=OCR Service
-After=multi-user.target
-
-[Service]
-User=uos
-Group=uos
-Type=idle
-WorkingDirectory=/home/uos/ocr_env
-ExecStart=pipenv run python pdocr_rpc_server.py
-
-[Install]
-WantedBy=multi-user.target
-```
-
-> 注意替换你的${USER}
-
-修改配置文件的权限：
-
-```shell
-sudo chmod 644 /lib/systemd/system/ocr.service
-```
-
-自启服务生效：
-
-```shell
-sudo systemctl daemon-reload
-sudo systemctl enable ocr.service
-```
-
-查看服务状态：
-
-```shell
-sudo systemctl status ocr.service
-```
-
-你可以再重启下电脑，看看服务是不是正常启动了，没报错就 OK 了。
+1. 每 1 次 OCR 识别业务实际是 2 次 RPC 接口请求，第 1 次是将当前屏幕截图并发送到 PRC 服务器，第 2 次调用识别的接口做识别，采用 Nginx 轮询算法做负载均衡会出现 2 次 RPC 请求被分发到 2 台不同的服务器上，这明显是错误的。
+2. 基于 Nginx `ip_hash` 的 session 管理负载均衡算法时，Nginx 默认取 IP 的前 3 段做哈希，而我们的测试机都在同一个网段，IP 前 3 段是一样的，因此会导致负载不均衡。

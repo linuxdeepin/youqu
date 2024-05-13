@@ -64,34 +64,18 @@ class OCRUtils:
                 break
         if ocr_setting.SERVER_IP is None:
             raise EnvironmentError(f"所有OCR服务器不可用: {cls.ocr_servers}")
-        network_retry = network_retry if network_retry else ocr_setting.NETWORK_RETRY
-        pause = pause if pause else ocr_setting.PAUSE
-        timeout = timeout if timeout else ocr_setting.TIMEOUT
-        max_match_number = max_match_number if max_match_number else ocr_setting.MAX_MATCH_NUMBER
-        ignore_time = 0
-        start = time.time()
-        for _ in range(max_match_number):
-            end = time.time()
-            during = end - start - ignore_time
-            if during > timeout:
-                return False
-            _start = time.time()
-            res = _OCR._ocr(
-                *target_strings,
-                picture_abspath=picture_abspath,
-                similarity=similarity,
-                return_default=return_default,
-                return_first=return_first,
-                lang=lang,
-                network_retry=network_retry,
-            )
-            _end = time.time()
-            ignore_time += (_end - _start)
-            if res is False:
-                time.sleep(pause)
-                continue
-            return res
-        return False
+        _OCR.ocr(
+            *target_strings,
+            picture_abspath=picture_abspath,
+            similarity=similarity,
+            return_default=return_default,
+            return_first=return_first,
+            lang=lang,
+            network_retry=network_retry,
+            pause=pause,
+            timeout=timeout,
+            max_match_number=max_match_number,
+        )
 
     @classmethod
     def ocrx(cls, *args, **kwargs):
@@ -139,6 +123,7 @@ class OCRUtils:
     @classmethod
     def all_result(cls):
         return cls.result
+
 
 if __name__ == '__main__':
     OCRUtils.ocrx().click()
