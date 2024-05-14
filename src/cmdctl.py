@@ -3,14 +3,14 @@
 
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 
+import os
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
 import subprocess
-import os
 
-from src.custom_exception import ShellExecutionFailed
-from src import logger
 from setting import conf
+from src import logger
+from src.custom_exception import ShellExecutionFailed
 
 
 class CmdCtl:
@@ -71,13 +71,13 @@ class CmdCtl:
 
     @classmethod
     def sudo_run_cmd(
-        cls,
-        command,
-        interrupt=False,
-        timeout=25,
-        out_debug_flag=True,
-        command_log=True,
-        password=None,
+            cls,
+            command,
+            interrupt=False,
+            timeout=25,
+            out_debug_flag=True,
+            command_log=True,
+            password=None,
     ):
         if password is None:
             password = conf.PASSWORD
@@ -252,3 +252,14 @@ class CmdCtl:
         for i in cls.GREP_LIST:
             cmd += f"grep -v {i} | "
         os.system(f"ps -ef | grep {process} | {cmd}cut -c 9-15 | xargs kill -9 > /dev/null 2>&1")
+
+    @classmethod
+    def sudo_kill_process(cls, process, grep_list: [list, tuple] = None):
+        if grep_list:
+            cls.GREP_LIST = grep_list
+        cmd = ""
+        for i in cls.GREP_LIST:
+            cmd += f"grep -v {i} | "
+        os.system(
+            f"process=$(ps -ef | grep {process} | {cmd}cut -c 9-15);echo '1' | sudo -S kill -9 $process > /dev/null 2>&1"
+        )
