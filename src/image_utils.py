@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # _*_ coding:utf-8 _*_
+from typing import Union, List
 
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 
@@ -29,3 +30,30 @@ image_setting.IMAGE_RATE = float(conf.IMAGE_RATE)
 
 class ImageUtils(ImageCenter):
     """图像识别的工具类"""
+
+    @classmethod
+    def find_image_remote(
+            cls,
+            widget: tuple,
+            rate: Union[float, int] = None,
+            multiple: bool = False,
+            picture_abspath: str = None,
+            screen_bbox: List[int] = None,
+            log_level: str = "info",
+            network_retry: int = None,
+            pause: [int, float] = None,
+            timeout: [int, float] = None,
+            max_match_number: int = None,
+    ):
+        return cls.find_image(
+            *widget,
+            rate=rate,
+            multiple=multiple,
+            picture_abspath=picture_abspath,
+            screen_bbox=screen_bbox,
+            log_level=log_level,
+            network_retry=network_retry,
+            pause=pause,
+            timeout=timeout,
+            max_match_number=max_match_number,
+        )

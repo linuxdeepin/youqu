@@ -5,7 +5,6 @@
 # pylint: disable=C0114
 # pylint: disable=E0401,C0413,R0903,W0707,W0611
 import random
-import time
 
 from pdocr_rpc import OCR as _OCR
 from pdocr_rpc.conf import setting as ocr_setting
@@ -64,7 +63,7 @@ class OCRUtils:
                 break
         if ocr_setting.SERVER_IP is None:
             raise EnvironmentError(f"所有OCR服务器不可用: {cls.ocr_servers}")
-        _OCR.ocr(
+        return _OCR.ocr(
             *target_strings,
             picture_abspath=picture_abspath,
             similarity=similarity,
