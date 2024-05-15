@@ -9,7 +9,7 @@ export default withMermaid(
         base: process.env.VITE_BASE,
         lang: 'zh-CN',
         title: "YouQu | Linux自动化测试利器",
-        description: "",
+        description: "使用简单且功能强大的自动化测试框架",
         head: [
             ['meta', {name: 'referrer', content: 'no-referrer-when-downgrade'}],
             ['link', {rel: 'icon', href: `${process.env.VITE_BASE || '/'}favicon.ico`}],
