@@ -23,7 +23,7 @@ class Commit:
         self.startdate = datetime.strptime(startdate, "%Y-%m-%d")
         self.enddate = (
             self.now_dt
-            if enddate is None
+            if enddate == ""
             else datetime.strptime(enddate, "%Y-%m-%d") + timedelta(days=1)
         )
         self.branch = branch
