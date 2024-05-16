@@ -25,7 +25,7 @@
 
 **官方文档：** <a href="https://youqu.uniontech.com" target="_blank">https://youqu.uniontech.com</a>
 
-欢迎加入 [YouQu官方兴趣小组](https://youqu.uniontech.com/SIG.html)
+**欢迎加入 [YouQu官方兴趣小组](https://youqu.uniontech.com/SIG.html)**
 
 ---
 
