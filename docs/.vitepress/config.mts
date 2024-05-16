@@ -35,6 +35,7 @@ export default withMermaid(
                     text: `v${version}`, items: [
                         {text: "更新日志", link: '/RELEASE'},
                         {text: "参与贡献", link: '/CONTRIBUTING'},
+                        {text: "兴趣小组", link: '/SIG'},
                     ]
                 },
                 {

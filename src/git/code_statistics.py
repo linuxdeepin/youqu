@@ -2,27 +2,27 @@
 # _*_ coding:utf-8 _*_
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
-import os
 import json
+import os
 from copy import deepcopy
 from datetime import datetime
 
 from setting import conf
-from src.rtk._base import transform_app_name
-from src.git.commit import Commit
 from src.depends.colorama import Fore
+from src.git.commit import Commit
+from src.rtk._base import transform_app_name
 
 
 class CodeStatistics(Commit):
     __author__ = "mikigo<huangmingqiang@uniontech.com>"
 
     def __init__(
-        self,
-        app_name: str,
-        branch: str,
-        startdate: str = None,
-        enddate: str = None,
-        **kwargs,
+            self,
+            app_name: str,
+            branch: str,
+            startdate: str = None,
+            enddate: str = None,
+            **kwargs,
     ):
         self.app_name = transform_app_name(app_name or conf.APP_NAME)
         self.repo_path = f"{conf.APPS_PATH}/{self.app_name}"
@@ -31,7 +31,7 @@ class CodeStatistics(Commit):
 
         if startdate:
             super().__init__(app_name, branch=branch, startdate=startdate, enddate=enddate)
-        self.ignore_txt = ["from", "import"]
+        self.ignore_txt = ["from", "import", '"""', '    """', "class", "#", "@"]
 
         for i in range(100):
             self.ignore_txt.append(" " * i + "#")
@@ -60,7 +60,7 @@ class CodeStatistics(Commit):
         git_files = self.get_git_files(commit_id=commit_id)
         for filepath in git_files:
             filename = filepath.split("/")[-1]
-            dif_texts = os.popen(f"cd {self.repo_path}/;git show {commit_id} {filepath}").read()
+            dif_texts = os.popen(f"cd {self.repo_path}/;git show {commit_id} -- {filepath}").read()
             print(Fore.GREEN, "=" * 100, Fore.RESET)
             print(filepath, "\n", dif_texts)
             dif_lines = dif_texts.splitlines()
@@ -101,7 +101,11 @@ class CodeStatistics(Commit):
                         if method_content:
                             for content in method_content:
                                 if content.startswith(("-", "+")):
-                                    if content[1:].startswith(tuple(self.ignore_txt)):
+                                    if any([
+                                        content[1:].startswith(tuple(self.ignore_txt)),
+                                        content[1:] == "",
+                                        content[1:].endswith(('"""', "@staticmethod", "@classmethod"))
+                                    ]):
                                         continue
                                     _fix_debug.append(method)
                                     fix_method_num += 1
@@ -119,6 +123,11 @@ class CodeStatistics(Commit):
                         if method_content:
                             for content in method_content:
                                 if content.startswith(("-", "+")):
+                                    if any([
+                                        content[1:] == "",
+                                        content[1:].endswith(('"""', "@staticmethod", "@classmethod"))
+                                    ]):
+                                        continue
                                     _fix_debug.append(method)
                                     fix_method_num += 1
                                     break

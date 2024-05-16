@@ -19,13 +19,17 @@
 
 ---
 
-<a href="https://github.com/linuxdeepin/youqu" target="_blank">GitHub</a> | <a href="https://gitee.com/deepin-community/youqu" target="_blank">Gitee</a>
+**Deepin 社区：** <a href="https://github.com/linuxdeepin/youqu" target="_blank">GitHub</a> | <a href="https://gitee.com/deepin-community/youqu" target="_blank">Gitee</a>
 
-<a href="https://linuxdeepin.github.io/youqu" target="_blank">在线文档</a>
+**openEuler 社区：** <a href="https://gitee.com/src-openeuler/youqu" target="_blank">Gitee</a>
+
+**官方文档：** <a href="https://youqu.uniontech.com" target="_blank">https://youqu.uniontech.com</a>
+
+欢迎加入 [YouQu官方兴趣小组](docs/assets/wechat.jpg)
 
 ---
 
-YouQu(有趣)是统信公司(Deepin/UOS)开源的一个用于 Linux 操作系统的自动化测试框架，支持多元化元素定位和断言、用例标签化管理和执行、强大的日志和报告输出等特色功能，同时完美兼容 X11、Wayland 显示协议，环境部署简单，操作易上手。🔥
+YouQu（有趣）是统信公司（Deepin/UOS）开源的一个 Linux 操作系统的自动化测试框架，支持多元化元素定位和断言、用例标签化管理和执行、强大的日志和报告输出等特色功能，同时完美兼容 X11、Wayland 显示协议，环境部署简单，操作易上手。🔥
 
 ## YouQu（有趣）能做什么
 

@@ -192,13 +192,13 @@ class _GlobalConfig:
 
     # [git]
     git_cfg = GetCfg(GLOBAL_CONFIG_FILE_PATH, "git")
-    GIT_URL = log_cli.get("GIT_URL", default="")
-    GTI_USER = log_cli.get("GTI_USER", default="")
-    GIT_PASSWORD = log_cli.get("GIT_PASSWORD", default="")
-    BRANCH = log_cli.get("BRANCH", default="")
-    DEPTH = log_cli.get("DEPTH", default="")
-    START_DATE = log_cli.get("STAR_TDATE", default="")
-    END_DATE = log_cli.get("END_DATE", default="")
+    GIT_URL = git_cfg.get("GIT_URL", default="")
+    GIT_USER = git_cfg.get("GTI_USER", default="")
+    GIT_PASSWORD = git_cfg.get("GIT_PASSWORD", default="")
+    BRANCH = git_cfg.get("BRANCH", default="")
+    DEPTH = git_cfg.get("DEPTH", default="")
+    START_DATE = git_cfg.get("START_DATE", default="")
+    END_DATE = git_cfg.get("END_DATE", default="")
 
     # ====================== 动态获取变量 ======================
     VERSION = ""
