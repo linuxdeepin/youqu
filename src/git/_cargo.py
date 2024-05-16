@@ -1,4 +1,4 @@
-def git_control(self, parser=None, sub_parser_git=None):
+def git_control(parser=None, sub_parser_git=None):
     sub_parser_git.add_argument(
         "-a",
         "--app",
@@ -14,16 +14,17 @@ def git_control(self, parser=None, sub_parser_git=None):
     sub_parser_git.add_argument("-e", "--enddate", default="", help="统计结束时间")
     args = parser.parse_args()
     from src.rtk._base import Args
+    from setting import conf
 
     git_kwargs = {
-        Args.app_name.value: args.app or self.default_app,
-        Args.url.value: args.url or self.default_url,
-        Args.user.value: args.user or self.default_git_user,
-        Args.password.value: args.password or self.default_git_password,
-        Args.branch.value: args.branch or self.default_branch,
-        Args.depth.value: args.depth or self.default_depth,
-        Args.startdate.value: args.startdate or self.default_startdate,
-        Args.enddate.value: args.enddate or self.default_enddate,
+        Args.app_name.value: args.app or conf.APP_NAME,
+        Args.url.value: args.url or conf.GIT_URL,
+        Args.user.value: args.user or conf.GIT_USER,
+        Args.password.value: args.password or conf.GIT_PASSWORD,
+        Args.branch.value: args.branch_or_tag or conf.BRANCH,
+        Args.depth.value: args.depth or conf.DEPTH,
+        Args.startdate.value: args.startdate or conf.START_DATE,
+        Args.enddate.value: args.enddate or conf.END_DATE,
     }
     from src.git.check import check_git_installed
 
@@ -39,7 +40,7 @@ def git_control(self, parser=None, sub_parser_git=None):
             from src.git.clone import clone as git_clone
         check_git_installed()
         git_clone(**git_kwargs)
-    if all(
+    elif all(
         [
             git_kwargs.get(Args.app_name.value),
             git_kwargs.get(Args.startdate.value),
@@ -49,3 +50,6 @@ def git_control(self, parser=None, sub_parser_git=None):
 
         check_git_installed()
         CodeStatistics(**git_kwargs).codex()
+
+    else:
+        print("参数异常")
