@@ -40,16 +40,13 @@ def git_control(parser=None, sub_parser_git=None):
             from src.git.clone import clone as git_clone
         check_git_installed()
         git_clone(**git_kwargs)
-    elif all(
-        [
-            git_kwargs.get(Args.app_name.value),
-            git_kwargs.get(Args.startdate.value),
-        ]
-    ):
-        from src.git.code_statistics import CodeStatistics
+    if git_kwargs.get(Args.app_name.value):
+        if git_kwargs.get(Args.startdate.value):
+            from src.git.code_statistics import CodeStatistics
 
-        check_git_installed()
-        CodeStatistics(**git_kwargs).codex()
-
+            check_git_installed()
+            CodeStatistics(**git_kwargs).codex()
+        else:
+            print("-s/--startdate 参数未传入")
     else:
-        print("参数异常")
+        print("-a/--app 参数未传入")

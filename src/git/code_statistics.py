@@ -11,6 +11,7 @@ from setting import conf
 from src.depends.colorama import Fore
 from src.git.commit import Commit
 from src.rtk._base import transform_app_name
+from src import logger
 
 
 class CodeStatistics(Commit):
@@ -61,8 +62,8 @@ class CodeStatistics(Commit):
         for filepath in git_files:
             filename = filepath.split("/")[-1]
             dif_texts = os.popen(f"cd {self.repo_path}/;git show {commit_id} -- {filepath}").read()
-            print(Fore.GREEN, "=" * 100, Fore.RESET)
-            print(filepath, "\n", dif_texts)
+            logger.info(Fore.GREEN + ("=" * 100) + Fore.RESET)
+            logger.info(filepath + "\n" + dif_texts)
             dif_lines = dif_texts.splitlines()
             # case
             if filename.startswith("test_"):
@@ -157,8 +158,8 @@ class CodeStatistics(Commit):
             f.write(json.dumps(res, ensure_ascii=False, indent=4, default=None))
 
         with open(result_file, "r", encoding="utf-8") as f:
-            print(f.read())
-        print(f"{Fore.GREEN}数据结果{'详细' if detail else '汇总'}报告：{result_file}{Fore.RESET}")
+            logger.info(f.read())
+        logger.info(f"{Fore.GREEN}数据结果{'详细' if detail else '汇总'}报告：{result_file}{Fore.RESET}")
 
     def codex(self):
         results = None
@@ -193,7 +194,7 @@ class CodeStatistics(Commit):
 
         if results is None:
             raise ValueError()
-        print(Fore.GREEN, "=" * 100, Fore.RESET)
+        logger.info(Fore.GREEN +  ("=" * 100) + Fore.RESET)
         self.write_result(results)
         if results_detail:
             self.write_result(results_detail, detail=True)

@@ -19,13 +19,15 @@
 
 ---
 
-**Deepin 社区：** <a href="https://github.com/linuxdeepin/youqu" target="_blank">GitHub</a> | <a href="https://gitee.com/deepin-community/youqu" target="_blank">Gitee</a>
+**深度社区：<a href="https://github.com/linuxdeepin/youqu" target="_blank">linuxdeepin</a> | <a href="https://gitee.com/deepin-community/youqu" target="_blank">deepin-community</a>**
 
-**openEuler 社区：** <a href="https://gitee.com/src-openeuler/youqu" target="_blank">Gitee</a>
+**欧拉社区： <a href="https://gitee.com/src-openeuler/youqu" target="_blank">src-openeuler</a>**
 
-**官方文档：** <a href="https://youqu.uniontech.com" target="_blank">https://youqu.uniontech.com</a>
+**官方文档： <a href="https://youqu.uniontech.com" target="_blank">https://youqu.uniontech.com</a>**
 
 **欢迎加入 [YouQu官方兴趣小组](https://youqu.uniontech.com/SIG.html)**
+
+
 
 ---
 
@@ -67,6 +69,8 @@ $ sudo pip3 install youqu
 ```shell
 $ youqu-startproject my_project
 ```
+
+注意：所有命令不要以 `root` 用户执行！
 
 如果 `youqu-startproject` 后面不加参数，默认的项目名称为：`youqu` ；
 
