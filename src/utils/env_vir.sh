@@ -187,7 +187,7 @@ echo "${python_virtualenv_path}"
 pipenv run pip list
 system_env
 
-echo 'export PIPENV_VERBOSITY=-1;pipenv run python "$@"' | sudo tee /usr/bin/youqu > /dev/null 2>&1
+echo 'pipenv run python "$@"' | sudo tee /usr/bin/youqu > /dev/null 2>&1
 echo "pipenv shell" | sudo tee /usr/bin/youqu-shell > /dev/null 2>&1
 echo "pipenv --rm" | sudo tee /usr/bin/youqu-rm > /dev/null 2>&1
 sudo chmod +x /usr/bin/youqu

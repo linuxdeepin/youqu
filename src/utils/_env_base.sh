@@ -65,13 +65,13 @@ system_env(){
     sudo sed -i "s/#   StrictHostKeyChecking ask/   StrictHostKeyChecking no/g" /etc/ssh/ssh_config  > /dev/null 2>&1
     cat $HOME/.bashrc | grep 'export DISPLAY=":0"' > /dev/null 2>&1
     if [ $? -ne 0 ]; then
+         echo 'export PIPENV_VERBOSITY=-1' >> $HOME/.bashrc
          echo 'export DISPLAY=":0"' >> $HOME/.bashrc
          echo 'export QT_QPA_PLATFORM=' >> $HOME/.bashrc
          echo 'export QT_ACCESSIBILITY=1' >> $HOME/.bashrc
          echo 'export QT_LINUX_ACCESSIBILITY_ALWAYS_ON=1' >> $HOME/.bashrc
     fi
     source $HOME/.bashrc
-    sudo rm -rf /usr/local/lib/python${PYTHON_VERSION}/dist-packages/*.pth
     echo "cd ${ROOT_DIR}/src/depends/sniff/;python3 sniff" | sudo tee /usr/bin/sniff > /dev/null 2>&1
     sudo chmod +x /usr/bin/sniff
 

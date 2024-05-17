@@ -27,13 +27,11 @@
 
 **欢迎加入 [YouQu官方兴趣小组](https://youqu.uniontech.com/SIG.html)**
 
-
-
 ---
 
 YouQu（有趣）是统信公司（Deepin/UOS）开源的一个 Linux 操作系统的自动化测试框架，支持多元化元素定位和断言、用例标签化管理和执行、强大的日志和报告输出等特色功能，同时完美兼容 X11、Wayland 显示协议，环境部署简单，操作易上手。🔥
 
-## YouQu（有趣）能做什么
+<h2 style="color: #0969DA;font-family: 黑体;">YouQu（有趣）能做什么</h2>
 
 - [x] 💻 Linux 桌面应用 UI 自动化测试
 - [x] 🌏 Web UI 自动化测试
@@ -43,7 +41,7 @@ YouQu（有趣）是统信公司（Deepin/UOS）开源的一个 Linux 操作系�
 - [ ] ⏲️ Linux 桌面应用性能自动化测试
 - [ ]    💥 Fuzzy Desktop 桌面模糊测试
 
-## 安装
+<h2 style="color: #0969DA;font-family: 黑体;">安装</h2>
 
 从 PyPI 安装:
 
@@ -53,7 +51,7 @@ $ sudo pip3 install youqu
 ```
 
 <details> 
-<summary>不加 sudo ?</summary> 
+<summary style="color: #FF9933">不加 sudo ?</summary> 
 <pre>
 其实不加 sudo 也是可以的：<br>
   pip3 install youqu<br>
@@ -62,7 +60,7 @@ $ sudo pip3 install youqu
 </pre>
 </details>
 
-## 创建项目
+<h2 style="color: #0969DA;font-family: 黑体;">创建项目</h2>
 
 您可以在任意目录下，使用 `youqu-startproject` 命令创建一个项目：
 
@@ -76,7 +74,7 @@ $ youqu-startproject my_project
 
 ![](./docs/assets/install.gif)
 
-## 安装依赖
+<h2 style="color: #0969DA;font-family: 黑体;">安装依赖</h2>
 
 安装部署 YouQu 执行所需环境： 
 
@@ -85,7 +83,7 @@ $ cd my_project
 $ bash env.sh
 ```
 
-## 创建 APP 工程
+<h2 style="color: #0969DA;font-family: 黑体;">创建 APP 工程</h2>
 
 使用 `startapp` 命令自动创建 APP 工程：
 
@@ -110,21 +108,20 @@ my_project
 
 `apps` 目录下可以存在任意多个 APP 工程。
 
-运行
--------
+<h2 style="color: #0969DA;font-family: 黑体;">运行</h2>
 
-### 1. 执行管理器
+<h3 style="color: #0969DA;font-family: 黑体;">1. 执行管理器</h3>
 
 在项目根目录下有一个 `manage.py` ，它是一个执行器入口，提供了本地执行、远程执行等的功能。
 
-### 2. 本地执行
+<h3 style="color: #0969DA;font-family: 黑体;">2. 本地执行</h3>
 
 
 ```shell
 $ youqu manage.py run
 ```
 
-#### 2.1. 命令行参数
+<h4 style="color: #0969DA;font-family: 黑体;">2.1. 命令行参数</h4>
 
 在一些 CI 环境下使用命令行参数会更加方便：
 
@@ -135,13 +132,13 @@ $ youqu manage.py run -a apps/autotest_deepin_some -k "xxx" -t "yyy"
 
 更多用法可以使用 `-h` 或 `--help` 查看。
 
-#### 2.2. 配置文件
+<h4 style="color: #0969DA;font-family: 黑体;">2.2. 配置文件</h4>
 
 通过配置文件配置参数
 
 在配置文件 [setting/globalconfig.ini](https://github.com/linuxdeepin/youqu/blob/master/setting/globalconfig.ini)  里面支持配置对执行的一些参数进行配置。
 
-### 3. 远程执行
+<h3 style="color: #0969DA;font-family: 黑体;">3. 远程执行</h3>
 
 远程执行就是用本地作为服务端控制远程机器执行，远程机器执行的用例相同。
 
@@ -152,11 +149,10 @@ $ youqu manage.py run -a apps/autotest_deepin_some -k "xxx" -t "yyy"
 $ youqu manage.py remote
 ```
 
-## 贡献
+<h2 style="color: #0969DA;font-family: 黑体;">贡献</h2>
 
 [贡献文档](https://github.com/linuxdeepin/youqu/blob/master/CONTRIBUTING.md) 
 
-
-## 开源许可证
+<h2 style="color: #0969DA;font-family: 黑体;">开源许可证</h2>
 
 YouQu 在 [GPL-2.0](https://github.com/linuxdeepin/youqu/blob/master/LICENSE) 下发布。
