@@ -55,6 +55,7 @@ $ sudo pip3 install youqu
 <details> 
     <summary><b>不加 sudo ?</b></summary> 
 
+-----------------------
 
 不加 sudo 也可以：
 
@@ -64,13 +65,15 @@ pip3 install youqu
 
 但可能出现 `youqu-startproject` 命令无法使用；
 
-这是因为不加 sudo 时，`youqu-startproject` 命令会生成在 `$HOME/.local/bin` 下，
+这是因为不加 `sudo` 时，`youqu-startproject` 命令会生成在 `$HOME/.local/bin` 下，
 
 而此路径可能不在环境变量（`PATH`）中，因此您需要添加环境变量：
 
 ```shell
 export PATH=$PATH:$HOME/.local/lib
 ```
+
+-----------------------
 
 </details>
 
@@ -167,7 +170,7 @@ $ youqu manage.py remote
 
 ## [贡献]()
 
-[贡献文档](https://github.com/linuxdeepin/youqu/blob/master/CONTRIBUTING.md) 
+[贡献文档](https://youqu.uniontech.com/CONTRIBUTING.html) 
 
 
 ## [开源许可证]()
