@@ -54,20 +54,22 @@ $ sudo pip3 install youqu
 
 <details> 
     <summary><b>不加 sudo ?</b></summary> 
-不加 sudo 也是可以的：
+
+
+不加 sudo 也可以：
 
 ```shell
 pip3 install youqu
 ```
 
-但某些情况下可能出现 youqu-startproject 命令无法使用；
+但可能出现 `youqu-startproject` 命令无法使用；
 
-这是因为不加 sudo 时，安装包路径是在 $HOME/.local/lib/pythonX.X/site-packages；
+这是因为不加 sudo 时，`youqu-startproject` 命令会生成在 `$HOME/.local/bin` 下，
 
-而此路径可能不在环境变量（PATH）中，您可以通过添加环境变量的方式使用 youqu-startproject 命令：
+而此路径可能不在环境变量（`PATH`）中，因此您需要添加环境变量：
 
 ```shell
-export PATH=$PATH:$HOME/.local/lib/pythonX.X/site-packages
+export PATH=$PATH:$HOME/.local/lib
 ```
 
 </details>
@@ -111,7 +113,7 @@ $ youqu manage.py startapp autotest_deepin_some
 ```shell
 my_project
 ├── apps
-│   ├── autotest_deepin_some  # <-- APP 工程
+│   ├── autotest_deepin_some  # <-- APP工程
 ...     ├── ...
 ```
 
