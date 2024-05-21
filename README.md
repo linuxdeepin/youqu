@@ -21,13 +21,11 @@
 
 **深度社区：<a href="https://github.com/linuxdeepin/youqu" target="_blank">linuxdeepin</a> | <a href="https://gitee.com/deepin-community/youqu" target="_blank">deepin-community</a>**
 
-**欧拉社区： <a href="https://gitee.com/src-openeuler/youqu" target="_blank">src-openeuler</a>**
+**欧拉社区：<a href="https://gitee.com/src-openeuler/youqu" target="_blank">src-openeuler</a>**
 
-**官方文档： <a href="https://youqu.uniontech.com" target="_blank">https://youqu.uniontech.com</a>**
+**官方文档：<a href="https://youqu.uniontech.com" target="_blank">https://youqu.uniontech.com</a>**
 
 **欢迎加入 [YouQu官方兴趣小组](https://youqu.uniontech.com/SIG.html)**
-
-
 
 ---
 
@@ -99,6 +97,9 @@ $ youqu-startproject my_project
 ```shell
 $ cd my_project
 $ bash env.sh
+# 使用的默认密码是 1；
+# 您可以使用 -p 选项传入密码：bash env.sh -p ${my_password}；
+# 也可以修改配置文件 setting/globalconfig.ini 里面的 PASSWORD 配置项；
 ```
 
 ## [创建 APP 工程]()
@@ -120,7 +121,7 @@ my_project
 ...     ├── ...
 ```
 
-在你的远程 Git 仓库中，只需要保存 APP 工程这部分代码即可。
+**在你的远程 Git 仓库中，只需要保存 APP 工程这部分代码即可。**
 
 `autotest_deepin_some` 是你的  APP 工程名称，在此基础上，你可以快速的开始你的 AT 项目，更重要的是确保创建工程的规范性。
 
