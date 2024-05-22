@@ -9,6 +9,7 @@
 import json
 import re
 import sys
+from collections import Counter
 from os import chdir
 from os import environ
 from os import listdir
@@ -49,42 +50,42 @@ class LocalRunner:
     __author__ = "Mikigo <huangmingqiang@uniontech.com>"
 
     def __init__(
-        self,
-        app_name=None,
-        keywords=None,
-        tags=None,
-        report_formats=None,
-        max_fail=None,
-        reruns=None,
-        record_failed_case=None,
-        clean=None,
-        log_level=None,
-        timeout=None,
-        debug=False,
-        noskip=None,
-        ifixed=None,
-        send_pms=None,
-        task_id=None,
-        suite_id=None,
-        trigger=None,
-        resolution=None,
-        case_file=None,
-        deb_path=None,
-        pms_user=None,
-        pms_password=None,
-        pms_info_file=None,
-        top=None,
-        lastfailed=None,
-        duringfail=None,
-        repeat=None,
-        project_name=None,
-        build_location=None,
-        line=None,
-        collection_only=None,
-        autostart=None,
-        export_csv_file=None,
-        slaves=None,
-        **kwargs,
+            self,
+            app_name=None,
+            keywords=None,
+            tags=None,
+            report_formats=None,
+            max_fail=None,
+            reruns=None,
+            record_failed_case=None,
+            clean=None,
+            log_level=None,
+            timeout=None,
+            debug=False,
+            noskip=None,
+            ifixed=None,
+            send_pms=None,
+            task_id=None,
+            suite_id=None,
+            trigger=None,
+            resolution=None,
+            case_file=None,
+            deb_path=None,
+            pms_user=None,
+            pms_password=None,
+            pms_info_file=None,
+            top=None,
+            lastfailed=None,
+            duringfail=None,
+            repeat=None,
+            project_name=None,
+            build_location=None,
+            line=None,
+            collection_only=None,
+            autostart=None,
+            export_csv_file=None,
+            slaves=None,
+            **kwargs,
     ):
         logger("INFO")
         try:
@@ -282,7 +283,7 @@ class LocalRunner:
             report_formats = [i.strip() for i in report_formats.split(",")]
             # allure
             if (GlobalConfig.ReportFormat.ALLURE in report_formats) and (
-                GlobalConfig.ReportFormat.JSON not in report_formats
+                    GlobalConfig.ReportFormat.JSON not in report_formats
             ):
                 self.make_allure_report(cmd, GlobalConfig.ReportFormat.ALLURE, proj_path)
             # xml
@@ -296,13 +297,13 @@ class LocalRunner:
                 )
             # json
             if (GlobalConfig.ReportFormat.ALLURE not in report_formats) and (
-                GlobalConfig.ReportFormat.JSON in report_formats
+                    GlobalConfig.ReportFormat.JSON in report_formats
             ):
                 self.make_allure_report(cmd, GlobalConfig.ReportFormat.ALLURE, proj_path)
                 self.make_dir(join(GlobalConfig.REPORT_PATH, GlobalConfig.ReportFormat.JSON))
             # allure json
             if (GlobalConfig.ReportFormat.ALLURE in report_formats) and (
-                GlobalConfig.ReportFormat.JSON in report_formats
+                    GlobalConfig.ReportFormat.JSON in report_formats
             ):
                 self.make_allure_report(cmd, GlobalConfig.ReportFormat.ALLURE, proj_path)
                 self.make_dir(join(GlobalConfig.REPORT_PATH, GlobalConfig.ReportFormat.JSON))
@@ -358,6 +359,24 @@ class LocalRunner:
                 build_location=self.build_location,
                 line=self.line,
             )
+
+        # new
+        json_report_path = f"{GlobalConfig.ROOT_DIR}/{GlobalConfig.JSON_REPORT_PATH}/json"
+        with open(f"{json_report_path}/detail_report.json", "r", encoding="utf-8") as _f:
+            detail_report = json.load(_f)
+        res = Counter([detail_report.get(i).get("result") for i in detail_report])
+        with open(f"{json_report_path}/summarize.json", "r", encoding="utf-8") as _f:
+            _f.write(json.dumps(
+                {
+                    "total": sum(res.values()),
+                    "pass": res.get("pass", 0),
+                    "fail": res.get("fail", 0),
+                    "skip": res.get("skip", 0),
+                },
+                indent=2,
+                ensure_ascii=False
+            ))
+
         allure_report_path = join(GlobalConfig.ALLURE_REPORT_PATH, GlobalConfig.ReportFormat.ALLURE)
         allure_html_report_path = join(GlobalConfig.ALLURE_REPORT_PATH, "allure_html")
 
@@ -368,7 +387,7 @@ class LocalRunner:
                 i.strip() for i in self.default.get(Args.report_formats.value).split(",")
             ]
             if (GlobalConfig.ReportFormat.ALLURE in report_formats) or (
-                GlobalConfig.ReportFormat.JSON in report_formats
+                    GlobalConfig.ReportFormat.JSON in report_formats
             ):
                 if exists(allure_html_report_path):
                     system(f"rm -rf {allure_html_report_path}")

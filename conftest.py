@@ -764,6 +764,12 @@ def pytest_sessionfinish(session):
         if execute:
             with open(f"{GlobalConfig.ROOT_DIR}/ci_result.json", "w", encoding="utf-8") as _f:
                 _f.write(dumps(execute, indent=2, ensure_ascii=False))
+            # new
+            json_report_path = f"{GlobalConfig.ROOT_DIR}/{GlobalConfig.JSON_REPORT_PATH}/json"
+            if not exists(json_report_path):
+                makedirs(json_report_path)
+            with open(f"{json_report_path}/detail_report.json", "w", encoding="utf-8") as _f:
+                _f.write(dumps(execute, indent=2, ensure_ascii=False))
 
     if session.config.option.pms_user and session.config.option.pms_password:
 

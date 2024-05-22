@@ -6,7 +6,6 @@ from enum import unique
 class SubCmd(Enum):
     run = "run"
     remote = "remote"
-    playbook = "playbook"
     pmsctl = "pmsctl"
     csvctl = "csvctl"
     startapp = "startapp"

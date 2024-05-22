@@ -10,7 +10,9 @@ import json
 import os
 import re
 import sys
-from configparser import ConfigParser
+from concurrent.futures import ALL_COMPLETED
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import wait
 from itertools import cycle
 from os import listdir
 from os import makedirs
@@ -18,9 +20,6 @@ from os import popen
 from os import system
 from os.path import exists
 from os.path import splitext
-from concurrent.futures import ThreadPoolExecutor
-from concurrent.futures import wait
-from concurrent.futures import ALL_COMPLETED
 from time import sleep
 from time import strftime
 
@@ -50,9 +49,9 @@ class RemoteRunner:
     __author__ = "Mikigo <huangmingqiang@uniontech.com>"
 
     def __init__(
-        self,
-        remote_kwargs: dict = None,
-        local_kwargs: dict = None,
+            self,
+            remote_kwargs: dict = None,
+            local_kwargs: dict = None,
     ):
         self.remote_kwargs = remote_kwargs
         self.local_kwargs = local_kwargs
@@ -67,7 +66,7 @@ class RemoteRunner:
 
         self._default = {
             Args.client_password.value: remote_kwargs.get("client_password")
-            or self.client_password,
+                                        or self.client_password,
         }
 
         client_dict = {}
@@ -103,16 +102,20 @@ class RemoteRunner:
         self.server_project_path = "/".join(GlobalConfig.ROOT_DIR.split("/")[3:])
         self.client_report_path = lambda x: f"/home/{x}/{self.server_project_path}/report"
         self.client_allure_report_path = (
-            lambda x: f"/home/{x}/{self.server_project_path}/{GlobalConfig.report_cfg.get('ALLURE_REPORT_PATH', default='report')}/allure".replace(
+            lambda
+                x: f"/home/{x}/{self.server_project_path}/{GlobalConfig.report_cfg.get('ALLURE_REPORT_PATH', default='report')}/allure".replace(
                 "//", "/"
             )
         )
         self.client_pms_json_report_path = (
             lambda x, y: f"/home/{x}/{self.server_project_path}/report/pms_{y}"
         )
-
+        self.click_json_report_path = (
+            lambda x: f"/home/{x}/{self.server_project_path}/report/json"
+        )
         self.client_xml_report_path = (
-            lambda x: f"/home/{x}/{self.server_project_path}/{GlobalConfig.report_cfg.get('XML_REPORT_PATH', default='report')}/xml".replace(
+            lambda
+                x: f"/home/{x}/{self.server_project_path}/{GlobalConfig.report_cfg.get('XML_REPORT_PATH', default='report')}/xml".replace(
                 "//", "/"
             )
         )
@@ -312,12 +315,12 @@ class RemoteRunner:
         rr_args = {k: v for k, v in self.local_kwargs.items() if v}
         lr_args.update(rr_args)
         if all(
-            [
-                lr_args.get(Args.task_id.value),
-                lr_args.get(Args.pms_user.value),
-                lr_args.get(Args.pms_password.value),
-                lr_args.get(Args.send_pms.value) == "finish",
-            ]
+                [
+                    lr_args.get(Args.task_id.value),
+                    lr_args.get(Args.pms_user.value),
+                    lr_args.get(Args.pms_password.value),
+                    lr_args.get(Args.send_pms.value) == "finish",
+                ]
         ):
             lr_args[Args.trigger.value] = "hand"
             self.collection_json = True
@@ -412,20 +415,35 @@ class RemoteRunner:
         :param password:
         :return:
         """
-        server_allure_path = f"{GlobalConfig.REPORT_PATH}/allure/{self.strf_time}_ip{_ip}_{self.default.get(Args.app_name.value)}"
-        self.make_dir(server_allure_path)
-        system(
-            f"{self.scp % password} {user}@{_ip}:{self.client_allure_report_path(user)}/* {server_allure_path}/ {self.empty}"
-        )
-        generate_allure_html = f"{server_allure_path}/html"
+        if self.default.get(Args.parallel.value):
+            self.parallel_server_allure_path = f"{GlobalConfig.REPORT_PATH}/allure/{self.strf_time}_{self.default.get(Args.app_name.value)}"
+            self.make_dir(self.parallel_server_allure_path)
+            system(
+                f"{self.scp % password} {user}@{_ip}:{self.client_allure_report_path(user)}/* {self.parallel_server_allure_path}/ {self.empty}"
+            )
+        else:
+            server_allure_path = f"{GlobalConfig.REPORT_PATH}/allure/{self.strf_time}_ip{_ip}_{self.default.get(Args.app_name.value)}"
+            self.make_dir(server_allure_path)
+            system(
+                f"{self.scp % password} {user}@{_ip}:{self.client_allure_report_path(user)}/* {server_allure_path}/ {self.empty}"
+            )
+            generate_allure_html = f"{server_allure_path}/html"
+            AllureCustom.gen(server_allure_path, generate_allure_html)
 
-        AllureCustom.gen(server_allure_path, generate_allure_html)
         if self.collection_json:
             server_json_path = f"{GlobalConfig.REPORT_PATH}/pms_{self.server_json_dir_id}/{self.strf_time}_ip{_ip}_{self.default.get(Args.app_name.value)}"
             self.make_dir(server_json_path)
             system(
                 f"{self.scp % password} {user}@{_ip}:{self.client_pms_json_report_path(user, self.server_json_dir_id)}/* {server_json_path}/ {self.empty}"
             )
+        server_detail_json_path = f"{GlobalConfig.REPORT_PATH}/json"
+        self.make_dir(server_detail_json_path)
+        system(
+            f"{self.scp % password} {user}@{_ip}:{self.click_json_report_path(user)}/detail_report.json {server_detail_json_path}/detail_report_{_ip}.json"
+        )
+        system(
+            f"{self.scp % password} {user}@{_ip}:{self.click_json_report_path(user)}/summarize.json {server_detail_json_path}/summarize_{_ip}.json"
+        )
 
     def remote_finish_send_to_pms(self):
         json_path = f"{GlobalConfig.REPORT_PATH}/pms_{self.server_json_dir_id}"
@@ -475,6 +493,24 @@ class RemoteRunner:
 
         if self.collection_json:
             self.remote_finish_send_to_pms()
+        # 分布式执行的情况下需要汇总结果
+        if self.default.get(Args.parallel.value):
+            summarize = {
+                "total": 0,
+                "pass": 0,
+                "fail": 0,
+                "skip": 0,
+            }
+            for root, dirs, files in os.walk(f"{GlobalConfig.REPORT_PATH}/json/"):
+                for file in files:
+                    if file.startswith("summarize_") and file.endswith(".json"):
+                        with open(f"{root}/{file}", "r", encoding="utf-8") as f:
+                            res = json.load(f)
+                        for i in summarize.keys():
+                            summarize[i] += res.get(i)
+
+            generate_allure_html = f"{self.parallel_server_allure_path}/html"
+            AllureCustom.gen(self.parallel_server_allure_path, generate_allure_html)
 
     def parallel_run(self, client_list):
         """

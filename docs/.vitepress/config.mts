@@ -143,7 +143,7 @@ export default withMermaid(
                     },
                     {
                         text: "HTTP接口自动化测试",
-                        collapsed: true,
+                        collapsed: false,
                         items: [
                             {text: "初始化项目", link: "/实践/HTTP接口自动化测试/初始化项目"},
                             {text: "创建APP工程", link: "/实践/HTTP接口自动化测试/创建APP工程"},
