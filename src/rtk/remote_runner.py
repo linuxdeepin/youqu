@@ -501,13 +501,12 @@ class RemoteRunner:
                 "fail": 0,
                 "skip": 0,
             }
-            for root, dirs, files in os.walk(f"{GlobalConfig.REPORT_PATH}/json/"):
-                for file in files:
-                    if file.startswith("summarize_") and file.endswith(".json"):
-                        with open(f"{root}/{file}", "r", encoding="utf-8") as f:
-                            res = json.load(f)
-                        for i in summarize.keys():
-                            summarize[i] += res.get(i)
+            for file in os.listdir(f"{GlobalConfig.REPORT_PATH}/json/"):
+                if file.startswith("summarize_") and file.endswith(".json"):
+                    with open(f"{GlobalConfig.REPORT_PATH}/json/{file}", "r", encoding="utf-8") as f:
+                        res = json.load(f)
+                    for i in summarize.keys():
+                        summarize[i] += res.get(i)
 
             generate_allure_html = f"{self.parallel_server_allure_path}/html"
             AllureCustom.gen(self.parallel_server_allure_path, generate_allure_html)
