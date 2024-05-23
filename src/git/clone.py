@@ -13,9 +13,9 @@ def git_config():
 
 
 def sslclone(
-    url: str = None,
-    user: str = None,
-    password: str = None,
+    git_url: str = None,
+    git_user: str = None,
+    git_password: str = None,
     branch: str = None,
     path_to: str = None,
     depth: [str, int] = None,
@@ -29,8 +29,8 @@ def sslclone(
     clone_cmd = (
         f"cd {conf.ROOT_DIR}/src/utils && "
         f"bash sslclone.sh {conf.ROOT_DIR}/{path_to} "
-        f"{url or conf.GIT_URL} "
-        f"{user or conf.GTI_USER} {password or conf.GIT_PASSWORD} "
+        f"{git_url or conf.GIT_URL} "
+        f"{git_user or conf.GTI_USER} {git_password or conf.GIT_PASSWORD} "
         f"{branch or ''} {depth or ''}"
     )
     print(clone_cmd)
@@ -39,7 +39,13 @@ def sslclone(
     sleep(2)
 
 
-def clone(url: str = None, branch: str = "", path_to: str = None, depth: [str, int] = "", **kwargs):
+def clone(
+        git_url: str = None,
+        branch: str = "",
+        path_to: str = None,
+        depth: [str, int] = "",
+        **kwargs
+):
     branch = branch or conf.BRANCH
     depth = depth or conf.DEPTH
     if path_to is None:
@@ -47,7 +53,7 @@ def clone(url: str = None, branch: str = "", path_to: str = None, depth: [str, i
     git_config()
     clone_cmd = (
         f"cd {conf.ROOT_DIR}/{path_to} && git clone "
-        f"{url or conf.GIT_URL} "
+        f"{git_url or conf.GIT_URL} "
         f"{f'-b {branch}' if branch else ''} {f'--depth {depth}' if depth else ''}"
     )
     print(clone_cmd)

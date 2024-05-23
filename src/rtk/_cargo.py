@@ -109,14 +109,17 @@ def local_runner(parser, sub_parser_run, cmd_args=None):
         Args.slaves.value: args.slaves,
     }
     if local_kwargs.get(Args.autostart.value) or GlobalConfig.AUTOSTART:
-        import letmego
+        try:
+            import letmego
 
-        letmego.conf.setting.PASSWORD = GlobalConfig.PASSWORD
-        letmego.register_autostart_service(
-            user=GlobalConfig.USERNAME,
-            working_directory=GlobalConfig.ROOT_DIR,
-            cmd=f"pipenv run python manage.py {' '.join(cmd_args)}",
-        )
+            letmego.conf.setting.PASSWORD = GlobalConfig.PASSWORD
+            letmego.register_autostart_service(
+                user=GlobalConfig.USERNAME,
+                working_directory=GlobalConfig.ROOT_DIR,
+                cmd=f"pipenv run python manage.py {' '.join(cmd_args)}",
+            )
+        except ModuleNotFoundError:
+            ...
     return local_kwargs, args
 
 
@@ -151,6 +154,21 @@ def remote_runner(parser, sub_parser_remote):
         "-cp", "--client_password", default="", help="测试机密码（全局）"
     )
     sub_parser_remote.add_argument(
+        "--git_url", default="", help="git仓库地址"
+    )
+    sub_parser_remote.add_argument(
+        "--git_user", default="", help="git仓库用户名"
+    )
+    sub_parser_remote.add_argument(
+        "--git_password", default="", help="git仓库密码"
+    )
+    sub_parser_remote.add_argument(
+        "-b", "--branch_or_tag", default="", help="分支或Tag"
+    )
+    sub_parser_remote.add_argument(
+        "-d", "--depth", default="", help="git仓库克隆深度"
+    )
+    sub_parser_remote.add_argument(
         "-y",
         "--parallel",
         default="",
@@ -168,12 +186,31 @@ def remote_runner(parser, sub_parser_remote):
         Args.send_code.value: args.send_code,
         Args.build_env.value: args.build_env,
         Args.client_password.value: args.client_password,
+        Args.git_url.value: args.git_url or GlobalConfig.GIT_URL,
+        Args.git_user.value: args.git_user or GlobalConfig.GIT_USER,
+        Args.git_password.value: args.git_password or GlobalConfig.GIT_PASSWORD,
+        Args.branch.value: args.branch_or_tag or GlobalConfig.BRANCH,
+        Args.depth.value: args.depth or GlobalConfig.DEPTH,
         Args.parallel.value: args.parallel,
     }
     _remote_kwargs = {
         "remote_kwargs": remote_kwargs,
         "local_kwargs": local_kwargs,
     }
+
+    if remote_kwargs.get(Args.git_url.value):
+        if all(
+                [
+                    remote_kwargs.get(Args.git_user.value),
+                    remote_kwargs.get(Args.git_password.value),
+                ]
+        ):
+            from src.git.clone import sslclone as git_clone
+        else:
+            from src.git.clone import clone as git_clone
+        from src.git.check import check_git_installed
+        check_git_installed()
+        git_clone(**remote_kwargs)
     return _remote_kwargs
 
 
@@ -223,53 +260,3 @@ def csv_control(parser=None, sub_parser_csv=None):
             f"需要传递一些有用参数或配置项：{Args.pyid2csv.value} 或 {Args.export_csv_file.value}"
             "，您可以使用 -h 或 --help 查看支持的参数"
         )
-
-
-def playbook_control(parser, sub_parser_playbook):
-    sub_parser_playbook.add_argument("-l", "--url", default="", help="git仓库地址")
-    sub_parser_playbook.add_argument("-u", "--user", default="", help="git仓库用户名")
-    sub_parser_playbook.add_argument("-p", "--password", default="", help="git仓库地密码")
-    sub_parser_playbook.add_argument("-b", "--branch_or_tag", default="", help="分支或Tag")
-    sub_parser_playbook.add_argument("-d", "--depth", default="", help="git仓库克隆深度")
-    sub_parser_playbook.add_argument("-o", "--path_to", default="", help="仓库克隆到路径")
-    sub_parser_playbook.add_argument(
-        "-e", "--execution_mode", default="", choices=["", "run", "remote"], help="执行的模式：run、remote"
-    )
-    sub_parser_playbook.add_argument(
-        "-c",
-        "--clients",
-        default="",
-        help="远程执行, 输入远程机器的机器信息：user@ip:password, 多个机器用'/'连接",
-    )
-    sub_parser_playbook.add_argument(
-        "-s",
-        "--slaves",
-        default="",
-        help="多端交互式控制, 输入远程机器的机器信息：user@ip:password, 多个机器用'/'连接",
-    )
-    sub_parser_playbook.add_argument(
-        "-k", "--keywords", default="", help="需要执行用例的关键词表达式"
-    )
-    sub_parser_playbook.add_argument("-t", "--tags", default="", help="需要执行用例的标签表达式")
-    sub_parser_playbook.add_argument(
-        "-pf", "--pms_case_file_path", default="", help="PMS用例导出文件路径"
-    )
-    args = parser.parse_args()
-    from src.rtk._base import Args
-    from src.rtk.playbook import PlayBook
-
-    playbook_cli_kwargs = {
-        Args.url.value: args.url,
-        Args.user.value: args.user,
-        Args.password.value: args.password,
-        Args.branch.value: args.branch_or_tag,
-        Args.depth.value: args.depth,
-        Args.path_to.value: args.path_to,
-        Args.execution_mode.value: args.execution_mode,
-        Args.clients.value: args.clients,
-        Args.slaves.value: args.slaves,
-        Args.keywords.value: args.keywords,
-        Args.tags.value: args.tags,
-        Args.pms_case_file_path.value: args.pms_case_file_path,
-    }
-    PlayBook(playbook_cli_kwargs)

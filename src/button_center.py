@@ -647,7 +647,7 @@ class ButtonCenter:
             except Exception as exc:
                 raise ApplicationStartError(f"{app_name, exc}") from exc
         else:
-            info = self.wwininfo.window_info().get(self.app_name)
+            info = WaylandWindowInfo().window_info().get(self.app_name)
             if isinstance(info, dict):
                 return info.get("window_id")
             elif isinstance(info, list):

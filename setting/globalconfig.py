@@ -257,7 +257,7 @@ class _GlobalConfig:
     top_cmd = "top -b -d 3 -w 512"
 
     GITHUB_URL = "https://github.com/linuxdeepin/youqu"
-    DOCS_URL = "https://linuxdeepin.github.io/youqu"
+    DOCS_URL = "https://youqu.uniontech.com/"
     PyPI_URL = "https://pypi.org/project/youqu"
 
     LETMEGO_DEBUG = True

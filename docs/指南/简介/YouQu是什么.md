@@ -74,7 +74,7 @@ YouQu（有趣）是统信公司开源的一个用于 Linux 操作系统的自�
 
 - <p style="background: -webkit-linear-gradient(120deg, #bd34fe 30%, #41d1ff);background-clip: text;-webkit-background-clip: text;-webkit-text-fill-color: transparent;"><b>软硬件兼容</b></p>
 
-  完美兼容` Wayland`  和 `X11` 显示协议，硬件兼容 `x86_64`、`aarch64`、`loongarch64`、`sw64`，真正做到一套代码，随处执行。
+  完美兼容 `Wayland` 和 `X11` 显示协议，硬件兼容 `x86_64`、`aarch64`、`loongarch64`、`sw64`，真正做到一套代码，随处执行。
 
 ## 开源许可证
 

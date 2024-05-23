@@ -44,7 +44,7 @@ PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.v
 whitelist="/usr/share/deepin-elf-verify/whitelist"
 pypi_mirror="https://pypi.tuna.tsinghua.edu.cn/simple"
 
-echo "${PASSWORD}" | sudo -S su
+echo "${PASSWORD}" | sudo -S su > /dev/null 2>&1
 
 if [ ! -f "$HOME/.Xauthority" ]; then
         touch $HOME/.Xauthority

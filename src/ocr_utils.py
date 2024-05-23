@@ -89,34 +89,34 @@ class OCRUtils:
         return cls.result
 
     @classmethod
-    def check_xy(cls):
+    def _check_xy(cls):
         if cls.x is None and cls.y is None:
-            raise ValueError("ocr_pro 没有识别到")
+            raise ValueError("ocrx 没有识别到")
 
     @classmethod
     def click(cls):
         from src.mouse_key import MouseKey
-        cls.check_xy()
+        cls._check_xy()
         MouseKey.click(cls.x, cls.y)
         return cls
 
     @classmethod
     def right_click(cls):
         from src.mouse_key import MouseKey
-        cls.check_xy()
+        cls._check_xy()
         MouseKey.right_click(cls.x, cls.y)
         return cls
 
     @classmethod
     def double_click(cls):
         from src.mouse_key import MouseKey
-        cls.check_xy()
+        cls._check_xy()
         MouseKey.double_click(cls.x, cls.y)
         return cls
 
     @classmethod
     def center(cls):
-        cls.check_xy()
+        cls._check_xy()
         return cls.x, cls.y
 
     @classmethod

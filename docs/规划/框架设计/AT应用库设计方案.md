@@ -16,8 +16,11 @@ AT 应用库改造是基于自动化测试基础框架进行用例方法和业�
 
 整体仍然遵循 PO 设计理念，根据业务需要，将文管业务层进行 3 层划分：
 
-应用库架构图（文件管理器）
-	![](https://pic.imgdb.cn/item/64f054c3661c6c8e54ff47db.png)
+::: tip 应用库架构图（文件管理器）
+
+​	![](https://pic.imgdb.cn/item/64f054c3661c6c8e54ff47db.png)
+
+:::
 
 ### 2、目录结构
 
@@ -77,17 +80,22 @@ autotest_dde_file_manager  # 应用仓库
 
     文管界面分为四个区域：标题栏、右边视图区域、左边视图区域、弹窗（设置界面弹窗、保险箱弹窗、删除确认弹窗、及各种网络弹窗）；
 
-	.
+	::: tip 主界面区域划分
 
-	主界面区域划分
-    	![](https://pic.imgdb.cn/item/64f054c3661c6c8e54ff4806.png)
-	???+ note "弹窗区域"
-    	![](https://pic.imgdb.cn/item/64f054c8661c6c8e54ff4d1b.png)
+	​	![](https://pic.imgdb.cn/item/64f054c3661c6c8e54ff4806.png)
+    
+	:::
+    
+    ::: tip	
+    
+    ![](https://pic.imgdb.cn/item/64f054c8661c6c8e54ff4d1b.png)
+    
+    :::
 
 
 - 各个模块只继承基类
 
-    ```python title="标题栏" hl_lines="1 3"
+    ```python{1,3}
     from apps.autotest_dde_file_manager.widget import BaseWidget
     
     class TitleWidget(BaseWidget):
@@ -100,10 +108,10 @@ autotest_dde_file_manager  # 应用仓库
   
 - 不同的定位方案调用不同的定位工具对象。
 
-      ```python
-      self.dog
-      self.ui
-      ```
+  ```python
+  self.dog
+  self.ui
+  ```
 
 - 方法编写
 
@@ -147,7 +155,7 @@ autotest_dde_file_manager  # 应用仓库
 
 - `DfmAssert`  直接在用例里面继承，方便使用断言语句。
 
-    ```python hl_lines="2 4 7"
+    ```python{2,4}
     from apps.dde_file_manager.widget.dfm_widget import DfmWidget
     from public.assert import Assert
     
@@ -161,14 +169,14 @@ autotest_dde_file_manager  # 应用仓库
 
   - 用例里面直接继承，方便在用例里面使用 self 进行断言，更符合断言的使用习惯，用例逻辑上更清楚。
 
-    ```python hl_lines="1 3" title="case/base_case.py"
+    ```python{1,3}
     from apps.autotest_dde_file_manager.dfm_assert import DfmAssert
     
     class BaseCase(DfmAssert):
 		pass
     ```
     
-    ```python hl_lines="1 3 5" title="case/test_xxx_001.py"
+    ```python{1,3}
     from apps.autotest_dde_file_manager.case import BaseCase
     
     class TestFileManager(BaseCase):
@@ -224,7 +232,7 @@ class DfmWidget(TitleWidget, RightViewWidget):
     pass
 ```
 
-```python title="case/test_xxx_002.py"
+```python
 from apps.dde_file_manager.widget import DfmWidget
 from apps.autotest_dde_file_manager.case import BaseCase
 

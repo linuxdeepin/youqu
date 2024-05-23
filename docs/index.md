@@ -130,6 +130,14 @@ const members = [
     ]
   },
   {
+    avatar: 'https://www.github.com/CCrazyPeter.png',
+    name: 'CCrazyPeter',
+    title: 'Developer',
+    links: [
+      { icon: 'github', link: 'https://github.com/CCrazyPeter' },
+    ]
+  },
+  {
     avatar: 'https://www.github.com/rb-union.png',
     name: 'rb-union',
     title: 'Helper',

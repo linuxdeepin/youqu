@@ -58,11 +58,11 @@ class Args(Enum):
     pms2csv = "pms2csv"
     pms_link_csv = "pms_link_csv"
     send2task = "send2task"
-    url = "url"
     startdate = "startdate"
     enddate = "enddate"
-    user = "user"
-    password = "password"
+    git_url = "git_url"
+    git_user = "git_user"
+    git_password = "git_password"
     depth = "depth"
     path_to = "path_to"
     execution_mode = "execution_mode"
@@ -85,11 +85,12 @@ def transform_app_name(app_name):
 
 def collect_result(results):
     res = Counter([results.get(i).get("result") for i in results])
-    total = sum(res.values())
+    _total = sum(res.values())
     skiped = res.get("skip", 0)
+    total = _total - skiped
     passed = res.get("pass", 0)
-    failed = total - skiped - passed
-    pass_rate = f"{round((passed / (total - skiped)) * 100, 2)}%" if passed else "0%"
+    failed = total - passed
+    pass_rate = f"{round((passed / total) * 100, 2)}%" if passed else "0%"
     return total, failed, passed, skiped, pass_rate
 
 
@@ -125,5 +126,6 @@ def write_json(project_name=None, build_location=None, line=None):
     with open(json_res_path, "w+", encoding="utf-8") as _f:
         _f.write(json.dumps(results, indent=2, ensure_ascii=False))
     sleep(1)
+    from src import logger
     with open(json_res_path, "r", encoding="utf-8") as _f:
-        print("CICD数据结果:\n", _f.read())
+        logger.info("CICD数据结果:\n", _f.read())
