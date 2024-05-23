@@ -35,6 +35,7 @@ class Manage:
     def __init__(self):
         from src.plugins.mng import trim
         from src.plugins.mng import help_tip
+        from src.plugins.mng import SubCmd
 
         trim()
         logger(GlobalConfig.LOG_LEVEL)
@@ -45,7 +46,6 @@ class Manage:
             sys.exit(1)
         parser = ArgumentParser(epilog=self.__author__)
         subparsers = parser.add_subparsers(help="子命令")
-        from setting.subcmd import SubCmd
 
         sub_parser_remote = subparsers.add_parser(SubCmd.remote.value)
         sub_parser_run = subparsers.add_parser(SubCmd.run.value)

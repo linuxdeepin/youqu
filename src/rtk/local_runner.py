@@ -32,8 +32,6 @@ al_setting.html_title = GlobalConfig.REPORT_TITLE
 al_setting.report_name = GlobalConfig.REPORT_NAME
 al_setting.report_language = GlobalConfig.REPORT_LANGUAGE
 
-import letmego
-
 from src import logger
 from src.rtk._base import Args, write_json
 from src.requestx import RequestX
@@ -360,11 +358,11 @@ class LocalRunner:
                 line=self.line,
             )
 
-        json_report_path = f"{GlobalConfig.JSON_REPORT_PATH}/json"
+        json_report_path = join(GlobalConfig.JSON_REPORT_PATH, "json")
         with open(f"{json_report_path}/detail_report.json", "r", encoding="utf-8") as _f:
             detail_report = json.load(_f)
         res = Counter([detail_report.get(i).get("result") for i in detail_report])
-        with open(f"{json_report_path}/summarize.json", "r", encoding="utf-8") as _f:
+        with open(f"{json_report_path}/summarize.json", "w", encoding="utf-8") as _f:
             _f.write(json.dumps(
                 {
                     "total": sum(res.values()),
@@ -400,12 +398,15 @@ class LocalRunner:
                         f"{json_report_path}/"
                         f"result_{self.default.get(Args.app_name.value)}_{GlobalConfig.TIME_STRING}_{GlobalConfig.HOST_IP.replace('.', '')}.json"
                     )
-
-        if exists(letmego.conf.setting.RUNNING_MAN_FILE):
-            letmego.unregister_autostart_service()
-            letmego.clean_running_man(
-                copy_to=f"{GlobalConfig.REPORT_PATH}/_running_man_{GlobalConfig.TIME_STRING}.log"
-            )
+        try:
+            import letmego
+            if exists(letmego.conf.setting.RUNNING_MAN_FILE):
+                letmego.unregister_autostart_service()
+                letmego.clean_running_man(
+                    copy_to=f"{GlobalConfig.REPORT_PATH}/_running_man_{GlobalConfig.TIME_STRING}.log"
+                )
+        except ModuleNotFoundError:
+            ...
 
     def install_deb(self):
         logger.info("安装deb包")

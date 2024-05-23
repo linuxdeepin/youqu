@@ -109,14 +109,17 @@ def local_runner(parser, sub_parser_run, cmd_args=None):
         Args.slaves.value: args.slaves,
     }
     if local_kwargs.get(Args.autostart.value) or GlobalConfig.AUTOSTART:
-        import letmego
+        try:
+            import letmego
 
-        letmego.conf.setting.PASSWORD = GlobalConfig.PASSWORD
-        letmego.register_autostart_service(
-            user=GlobalConfig.USERNAME,
-            working_directory=GlobalConfig.ROOT_DIR,
-            cmd=f"pipenv run python manage.py {' '.join(cmd_args)}",
-        )
+            letmego.conf.setting.PASSWORD = GlobalConfig.PASSWORD
+            letmego.register_autostart_service(
+                user=GlobalConfig.USERNAME,
+                working_directory=GlobalConfig.ROOT_DIR,
+                cmd=f"pipenv run python manage.py {' '.join(cmd_args)}",
+            )
+        except ModuleNotFoundError:
+            ...
     return local_kwargs, args
 
 

@@ -25,6 +25,7 @@ from os import remove
 from os import makedirs
 from os import walk
 from os.path import exists
+from os.path import join
 from os.path import splitext
 from enum import Enum
 from time import sleep
@@ -38,16 +39,22 @@ from concurrent.futures import wait
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import ALL_COMPLETED
 
-import letmego
+
 import allure
 import pytest
 from _pytest.mark import Mark
 from _pytest.terminal import TerminalReporter
 from funnylog.conf import setting as log_setting
 
-letmego.conf.setting.PASSWORD = GlobalConfig.PASSWORD
-letmego.conf.setting.RUNNING_MAN_FILE = f"{GlobalConfig.REPORT_PATH}/_running_man.log"
-letmego.conf.setting.DEBUG = GlobalConfig.LETMEGO_DEBUG
+try:
+    import letmego
+
+    HAS_LETMEGO = True
+    letmego.conf.setting.PASSWORD = GlobalConfig.PASSWORD
+    letmego.conf.setting.RUNNING_MAN_FILE = f"{GlobalConfig.REPORT_PATH}/_running_man.log"
+    letmego.conf.setting.DEBUG = GlobalConfig.LETMEGO_DEBUG
+except ModuleNotFoundError:
+    HAS_LETMEGO = False
 
 log_setting.LOG_FILE_PATH = GlobalConfig.REPORT_PATH
 log_setting.CLASS_NAME_STARTSWITH = GlobalConfig.CLASS_NAME_STARTSWITH
@@ -434,8 +441,9 @@ def pytest_collection_modifyitems(session):
             _reruns = None
             if hasattr(session.config.option, "reruns"):
                 _reruns = session.config.option.reruns
-            if letmego.read_testcase_running_status(item, reruns=_reruns):
-                session.items.remove(item)
+            if HAS_LETMEGO:
+                if letmego.read_testcase_running_status(item, reruns=_reruns):
+                    session.items.remove(item)
 
     if (suite_id or task_id) and session.items:
         print("\n即将执行的用例:")
@@ -538,7 +546,7 @@ def pytest_collection_finish(session):
 
 
 def pytest_runtest_setup(item):
-    if hasattr(item, "execution_count"):
+    if HAS_LETMEGO and hasattr(item, "execution_count"):
         letmego.conf.setting.EXECUTION_COUNT = item.execution_count
 
     print()  # 处理首行日志换行的问题
@@ -630,7 +638,7 @@ def pytest_runtest_makereport(item, call):
             # 只要是需要数据回填（无论是自动还是手动）,都需要写json结果.
             write_case_result(item, report)
 
-        if item.config.option.autostart:
+        if HAS_LETMEGO and item.config.option.autostart:
             letmego.write_testcase_running_status(item, report)
     try:
         if item.execution_count >= (int(item.config.option.record_failed_case) + 1):
@@ -760,7 +768,7 @@ def pytest_sessionfinish(session):
                 ):
                     execute[item_name] = default_result
 
-    json_report_path = f"{GlobalConfig.JSON_REPORT_PATH}/json"
+    json_report_path = join(GlobalConfig.JSON_REPORT_PATH, "json")
     if not exists(json_report_path):
         makedirs(json_report_path)
     with open(f"{json_report_path}/detail_report.json", "w", encoding="utf-8") as _f:

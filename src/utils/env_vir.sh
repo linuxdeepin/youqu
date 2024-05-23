@@ -22,7 +22,6 @@ env(){
     deb_array=(
         python3-pip
         python3-tk
-        sshpass
         scrot
         openjdk-11-jdk-headless
         gir1.2-atspi-2.0
@@ -36,7 +35,6 @@ env(){
         ENV_CUT_FLAG="cut"
         deb_array=(
             python3-pip
-            sshpass
             openjdk-11-jdk-headless
         )
     fi
@@ -126,7 +124,6 @@ pip_array=(
     pdocr-rpc
     image-center
     allure-custom
-    letmego
 )
 
 if [ "${ENV_CUT_FLAG}" = "cut" ]; then
@@ -191,9 +188,5 @@ echo "pipenv --rm" | sudo tee /usr/bin/youqu-rm > /dev/null 2>&1
 sudo chmod +x /usr/bin/youqu
 sudo chmod +x /usr/bin/youqu-shell
 sudo chmod +x /usr/bin/youqu-rm
-
-#cp --force ${ROOT_DIR}/src/utils/command_complete.sh ${HOME}/.config/
-#echo "source ${HOME}/.config/command_complete.sh" >> $HOME/.bashrc
-#source $HOME/.bashrc
 
 cd ${ROOT_DIR};youqu manage.py -h
