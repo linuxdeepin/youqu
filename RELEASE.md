@@ -1,17 +1,36 @@
 # 版本更新记录
 
+## 2.6.2（dev）
+
+**New 🌟**
+
+- `JSON` 报告功能优化
+
+  **`run` 模式下：**
+
+  - `/report/json/detail_report.json` 包含每条 `py` 脚本的结果；
+  - `/report/json/summarize.json` 根据 `detail_report.json` 计算的汇总数据；
+
+  **`remote` 模式下：**
+
+  - 收集远程测试机上所有的 `/report/json/${timestr}_remote/detail_report_${IP}.json` ；
+  - 收集远程测试机上所有的 `/report/json/${timestr}_remote/summarize_${IP}.json`；
+  - `parallel` （分布式）模式下自动汇总 `summarize` 数据：`/report/json/${timestr}_remote/summarize.json`；
+
+- `remote` 模式新增参数：`git_url`、`git_user`、`git_password`、`branch`、`depth` 用以控制拉取 git 仓库代码；
+
 ## 2.6.1（2024/05/21）
 
-这个版本中，我们成功在欧拉社区开源 **[src-openeuler](https://gitee.com/src-openeuler/youqu)** ，后续将以 `patch` 的方式持续在欧拉社区进行代码更新，希望欧拉系统上使用到 YouQu 的同学们能给我们反馈使用情况。
+这个版本中，我们成功在欧拉社区开源 **[src-openeuler](https://gitee.com/src-openeuler/youqu)** ，后续将以 `patch` 的方式持续在欧拉社区进行代码更新，希望欧拉系统上使用到 `YouQu` 的同学们能给我们反馈使用情况。
 
-此外，重点对统计 `commit` 功能进行了优化和 `Bug` 修复，此功能目前还处于内部灰度阶段，未来有希望成为 YouQu 的另一个亮点，能自动分析统计每次提交中包含的用例和方法的增删改的数据，数据汇报者统计者的利器。
+此外，重点对统计 `commit` 功能进行了优化和 `Bug` 修复，此功能目前还处于内部灰度阶段，未来有希望成为 `YouQu` 的另一个亮点，能自动分析统计每次提交中包含的用例和方法的增删改的数据，数据汇报者统计者的利器。
 
 **New 🌟**
 
 - 新增 `skipif_not_xxx` 条件跳过逻辑；[PR #68](https://github.com/linuxdeepin/youqu/pull/68) by [@DarkLii](https://github.com/DarkLii)
 - 对生成的 `JSON` 报告的路径、文件名称、报告内容进行了重新规划，将在下一个版本开发并发布；[@mikigo](https://github.com/mikigo)
-- 文档更新：指南/框架必备/执行管理器，新增用例驱动方式章节，用以集中说明 YouQu 支持的驱动方式。[@mikigo](https://github.com/mikigo)
-- YouQu插件image-center更新：支持Windows和MacOS，图片入参支持多种图片格式，并兼容不带文件后缀名入参方式。[@CCrazyPeter](https://github.com/CCrazyPeter)
+- 文档更新：指南/框架必备/执行管理器，新增用例驱动方式章节，用以集中说明 `YouQu` 支持的驱动方式。[@mikigo](https://github.com/mikigo)
+- `YouQu` 插件 `image-center` 更新：支持 `Windows` 和 `MacOS`，图片入参支持多种图片格式，并兼容不带文件后缀名入参方式。[@CCrazyPeter](https://github.com/CCrazyPeter)
 
 **Fix 🐛**
 

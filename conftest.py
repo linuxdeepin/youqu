@@ -738,37 +738,40 @@ def pytest_report_teststatus(report, config):
 
 
 def pytest_sessionfinish(session):
+    tr = session.config.pluginmanager.get_plugin("terminalreporter")
+    execute = {}
+    for _, items in tr.stats.items():
+        for item in items:
+            if hasattr(item, "outcome"):
+                default_result = {"result": "blocked", "longrepr": "None"}
+                if item.outcome == ConfStr.PASSED.value:
+                    default_result["result"] = "pass"
+                elif item.outcome == ConfStr.SKIPPED.value:
+                    default_result["result"] = "skip"
+                elif item.outcome == ConfStr.RERUN.value:
+                    continue
+                else:
+                    default_result["result"] = "fail"
+                default_result["longrepr"] = item.longreprtext
+                item_name = item.fspath
+                if not execute.get(item_name) or (
+                        item.outcome != ConfStr.PASSED.value
+                        and execute.get(item_name).get("result") == "pass"
+                ):
+                    execute[item_name] = default_result
+
+    json_report_path = f"{GlobalConfig.JSON_REPORT_PATH}/json"
+    if not exists(json_report_path):
+        makedirs(json_report_path)
+    with open(f"{json_report_path}/detail_report.json", "w", encoding="utf-8") as _f:
+        _f.write(dumps(execute, indent=2, ensure_ascii=False))
+
     if session.config.option.allure_report_dir:
-        tr = session.config.pluginmanager.get_plugin("terminalreporter")
-        execute = {}
-        for _, items in tr.stats.items():
-            for item in items:
-                if hasattr(item, "outcome"):
-                    default_result = {"result": "blocked", "longrepr": "None"}
-                    if item.outcome == ConfStr.PASSED.value:
-                        default_result["result"] = "pass"
-                    elif item.outcome == ConfStr.SKIPPED.value:
-                        default_result["result"] = "skip"
-                    elif item.outcome == ConfStr.RERUN.value:
-                        continue
-                    else:
-                        default_result["result"] = "fail"
-                    default_result["longrepr"] = item.longreprtext
-                    item_name = item.fspath
-                    if not execute.get(item_name) or (
-                            item.outcome != ConfStr.PASSED.value
-                            and execute.get(item_name).get("result") == "pass"
-                    ):
-                        execute[item_name] = default_result
+
         AllureReportExtend.environment_info(session, execute)
+        # 后续移除
         if execute:
             with open(f"{GlobalConfig.ROOT_DIR}/ci_result.json", "w", encoding="utf-8") as _f:
-                _f.write(dumps(execute, indent=2, ensure_ascii=False))
-            # new
-            json_report_path = f"{GlobalConfig.ROOT_DIR}/{GlobalConfig.JSON_REPORT_PATH}/json"
-            if not exists(json_report_path):
-                makedirs(json_report_path)
-            with open(f"{json_report_path}/detail_report.json", "w", encoding="utf-8") as _f:
                 _f.write(dumps(execute, indent=2, ensure_ascii=False))
 
     if session.config.option.pms_user and session.config.option.pms_password:

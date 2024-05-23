@@ -154,17 +154,28 @@ class RemoteRunner:
         app_name: str = self.default.get(Args.app_name.value)
         exclude = ""
         for i in [
-            "report",
             "__pycache__",
             ".pytest_cache",
             ".vscode",
             ".idea",
             ".git",
+            ".github",
+            ".reuse",
             "docs",
-            "site",
+            "node_modules",
+            "report",
+            ".gitignore",
+            "CONTRIBUTING.md",
+            "LICENSE",
+            "package.json",
+            "Pipfile",
+            "Pipfile.lock",
+            "pnpm-lock.yaml",
+            "publish.sh",
+            "pyproject.toml",
             "README.md",
-            "README.zh_CN.md",
             "RELEASE.md",
+            "ruff.toml",
         ]:
             exclude += f"--exclude='{i}' "
         if app_name:
@@ -297,6 +308,8 @@ class RemoteRunner:
             i[1] = f"'{i[1]}'"
             if i[0] == "--app_name":
                 real_app_name = f"apps/{self.default.get(Args.app_name.value)}"
+                if self.default.get(Args.app_name.value) is None:
+                    real_app_name = ""
                 continue
 
             _tmp_args.extend(i)
@@ -336,8 +349,8 @@ class RemoteRunner:
         cmd.extend(pytest_cmd)
         cmd.append('"')
         cmd_str = " ".join(cmd)
+        logger.info(f"\n{cmd_str}\n")
         if self.default.get(Args.debug.value):
-            logger.info(f"\n{cmd_str}\n")
             logger.info("DEBUG 模式不执行用例!")
         else:
             system(cmd_str)
@@ -415,14 +428,15 @@ class RemoteRunner:
         :param password:
         :return:
         """
-        if self.default.get(Args.parallel.value):
-            self.parallel_server_allure_path = f"{GlobalConfig.REPORT_PATH}/allure/{self.strf_time}_{self.default.get(Args.app_name.value)}"
-            self.make_dir(self.parallel_server_allure_path)
+        html_dir_endswith = f"_{self.default.get(Args.app_name.value)}" if self.default.get(Args.app_name.value) else ""
+        if not self.default.get(Args.parallel.value):
+            self.nginx_server_allure_path = f"{GlobalConfig.REPORT_PATH}/allure/{self.strf_time}{html_dir_endswith}"
+            self.make_dir(self.nginx_server_allure_path)
             system(
-                f"{self.scp % password} {user}@{_ip}:{self.client_allure_report_path(user)}/* {self.parallel_server_allure_path}/ {self.empty}"
+                f"{self.scp % password} {user}@{_ip}:{self.client_allure_report_path(user)}/* {self.nginx_server_allure_path}/ {self.empty}"
             )
         else:
-            server_allure_path = f"{GlobalConfig.REPORT_PATH}/allure/{self.strf_time}_ip{_ip}_{self.default.get(Args.app_name.value)}"
+            server_allure_path = f"{GlobalConfig.REPORT_PATH}/allure/{self.strf_time}_ip{_ip}{html_dir_endswith}"
             self.make_dir(server_allure_path)
             system(
                 f"{self.scp % password} {user}@{_ip}:{self.client_allure_report_path(user)}/* {server_allure_path}/ {self.empty}"
@@ -436,13 +450,13 @@ class RemoteRunner:
             system(
                 f"{self.scp % password} {user}@{_ip}:{self.client_pms_json_report_path(user, self.server_json_dir_id)}/* {server_json_path}/ {self.empty}"
             )
-        server_detail_json_path = f"{GlobalConfig.REPORT_PATH}/json"
-        self.make_dir(server_detail_json_path)
+        self.server_detail_json_path = f"{GlobalConfig.REPORT_PATH}/json/{self.strf_time}_remote"
+        self.make_dir(self.server_detail_json_path)
         system(
-            f"{self.scp % password} {user}@{_ip}:{self.click_json_report_path(user)}/detail_report.json {server_detail_json_path}/detail_report_{_ip}.json"
+            f"{self.scp % password} {user}@{_ip}:{self.click_json_report_path(user)}/detail_report.json {self.server_detail_json_path}/detail_report_{_ip}.json"
         )
         system(
-            f"{self.scp % password} {user}@{_ip}:{self.click_json_report_path(user)}/summarize.json {server_detail_json_path}/summarize_{_ip}.json"
+            f"{self.scp % password} {user}@{_ip}:{self.click_json_report_path(user)}/summarize.json {self.server_detail_json_path}/summarize_{_ip}.json"
         )
 
     def remote_finish_send_to_pms(self):
@@ -494,22 +508,24 @@ class RemoteRunner:
         if self.collection_json:
             self.remote_finish_send_to_pms()
         # 分布式执行的情况下需要汇总结果
-        if self.default.get(Args.parallel.value):
+        if not self.default.get(Args.parallel.value):
             summarize = {
                 "total": 0,
                 "pass": 0,
                 "fail": 0,
                 "skip": 0,
             }
-            for file in os.listdir(f"{GlobalConfig.REPORT_PATH}/json/"):
+            for file in os.listdir(self.server_detail_json_path):
                 if file.startswith("summarize_") and file.endswith(".json"):
-                    with open(f"{GlobalConfig.REPORT_PATH}/json/{file}", "r", encoding="utf-8") as f:
+                    with open(f"{self.server_detail_json_path}/{file}", "r", encoding="utf-8") as f:
                         res = json.load(f)
                     for i in summarize.keys():
                         summarize[i] += res.get(i)
+            with open(f"{self.server_detail_json_path}/summarize.json", "w", encoding="utf-8") as _f:
+                _f.write(json.dumps(summarize, indent=2, ensure_ascii=False))
 
-            generate_allure_html = f"{self.parallel_server_allure_path}/html"
-            AllureCustom.gen(self.parallel_server_allure_path, generate_allure_html)
+            generate_allure_html = f"{self.nginx_server_allure_path}/html"
+            AllureCustom.gen(self.nginx_server_allure_path, generate_allure_html)
 
     def parallel_run(self, client_list):
         """

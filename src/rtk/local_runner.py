@@ -360,8 +360,7 @@ class LocalRunner:
                 line=self.line,
             )
 
-        # new
-        json_report_path = f"{GlobalConfig.ROOT_DIR}/{GlobalConfig.JSON_REPORT_PATH}/json"
+        json_report_path = f"{GlobalConfig.JSON_REPORT_PATH}/json"
         with open(f"{json_report_path}/detail_report.json", "r", encoding="utf-8") as _f:
             detail_report = json.load(_f)
         res = Counter([detail_report.get(i).get("result") for i in detail_report])
