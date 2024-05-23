@@ -40,20 +40,26 @@ Author: mikigo
 
 整体的框架设计在《自动化测试架构设计》文档里面已经有详细描述了，这里贴一下整体的架构图：
 
-???+ note "架构图"
-	![](https://pic.imgdb.cn/item/64f054c4661c6c8e54ff4948.png)
+::: tip 架构图
+
+​	![](https://pic.imgdb.cn/item/64f054c4661c6c8e54ff4948.png)
+
+:::
 
 为了突显本文的重点，抽取其中重要功能模块，如下图：
 
-???+ note "核心模块"
-	![](https://pic.imgdb.cn/item/64f054c2661c6c8e54ff4770.png)
+::: tip 核心模块
+
+​	![](https://pic.imgdb.cn/item/64f054c2661c6c8e54ff4770.png)
+
+:::
 
 ### 3、目录结构
 
 ```shell title="框架结构"
-autotest-basic-frame  # 自动化测试基础框架
+youqu  # 自动化测试基础框架
 ├── apps  # 应用库
-│   ├── autotest-dde-file-manager  # 单独的应用仓库（应用库详细目录结构请看应用库设计方案）
+│   ├── autotest_dde_file_manager  # 单独的应用仓库（应用库详细目录结构请看应用库设计方案）
 │   │   ├── case  # 用例
 │   │   ├── config.ini # 局部配置
 │   │   ├── config.py  # 局部配置
