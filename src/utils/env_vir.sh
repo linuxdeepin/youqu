@@ -177,6 +177,7 @@ sudo rm -rf ${ROOT_DIR}/public
 sudo cp -r ${public_location}/auto_uos ${ROOT_DIR}/public
 sudo chmod -R 777 ${ROOT_DIR}/public
 
+cd ${ROOT_DIR}
 rm -rf Pipfile
 echo "${python_virtualenv_path}"
 pipenv run pip list

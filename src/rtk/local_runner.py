@@ -358,22 +358,6 @@ class LocalRunner:
                 line=self.line,
             )
 
-        json_report_path = join(GlobalConfig.JSON_REPORT_PATH, "json")
-        with open(f"{json_report_path}/detail_report.json", "r", encoding="utf-8") as _f:
-            detail_report = json.load(_f)
-        res = Counter([detail_report.get(i).get("result") for i in detail_report])
-        with open(f"{json_report_path}/summarize.json", "w", encoding="utf-8") as _f:
-            _f.write(json.dumps(
-                {
-                    "total": sum(res.values()),
-                    "pass": res.get("pass", 0),
-                    "fail": res.get("fail", 0),
-                    "skip": res.get("skip", 0),
-                },
-                indent=2,
-                ensure_ascii=False
-            ))
-
         allure_report_path = join(GlobalConfig.ALLURE_REPORT_PATH, GlobalConfig.ReportFormat.ALLURE)
         allure_html_report_path = join(GlobalConfig.ALLURE_REPORT_PATH, "allure_html")
 

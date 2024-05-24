@@ -29,7 +29,7 @@ from os.path import join
 from os.path import splitext
 from enum import Enum
 from time import sleep
-from collections import deque
+from collections import deque, Counter
 from datetime import datetime
 from json import dumps
 from re import findall
@@ -773,6 +773,19 @@ def pytest_sessionfinish(session):
         makedirs(json_report_path)
     with open(f"{json_report_path}/detail_report.json", "w", encoding="utf-8") as _f:
         _f.write(dumps(execute, indent=2, ensure_ascii=False))
+
+    res = Counter([execute.get(i).get("result") for i in execute])
+    with open(f"{json_report_path}/summarize.json", "w", encoding="utf-8") as _f:
+        _f.write(dumps(
+            {
+                "total": sum(res.values()),
+                "pass": res.get("pass", 0),
+                "fail": res.get("fail", 0),
+                "skip": res.get("skip", 0),
+            },
+            indent=2,
+            ensure_ascii=False
+        ))
 
     if session.config.option.allure_report_dir:
 
