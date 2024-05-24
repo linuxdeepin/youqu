@@ -703,6 +703,15 @@ class ShortCut(MouseKey):
         cls.hot_key("ctrl", "alt", "v")
 
     @classmethod
+    def ctrl_alt_delete(cls):
+        """
+         快捷键打开剪切板
+        :return:
+        """
+        sleep(1)
+        cls.hot_key("ctrl", "alt", "delete")
+
+    @classmethod
     def ctrl_printscreen(cls):
         """
          快捷键启动延时截图
@@ -841,6 +850,13 @@ class ShortCut(MouseKey):
         :return:
         """
         cls.hot_key("win", "d")
+
+    @classmethod
+    def super_l(cls):
+        """快捷键 super + l
+        :return:
+        """
+        cls.hot_key("win", "l")
 
     @classmethod
     def super(cls):
