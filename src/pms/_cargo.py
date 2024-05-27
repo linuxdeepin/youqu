@@ -1,7 +1,7 @@
 from setting.globalconfig import GlobalConfig
 
 
-def pms_control(self, parser=None, sub_parser_pms=None):
+def pms_control(parser=None, sub_parser_pms=None):
     """pms相关功能命令行参数"""
     sub_parser_pms.add_argument(
         "-a",
@@ -36,12 +36,12 @@ def pms_control(self, parser=None, sub_parser_pms=None):
     from src.rtk._base import Args
 
     pms_kwargs = {
-        Args.app_name.value: args.app or self.default_app,
-        Args.pms_user.value: args.pms_user or self.default_pms_user,
-        Args.pms_password.value: args.pms_password or self.default_pms_password,
-        Args.pms2csv.value: args.pms2csv or self.default_pms2csv,
-        Args.pms_link_csv.value: args.pms_link_csv or self.default_pms_link_csv,
-        Args.send2task.value: args.send2task or self.default_send2task,
+        Args.app_name.value: args.app,
+        Args.pms_user.value: args.pms_user,
+        Args.pms_password.value: args.pms_password,
+        Args.pms2csv.value: args.pms2csv,
+        Args.pms_link_csv.value: args.pms_link_csv,
+        Args.send2task.value: args.send2task,
         Args.task_id.value: args.task_id or GlobalConfig.TASK_ID,
         Args.trigger.value: args.trigger or GlobalConfig.TRIGGER,
     }

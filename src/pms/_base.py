@@ -16,7 +16,6 @@ from src import logger
 from src.requestx import RequestX
 
 MAX_CASE_NUMBER = 10000
-# pylint: disable=unnecessary-lambda-assignment,R0903
 runs_id_cmd_log = lambda x: sub(r"'run_case_id': '\d+', ", "", str(x))
 
 
@@ -36,33 +35,6 @@ class _Base:
         }
         # pylint: disable=invalid-name
         self.rx = RequestX(login_url=login_url, headers=headers, data=data)
-
-
-def _unicode_to_cn(in_str):
-    """
-    修改数据并进行编码解码操作，以完成u码转中文
-    :param in_str: 字符串
-    :return:/
-    """
-    local_in_str_replace = (
-        in_str.replace(r"\"", '"')
-        .replace(r"\/", "/")
-        .replace(r"\\u", r"\u")
-        .replace(r"\\n", "")
-        .replace(r"\\r", "")
-    )
-    if isinstance(local_in_str_replace, bytes):
-        local_temp = str(local_in_str_replace, encoding="utf-8")
-        local_out = local_temp.encode("utf-8").decode("unicode_escape")
-    else:
-        local_out = local_in_str_replace.encode("utf-8").decode("unicode_escape")
-    return (
-        local_out.replace('"data":"{', '"data":{')
-        .replace('","md5"', ',"md5"')
-        .replace(":null", ':"null"')
-        .replace(":true", ':"true"')
-        .replace(":false", ':"false"')
-    )
 
 
 def write_case_result(item, report):

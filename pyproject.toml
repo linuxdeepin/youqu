@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "youqu"
-version = "2.6.1"
+version = "2.6.2"
 authors = [
     { name = "mikigo", email = "huangmingqiang@uniontech.com" },
 ]
@@ -34,3 +34,31 @@ packages = [
 [project.urls]
 Source = "https://github.com/linuxdeepin/youqu"
 Documentation = "https://linuxdeepin.github.io/youqu"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+    "W191", # indentation contains tabs
+    "E402",
+    "E711",
+    "E721",
+    "E722",
+    "E731",
+    "E712",
+    "F401",
+    "F403",
+    "F507",
+    "F541",
+    "F841",
+]

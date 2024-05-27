@@ -320,7 +320,7 @@ def pytest_collection_modifyitems(session):
                         fixed_index = index - 1
                     elif title.strip() == FixedCsvTitle.removed.value:
                         removed_index = index - 1
-                    elif title.strip() == FixedCsvTitle.pms_case_id.value:
+                    elif title.strip() == FixedCsvTitle.pms_case_id.value.strip("*"):
                         pms_id_index = index - 1
 
                 taglines = [txt.strip().split(",") for txt in txt_list[1:]]

@@ -20,8 +20,8 @@ hero:
       text: Gitee
       link: "https://gitee.com/deepin-community/youqu"
   image:
-      src: /logo.png
-      alt: YouQu
+    src: /logo.png
+    alt: YouQu
 
 features:
   - icon: 💻
@@ -47,6 +47,8 @@ features:
   - icon: ️🕷️
     title: HTTP 接口自动化测试
     details: 保障HTTP接口的响应速度和数据传输安全，我们的自动化测试是您的明智之选。
+    link: /实践/HTTP接口自动化测试/初始化项目
+    linkText: 查看
   - icon: ️⏲️
     title: Linux 桌面应用性能自动化测试
     details: 让Linux桌面应用性能测试更简单、高效，选YouQu自动化测试基础框架。
@@ -138,6 +140,17 @@ const members = [
     ]
   },
   {
+    avatar: 'https://www.github.com/003307.png',
+    name: '003307',
+    title: 'Developer',
+    links: [
+      { icon: 'github', link: 'https://github.com/003307' },
+    ]
+  },  
+];
+
+const helpers = [
+  {
     avatar: 'https://www.github.com/rb-union.png',
     name: 'rb-union',
     title: 'Helper',
@@ -184,7 +197,7 @@ const members = [
 <VPTeamPage>
   <VPTeamPageTitle>
     <template #title>
-      YouQu Team
+      Contributers
     </template>
     <template #lead>
       感谢以下所有人的贡献与参与
@@ -193,5 +206,17 @@ const members = [
   <VPTeamMembers
     size="small"
     :members="members"
+  />
+  <VPTeamPageTitle>
+    <template #title>
+      Helpers
+    </template>
+    <template #lead>
+      感谢以下所有人的提供帮助及重要建议
+    </template>
+  </VPTeamPageTitle>
+  <VPTeamMembers
+    size="small"
+    :members="helpers"
   />
 </VPTeamPage>
