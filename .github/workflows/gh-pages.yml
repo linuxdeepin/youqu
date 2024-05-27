@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-      - run: cd src/utils/;bash docs_env.sh
+      - run: cd docs/;bash docs_env.sh
 
       - name: Build
         run: export VITE_BASE="/youqu/";pnpm run build
