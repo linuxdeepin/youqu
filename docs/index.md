@@ -197,7 +197,7 @@ const helpers = [
 <VPTeamPage>
   <VPTeamPageTitle>
     <template #title>
-      Contributers
+      Contributors
     </template>
     <template #lead>
       感谢以下所有人的贡献与参与
