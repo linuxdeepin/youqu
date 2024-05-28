@@ -7,6 +7,7 @@ import os
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
 import subprocess
+import sys
 
 from setting import conf
 from src import logger
@@ -47,14 +48,16 @@ class CmdCtl:
     @classmethod
     def _getstatusoutput(cls, command, timeout):
         """getstatusoutput"""
+        kwargs = {
+            "shell": True,
+            "stderr": subprocess.STDOUT,
+            "stdout": subprocess.PIPE,
+            "timeout": timeout,
+        }
         try:
-            result = cls._run(
-                command,
-                shell=True,
-                text=True,
-                stderr=subprocess.STDOUT,
-                stdout=subprocess.PIPE,
-                timeout=timeout,
+            if sys.version_info >= (3, 7):
+                kwargs["text"] = True
+            result = cls._run(command,**kwargs
             )
             data = result.stdout
             exitcode = result.returncode

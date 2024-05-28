@@ -177,6 +177,18 @@ def remote_runner(parser, sub_parser_remote):
             "no:表示测试机分布式执行，服务端会根据收集到的测试用例自动分配给各个测试机执行。"
         ),
     )
+    sub_parser_remote.add_argument(
+        "--json_backfill_base_url", default="", help="json报告回填的接口地址"
+    )
+    sub_parser_remote.add_argument(
+        "--json_backfill_task_id", default="", help="json报告回填所属任务id"
+    )
+    sub_parser_remote.add_argument(
+        "--json_backfill_user", default="", help="json报告回填的用户名"
+    )
+    sub_parser_remote.add_argument(
+        "--json_backfill_password", default="", help="json报告回填的密码"
+    )
 
     local_kwargs, args = local_runner(parser, sub_parser_remote)
     from src.rtk._base import Args
@@ -192,6 +204,10 @@ def remote_runner(parser, sub_parser_remote):
         Args.branch.value: args.branch_or_tag or GlobalConfig.BRANCH,
         Args.depth.value: args.depth or GlobalConfig.DEPTH,
         Args.parallel.value: args.parallel,
+        Args.json_backfill_base_url.value: args.json_backfill_base_url,
+        Args.json_backfill_task_id.value: args.json_backfill_task_id,
+        Args.json_backfill_user.value: args.json_backfill_user,
+        Args.json_backfill_password.value: args.json_backfill_password,
     }
     _remote_kwargs = {
         "remote_kwargs": remote_kwargs,

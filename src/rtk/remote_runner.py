@@ -95,6 +95,7 @@ class RemoteRunner:
             Args.send_code.value: remote_kwargs.get("send_code") or self.send_code,
             Args.build_env.value: remote_kwargs.get("build_env") or self.client_env,
             Args.parallel.value: remote_kwargs.get("parallel") or self.parallel,
+            Args.json_backfill_task_id.value: remote_kwargs.get("json_backfill_task_id"),
         }
         # 客户端地址
         if "/home/" not in GlobalConfig.ROOT_DIR:
@@ -110,9 +111,11 @@ class RemoteRunner:
         self.client_pms_json_report_path = (
             lambda x, y: f"/home/{x}/{self.server_project_path}/report/pms_{y}"
         )
-        self.click_json_report_path = (
+        self.client_json_report_path = (
             lambda x: f"/home/{x}/{self.server_project_path}/report/json"
         )
+        self.strf_time = strftime("%m%d%p%I%M%S")
+        self.server_detail_json_path = f"{GlobalConfig.REPORT_PATH}/json/{self.strf_time}_remote"
         self.client_xml_report_path = (
             lambda
                 x: f"/home/{x}/{self.server_project_path}/{GlobalConfig.report_cfg.get('XML_REPORT_PATH', default='report')}/xml".replace(
@@ -127,7 +130,6 @@ class RemoteRunner:
         self.scp = "sshpass -p '%s' scp -r"
         self.rsync = "sshpass -p '%s' rsync -av -e ssh"
         self.empty = "> /dev/null 2>&1"
-        self.strf_time = strftime("%m%d%p%I%M%S")
 
         self.collection_json = False
         self.server_json_dir_id = None
@@ -450,13 +452,12 @@ class RemoteRunner:
             system(
                 f"{self.scp % password} {user}@{_ip}:{self.client_pms_json_report_path(user, self.server_json_dir_id)}/* {server_json_path}/ {self.empty}"
             )
-        self.server_detail_json_path = f"{GlobalConfig.REPORT_PATH}/json/{self.strf_time}_remote"
         self.make_dir(self.server_detail_json_path)
         system(
-            f"{self.scp % password} {user}@{_ip}:{self.click_json_report_path(user)}/detail_report.json {self.server_detail_json_path}/detail_report_{_ip}.json"
+            f"{self.scp % password} {user}@{_ip}:{self.client_json_report_path(user)}/detail_report.json {self.server_detail_json_path}/detail_report_{_ip}.json"
         )
         system(
-            f"{self.scp % password} {user}@{_ip}:{self.click_json_report_path(user)}/summarize.json {self.server_detail_json_path}/summarize_{_ip}.json"
+            f"{self.scp % password} {user}@{_ip}:{self.client_json_report_path(user)}/summarize.json {self.server_detail_json_path}/summarize_{_ip}.json"
         )
 
     def remote_finish_send_to_pms(self):
@@ -507,6 +508,18 @@ class RemoteRunner:
 
         if self.collection_json:
             self.remote_finish_send_to_pms()
+        if all([
+            self.default.get(Args.json_backfill_base_url.value),
+            self.default.get(Args.json_backfill_task_id.value),
+            self.default.get(Args.json_backfill_user.value),
+            self.default.get(Args.json_backfill_password.value)
+        ]):
+            from src.rtk.json_backfill import JsonBackfill
+            JsonBackfill(
+                base_url=self.default.get(Args.json_backfill_base_url.value),
+                username=self.default.get(Args.json_backfill_user.value),
+                password=self.default.get(Args.json_backfill_password.value),
+            ).remote_backfill(self.server_detail_json_path, self.default.get(Args.json_backfill_task_id.value))
         # 分布式执行的情况下需要汇总结果
         if not self.default.get(Args.parallel.value):
             summarize = {

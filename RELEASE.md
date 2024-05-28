@@ -15,9 +15,15 @@
 
   - 收集远程测试机上所有的 `/report/json/${timestr}_remote/detail_report_${IP}.json` ；
   - 收集远程测试机上所有的 `/report/json/${timestr}_remote/summarize_${IP}.json`；
-  - `parallel` （分布式）模式下自动汇总 `summarize` 数据：`/report/json/${timestr}_remote/summarize.json`；
+  - 负载均衡驱动模式下自动汇总 `summarize` 数据：`/report/json/${timestr}_remote/summarize.json`；
 
-- `remote` 模式新增参数：`git_url`、`git_user`、`git_password`、`branch`、`depth` 用以控制拉取 git 仓库代码；
+- `remote` 模式新增参数：`git_url`、`git_user`、`git_password`、`branch`、`depth` 用以控制拉取 `git` 仓库代码；
+
+- 由于 [letmego](https://linuxdeepin.github.io/letmego/) 方案使用场景较少，默认环境中移除此模块，子项目需要时通过新增依赖机制进行安装；
+
+**Fix 🐛**
+
+- 修复测试单驱动执行报错的问题；
 
 ## 2.6.1（2024/05/21）
 

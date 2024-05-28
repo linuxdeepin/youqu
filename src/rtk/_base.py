@@ -68,6 +68,10 @@ class Args(Enum):
     execution_mode = "execution_mode"
     slaves = "slaves"
     pms_case_file_path = "pms_case_file_path"
+    json_backfill_base_url = "json_backfill_base_url"
+    json_backfill_task_id = "json_backfill_task_id"
+    json_backfill_user = "json_backfill_user"
+    json_backfill_password = "json_backfill_password"
 
 
 def transform_app_name(app_name):

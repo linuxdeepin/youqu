@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 # _*_ coding:utf-8 _*_
-
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
-
 # SPDX-License-Identifier: GPL-2.0-only
-# pylint: disable=C0114,C0115,W0621,C0103
-from urllib import request
-from urllib import parse
-from urllib.request import build_opener
 from http import cookiejar
+from urllib import parse
+from urllib import request
+from urllib.request import build_opener
+import json as _json
 
 
 class RequestX:
     def __init__(
-        self,
-        login_url=None,
-        headers=None,
-        data=None,
+            self,
+            login_url=None,
+            headers=None,
+            data=None,
     ):
         self.login_url = login_url
         self.headers = headers
@@ -53,6 +51,19 @@ class RequestX:
             timeout = object()
         response = self.session.open(url, data=data, timeout=timeout).read().decode()
         return response
+
+    @classmethod
+    def post(cls, url: str, headers: dict, data: dict = None, json: dict=None):
+        if data:
+            params = parse.urlencode(data).encode("utf-8")
+        elif json:
+            params = _json.dumps(json)
+            params = bytes(params, "utf-8")
+        else:
+            raise ValueError
+        r = request.Request(url=url, data=params, headers=headers, method="POST")
+        req = request.urlopen(r).read().decode("utf-8")
+        return req
 
 
 if __name__ == "__main__":

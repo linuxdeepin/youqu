@@ -36,7 +36,7 @@ class AllureReportExtend:
                 total, failed, passed, skiped, _ = collect_result(execute)
                 py_case_info = f"{total}/{passed}/{failed}/{skiped}"
 
-            w(f"PMS用例维度(总数/通过/失败/跳过)={py_case_info}")
+            w(f"Py用例维度(总数/通过/失败/跳过)={py_case_info}")
             w(f"网络地址={GlobalConfig.USERNAME}@{GlobalConfig.HOST_IP}")
             w(f"工作目录={GlobalConfig.ROOT_DIR}")
             w(f"镜像版本={GlobalConfig.VERSION}")
@@ -46,22 +46,12 @@ class AllureReportExtend:
             w(f"显示协议={GlobalConfig.DISPLAY_SERVER.title()}")
 
             try:
-                cpu_info = (
-                    os.popen(
-                        f"echo '{GlobalConfig.PASSWORD}' | sudo -S dmidecode -s  processor-version"
-                    )
-                    .readlines()[0]
-                    .strip("\n")
-                )
-                w(f"CPU信息={cpu_info}")
-
-
-                mem_info = os.popen(
-                    f'''echo '{GlobalConfig.PASSWORD}' | sudo -S dmidecode|grep -A16 'Memory Device' | '''
-                    'grep -v "Memory Device Mapped Address" | grep "Range Size"'
-                ).readlines()
-                MEM_TOTAL = sum([int(i.split(":")[1].rstrip(" GB\n").strip()) for i in mem_info])
-                w(f"内存信息={MEM_TOTAL}G")
+                cpu_info = os.popen('cat /proc/cpuinfo | grep "model name"').readlines()
+                if cpu_info:
+                    w(f"CPU信息={cpu_info[0]}")
+                mem_info = os.popen('cat /proc/meminfo | grep MemTotal').readlines()
+                if mem_info:
+                    w(f"内存信息={mem_info[0]}")
             except IndexError:
                 ...
 
