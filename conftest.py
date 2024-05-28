@@ -39,7 +39,6 @@ from concurrent.futures import wait
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import ALL_COMPLETED
 
-
 import allure
 import pytest
 from _pytest.mark import Mark
@@ -152,7 +151,7 @@ def pytest_addoption(parser):
 
 
 def pytest_cmdline_main(config):
-    # 初始化log配置，以解决allure报告日志格式问题
+    # 初始化log配置，以解决html报告日志格式问题
     log_info = logger(config.option.log_level)
     config.option.log_level = config.option.log_level
     config.option.log_format = log_info.log_format
@@ -604,9 +603,9 @@ def pytest_runtest_teardown(item):
     if sessiontimeout:
         duration = datetime.now() - item.session.config.option.start_time
         if duration.seconds > int(sessiontimeout):
-            # 处理时间秒为 XX分XX秒
+            # 处理时间秒为 xx分xx秒
             _min, sec = divmod(duration.seconds, 60)
-            # 处理时间分为 XX小时xx分xx秒
+            # 处理时间分为 xx小时xx分xx秒
             hour, _min = divmod(_min, 60)
             raise item.session.Interrupted(f"会话超时（{hour}小时{_min}分{sec}秒）,用例强制终止!")
 

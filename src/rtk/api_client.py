@@ -39,6 +39,6 @@ class ApiClient:
 if __name__ == "__main__":
     ApiClient(
         base_url="http://10.7.55.191:8000",
-        username="superadmin",
-        password="ut005492",
+        username="",
+        password="",
     )

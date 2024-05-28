@@ -71,6 +71,6 @@ class JsonBackfill:
 if __name__ == '__main__':
     JsonBackfill(
         base_url="http://10.7.55.191:8000",
-        username="superadmin",
-        password="ut005492",
+        username="",
+        password="",
     ).remote_backfill(f"{conf.REPORT_PATH}/json/0524上午113458_remote/", "d3439082af374a94b95e1d3c0613f513")
