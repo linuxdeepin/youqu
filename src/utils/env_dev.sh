@@ -86,6 +86,7 @@ fi
 
 if [ ${debian_platform} == false ]; then
         pip_array[${#pip_array[@]}]=numpy
+        pip_array[${#pip_array[@]}]="pillow==8.4.0"
     fi
 
 for p in ${pip_array[*]}

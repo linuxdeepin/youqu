@@ -60,6 +60,8 @@ class CmdCtl:
             result = cls._run(command,**kwargs
             )
             data = result.stdout
+            if isinstance(data, bytes):
+                data = data.decode("utf-8")
             exitcode = result.returncode
         except subprocess.CalledProcessError as ex:
             data = ex.output
