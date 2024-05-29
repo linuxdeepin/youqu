@@ -95,7 +95,10 @@ class RemoteRunner:
             Args.send_code.value: remote_kwargs.get("send_code") or self.send_code,
             Args.build_env.value: remote_kwargs.get("build_env") or self.client_env,
             Args.parallel.value: remote_kwargs.get("parallel") or self.parallel,
+            Args.json_backfill_base_url.value: remote_kwargs.get("json_backfill_base_url"),
             Args.json_backfill_task_id.value: remote_kwargs.get("json_backfill_task_id"),
+            Args.json_backfill_user.value: remote_kwargs.get("json_backfill_user"),
+            Args.json_backfill_password.value: remote_kwargs.get("json_backfill_password"),
         }
         # 客户端地址
         if "/home/" not in GlobalConfig.ROOT_DIR:
