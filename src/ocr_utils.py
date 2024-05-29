@@ -123,6 +123,25 @@ class OCRUtils:
     def all_result(cls):
         return cls.result
 
+    @classmethod
+    def ocr_find_by_range(cls, text, x1=0, x2=1920, y1=0, y2=1080):
+        """
+        OCR在界面中识别到多个关键词时，通过区域筛选出对应关键词并返回坐标
+        :param text: 页面查找关键词
+        :param x1: x坐标开始范围
+        :param x2: x坐标结束范围
+        :param y1: y坐标开始范围
+        :param y2: y坐标结束范围
+        :return: 坐标 x, y
+        """
+        ocr_return = cls.ocr(text)
+        if isinstance(ocr_return, tuple):
+            return ocr_return[0], ocr_return[1]
+        elif isinstance(ocr_return, dict):
+            for key, value in ocr_return.items():
+                if x1 <= value[0] <= x2 and y1 <= value[1] <= y2:
+                    return value[0], value[1]
+
 
 if __name__ == '__main__':
     OCRUtils.ocrx().click()
