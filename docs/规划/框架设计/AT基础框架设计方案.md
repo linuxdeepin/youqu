@@ -26,7 +26,7 @@ Author: mikigo
 
 - **应用库（`apps`）**
 
-  各个应用自己的仓库，里面主要包含的是用例、方法及一些测试资源，比如文件管理器叫 `autotest-dde-file-manager` 。
+  各个应用自己的仓库，里面主要包含的是用例、方法及一些测试资源，比如文件管理器叫 `autotest_dde_file_manager` 。
 
 - **核心库（`src`）**
 

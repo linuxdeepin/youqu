@@ -1,6 +1,6 @@
 # 版本更新记录
 
-## 2.6.2（dev）
+## 2.6.2（2024/05/29）
 
 **New 🌟**
 
@@ -21,9 +21,16 @@
 
 - 由于 [letmego](https://linuxdeepin.github.io/letmego/) 方案使用场景较少，默认环境中移除此模块，子项目需要时通过新增依赖机制进行安装；
 
+- 支持将测试结果回传给测试平台；
+
+- 文档更新：实践/HTTP接口自动化测试/创建一条完整的用例。[@003307](https://github.com/003307)
+
+- `YouQu` 插件 `pdocr-rpc` 更新：支持Windows和MacOS，图片入参支持多种图片格式，并兼容不带文件后缀名入参方式。[@CCrazyPeter](https://github.com/CCrazyPeter)
+
 **Fix 🐛**
 
 - 修复测试单驱动执行报错的问题；
+- `YouQu` 插件 `pdocr-rpc` 修复服务器系统获取显示协议错误的问题；
 
 ## 2.6.1（2024/05/21）
 
