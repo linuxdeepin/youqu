@@ -272,17 +272,7 @@ class MouseKey:
         else:
             if check_chinese():
                 # 复制
-                if os.popen("ps -aux |  grep wayland_autotool | grep -v grep").read():
-                    # 先杀掉
-                    CmdCtl.run_cmd("kill -9 $(pidof wayland_autotool)", interrupt=False)
-                    sleep(1)
-                dbus_cmd = (
-                    "dbus-send --session --dest=com.deepin.Autotool "
-                    "--print-reply  /com/deepin/Autotool com.deepin.Autotool"
-                )
-                popen(f'{dbus_cmd}.setText string:"{message}"')
-                sleep(0.5)
-                # popen(f"{dbus_cmd}.getText")
+                os.system(f"echo \"{message}\" | wl-copy")
                 # 有些地方可能不支持ctrl+v粘贴，比如终端，需要使用ctrl+shift+v
                 _hk = ["ctrl", "v"]
                 if wayland_shift:
