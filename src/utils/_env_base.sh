@@ -12,7 +12,7 @@ check_status(){
 }
 
 wayland_env(){
-    deb_array=(g++ build-essential cmake qt5-default qt5-qmake libqt5gui5 libqt5core5a)
+    deb_array=(g++ build-essential cmake qt5-default qt5-qmake libqt5gui5 libqt5core5a wl-clipboard)
     for deb in ${deb_array[*]}
     do
         sudo apt install -y ${deb} > /tmp/env.log 2>&1
