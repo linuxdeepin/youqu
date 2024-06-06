@@ -21,7 +21,7 @@ dogtail_port = 4242
 
 
 @check_rpc_started(basename(__file__))
-def remote_dogtail_ctl(user=None, ip=None, password=None):
+def remote_dogtail_ctl(user=None, ip=None, password=None, restart_service=False):
     return remote_client(ip=ip, port=dogtail_port)
 
 

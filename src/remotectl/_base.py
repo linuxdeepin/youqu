@@ -97,10 +97,12 @@ def _transfer_to_client(ip, password, user):
 
 
 def _start_client_service(ip, password, user, filename):
+    if not os.path.exists(f"{conf.REPORT_PATH}/logs/"):
+        os.makedirs(f"{conf.REPORT_PATH}/logs/")
     _cmd = (
         f"nohup {_ssh(ip, password, user)} "
         f'"cd ~/{client_project_path}/src/remotectl/ && '
-        f'pipenv run python {filename}" > {filename}.log 2>&1 &'
+        f'pipenv run python {filename}" >>  {conf.REPORT_PATH}/logs/{filename}.log 2>&1 &'
     )
     # print(Fore.GREEN, _cmd, Fore.RESET)
     p = multiprocessing.Process(target=_feeling_good, args=(_cmd,))
@@ -120,15 +122,7 @@ def _restart_client_service(ip, password, user, filename):
         f'''"ps -ef | grep {filename} | {cmd}cut -c 9-15 | xargs kill -9 > /dev/null 2>&1"'''
     )
     time.sleep(1)
-    _cmd = (
-        f"nohup {_ssh(ip, password, user)} "
-        f'"cd ~/{client_project_path}/src/remotectl/ && '
-        f'pipenv run python {filename}" >> {filename}.log 2>&1 &'
-    )
-    # print(Fore.GREEN, _cmd, Fore.RESET)
-    p = multiprocessing.Process(target=_feeling_good, args=(_cmd,))
-    p.start()
-    time.sleep(1)
+    _start_client_service(ip, password, user, filename)
 
 
 def check_rpc_started(filename):
@@ -141,6 +135,7 @@ def check_rpc_started(filename):
                 raise ValueError("user and ip are required")
             password = kwargs.get("password") or (args[2] if len(args) >= 3 else conf.PASSWORD)
             transfer_appname = kwargs.get("transfer_appname")
+            restart_service = kwargs.get("restart_service")
 
             _base_env_check()
             if transfer_appname:
@@ -151,7 +146,7 @@ def check_rpc_started(filename):
             if not tool_status:
                 _transfer_to_client(ip, password, user)
                 _start_client_service(ip, password, user, filename)
-            if filename == "_remote_dogtail_ctl.py":
+            if restart_service:
                 _restart_client_service(ip, password, user, filename)
             res = func(*args, **kwargs)
 

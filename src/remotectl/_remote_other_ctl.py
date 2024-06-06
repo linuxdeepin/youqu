@@ -21,7 +21,7 @@ port = 4243
 
 
 @check_rpc_started(basename(__file__))
-def remote_other_ctl(user=None, ip=None, password=None, transfer_appname=None):
+def remote_other_ctl(user=None, ip=None, password=None, transfer_appname=None, restart_service=False):
     return remote_client(ip=ip, port=port)
 
 
