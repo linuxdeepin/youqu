@@ -265,6 +265,7 @@ class CmdCtl:
         cmd = ""
         for i in cls.GREP_LIST:
             cmd += f"grep -v {i} | "
+        from setting import conf
         os.system(
-            f"process=$(ps -ef | grep {process} | {cmd}cut -c 9-15);echo '1' | sudo -S kill -9 $process > /dev/null 2>&1"
+            f"process=$(ps -ef | grep {process} | {cmd}cut -c 9-15);echo '{conf.PASSWORD}' | sudo -S kill -9 $process > /dev/null 2>&1"
         )

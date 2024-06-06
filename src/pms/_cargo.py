@@ -63,7 +63,7 @@ def pms_control(parser=None, sub_parser_pms=None):
 
         Send2Pms().send2pms(
             Send2Pms.case_res_path(pms_kwargs.get(Args.task_id.value)),
-            Send2Pms.data_send_result_csv(pms_kwargs.get(Args.trigger.value)),
+            Send2Pms.data_send_result_csv(pms_kwargs.get(Args.task_id.value)),
         )
     else:
         raise ValueError

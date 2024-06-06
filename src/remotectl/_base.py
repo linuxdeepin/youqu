@@ -18,7 +18,7 @@ from xmlrpc.server import SimpleXMLRPCServer
 sys.path.append(dirname(dirname(dirname(os.path.abspath(__file__)))))
 
 from setting import conf
-from src.depends.colorama import Fore
+# from src.depends.colorama import Fore
 
 client_project_path = "/".join(conf.ROOT_DIR.split("/")[3:])
 exclude_files = [
@@ -26,6 +26,7 @@ exclude_files = [
     "report",
     "public",
     "__pycache__",
+    "node_modules",
     ".pytest_cache",
     ".vscode",
     ".idea",
@@ -74,19 +75,21 @@ def _transfer_appname(ip, password, user, transfer_appname):
 
 
 def _transfer_to_client(ip, password, user):
-    os.system(f'''{_ssh(ip, password, user)} "mkdir -p ~/{client_project_path}"''')
+    os.system(f'''{_ssh(ip, password, user)} "mkdir -p ~/{client_project_path}" > /dev/null 2>&1''')
     os.system(
         f"sshpass -p '{password}' rsync -av -e ssh {_exclude()} {conf.ROOT_DIR}/* "
         f"{user}@{ip}:~/{client_project_path}/"
     )
     os.system(
-        f'''{_ssh(ip, password, user)} "cd ~/{client_project_path}/ && mkdir apps && touch apps/__init__.py"'''
+        f'''{_ssh(ip, password, user)} "cd ~/{client_project_path}/ && mkdir apps && touch apps/__init__.py" > /dev/null 2>&1'''
     )
-    os.system(f'''{_ssh(ip, password, user)} "cd ~/{client_project_path}/apps/ && touch REMOTE"''')
+    os.system(
+        f'''{_ssh(ip, password, user)} "cd ~/{client_project_path}/apps/ && touch REMOTE" > /dev/null 2>&1'''
+    )
     if (
-            not os.popen(f'''{_ssh(ip, password, user)} "cd ~/{client_project_path}/ && ls env_ok"''')
-                    .read()
-                    .strip()
+            not os.popen(
+                f'''{_ssh(ip, password, user)} "cd ~/{client_project_path}/ && ls env_ok"'''
+            ).read().strip()
     ):
         os.system(
             f'{_ssh(ip, password, user)} "cd ~/{client_project_path}/ && bash env.sh -p {password} && touch env_ok"'
@@ -97,9 +100,32 @@ def _start_client_service(ip, password, user, filename):
     _cmd = (
         f"nohup {_ssh(ip, password, user)} "
         f'"cd ~/{client_project_path}/src/remotectl/ && '
-        f'pipenv run python {filename}" > /tmp/{filename}.log 2>&1 &'
+        f'pipenv run python {filename}" > {filename}.log 2>&1 &'
     )
-    print(Fore.GREEN, _cmd, Fore.RESET)
+    # print(Fore.GREEN, _cmd, Fore.RESET)
+    p = multiprocessing.Process(target=_feeling_good, args=(_cmd,))
+    p.start()
+    time.sleep(1)
+
+
+def _restart_client_service(ip, password, user, filename):
+    GREP_LIST = (
+        "grep",
+    )
+    cmd = ""
+    for i in GREP_LIST:
+        cmd += f"grep -v {i} | "
+    os.system(
+        f"{_ssh(ip, password, user)} "
+        f'''"ps -ef | grep {filename} | {cmd}cut -c 9-15 | xargs kill -9 > /dev/null 2>&1"'''
+    )
+    time.sleep(1)
+    _cmd = (
+        f"nohup {_ssh(ip, password, user)} "
+        f'"cd ~/{client_project_path}/src/remotectl/ && '
+        f'pipenv run python {filename}" >> {filename}.log 2>&1 &'
+    )
+    # print(Fore.GREEN, _cmd, Fore.RESET)
     p = multiprocessing.Process(target=_feeling_good, args=(_cmd,))
     p.start()
     time.sleep(1)
@@ -125,8 +151,11 @@ def check_rpc_started(filename):
             if not tool_status:
                 _transfer_to_client(ip, password, user)
                 _start_client_service(ip, password, user, filename)
+            if filename == "_remote_dogtail_ctl.py":
+                _restart_client_service(ip, password, user, filename)
+            res = func(*args, **kwargs)
 
-            return func(*args, **kwargs)
+            return res
 
         return wrapper
 
@@ -139,7 +168,7 @@ def remote_client(ip, port):
     except ImportError:
         raise ImportError("Please install zerorpc")
 
-    c = zerorpc.Client(timeout=50, heartbeat=None)
+    c = zerorpc.Client(timeout=20, heartbeat=None)
     try:
         c.connect(f"tcp://{ip}:{port}")
         return c
@@ -172,6 +201,8 @@ def _remote_server(obj, port):
             server.register_function(getattr(obj, func), func)
     server.serve_forever()
 
+
 if __name__ == '__main__':
     from src import Src
+
     _remote_server(Src(), 4242)
