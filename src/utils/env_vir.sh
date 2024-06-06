@@ -4,6 +4,12 @@
 
 # SPDX-License-Identifier: GPL-2.0-only
 source ${ROOT_DIR}/src/utils/_env_base.sh
+
+export PIPENV_VENV_IN_PROJECT=true
+export PIPENV_PYPI_MIRROR=https://pypi.tuna.tsinghua.edu.cn/simple
+export PIPENV_QUIET=true
+export PIPENV_DEFAULT_PYTHON_VERSION=3
+
 echo "
  ██╗   ██╗  ██████╗      ███████╗ ███╗   ██╗ ██╗   ██╗
  ╚██╗ ██╔╝ ██╔═══██╗     ██╔════╝ ████╗  ██║ ██║   ██║
