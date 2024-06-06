@@ -146,6 +146,14 @@ const members = [
     links: [
       { icon: 'github', link: 'https://github.com/003307' },
     ]
+  }, 
+  {
+    avatar: 'https://www.github.com/Marszzz1116.png',
+    name: 'Marszzz1116',
+    title: 'Developer',
+    links: [
+      { icon: 'github', link: 'https://github.com/Marszzz1116' },
+    ]
   },  
 ];
 
