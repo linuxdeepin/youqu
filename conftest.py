@@ -679,13 +679,13 @@ def pytest_runtest_makereport(item, call):
                             try:
                                 for index, tem in enumerate(item.record["template"]):
                                     template = f"{splitext(item.record['image_path'])[0]}_template_{index}.png"
-                                    CmdCtl.run_cmd(f"cp {tem} {template}")
+                                    CmdCtl.run_cmd(f"cp {tem}.png {template}")
                                     allure.attach.file(
                                         template,
                                         name="模板图片",
                                         attachment_type=allure.attachment_type.PNG,
                                     )
-                            except KeyError:
+                            except (FileNotFoundError, KeyError):
                                 # 非图像识别错误
                                 pass
                             try:
