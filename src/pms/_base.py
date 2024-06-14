@@ -57,7 +57,7 @@ def write_case_result(item, report):
     run_case_id = None
     from_case_id = None
     for mark in item.own_markers:
-        if mark.args == ("PMS用例ID",):
+        if mark.args and isinstance(mark.args[0], str) and mark.args[0].strip("*") == "PMS用例ID":
             caseid = mark.name
         elif mark.args == ("run_case_id",):
             run_case_id = mark.name

@@ -86,16 +86,16 @@ class LocalRunner:
             **kwargs,
     ):
         logger("INFO")
-        try:
-            github_tags = RequestX().open_url(
-                f"https://api.github.com/repos/linuxdeepin/youqu/tags", timeout=1
-            )
-            latest_tag = json.loads(github_tags)[0].get("name")
-            if GlobalConfig.current_tag != latest_tag:
-                print(f"YouQu最新版本为: {latest_tag}，当前使用版本为: {GlobalConfig.current_tag}")
-                print(f"建议使用：sudo pip3 install youqu=={latest_tag} 升级版本")
-        except Exception:
-            pass
+        # try:
+        #     github_tags = RequestX().open_url(
+        #         f"https://api.github.com/repos/linuxdeepin/youqu/tags", timeout=1
+        #     )
+        #     latest_tag = json.loads(github_tags)[0].get("name")
+        #     if GlobalConfig.current_tag != latest_tag:
+        #         print(f"YouQu最新版本为: {latest_tag}，当前使用版本为: {GlobalConfig.current_tag}")
+        #         print(f"建议使用：sudo pip3 install youqu=={latest_tag} 升级版本")
+        # except Exception:
+        #     pass
         self.default = {
             Args.app_name.value: transform_app_name(
                 app_name if app_name or case_file else GlobalConfig.APP_NAME
