@@ -38,8 +38,6 @@ YouQu（有趣）是统信公司（Deepin/UOS）开源的一个 Linux 操作系�
 - [x] 🚌 Linux DBus 接口自动化测试
 - [x] 🚀 命令行自动化测试
 - [x] 🕷️ HTTP 接口自动化测试
-- [ ] ⏲️ Linux 桌面应用性能自动化测试
-- [ ]    💥 Fuzzy Desktop 桌面模糊测试
 
 ## [安装]()
 
