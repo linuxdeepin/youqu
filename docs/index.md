@@ -49,12 +49,6 @@ features:
     details: 保障HTTP接口的响应速度和数据传输安全，我们的自动化测试是您的明智之选。
     link: /实践/HTTP接口自动化测试/初始化项目
     linkText: 查看
-  - icon: ️⏲️
-    title: Linux 桌面应用性能自动化测试
-    details: 让Linux桌面应用性能测试更简单、高效，选YouQu自动化测试基础框架。
-  - icon: ️💥
-    title: Fuzzy Desktop 桌面模糊测试
-    details: 探索桌面应用的安全边界，YouQu自动化测试基础框架助您实现Fuzzy Desktop模糊测试无忧。
 
 ---
 
