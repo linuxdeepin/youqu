@@ -53,16 +53,19 @@ class Commit:
                 tmp.append(line.split("Author: ")[-1])
             elif line.startswith("Date: "):
                 tmp.append(line.split("Date: ")[1].strip())
+            else:
+                if line.strip() and not line.strip().startswith("Change-Id"):
+                    tmp.append(line.strip())
         return git_logs
 
     def commit_id(self):
         commit_ids = deque()
-        for commit_id, author, _time_str in self.git_logs:
+        for commit_id, author, _time_str, *msg in self.git_logs:
             time_str = " ".join(_time_str.split(" ")[:-1])
             git_dt = datetime.strptime(time_str, "%a %b %d %H:%M:%S %Y")
 
             if self.startdate <= git_dt <= self.enddate:
-                commit_ids.appendleft([commit_id, author, git_dt])
+                commit_ids.appendleft([commit_id, author, git_dt, msg])
 
         if not commit_ids:
             raise ValueError(f"{self.startdate} 到 {self.enddate} 没有获取到有效的 commit id")

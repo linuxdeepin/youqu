@@ -167,9 +167,10 @@ class CodeStatistics(Commit):
         if self.startdate:
             commit_id_pairs = self.commit_id()
             results = {}
-            for i, (commit_id, _author, git_dt) in enumerate(commit_id_pairs):
+            for i, (commit_id, _author, git_dt, msg) in enumerate(commit_id_pairs):
                 _res = self.compare_files(commit_id, _author, git_dt)
                 res = deepcopy(_res)
+                _res["msg"] = "\n".join(msg)
                 results_detail.append(_res)
                 author = res["author"]
                 new_test_case_num = res["新增用例"]
