@@ -62,7 +62,10 @@ class Commit:
         commit_ids = deque()
         for commit_id, author, _time_str, *msg in self.git_logs:
             time_str = " ".join(_time_str.split(" ")[:-1])
-            git_dt = datetime.strptime(time_str, "%a %b %d %H:%M:%S %Y")
+            try:
+                git_dt = datetime.strptime(time_str, "%a %b %d %H:%M:%S %Y")
+            except ValueError:
+                continue
 
             if self.startdate <= git_dt <= self.enddate:
                 commit_ids.appendleft([commit_id, author, git_dt, msg])
