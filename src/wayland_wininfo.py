@@ -120,7 +120,7 @@ class WaylandWindowInfo:
             window_info = windows_pointer[i]
             resource_name = window_info.resourceName.decode("utf-8")
             if " " in resource_name:
-                resource_name = resource_name.split(" ")[0]
+                resource_name = resource_name.split(" ")[-1]
             if not resource_name:
                 resource_name = (
                     os.popen(f"cat /proc/{window_info.pid}/cmdline").read().strip("\x00")
