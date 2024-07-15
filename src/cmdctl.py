@@ -269,3 +269,25 @@ class CmdCtl:
         os.system(
             f"process=$(ps -ef | grep {process} | {cmd}cut -c 9-15);echo '{conf.PASSWORD}' | sudo -S kill -9 $process > /dev/null 2>&1"
         )
+
+    @staticmethod
+    def expect_run(
+            cmd: str,
+            events: dict,
+            return_code=False,
+            timeout: int = 30
+    ):
+        """
+        expect_run(
+            "ssh username@machine_ip 'ls -l'",
+            events={'password':'secret\n'}
+        )
+        如果 return_code=True，返回 (stdout, return_code)
+        """
+        import pexpect
+        return pexpect.run(
+            cmd,
+            events=events,
+            withexitstatus=return_code,
+            timeout=timeout
+        )
