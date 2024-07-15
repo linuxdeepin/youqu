@@ -120,8 +120,8 @@ class WaylandWindowInfo:
             window_info = windows_pointer[i]
             resource_name = window_info.resourceName.decode("utf-8")
             if " " in resource_name:
-                resource_name = resource_name.split(" ")[0] if resource_name.split(" ")[0] else \
-                resource_name.split(" ")[-1]
+                _resource_name_1, _resource_name_2 = resource_name.split(" ")
+                resource_name = _resource_name_1 or _resource_name_2
             _info = {
                 "location": (
                     window_info.Geometry.x,
