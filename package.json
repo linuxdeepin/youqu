@@ -1,5 +1,5 @@
 {
-  "version": "2.6.6",
+  "version": "2.6.7",
   "devDependencies": {
     "busuanzi.pure.js": "^1.0.3",
     "markdown-it-mathjax3": "^4.3.2",
