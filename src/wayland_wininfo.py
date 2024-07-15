@@ -120,11 +120,8 @@ class WaylandWindowInfo:
             window_info = windows_pointer[i]
             resource_name = window_info.resourceName.decode("utf-8")
             if " " in resource_name:
-                resource_name = resource_name.split(" ")[-1]
-            if not resource_name:
-                resource_name = (
-                    os.popen(f"cat /proc/{window_info.pid}/cmdline").read().strip("\x00")
-                )
+                resource_name = resource_name.split(" ")[0] if resource_name.split(" ")[0] else \
+                resource_name.split(" ")[-1]
             _info = {
                 "location": (
                     window_info.Geometry.x,
@@ -151,8 +148,9 @@ class WaylandWindowInfo:
 
 if __name__ == "__main__":
     wwininfo = WaylandWindowInfo()
-    wwininfo.library.InitDtkWmDisplay()
-    for i in range(100):
-        print(wwininfo.window_info())
-        sleep(1)
-    wwininfo.library.DestoryDtkWmDisplay()
+    wwininfo.window_info()
+    # wwininfo.library.InitDtkWmDisplay()
+    # for i in range(100):
+    #     print(wwininfo.window_info())
+    #     sleep(1)
+    # wwininfo.library.DestoryDtkWmDisplay()
