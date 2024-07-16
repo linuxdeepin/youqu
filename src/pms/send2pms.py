@@ -10,6 +10,7 @@ import json
 import os
 import re
 from os.path import exists
+import socket
 from time import sleep
 from urllib.parse import urlencode
 from urllib.error import HTTPError
@@ -33,7 +34,7 @@ class Send2Pms(_Base):
         if res == "":
             # 测试套件回填时地址不一样
             run_case_html_url = f"{base_url}-0-{run_case_id}-1.html"
-            res = self.rx.open_url(run_case_html_url, timeout=10)
+            res = self.rx.open_url(run_case_html_url, timeout=30)
         steps_id = re.findall(r"name='steps\[(\d+)\]'", res)
         if steps_id and steps_id[0]:
             steps_id = steps_id[0]
@@ -50,7 +51,7 @@ class Send2Pms(_Base):
         }
         bytes_data = urlencode(data).encode("utf-8")
         # post请求接口
-        res = self.rx.session.open(fullurl=run_case_html_url, data=bytes_data, timeout=10)
+        res = self.rx.session.open(fullurl=run_case_html_url, data=bytes_data, timeout=30)
         status_code = res.status
         return status_code
 
@@ -97,7 +98,7 @@ class Send2Pms(_Base):
                             break
                         f.write(f"{case_name},{data['result']},request_ok\n")
                         break
-                except HTTPError:
+                except (HTTPError, socket.timeout):
                     sleep(1)
             else:
                 logger.info(f"{runs_id_cmd_log(data)} 数据回填失败 ✘")
@@ -125,7 +126,7 @@ class Send2Pms(_Base):
                     if status_code == 200:
                         logger.info(f"{runs_id_cmd_log(data)} 数据回填成功 ✔")
                         break
-                except HTTPError:
+                except (HTTPError, socket.timeout):
                     sleep(1)
 
             else:
