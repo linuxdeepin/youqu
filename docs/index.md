@@ -7,18 +7,12 @@ hero:
   text: "使用简单且功能强大的自动化测试框架"
   tagline: 让 Linux 自动化测试变得简单
   actions:
-    - theme: brand
-      text: YouQu是什么？
-      link: /指南/简介/YouQu是什么
     - theme: alt
-      text: 快速开始
-      link: /指南/简介/快速开始
+      text: YouQu3 🔥
+      link: "https://youqu.uniontech.com/v3/"
     - theme: alt
-      text: GitHub
-      link: "https://github.com/linuxdeepin/youqu"
-    - theme: alt
-      text: Gitee
-      link: "https://gitee.com/deepin-community/youqu"
+      text: PyLinuxAuto 🔥
+      link: "https://youqu.uniontech.com/pylinuxauto/"
   image:
     src: /logo.png
     alt: YouQu
