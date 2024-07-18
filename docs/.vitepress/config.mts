@@ -25,7 +25,7 @@ export default withMermaid(
 
         themeConfig: {
             // https://vitepress.dev/reference/default-theme-config
-            siteTitle: false,
+            siteTitle: "YouQu",
             nav: [
                 {text: '首页', link: '/index'},
                 {text: '指南', link: '/指南/简介/YouQu是什么'},
@@ -169,7 +169,7 @@ export default withMermaid(
             },
             ignoreDeadLinks: true,
             // =========================================================
-            logo: {src: '/logo.png', width: 70, height: 24},
+            logo: {src: '/logo.png', width: 25, height: 24},
             socialLinks: [
                 {icon: 'github', link: 'https://github.com/linuxdeepin/youqu'}
             ],
