@@ -2,6 +2,13 @@
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
 
+ctrl_c_handler(){
+    echo "正在退出……"
+    exit 1
+}
+
+trap ctrl_c_handler INT
+
 check_status(){
     if [ $? = 0 ]; then
         echo -e "$1\t安装成功 √"
