@@ -7,10 +7,10 @@ hero:
   text: "使用简单且功能强大的自动化测试框架"
   tagline: 让 Linux 自动化测试变得简单
   actions:
-    - theme: alt
+    - theme: brand
       text: YouQu3 🔥
       link: "https://youqu.uniontech.com/v3/"
-    - theme: alt
+    - theme: brand
       text: PyLinuxAuto 🔥
       link: "https://youqu.uniontech.com/pylinuxauto/"
   image:
@@ -121,6 +121,14 @@ const members = [
       { icon: 'github', link: 'https://github.com/Marszzz1116' },
     ]
   },  
+  {
+    avatar: 'https://www.github.com/lu-xianseng.png',
+    name: 'lu-xianseng',
+    title: 'Developer',
+    links: [
+      { icon: 'github', link: 'https://github.com/lu-xianseng' },
+    ]
+  },  
 ];
 
 const helpers = [
@@ -156,15 +164,6 @@ const helpers = [
       { icon: 'github', link: 'https://github.com/momiji33' },
     ]
   },
-  {
-    avatar: 'https://www.github.com/lu-xianseng.png',
-    name: 'lu-xianseng',
-    title: 'Helper',
-    links: [
-      { icon: 'github', link: 'https://github.com/lu-xianseng' },
-    ]
-  },
-  
 ]
 </script>
 
@@ -186,7 +185,7 @@ const helpers = [
       Helpers
     </template>
     <template #lead>
-      感谢以下所有人的提供帮助及重要建议
+      感谢以下所有人提供的帮助及重要建议
     </template>
   </VPTeamPageTitle>
   <VPTeamMembers
