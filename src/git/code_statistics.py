@@ -200,12 +200,6 @@ class CodeStatistics(Commit):
             new_method_num = res["新增方法"]
             del_method_num = res["删除方法"]
             fix_method_num = res["修改方法"]
-            # new_test_cases = res["新增用例明细"]
-            # del_tset_cases = res["删除用例明细"]
-            # fix_test_cases = res["修改用例明细"]
-            # new_methods = res["新增方法明细"]
-            # del_methods = res["删除方法明细"]
-            # fix_methods = res["修改方法明细"]
             commit_id = res["commit_id"]
             _git_dt = res["git_dt"]
             if results.get(author) is None:
