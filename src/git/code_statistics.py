@@ -32,6 +32,7 @@ class CodeStatistics(Commit):
 
         if startdate:
             super().__init__(app_name, branch=branch, startdate=startdate, enddate=enddate)
+
         self.ignore_txt = ["from", "import", '"""', '    """', "class", "#", "@"]
 
         for i in range(100):
@@ -58,6 +59,12 @@ class CodeStatistics(Commit):
         new_method_num = 0
         del_method_num = 0
         fix_method_num = 0
+        new_test_cases = []
+        del_test_cases = []
+        fix_test_cases = []
+        new_mehthods = []
+        del_mehthods = []
+        fix_mehthods = []
         git_files = self.get_git_files(commit_id=commit_id)
         for filepath in git_files:
             filename = filepath.split("/")[-1]
@@ -70,12 +77,15 @@ class CodeStatistics(Commit):
                 for line in dif_lines:
                     if line.startswith("--- /dev/null"):
                         new_test_case_num += 1
+                        new_test_cases.append(filepath)
                         break
                     elif line.startswith("+++ /dev/null"):
                         del_test_case_num += 1
+                        del_test_cases.append(filepath)
                         break
                 else:
                     fix_test_case_num += 1
+                    fix_test_cases.append(filepath)
             # method
             else:
                 methods = []
@@ -110,6 +120,7 @@ class CodeStatistics(Commit):
                                         continue
                                     _fix_debug.append(method)
                                     fix_method_num += 1
+                                    fix_mehthods.append(f"{filepath}[{method_name}]")
                                     break
 
                     # 正常出现的方法
@@ -117,9 +128,11 @@ class CodeStatistics(Commit):
                     elif method_name.startswith("+"):
                         _new_debug.append(method)
                         new_method_num += 1
+                        new_mehthods.append(f"{filepath}[{method_name}]")
                     # 方法名称是-开头，直接视为删除方法
                     elif method_name.startswith("-"):
                         del_method_num += 1
+                        del_mehthods.append(f"{filepath}[{method_name}]")
                     else:
                         if method_content:
                             for content in method_content:
@@ -131,6 +144,7 @@ class CodeStatistics(Commit):
                                         continue
                                     _fix_debug.append(method)
                                     fix_method_num += 1
+                                    fix_mehthods.append(f"{filepath}[{method_name}]")
                                     break
 
         res = {
@@ -144,6 +158,12 @@ class CodeStatistics(Commit):
             "新增方法": new_method_num,
             "删除方法": del_method_num,
             "修改方法": fix_method_num,
+            "新增用例明细": new_test_cases,
+            "删除用例明细": del_test_cases,
+            "修复用例明细": fix_test_cases,
+            "新增方法明细": new_mehthods,
+            "删除方法明细": del_mehthods,
+            "修复方法明细": fix_mehthods,
         }
         return res
 
@@ -162,39 +182,46 @@ class CodeStatistics(Commit):
         logger.info(f"{Fore.GREEN}数据结果{'详细' if detail else '汇总'}报告：{result_file}{Fore.RESET}")
 
     def codex(self):
-        results = None
+        if not self.startdate:
+            raise ValueError
+
         results_detail = []
-        if self.startdate:
-            commit_id_pairs = self.commit_id()
-            results = {}
-            for i, (commit_id, _author, git_dt, msg) in enumerate(commit_id_pairs):
-                _res = self.compare_files(commit_id, _author, git_dt)
-                res = deepcopy(_res)
-                _res["msg"] = "\n".join(msg)
-                results_detail.append(_res)
-                author = res["author"]
-                new_test_case_num = res["新增用例"]
-                del_test_case_num = res["删除用例"]
-                fix_test_case_num = res["修改用例"]
-                new_method_num = res["新增方法"]
-                del_method_num = res["删除方法"]
-                fix_method_num = res["修改方法"]
-                commit_id = res["commit_id"]
-                _git_dt = res["git_dt"]
-                if results.get(author) is None:
-                    results[author] = res
-                else:
-                    results[author]["新增用例"] += new_test_case_num
-                    results[author]["删除用例"] += del_test_case_num
-                    results[author]["修改用例"] += fix_test_case_num
-                    results[author]["新增方法"] += new_method_num
-                    results[author]["删除方法"] += del_method_num
-                    results[author]["修改方法"] += fix_method_num
-                    results[author]["commit_id"] = commit_id
-                    results[author]["git_dt_end"] = _git_dt
+        commit_id_pairs = self.commit_id()
+        results = {}
+        for i, (commit_id, _author, git_dt, msg) in enumerate(commit_id_pairs):
+            _res = self.compare_files(commit_id, _author, git_dt)
+            res = deepcopy(_res)
+            _res["msg"] = "\n".join(msg)
+            results_detail.append(_res)
+            author = res["author"]
+            new_test_case_num = res["新增用例"]
+            del_test_case_num = res["删除用例"]
+            fix_test_case_num = res["修改用例"]
+            new_method_num = res["新增方法"]
+            del_method_num = res["删除方法"]
+            fix_method_num = res["修改方法"]
+            # new_test_cases = res["新增用例明细"]
+            # del_tset_cases = res["删除用例明细"]
+            # fix_test_cases = res["修改用例明细"]
+            # new_methods = res["新增方法明细"]
+            # del_methods = res["删除方法明细"]
+            # fix_methods = res["修改方法明细"]
+            commit_id = res["commit_id"]
+            _git_dt = res["git_dt"]
+            if results.get(author) is None:
+                results[author] = res
+            else:
+                results[author]["新增用例"] += new_test_case_num
+                results[author]["删除用例"] += del_test_case_num
+                results[author]["修改用例"] += fix_test_case_num
+                results[author]["新增方法"] += new_method_num
+                results[author]["删除方法"] += del_method_num
+                results[author]["修改方法"] += fix_method_num
+                results[author]["commit_id"] = commit_id
+                results[author]["git_dt_end"] = _git_dt
 
         if results is None:
-            raise ValueError()
+            raise ValueError
         logger.info(Fore.GREEN +  ("=" * 100) + Fore.RESET)
         self.write_result(results)
         if results_detail:
@@ -202,7 +229,7 @@ class CodeStatistics(Commit):
 
 
 if __name__ == "__main__":
-    app_name = "apps/autotest_deepin_kwin_UI"
+    app_name = "apps/autotest_kernel"
     CodeStatistics(
         app_name=app_name,
         branch="at-develop/eagle",

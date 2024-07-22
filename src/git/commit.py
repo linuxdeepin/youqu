@@ -23,7 +23,7 @@ class Commit:
         self.startdate = datetime.strptime(startdate, "%Y-%m-%d")
         self.enddate = (
             self.now_dt
-            if enddate == ""
+            if enddate == "" or enddate is None
             else datetime.strptime(enddate, "%Y-%m-%d") + timedelta(days=1)
         )
         self.branch = branch
@@ -78,7 +78,7 @@ class Commit:
 
 if __name__ == "__main__":
     Commit(
-        app_name="apps/autotest_deepin_kwin_UI",
+        app_name="apps/autotest_kernel",
         branch="at-develop/eagle",
-        startdate="2024-03-20",
+        startdate="2024-05-20",
     ).commit_id()
