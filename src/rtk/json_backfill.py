@@ -45,6 +45,7 @@ class JsonBackfill:
             "case": "",
             "task": json_backfill_task_id,
             "result": "",
+            "is_closed": "",
             "module": "",
             "longrepr": "",
             "pm_ip": "",
@@ -58,7 +59,9 @@ class JsonBackfill:
                 if case_id:
                     tpl["case"] = case_id[0]
                 tpl["module"] = module
-                tpl["result"] = value.get("result")
+                result = value.get("result")
+                tpl["result"] = result
+                tpl["is_closed"] = False if result == "fail" else True
                 tpl["longrepr"] = value.get("longrepr")
                 tpl["pm_ip"] = _ip
                 res = self.api.post(
