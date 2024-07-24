@@ -200,12 +200,10 @@ class LocalRunner:
             pms_cfg = GetCfg(pms_info_file_path, "pms")
             cmd.extend(["--pms_user", pms_cfg.get("PMS_USER", default="")])
             cmd.extend(["--pms_password", pms_cfg.get("PMS_PASSWORD", default="")])
-            keywords_or_marker = False
         # 通过pms测试套执行用例
         elif default.get(Args.pms_user.value) and default.get(Args.pms_password.value):
             cmd.extend(["--pms_user", default.get(Args.pms_user.value)])
             cmd.extend(["--pms_password", default.get(Args.pms_password.value)])
-            keywords_or_marker = False
         # 通过本地测试套
         elif default.get(Args.case_file.value):
             file_path = f"{GlobalConfig.ROOT_DIR}/{default.get(Args.case_file.value)}"
