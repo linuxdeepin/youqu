@@ -218,7 +218,7 @@ class DogtailUtils(MouseKey):
     def find_element_by_attr_and_right_click(self, expr, index=0):
         self.find_element_by_attr(expr, index).click(3)
 
-    def find_elements_by_recursive(self, ele_name):
+    def find_elements_to_the_end(self, ele_name):
         """
          递归查找应用界面的元素(适用于查找多个同名称元素)
         :param ele_name: 需要查找的元素名称

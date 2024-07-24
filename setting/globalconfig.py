@@ -2,22 +2,18 @@
 # _*_ coding:utf-8 _*_
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
-# pylint: disable=C0114
-from configparser import RawConfigParser  # 解决读取log报错
+import pathlib
+from configparser import RawConfigParser
 from enum import Enum
 from enum import unique
 from getpass import getuser
 from os import popen
 from os.path import abspath
 from os.path import dirname
-from os.path import join
 from os.path import exists
+from os.path import join
 from platform import machine
 from time import strftime
-import pathlib
-
-
-# pylint: disable=C0116,C0103,C0103,C0115,R0903
 
 
 class GetCfg:
