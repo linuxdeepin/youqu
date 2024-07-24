@@ -128,6 +128,14 @@ const members = [
     links: [
       { icon: 'github', link: 'https://github.com/lu-xianseng' },
     ]
+  },
+  {
+    avatar: 'https://www.github.com/KeyLee123.png',
+    name: 'KeyLee123',
+    title: 'Developer',
+    links: [
+      { icon: 'github', link: 'https://github.com/KeyLee123' },
+    ]
   },  
 ];
 
