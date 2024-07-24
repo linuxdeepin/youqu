@@ -217,3 +217,26 @@ class DogtailUtils(MouseKey):
 
     def find_element_by_attr_and_right_click(self, expr, index=0):
         self.find_element_by_attr(expr, index).click(3)
+
+    def find_elements_by_recursive(self, find_element):
+        """
+         递归查找应用界面的元素(适用于查找多个同名称元素)
+        :param find_element: 需要查找的元素名称
+        :return: 查找到的元素对象的列表
+        """
+        find_list = []
+
+        def find_recur(father_level=None):
+            root_element = DogtailUtils(self.name).obj
+            if not father_level:
+                father_level = root_element
+            chileren_list = father_level.children
+            if chileren_list:
+                for i in chileren_list:
+                    combo_value = i.combovalue
+                    if combo_value == find_element:
+                        find_list.append(i)
+                    find_recur(i)
+
+        find_recur()
+        return find_list
