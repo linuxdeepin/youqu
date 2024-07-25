@@ -57,8 +57,8 @@ class CmdCtl:
         try:
             if sys.version_info >= (3, 7):
                 kwargs["text"] = True
-            result = cls._run(command,**kwargs
-            )
+            result = cls._run(command, **kwargs
+                              )
             data = result.stdout
             if isinstance(data, bytes):
                 data = data.decode("utf-8")
@@ -78,16 +78,22 @@ class CmdCtl:
     def sudo_run_cmd(
             cls,
             command,
-            interrupt=False,
-            timeout=25,
-            out_debug_flag=True,
-            command_log=True,
-            password=None,
+            workdir: str = None,
+            interrupt: bool = False,
+            timeout: int = 25,
+            out_debug_flag: bool = True,
+            command_log: bool = True,
+            password: str = None,
     ):
         if password is None:
             password = conf.PASSWORD
+        wd = ""
+        if workdir:
+            if not os.path.exists(workdir):
+                raise FileNotFoundError
+            wd = f"cd {workdir} && "
         return cls.run_cmd(
-            f"echo '{password}' | sudo -S {command}",
+            f"{wd}echo '{password}' | sudo -S {command}",
             interrupt=interrupt,
             timeout=timeout,
             out_debug_flag=out_debug_flag,
@@ -95,7 +101,14 @@ class CmdCtl:
         )
 
     @classmethod
-    def run_cmd(cls, command, interrupt=False, timeout=25, out_debug_flag=True, command_log=True):
+    def run_cmd(
+            cls,
+            command,
+            interrupt=False,
+            timeout=25,
+            out_debug_flag=True,
+            command_log=True
+    ):
         """
          执行shell命令
         :param command: shell 命令
