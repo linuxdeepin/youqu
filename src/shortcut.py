@@ -270,6 +270,22 @@ class ShortCut(MouseKey):
         cls.hot_key("alt", "tab")
 
     @classmethod
+    def ctrl_tab(cls):
+        """
+         快捷键ctrl+table
+        :return:
+        """
+        cls.hot_key("ctrl", "tab")
+
+    @classmethod
+    def ctrl_shift_tab(cls):
+        """
+         快捷键ctrl+table
+        :return:
+        """
+        cls.hot_key("ctrl", "shift", "tab")
+
+    @classmethod
     def alt_m(cls):
         """
          ctrl_m
