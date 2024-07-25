@@ -137,6 +137,14 @@ const members = [
       { icon: 'github', link: 'https://github.com/KeyLee123' },
     ]
   },  
+  {
+    avatar: 'https://www.github.com/qisijia367.png',
+    name: 'qisijia367',
+    title: 'Developer',
+    links: [
+      { icon: 'github', link: 'https://github.com/qisijia367' },
+    ]
+  },  
 ];
 
 const helpers = [
