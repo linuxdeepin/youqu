@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
 export PIPENV_VERBOSITY=-1
