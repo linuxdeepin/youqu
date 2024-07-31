@@ -46,13 +46,14 @@ class CmdCtl:
         return subprocess.CompletedProcess(process.args, retcode, stdout, stderr)
 
     @classmethod
-    def _getstatusoutput(cls, command, timeout):
+    def _getstatusoutput(cls, command, timeout, executable):
         """getstatusoutput"""
         kwargs = {
             "shell": True,
             "stderr": subprocess.STDOUT,
             "stdout": subprocess.PIPE,
             "timeout": timeout,
+            "executable": executable,
         }
         try:
             if sys.version_info >= (3, 7):
@@ -107,7 +108,8 @@ class CmdCtl:
             interrupt=False,
             timeout=25,
             out_debug_flag=True,
-            command_log=True
+            command_log=True,
+            executable="/bin/bash"
     ):
         """
          执行shell命令
@@ -118,7 +120,7 @@ class CmdCtl:
         :param command_log: 执行的命令字符串日志
         :return: 返回终端输出
         """
-        status, out = cls._getstatusoutput(command, timeout=timeout)
+        status, out = cls._getstatusoutput(command, timeout=timeout, executable=executable)
         if command_log:
             logger.debug(command)
         if status and interrupt:
