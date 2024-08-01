@@ -214,7 +214,7 @@ class RemoteRunner:
         )
         system(
             f"{self.ssh % password} {user}@{_ip} "
-            f'"cd ~/{self.server_project_path}/ && bash env.sh"'
+            f'"cd ~/{self.server_project_path}/ && bash env.sh -p {password}"'
         )
         logger.info(f"环境安装完成 - < {user}@{_ip} >")
 
