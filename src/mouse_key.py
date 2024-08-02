@@ -278,6 +278,8 @@ class MouseKey:
                 if wayland_shift:
                     _hk.insert(1, "shift")
                 cls.hot_key(*_hk)
+                # 目前的方案中，粘贴内容后会在末尾会多出一个空格，临时处理：去掉末尾空格
+                cls.press_key("backspace")
             else:
                 for key in message:
                     if _ydotool:
