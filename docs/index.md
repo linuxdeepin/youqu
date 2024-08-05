@@ -36,7 +36,7 @@ const members = [
     name: 'mikigo',
     title: 'Creator',
     org: 'YouQu3',
-    orgLink: 'https://github.com/funny-dream/youqu3',
+    orgLink: 'https://github.com/linuxdeepin/youqu',
     links: [
       { icon: 'github', link: 'https://github.com/mikigo' },
       { icon: 'x', link: 'https://twitter.com/mikigo_' },

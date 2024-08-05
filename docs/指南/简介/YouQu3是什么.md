@@ -3,7 +3,7 @@ outline: false
 ---
 
 <p align="center">
-  <a href="https://github.com/funny-dream/youqu3">
+  <a href="https://github.com/linuxdeepin/youqu">
     <img src="/logo.png" width="100" alt="YouQu3">
   </a>
 </p>

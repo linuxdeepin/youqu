@@ -112,7 +112,7 @@ export default defineConfig({
         // =========================================================
         logo: {src: '/logo.png', width: 22, height: 30},
         socialLinks: [
-            {icon: 'github', link: 'https://github.com/funny-dream/youqu3'}
+            {icon: 'github', link: 'https://github.com/linuxdeepin/youqu'}
         ],
         footer: {
             copyright: `版权所有 © 2024-${new Date().getFullYear()} 统信软件`

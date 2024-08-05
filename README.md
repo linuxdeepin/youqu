@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/funny-dream/youqu3">
+  <a href="https://github.com/linuxdeepin/youqu">
     <img src="./docs/assets/logo.png" width="100" alt="YouQu3">
   </a>
 </p>
@@ -14,7 +14,7 @@
 
 ![PyPI](https://img.shields.io/pypi/v/youqu3?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu3%2F&color=%23F79431)
 ![Downloads](https://static.pepy.tech/badge/youqu3)
-![Hits](https://hits.sh/github.com/funny-dream/youqu3.svg?style=flat&label=visitors&color=blue)
+![Hits](https://hits.sh/github.com/linuxdeepin/youqu.svg?style=flat&label=visitors&color=blue)
 
 --------------
 
@@ -62,4 +62,4 @@ youqu3 init
 
 ## 开源许可证
 
-YouQu3 在 [GPL-2.0](https://github.com/funny-dream/youqu3/blob/main/LICENSE) 下发布
+YouQu3 在 [GPL-2.0](https://github.com/linuxdeepin/youqu/blob/main/LICENSE) 下发布
