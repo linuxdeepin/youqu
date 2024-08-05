@@ -153,7 +153,7 @@ class AssertCommon:
             _path = f"{widget}/{file}"
         else:
             _path = widget
-        logger.info(f"断言文件是否存在<{_path}>")
+        logger.info(f"断言文件存在<{_path}>")
         if not os.path.exists(os.path.expanduser(_path)):
             raise AssertionError(f"文件不存在！ 路径 {_path}")
         return True
@@ -167,7 +167,7 @@ class AssertCommon:
         :param recursive: 是否递归查找
         """
         sleep(1)
-        logger.info(f"断言文件是否不存在<{widget}>")
+        logger.info(f"断言文件不存在<{widget}>")
         if recursive:
             if file:
                 for _, _, files in os.walk(widget):
@@ -180,7 +180,6 @@ class AssertCommon:
         else:
             if file:
                 widget = f"{widget}/{file}"
-            logger.info(f"断言文件是否存在<{widget}>")
             if os.path.exists(os.path.expanduser(widget)):
                 raise AssertionError(f"文件存在！ 路径 {widget}")
 
