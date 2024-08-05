@@ -11,5 +11,5 @@ concurrency:
 
 jobs:
   clacheck:
-    uses: linuxdeepin/.github/.github/workflows/cla-check.yml@youqu3
+    uses: linuxdeepin/.github/.github/workflows/cla-check.yml@master
     secrets: inherit

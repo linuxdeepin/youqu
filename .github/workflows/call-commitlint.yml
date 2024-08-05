@@ -8,4 +8,4 @@ concurrency:
 
 jobs:
   check_job:
-    uses: linuxdeepin/.github/.github/workflows/commitlint.yml@youqu3
+    uses: linuxdeepin/.github/.github/workflows/commitlint.yml@master
