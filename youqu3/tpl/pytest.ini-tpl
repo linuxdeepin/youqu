@@ -1,0 +1,18 @@
+[pytest]
+addopts =
+    -s
+    --no-header
+    --verbosity=2
+    --show-capture=no
+    --reruns-delay=1
+    --color=auto
+    --code-highlight=yes
+    --tb=auto
+    -r fEs
+    --continue-on-collection-errors
+filterwarnings =
+    ignore
+    ignore::UserWarning
+    ignore:.*U.*mode is deprecated:DeprecationWarning
+
+console_output_style = count

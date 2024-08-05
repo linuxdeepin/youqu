@@ -1,0 +1,27 @@
+# ${app_name}
+
+## 环境部署
+
+```bash
+pip install -r requirements.txt
+```
+
+## Ruff
+
+## 安装 Ruff
+
+```bash
+pip install ruff
+```
+
+### 代码检查
+
+```bash
+ruff check .
+```
+
+### 代码格式化
+
+```bash
+ruff format .
+```

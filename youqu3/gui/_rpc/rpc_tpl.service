@@ -1,0 +1,13 @@
+[Unit]
+Description=RPC Service
+After=multi-user.target
+
+[Service]
+User={user}
+Group={user}
+Type=idle
+WorkingDirectory={client_rootdir}
+ExecStart={start_service}
+
+[Install]
+WantedBy=multi-user.target

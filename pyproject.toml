@@ -1,36 +1,77 @@
+[project]
+name = "youqu3"
+description = "YouQu-Next"
+authors = [
+    { name = "mikigo", email = "huangmingqiang@uniontech.com" },
+]
+dependencies = [
+    "pytest-timeout",
+    "pytest-rerunfailures",
+    "pytest-mark-manage",
+    "allure-pytest",
+    "pytest-json-report",
+    "funnylog2",
+    "click",
+    "pexpect",
+]
+dynamic = ["version"]
+
+requires-python = ">=3.7"
+readme = "README.md"
+license = { text = "GPL2.0" }
+
+[project.optional-dependencies]
+gui = [
+    "pylinuxauto",
+    "youqu-html-rpc",
+    "pytest-record-video",
+]
+webui = [
+    "playwright",
+    "youqu-html-rpc",
+    "pytest-record-video",
+]
+http = [
+    "requests",
+    "youqu-html-rpc",
+]
+remote = [
+    "fabric",
+]
+local-html = [
+    "youqu-html",
+]
+
+[project.scripts]
+youqu3 = "youqu3.driver.cli:cli"
+
+[project.entry-points.pytest11]
+pytest-youqu-plugin = "youqu3.plugin"
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[project]
-name = "youqu"
-version = "2.6.9"
-authors = [
-    { name = "mikigo", email = "huangmingqiang@uniontech.com" },
-]
 
-description = "youqu"
-readme = "youqu/README.md"
-requires-python = ">=3.6"
-classifiers = [
-    "Programming Language :: Python :: 3.6",
-    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
-    "Operating System :: OS Independent",
-]
-
-dependencies = [
-]
-
-[project.optional-dependencies]
-
-[project.scripts]
-youqu-startproject = "youqu.startproject:cli"
+[tool.hatch]
+version = { path = "youqu3/__version__.py" }
 
 [tool.hatch.build.targets.wheel]
 packages = [
-    "/youqu",
+    "/youqu3",
 ]
 
-[project.urls]
-Source = "https://github.com/linuxdeepin/youqu"
-Documentation = "https://linuxdeepin.github.io/youqu"
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "/.github",
+  "/.venv",
+  "/.env",
+  "/.gitignore",
+  "/dist",
+  "/docs",
+  "/node_modules",
+  "/tests",
+  "/package.json",
+  "/Pipfile",
+  "/publish.sh",
+]

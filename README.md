@@ -1,177 +1,65 @@
 <p align="center">
-  <a href="https://linuxdeepin.github.io/youqu">
-    <img src="./docs/assets/logo.png" width="100" alt="YouQu">
+  <a href="https://github.com/funny-dream/youqu3">
+    <img src="./docs/assets/logo.png" width="100" alt="YouQu3">
   </a>
 </p>
+<h1 align="center">YouQu3</h1>
 <p align="center">
-    <em>YouQu（有趣），一个使用简单且功能强大的自动化测试基础框架。</em>
+    <em>Next-Gen Linux Autotest Framework.</em>
 </p>
 
 
+![Python](https://img.shields.io/badge/Python-007CFF?style=for-the-badge&logo=Python&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-007CFF?style=for-the-badge&logo=linux&logoColor=white)
 
+![PyPI](https://img.shields.io/pypi/v/youqu3?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu3%2F&color=%23F79431)
+![Downloads](https://static.pepy.tech/badge/youqu3)
+![Hits](https://hits.sh/github.com/funny-dream/youqu3.svg?style=flat&label=visitors&color=blue)
 
-[![GitHub issues](https://img.shields.io/github/issues/linuxdeepin/youqu?color=%23F79431)](https://github.com/linuxdeepin/youqu/issues)
-[![PyPI](https://img.shields.io/pypi/v/youqu?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu%2F&color=%23F79431)](https://pypi.org/project/youqu/)
-![Static Badge](https://img.shields.io/badge/UOS%2FDeepin/openEuler-Platform?style=flat&label=OS&color=%23F79431)
+--------------
 
-[![Downloads](https://static.pepy.tech/badge/youqu)](https://pepy.tech/project/youqu)
-[![Hits](https://hits.sh/github.com/linuxdeepin/youqu.svg?style=flat&label=visitors&color=blue)](https://github.com/linuxdeepin/youqu)
+文档：https://youqu.uniontech.com/v3/
 
----
+--------------
 
-**深度社区：<a href="https://github.com/linuxdeepin/youqu" target="_blank">linuxdeepin</a> | <a href="https://gitee.com/deepin-community/youqu" target="_blank">deepin-community</a>**
+**YouQu3** 是下一代 Linux 自动化测试框架，在继承 YouQu2 诸多亮点功能的同时解决其遇到的问题，同时对各功能进行插件化、模块化改造，全面优化框架接口调用机制。
 
-**欧拉社区：<a href="https://gitee.com/src-openeuler/youqu" target="_blank">src-openeuler</a>**
+## [特性]()
 
-**官方文档：<a href="https://youqu.uniontech.com" target="_blank">https://youqu.uniontech.com</a>**
-
-**欢迎加入 [YouQu官方兴趣小组](https://youqu.uniontech.com/SIG.html)**
-
----
-
-YouQu（有趣）是统信公司（Deepin/UOS）开源的一个 Linux 操作系统的自动化测试框架，支持多元化元素定位和断言、用例标签化管理和执行、强大的日志和报告输出等特色功能，同时完美兼容 X11、Wayland 显示协议，环境部署简单，操作易上手。🔥
-
-## [YouQu（有趣）能做什么]()
-
-- [x] 💻 Linux 桌面应用 UI 自动化测试
-- [x] 🌏 Web UI 自动化测试
-- [x] 🚌 Linux DBus 接口自动化测试
-- [x] 🚀 命令行自动化测试
-- [x] 🕷️ HTTP 接口自动化测试
+- 以 Python 包的形式提供框架能力，方便安装、更新。
+- 自带虚拟环境管理器，支持离线部署，用例整体打包交付之后，可以在无网络环境下直接运行。
+- 极致轻量化、可定制化依赖，可以根据测试项目类型安装对应的依赖。
+- 功能可插拔，以插件的形式提供功能，不安装插件的情况下框架也能正常运行。
+- 可视化配置，在浏览器中输入一些配置后即可驱动测试用例执行，搭配远程执行功能，可实现群控测试机执行。
+- 支持非开发者下运行，简化系统环境部署。
 
 ## [安装]()
 
-从 PyPI 安装:
-
-
-```shell
-$ sudo pip3 install youqu
-```
-
-<details> 
-    <summary><b>不加 sudo ?</b></summary> 
-
------------------------
-
-不加 sudo 也可以：
+基础环境：
 
 ```shell
-pip3 install youqu
+pip install youqu3
 ```
 
-但可能出现 `youqu-startproject` 命令无法使用；
+![](docs/assets/install.gif)
 
-这是因为不加 `sudo` 时，`youqu-startproject` 命令会生成在 `$HOME/.local/bin` 下，
+## 创建用例工程
 
-而此路径可能不在环境变量（`PATH`）中，因此您需要添加环境变量：
+创建一个目录
+
+```bash
+mkdir my_autotest
+```
+
+使用脚手架功能创建用例工程
 
 ```shell
-export PATH=$PATH:$HOME/.local/bin
+cd my_autotest/
+youqu3 init
 ```
 
------------------------
+![](docs/assets/init.gif)
 
-</details>
+## 开源许可证
 
-
-## [创建项目]()
-
-您可以在任意目录下，使用 `youqu-startproject` 命令创建一个项目：
-
-```shell
-$ youqu-startproject my_project
-```
-
-注意：所有命令不要以 `root` 用户执行！
-
-如果 `youqu-startproject` 后面不加参数，默认的项目名称为：`youqu` ；
-
-![](./docs/assets/install.gif)
-
-## [安装依赖]()
-
-安装部署 YouQu 执行所需环境： 
-
-```shell
-$ cd my_project
-$ bash env.sh
-# 使用的默认密码是 1；
-# 您可以使用 -p 选项传入密码：bash env.sh -p ${my_password}；
-# 也可以修改配置文件 setting/globalconfig.ini 里面的 PASSWORD 配置项；
-```
-
-## [创建 APP 工程]()
-
-使用 `startapp` 命令自动创建 APP 工程：
-
-```shell
-$ youqu manage.py startapp autotest_deepin_some
-```
-
-自动创建的 APP 工程遵循完整的 PO 设计模式，让你可以专注于用例和方法的编写维护。
-
-在 `apps` 目录下会自动创建一个 APP 工程：`autotest_deepin_some`，同时新建好工程模板目录和模板文件：
-
-```shell
-my_project
-├── apps
-│   ├── autotest_deepin_some  # <-- APP工程
-...     ├── ...
-```
-
-**在你的远程 Git 仓库中，只需要保存 APP 工程这部分代码即可。**
-
-`autotest_deepin_some` 是你的  APP 工程名称，在此基础上，你可以快速的开始你的 AT 项目，更重要的是确保创建工程的规范性。
-
-`apps` 目录下可以存在任意多个 APP 工程。
-
-[运行]()
--------
-
-### [1. 执行管理器]()
-
-在项目根目录下有一个 `manage.py` ，它是一个执行器入口，提供了本地执行、远程执行等的功能。
-
-### [2. 本地执行]()
-
-
-```shell
-$ youqu manage.py run
-```
-
-#### [2.1. 命令行参数]()
-
-在一些 CI 环境下使用命令行参数会更加方便：
-
-
-```shell
-$ youqu manage.py run -a apps/autotest_deepin_some -k "xxx" -t "yyy"
-```
-
-更多用法可以使用 `-h` 或 `--help` 查看。
-
-#### [2.2. 配置文件]()
-
-通过配置文件配置参数
-
-在配置文件 [setting/globalconfig.ini](https://github.com/linuxdeepin/youqu/blob/master/setting/globalconfig.ini)  里面支持配置对执行的一些参数进行配置。
-
-### [3. 远程执行]()
-
-远程执行就是用本地作为服务端控制远程机器执行，远程机器执行的用例相同。
-
-使用 `remote` 命令：
-
-
-```shell
-$ youqu manage.py remote
-```
-
-## [贡献]()
-
-[贡献文档](https://youqu.uniontech.com/CONTRIBUTING.html) 
-
-
-## [开源许可证]()
-
-YouQu 在 [GPL-2.0](https://github.com/linuxdeepin/youqu/blob/master/LICENSE) 下发布。
+YouQu3 在 [GPL-2.0](https://github.com/funny-dream/youqu3/blob/main/LICENSE) 下发布

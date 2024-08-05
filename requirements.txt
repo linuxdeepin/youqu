@@ -1,0 +1,10 @@
+-i https://pypi.tuna.tsinghua.edu.cn/simple
+
+pytest-timeout
+pytest-rerunfailures
+pytest-mark-manage
+allure-pytest
+pytest-json-report
+funnylog2
+click
+pexpect

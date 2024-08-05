@@ -5,7 +5,6 @@ import { useData, useRoute, inBrowser } from 'vitepress';
 import mediumZoom from 'medium-zoom';
 import vitepressBackToTop from 'vitepress-plugin-back-to-top';
 import 'vitepress-plugin-back-to-top/dist/style.css';
-import "vitepress-markdown-timeline/dist/theme/index.css";
 import busuanzi from 'busuanzi.pure.js';
 
 import './style/index.css';
@@ -52,10 +51,10 @@ export default {
     // giscus配置
     giscusTalk(
         {
-          repo: 'linuxdeepin/youqu', //仓库
-          repoId: 'R_kgDOKDOpHg', //仓库ID
+          repo: 'funny-dream/youqu3', //仓库
+          repoId: 'R_kgDOMBemKg', //仓库ID
           category: 'Announcements', // 讨论分类
-          categoryId: 'DIC_kwDOKDOpHs4CcRPx', //讨论分类ID
+          categoryId: 'DIC_kwDOMBemKs4CgATm', //讨论分类ID
           mapping: 'pathname',
           inputPosition: 'top',
           lang: 'zh-CN',
