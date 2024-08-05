@@ -1,5 +1,15 @@
 # 版本更新记录
 
+## 2.6.9（2024/08/05）
+
+**Fix 🐛**
+
+- Cmd.sudo_run_cmd增加workdir功能
+- 将run_cmd固定shell默认指定为/bin/bash
+- 临时处理input_message方法，在wayland输入中文末尾多出空格的问题
+- 修改部署客户端设备youqu环境时，阻塞在密码输入
+- 扩展OCR断言支持区域断言，提升精准度，优化OCR识别范围筛选方法
+
 ## 2.6.8（2024/07/15）
 
 **New 🌟**
