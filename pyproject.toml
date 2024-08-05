@@ -1,6 +1,6 @@
 [project]
 name = "youqu3"
-description = "YouQu-Next"
+description = "Next-Gen Linux Autotest Framework"
 authors = [
     { name = "mikigo", email = "huangmingqiang@uniontech.com" },
 ]
