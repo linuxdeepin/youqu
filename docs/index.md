@@ -3,16 +3,9 @@
 layout: home
 
 hero:
-  name: YouQu
+  name: YouQu 
   text: "使用简单且功能强大的自动化测试框架"
   tagline: 让 Linux 自动化测试变得简单
-  actions:
-    - theme: brand
-      text: YouQu3 🔥
-      link: "https://youqu.uniontech.com/v3/"
-    - theme: brand
-      text: PyLinuxAuto 🔥
-      link: "https://youqu.uniontech.com/pylinuxauto/"
   image:
     src: /logo.png
     alt: YouQu
@@ -43,6 +36,9 @@ features:
     details: 保障HTTP接口的响应速度和数据传输安全，我们的自动化测试是您的明智之选。
     link: /实践/HTTP接口自动化测试/初始化项目
     linkText: 查看
+  - icon: ️🤙
+    title: 。。。无限可能
+    details: 海阔凭鱼跃，天高任鸟飞。
 
 ---
 
@@ -188,9 +184,6 @@ const helpers = [
     <template #title>
       Contributors
     </template>
-    <template #lead>
-      感谢以下所有人的贡献与参与
-    </template>
   </VPTeamPageTitle>
   <VPTeamMembers
     size="small"
@@ -199,9 +192,6 @@ const helpers = [
   <VPTeamPageTitle>
     <template #title>
       Helpers
-    </template>
-    <template #lead>
-      感谢以下所有人提供的帮助及重要建议
     </template>
   </VPTeamPageTitle>
   <VPTeamMembers

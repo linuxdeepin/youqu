@@ -169,7 +169,7 @@ export default withMermaid(
             },
             ignoreDeadLinks: true,
             // =========================================================
-            logo: {src: '/logo.png', width: 25, height: 24},
+            logo: {src: '/logo.png', width: 25, height: 30},
             socialLinks: [
                 {icon: 'github', link: 'https://github.com/linuxdeepin/youqu'}
             ],

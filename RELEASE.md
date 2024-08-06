@@ -4,35 +4,35 @@
 
 **Fix 🐛**
 
-- Cmd.sudo_run_cmd增加workdir功能
-- 将run_cmd固定shell默认指定为/bin/bash
-- 临时处理input_message方法，在wayland输入中文末尾多出空格的问题
-- 修改部署客户端设备youqu环境时，阻塞在密码输入
-- 扩展OCR断言支持区域断言，提升精准度，优化OCR识别范围筛选方法
+- `Cmd.sudo_run_cmd` 增加 `workdir` 功能
+- 将 `run_cmd` 固定 `shell` 默认指定为 `/bin/bash`
+- 临时处理 `input_message` 方法，在 `wayland` 输入中文末尾多出空格的问题
+- 修改部署客户端设备 `youqu` 环境时，阻塞在密码输入
+- 扩展 `OCR` 断言支持区域断言，提升精准度，优化 `OCR` 识别范围筛选方法
 
 ## 2.6.8（2024/07/15）
 
 **New 🌟**
 
-- git commit 功能增加显示明细数据。
+- `git commit` 功能增加显示明细数据。
 - 新增在所有属性中查找同名节点的功能。
 
 ## 2.6.7（2024/07/15）
 
 **Fix 🐛**
 
-- 修复 Wayland 下窗管返回的 window_info 内获取应用名称的逻辑错误的问题。
+- 修复 `Wayland` 下窗管返回的 `window_info` 内获取应用名称的逻辑错误的问题。
 
 ## 2.6.6（2024/07/05）
 
 **New 🌟**
 
-- git commit 统计功能新增 commit msg 信息获取。
+- `git commit` 统计功能新增 `commit msg` 信息获取。
 
 **Fix 🐛**
 
 - 修复测试单驱动收集用例数量为 0 的问题；
-- 修复 Wayland 下窗管返回的应用名称错误的问题；
+- 修复 `Wayland` 下窗管返回的应用名称错误的问题；
 
 ## 2.6.5（2024/06/11）
 
