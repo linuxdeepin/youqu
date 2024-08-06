@@ -18,11 +18,11 @@ export default defineConfig({
         // https://vitepress.dev/reference/default-theme-config
         siteTitle: "YouQu3",
         nav: [
-                {text: '🏠 首页', link: '/index'},
-            {text: '🧭 指南', link: '/指南/简介/YouQu3是什么'},
-            {text: '🏃‍ 实践', link: '/实践/简介'},
-            {text: '🎵 规划', link: '/规划/YouQu3架构设计规划'},
-            {text: '🔌 插件', link: '/插件/插件列表'},
+                {text: '🏠首页', link: '/index'},
+            {text: '🧭指南', link: '/指南/简介/YouQu3是什么'},
+            {text: '🏃‍实践', link: '/实践/简介'},
+            {text: '🎵规划', link: '/规划/YouQu3架构设计规划'},
+            {text: '🔌插件', link: '/插件/插件列表'},
         ],
 
         sidebar: {
@@ -112,7 +112,7 @@ export default defineConfig({
         // =========================================================
         logo: {src: '/logo.png', width: 22, height: 30},
         socialLinks: [
-            {icon: 'github', link: 'https://github.com/linuxdeepin/youqu'}
+            {icon: 'github', link: 'https://github.com/linuxdeepin/youqu/tree/youqu3'}
         ],
         footer: {
             copyright: `版权所有 © 2024-${new Date().getFullYear()} 统信软件`

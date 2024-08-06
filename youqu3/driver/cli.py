@@ -20,7 +20,7 @@ def cli(): ...
 
 @cli.command()
 @click.help_option("-h", "--help", help="查看帮助信息")
-@click.option("-f", "--filepath", default=None, type=click.STRING,
+@click.option("-p", "--path", default=None, type=click.STRING,
               help="指定用例文件或目录路径执行，")
 @click.option("-k", "--keywords", default=None, type=click.STRING,
               help="指定用例关键词执行，支持 'and/or/not' 逻辑表达式")
@@ -33,7 +33,7 @@ def cli(): ...
 @click.option("--job-start", default=None, type=click.STRING, help="测试结束之前执行")
 @click.option("--job-end", default=None, type=click.STRING, help="测试结束之后执行")
 def run(
-        filepath,
+        path,
         keywords,
         tags,
         setup_plan,
@@ -44,7 +44,7 @@ def run(
 ):
     """本地执行"""
     args = {
-        "filepath": filepath,
+        "path": path,
         "keywords": keywords,
         "tags": tags,
         "setup_plan": setup_plan,
@@ -61,7 +61,7 @@ def run(
 @click.help_option("-h", "--help", help="查看帮助信息")
 @click.option("-c", "--clients", default=None, type=click.STRING,
               help="远程机器信息:user@ip:password，多个机器之间用 '/' 连接")
-@click.option("-f", "--filepath", default=None, type=click.STRING,
+@click.option("-p", "--path", default=None, type=click.STRING,
               help="指定用例文件路径执行")
 @click.option("-k", "--keywords", default=None, type=click.STRING,
               help="指定用例关键词执行，支持 'and/or/not' 逻辑表达式")
@@ -74,7 +74,7 @@ def run(
 @click.option("--job-end", default=None, type=click.STRING, help="测试结束之后执行")
 def remote(
         clients,
-        filepath,
+        path,
         keywords,
         tags,
         slaves,
@@ -85,7 +85,7 @@ def remote(
     """远程控制执行"""
     args = {
         "clients": clients,
-        "filepath": filepath,
+        "path": path,
         "keywords": keywords,
         "tags": tags,
         "slaves": slaves,

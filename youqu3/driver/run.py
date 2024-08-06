@@ -17,7 +17,7 @@ class Run:
 
     def __init__(
             self,
-            filepath=None,
+            path=None,
             keywords=None,
             tags=None,
             setup_plan=None,
@@ -29,7 +29,7 @@ class Run:
     ):
         logger("INFO")
 
-        self.filepath = filepath
+        self.path = path
         self.keywords = keywords
         self.tags = tags
         self.setup_plan = setup_plan
@@ -78,8 +78,8 @@ class Run:
     def generate_cmd(self):
         cmd = ["pytest"]
 
-        if self.filepath:
-            cmd.append(self.filepath)
+        if self.path:
+            cmd.append(self.path)
 
         keywords_txt = self.read_keywords_txt()
         if self.keywords:

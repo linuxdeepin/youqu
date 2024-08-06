@@ -23,7 +23,7 @@ class Remote:
     def __init__(
             self,
             clients=None,
-            filepath=None,
+            path=None,
             keywords=None,
             tags=None,
             slaves=None,
@@ -34,7 +34,7 @@ class Remote:
     ):
         logger("INFO")
 
-        self.filepath = filepath
+        self.path = path
         self.keywords = keywords
         self.tags = tags
         self.clients = clients
@@ -210,8 +210,8 @@ class Remote:
     def generate_cmd(self):
         cmd = ["youqu3-cargo", "run"]
 
-        if self.filepath:
-            cmd.append(f"'{self.filepath}'")
+        if self.path:
+            cmd.append(f"'{self.path}'")
         if self.inside_filepath:
             cmd.append(f"'{self.inside_filepath}'")
 
