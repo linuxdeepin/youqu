@@ -121,7 +121,7 @@ class Cmd:
             if not os.path.exists(workdir):
                 raise FileNotFoundError
             wd = f"cd {workdir} && "
-        return cls.run(
+        res = cls.run(
             f"{wd}echo '{password}' | sudo -S {command}",
             interrupt=interrupt,
             timeout=timeout,
@@ -129,6 +129,12 @@ class Cmd:
             command_log=command_log,
             return_code=return_code
         )
+        if return_code is False:
+            return res.lstrip("请输入密码●")
+        else:
+            res = list(res)
+            res[0] = res[0].lstrip("请输入密码●")
+            return res
 
     GREP_LIST = (
         "grep",

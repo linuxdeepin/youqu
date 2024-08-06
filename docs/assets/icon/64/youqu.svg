@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>youqu</title>
+    <defs>
+        <filter x="-8.7%" y="-7.0%" width="117.5%" height="117.6%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <linearGradient x1="50%" y1="-10.4717632%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#6AC900" offset="0%"></stop>
+            <stop stop-color="#008989" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="youqu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-2" filter="url(#filter-1)" transform="translate(3.4247, 3.5386)">
+            <rect id="矩形" fill="url(#linearGradient-2)" x="2.57532967" y="2.46142283" width="52" height="52" rx="11"></rect>
+            <g id="编组" transform="translate(28.5753, 28.4614) rotate(-330) translate(-28.5753, -28.4614)translate(7.5428, 7.7401)">
+                <path d="M32.920312,9.95837657 C35.4455479,9.95837657 37.492656,12.0054847 37.492656,14.5307206 L37.492656,28.2477525 L37.492656,28.2477525 C32.4421843,28.2477525 28.347968,24.1535362 28.347968,19.1030645 L28.347968,14.5307206 C28.347968,12.0054847 30.3950762,9.95837657 32.920312,9.95837657 Z" id="矩形" fill="#D5E8C0" transform="translate(32.9203, 19.1031) rotate(-270) translate(-32.9203, -19.1031)"></path>
+                <path d="M9.14468797,13.3193287 C11.6699238,13.3193287 13.717032,15.3664368 13.717032,17.8916726 L13.717032,31.6087046 L13.717032,31.6087046 C8.66656025,31.6087046 4.57234399,27.5144883 4.57234399,22.4640166 L4.57234399,17.8916726 C4.57234399,15.3664368 6.61945212,13.3193287 9.14468797,13.3193287 Z" id="矩形" fill="#FFFFFF" transform="translate(9.1447, 22.464) rotate(-90) translate(-9.1447, -22.464)"></path>
+                <path d="M19.7254631,-3.41060513e-13 C22.2506989,-3.41524391e-13 24.2978071,2.04710813 24.2978071,4.57234399 L24.2978071,18.2893759 L24.2978071,18.2893759 C19.2473354,18.2893759 15.1531191,14.1951597 15.1531191,9.14468797 L15.1531191,4.57234399 C15.1531191,2.04710813 17.2002272,-3.40596635e-13 19.7254631,-3.41060513e-13 Z" id="矩形" fill="#FFFFFF"></path>
+                <path d="M22.4640166,23.1532255 C24.9892525,23.1532255 27.0363606,25.2003337 27.0363606,27.7255695 L27.0363606,41.4426015 L27.0363606,41.4426015 C21.9858889,41.4426015 17.8916726,37.3483852 17.8916726,32.2979135 L17.8916726,27.7255695 C17.8916726,25.2003337 19.9387808,23.1532255 22.4640166,23.1532255 Z" id="矩形" fill="#FFFFFF" transform="translate(22.464, 32.2979) scale(-1, -1) rotate(-360) translate(-22.464, -32.2979)"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,5 +1,5 @@
 h1 {
-    background: -webkit-linear-gradient(120deg, #28C76F 30%, #28C76F);
+    background: -webkit-linear-gradient(120deg, #008989 30%, #6AC900);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -7,7 +7,15 @@ h1 {
 }
 
 h2 {
-    background: -webkit-linear-gradient(120deg, #28C76F 30%, #28C76F);
+    background: -webkit-linear-gradient(120deg, #008989 60%, #6AC900);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+}
+
+h3 {
+    background: -webkit-linear-gradient(120deg, #008989 60%, #6AC900);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -24,16 +32,22 @@ h2 {
 
 :root {
     --vp-home-hero-name-color: transparent;
-    --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #28C76F 30%, #28C76F);
+    /*--vp-home-hero-name-background: -webkit-linear-gradient(120deg, #008989 30%, #6AC900);*/
 
-    --vp-home-hero-image-background-image: linear-gradient(-45deg, #90F7EC 50%, #90F7EC 50%);
+    /*--vp-home-hero-image-background-image: linear-gradient(-45deg, #FFF5C3 50%, #FFF5C3 50%);*/
     --vp-home-hero-image-filter: blur(44px);
     /* brand按钮 */
     /*--vp-button-brand-border: white;*/
     --vp-button-brand-text: white;
     --vp-button-brand-bg: #28C76F;
     /*--vp-button-brand-hover-border: white;*/
-    /*--vp-button-brand-hover-text: white;*/
-    --vp-button-brand-hover-bg: #90F7EC;
-    /*--vp-button-brand-active-border: white;*/
+    --vp-button-brand-hover-text: white;
+    --vp-button-brand-hover-bg: #2AFADF;
+
+    --vp-button-brand-active-border: white;
+}
+
+.VPHero .image {
+    max-width: 780px;
+    max-height: 380px;
 }

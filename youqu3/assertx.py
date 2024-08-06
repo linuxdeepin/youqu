@@ -158,45 +158,39 @@ class Assert:
 
     @staticmethod
     def assert_process_exist(app):
-        """
-         断言应用进程存在
-        :param app: 应用名字
-        """
-        logger.info(f"断言应用进程状态{app}存在")
+        """判断{{app}}进程存在"""
         if True != Cmd.get_process_status(app):
-            raise AssertionError(f"断言应用进程状态{app}不存在")
+            raise AssertionError(f"{app}进程状态不存在")
 
     @staticmethod
     def assert_process_not_exist(app):
-        """
-         断言应用进程不存在
-        :param app: 应用名字
-        """
-        logger.info(f"断言应用进程状态{app}不存在")
+        """判断{{app}}进程不存在"""
         if False != Cmd.get_process_status(app):
-            raise AssertionError(f"断言应用进程状态{app}存在")
+            raise AssertionError(f"{app}进程状态存在")
 
     @staticmethod
     def assert_equal(expect, actual):
-        """
-         断言相等
-        :param expect: 期望结果
-        :param actual: 实际结果
-        """
-        logger.info(f"预期值<{expect}>与实际值<{actual}>是否相等")
-        if not bool(expect == actual):
+        """判断预期值<{{expect}>与实际值<{{actual}>相等"""
+        if expect != actual:
             raise AssertionError(f"预期值<{expect}>与实际值<{actual}>不相等")
 
     @staticmethod
     def assert_not_equal(expect, actual):
-        """
-         断言不相等
-        :param expect: 期望结果
-        :param actual: 实际结果
-        """
-        logger.info(f"预期值<{expect}>与实际值<{actual}>是否相等")
-        if bool(expect == actual):
-            raise AssertionError(f"预期值<{expect}>与实际值<{actual}>不相等")
+        """判断预期值<{{expect}>与实际值<{{actual}>不相等"""
+        if expect == actual:
+            raise AssertionError(f"预期值<{expect}>与实际值<{actual}>相等")
+
+    @staticmethod
+    def assert_in(target, pool):
+        """判断<{{target}}>在<{{pool}}>中"""
+        if target not in pool:
+            raise AssertionError(f"<{target}>不在<{pool}>中")
+
+    @staticmethod
+    def assert_not_in(target, pool):
+        """判断<{{target}}>不在<{{pool}}>中"""
+        if target in pool:
+            raise AssertionError(f"<{target}>在<{pool}>中")
 
     @staticmethod
     def assert_true(expect):
