@@ -5,9 +5,12 @@
 import os
 from typing import Union
 
+from funnylog2.config import config as funnylog2_config
 from youqu3 import exceptions
 from youqu3 import log, logger, setting
 from youqu3.cmd import Cmd
+
+funnylog2_config.CLASS_NAME_ENDSWITH.append("Assert")
 
 
 @log
@@ -27,12 +30,7 @@ class Assert:
             timeout: [int, float] = None,
             match_number: int = None,
     ):
-        """
-        期望界面存在模板图片
-        :param widget: 图片路径 例：assert_res/1.png
-        :param rate: 匹配相似度
-        """
-        logger.info(f"屏幕上匹配图片< {f'***{widget[-40:]}' if len(widget) >= 40 else widget} >")
+        """判断界面存在{{widget}}模板图片"""
         from youqu3.gui import pylinuxauto
         try:
             pylinuxauto.find_element_by_image(
@@ -47,6 +45,36 @@ class Assert:
             )
         except exceptions.TemplateElementNotFound as exc:
             raise AssertionError(exc) from exceptions.TemplateElementNotFound
+
+    @staticmethod
+    def assert_image_not_exist(
+            widget: str,
+            rate: float = None,
+            multiple: bool = False,
+            picture_abspath: str = None,
+            network_retry: int = None,
+            pause: [int, float] = None,
+            timeout: [int, float] = None,
+            match_number: int = None,
+    ):
+        """判断界面不存在{{widget}}模板图片"""
+        try:
+            from youqu3.gui import pylinuxauto
+            pylinuxauto.find_element_by_image(
+                widget,
+                rate=rate,
+                multiple=multiple,
+                picture_abspath=picture_abspath,
+                network_retry=network_retry,
+                pause=pause,
+                timeout=timeout,
+                max_match_number=match_number,
+            )
+            raise exceptions.TemplateElementFound(widget)
+        except exceptions.TemplateElementNotFound:
+            pass
+        except exceptions.TemplateElementFound as exc:
+            raise AssertionError(exc) from exceptions.TemplateElementFound
 
     @classmethod
     def assert_image_exist_during_time(
@@ -72,87 +100,32 @@ class Assert:
             raise AssertionError(exc) from exceptions.TemplateElementNotFound
 
     @staticmethod
-    def assert_image_not_exist(
-            widget: str,
-            rate: float = None,
-            multiple: bool = False,
-            picture_abspath: str = None,
-            network_retry: int = None,
-            pause: [int, float] = None,
-            timeout: [int, float] = None,
-            match_number: int = None,
-    ):
-        """
-        期望界面不存在模板图片
-        :param widget: 图片路径 assert_res/1.png
-        :param rate: 匹配相似度
-        """
-        logger.info(
-            f"屏幕上匹配不存在图片< {f'***{widget[-40:]}' if len(widget) >= 40 else widget} >"
-        )
-        try:
-            from youqu3.gui import pylinuxauto
-            pylinuxauto.find_element_by_image(
-                widget,
-                rate=rate,
-                multiple=multiple,
-                picture_abspath=picture_abspath,
-                network_retry=network_retry,
-                pause=pause,
-                timeout=timeout,
-                max_match_number=match_number,
-            )
-            raise exceptions.TemplateElementFound(widget)
-        except exceptions.TemplateElementNotFound:
-            pass
-        except exceptions.TemplateElementFound as exc:
-            raise AssertionError(exc) from exceptions.TemplateElementFound
-
-    @staticmethod
     def assert_file_exist(file_path):
-        """
-        期望存在文件路径
-        :param file_path: 文件全路径或目录 例：~/Desktop/1.txt
-        """
-        logger.info(f"断言文件存在 <{file_path}>")
+        """判断文件{{file_path}}存在"""
         if not os.path.exists(os.path.expanduser(file_path)):
-            raise AssertionError(f"文件不存在:{file_path}")
+            raise AssertionError(f"文件{file_path}不存在")
         return True
 
     @staticmethod
     def assert_file_not_exist(file_path):
-        """
-        期望不存在文件路径
-        :param file_path: 文件全路径 例：~/Desktop/1.txt
-        :param file: 文件名
-        :param recursive: 是否递归查找
-        """
-        logger.info(f"断言文件不存在 <{file_path}>")
+        """判断文件{{file_path}}不存在"""
         if os.path.exists(os.path.expanduser(file_path)):
-            raise AssertionError(f"文件存在:{file_path}")
+            raise AssertionError(f"文件{file_path}存在")
 
     @staticmethod
     def assert_element_exist(expr):
-        """
-         期望元素存在
-        :param expr: 匹配元素的格式, 例如： /dde-file-manager/1.txt
-        """
-        logger.info(f"断言元素存在<{expr}>")
+        """判断元素{{expr}}不存在"""
         from youqu3.gui import pylinuxauto
         if not pylinuxauto.find_element_by_attr_path(expr):
-            raise AssertionError(f"元素不存在:{expr}")
+            raise AssertionError(f"元素{expr}不存在")
 
     @staticmethod
     def assert_element_not_exist(expr):
-        """
-         期望元素不存在
-        :param expr: 匹配元素的格式
-        """
-        logger.info(f"断言元素不存在<{expr}>")
+        """判断元素{{expr}}不存在"""
         from youqu3.gui import pylinuxauto
         try:
             pylinuxauto.find_element_by_attr_path(expr)
-            raise AssertionError(f"元素不应该存在:{expr}")
+            raise AssertionError(f"元素{expr}存在")
         except exceptions.ElementNotFound:
             pass
 
@@ -181,16 +154,30 @@ class Assert:
             raise AssertionError(f"预期值<{expect}>与实际值<{actual}>相等")
 
     @staticmethod
-    def assert_in(target, pool):
+    def assert_in(target: str, pool: str):
         """判断<{{target}}>在<{{pool}}>中"""
         if target not in pool:
             raise AssertionError(f"<{target}>不在<{pool}>中")
 
     @staticmethod
-    def assert_not_in(target, pool):
+    def assert_not_in(target: str, pool: str):
         """判断<{{target}}>不在<{{pool}}>中"""
         if target in pool:
             raise AssertionError(f"<{target}>在<{pool}>中")
+
+    @staticmethod
+    def assert_sequence_in(target: list, pool: list):
+        """判断<{{target}}>在<{{pool}}>中"""
+        for i in target:
+            if i not in pool:
+                raise AssertionError(f"{pool}中不存在{i}")
+
+    @staticmethod
+    def assert_sequence_not_in(target: list, pool: list):
+        """判断<{{target}}>不在<{{pool}}>中"""
+        for i in target:
+            if i in pool:
+                raise AssertionError(f"{pool}中存在{i}")
 
     @staticmethod
     def assert_true(expect):

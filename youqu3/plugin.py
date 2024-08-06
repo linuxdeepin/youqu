@@ -1,9 +1,24 @@
+import enum
 import re
 
 import pytest
-
 from youqu3 import exceptions
+from youqu3 import logger
 from youqu3 import setting
+
+FLAG_FEEL = "=" * 10
+
+
+@enum.unique
+class ConfStr(enum.Enum):
+    SKIP = "skip"
+    SKIPIF = "skipif"
+    FIXED = "fixed"
+    PASSED = "passed"
+    FAILED = "failed"
+    SKIPPED = "skipped"
+    REMOVED = "removed"
+    RERUN = "rerun"
 
 
 def pytest_addoption(parser):
@@ -11,12 +26,64 @@ def pytest_addoption(parser):
 
 
 def pytest_sessionstart(session):
-    from youqu3 import logger
-    logger("INFO")
+    logger("DEBUG")
+
+
+def pytest_collection_finish(session):
+    session.item_count = len(session.items)
+    _items = session.items[:]
+    is_skiped_case = False
+    for item in _items[::-1]:
+        for mark in item.own_markers:
+            if mark.name == ConfStr.SKIP.value:
+                is_skiped_case = True
+                try:
+                    _items.remove(item)
+                except ValueError:
+                    ...
+            elif mark.name == ConfStr.SKIPIF.value and mark.args == (True,):
+                is_skiped_case = True
+                try:
+                    _items.remove(item)
+                except ValueError:
+                    ...
+    print(
+        f"用例收集数量:\t{session.item_count} "
+        f"{f'(剔除跳过: {len(_items)})' if is_skiped_case else ''}"
+    )
+    print(
+        f"用例文件数量:\t{len(set([item.fspath for item in session.items]))} "
+        f"{f'(剔除跳过: {len(set([item.fspath for item in _items]))})' if is_skiped_case else ''}"
+    )
 
 
 def pytest_runtest_setup(item):
     print()
+    LN = "\n"
+    current_item_count = f"[{item.session.items.index(item) + 1}/{item.session.item_count}] "
+    try:
+        current_item_percent = "{:.0f}%".format(
+            int(item.session.items.index(item) + 1) / int(item.session.item_count) * 100
+        )
+    except:
+        current_item_percent = ""
+    try:
+        rerun_text = f" | <重跑第{item.execution_count - 1}次>" if item.execution_count > 1 else ""
+    except AttributeError:
+        rerun_text = ""
+    logger.info(
+        f"{LN}{FLAG_FEEL} {item.function.__name__} | "
+        f"{str(item.function.__doc__).replace(LN, '').replace('    ', '')}{rerun_text} "
+        f"{FLAG_FEEL} {current_item_count} {current_item_percent}"
+    )
+
+
+def pytest_runtest_call(item):
+    logger.info(f"{FLAG_FEEL} case body {FLAG_FEEL}")
+
+
+def pytest_runtest_teardown(item):
+    logger.info(f"{FLAG_FEEL} teardown {FLAG_FEEL}")
 
 
 @pytest.fixture(scope='module')
