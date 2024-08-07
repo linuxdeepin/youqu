@@ -10,7 +10,7 @@ from youqu3 import setting
 class Cmd:
 
     @staticmethod
-    def _run(command, _input=None, timeout=None, check=False, **kwargs):
+    def _run(command, _input=None, timeout=None, check=False, executable=None, **kwargs):
         with subprocess.Popen(command, **kwargs) as process:
             try:
                 stdout, stderr = process.communicate(_input, timeout=timeout)
@@ -25,12 +25,13 @@ class Cmd:
         return subprocess.CompletedProcess(process.args, retcode, stdout, stderr)
 
     @classmethod
-    def _getstatusoutput(cls, command, timeout):
+    def _getstatusoutput(cls, command, timeout, executable):
         kwargs = {
             "shell": True,
             "stderr": subprocess.STDOUT,
             "stdout": subprocess.PIPE,
             "timeout": timeout,
+            "executable": executable,
         }
         try:
             if sys.version_info >= (3, 7):
@@ -58,7 +59,8 @@ class Cmd:
             timeout: [None, int] = 25,
             print_log: bool = True,
             command_log: bool = True,
-            return_code: bool = False
+            return_code: bool = False,
+            executable: str = "/bin/bash",
     ):
         """
          执行shell命令
@@ -69,7 +71,7 @@ class Cmd:
         :param command_log: 执行的命令字符串日志
         :return: 返回终端输出
         """
-        exitcode, stdout = cls._getstatusoutput(command, timeout=timeout)
+        exitcode, stdout = cls._getstatusoutput(command, timeout=timeout, executable=executable)
         if command_log:
             logger.debug(command)
         if exitcode != 0 and interrupt:

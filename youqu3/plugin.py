@@ -150,3 +150,8 @@ def sleep():
 def cmd():
     from youqu3.cmd import Cmd
     return Cmd
+
+@pytest.fixture(scope="session")
+def check():
+    from youqu3.assertx import Assert
+    return Assert

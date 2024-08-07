@@ -38,7 +38,10 @@ http = [
 remote = [
     "fabric",
 ]
-local-html = [
+html-rpc = [
+    "youqu-html-rpc",
+]
+html = [
     "youqu-html",
 ]
 

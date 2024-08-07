@@ -1,4 +1,5 @@
 import {defineConfig} from 'vitepress'
+import {version} from "../../package.json"
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -18,11 +19,24 @@ export default defineConfig({
         // https://vitepress.dev/reference/default-theme-config
         siteTitle: "YouQu3",
         nav: [
-                {text: '🏠首页', link: '/index'},
+            {text: '🏠首页', link: '/index'},
             {text: '🧭指南', link: '/指南/简介/YouQu3是什么'},
             {text: '🏃‍实践', link: '/实践/简介'},
             {text: '🎵规划', link: '/规划/YouQu3架构设计规划'},
-            {text: '🔌插件', link: '/插件/插件列表'},
+            {
+                text: '🔌插件', items: [
+                    {text: '插件列表', link: '/插件/插件列表'},
+                    {text: "PyLinuxAuto 🔥", link: 'https://youqu.uniontech.com/pylinuxauto/'},
+                    {text: "UMTK 🔥", link: 'https://github.com/linuxdeepin-QAeggs/uos-method-toolkit'},
+                ]
+            },
+            {
+                text: `v${version}`, items: [
+                    {text: "更新日志", link: '/RELEASE'},
+                    {text: "参与贡献", link: '/CONTRIBUTING'},
+                    {text: "兴趣小组", link: '/SIG'},
+                ]
+            },
         ],
 
         sidebar: {
