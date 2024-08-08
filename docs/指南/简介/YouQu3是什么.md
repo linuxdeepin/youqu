@@ -12,7 +12,22 @@ outline: false
     <em>Next-Gen Linux Autotest Framework.</em>
 </p>
 
---------------
+<p class="badges">
+  <img alt="Python" src="https://img.shields.io/badge/Python-007CFF?style=for-the-badge&logo=Python&logoColor=white" />
+  <img alt="Linux" src="https://img.shields.io/badge/Linux-007CFF?style=for-the-badge&logo=linux&logoColor=white" />
+</p>
+
+<p class="badges">
+  <img alt="PyPI" src="https://img.shields.io/pypi/v/youqu3?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu3%2F&color=%23F79431" />
+  <img alt="Downloads" src="https://static.pepy.tech/badge/youqu3" />
+</p>
+
+<style scoped>
+.badges {
+  display: flex;
+  gap: 10px;
+}
+</style>
 
 **YouQu3** 旨在成为下一代 Linux 自动化测试框架，在继承 [YouQu2](https://youqu.uniontech.com/) 诸多亮点功能的同时解决其遇到的问题，同时对各功能进行插件化、模块化改造，全面优化框架接口调用机制。
 
