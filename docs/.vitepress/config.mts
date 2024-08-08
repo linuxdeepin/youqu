@@ -22,14 +22,14 @@ export default defineConfig({
             {text: '🏠首页', link: '/index'},
             {text: '🧭指南', link: '/指南/简介/YouQu3是什么'},
             {text: '🏃‍实践', link: '/实践/简介'},
-            {text: '🎵规划', link: '/规划/YouQu3架构设计规划'},
             {
-                text: '🔌插件', items: [
-                    {text: '插件列表', link: '/插件/插件列表'},
-                    {text: "PyLinuxAuto 🔥", link: 'https://youqu.uniontech.com/pylinuxauto/'},
-                    {text: "UMTK 🔥", link: 'https://github.com/linuxdeepin-QAeggs/uos-method-toolkit'},
+                text: '🎵规划', items: [
+                    {text: '框架设计', link: '/规划/YouQu3架构设计规划'},
+                    {text: "PyLinuxAuto", link: 'https://youqu.uniontech.com/pylinuxauto/'},
+                    {text: "UMTK", link: 'https://youqu.uniontech.com/umtk/'},
                 ]
             },
+            {text: '🔌插件', link: '/插件/插件列表'},
             {
                 text: `v${version}`, items: [
                     {text: "更新日志", link: '/RELEASE'},
@@ -110,8 +110,6 @@ export default defineConfig({
                     collapsed: false,
                     items: [
                         {text: "YouQu3架构设计规划", link: "/规划/YouQu3架构设计规划"},
-                        {text: "UOS自动化测试方法套件", link: "/规划/UOS自动化测试方法套件"},
-                        {text: "UOS自动化测试用例", link: "/规划/UOS自动化测试用例"},
                     ]
                 },
             ],
