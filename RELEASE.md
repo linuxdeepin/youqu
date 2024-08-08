@@ -4,11 +4,11 @@
 
 **Fix 🐛**
 
-- `Cmd.sudo_run_cmd` 增加 `workdir` 功能
-- 将 `run_cmd` 固定 `shell` 默认指定为 `/bin/bash`
-- 临时处理 `input_message` 方法，在 `wayland` 输入中文末尾多出空格的问题
-- 修改部署客户端设备 `youqu` 环境时，阻塞在密码输入
-- 扩展 `OCR` 断言支持区域断言，提升精准度，优化 `OCR` 识别范围筛选方法
+- `Cmd.sudo_run_cmd` 增加 `workdir` 功能。
+- 将 `run_cmd` 固定 `shell` 默认指定为 `/bin/bash`。
+- 临时处理 `input_message` 方法，在 `wayland` 输入中文末尾多出空格的问题。
+- 修改部署客户端设备 `youqu` 环境时，阻塞在密码输入。
+- 扩展 `OCR` 断言支持区域断言，提升精准度，优化 `OCR` 识别范围筛选方法。
 
 ## 2.6.8（2024/07/15）
 

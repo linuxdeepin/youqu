@@ -30,7 +30,14 @@ export default withMermaid(
                 {text: '首页', link: '/index'},
                 {text: '指南', link: '/指南/简介/YouQu是什么'},
                 {text: '实践', link: '/实践/Linux桌面UI自动化测试/初始化项目'},
-                {text: '规划', link: '/规划/框架设计/AT基础框架设计方案'},
+                {
+                    text: '规划', items: [
+                        {text: "框架设计", link: '/规划/框架设计/AT基础框架设计方案'},
+                        {text: "YouQu3", link: 'https://youqu.uniontech.com/v3/'},
+                        {text: "PyLinuxAuto", link: 'https://youqu.uniontech.com/pylinuxauto/'},
+                        {text: "UMTK", link: 'https://youqu.uniontech.com/umtk/'},
+                    ]
+                },
                 {
                     text: `v${version}`, items: [
                         {text: "更新日志", link: '/RELEASE'},
