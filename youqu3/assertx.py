@@ -181,21 +181,27 @@ class Assert:
 
     @staticmethod
     def assert_true(expect):
-        """
-         断言结果为真
-        :param expect: 结果
-        """
+        """断言{{expect}}结果为真"""
         if not expect:
             raise AssertionError(f"<{expect}>不为真")
 
     @staticmethod
     def assert_false(expect):
-        """
-         断言结果为假
-        :param expect: 结果
-        """
+        """断言{{expect}}结果为假"""
         if expect:
             raise AssertionError(f"<{expect}>不为假")
+
+    @staticmethod
+    def assert_any(expect):
+        """断言任一{{expect}}结果为真"""
+        if not any(expect):
+            raise AssertionError(f"<{expect}>均不为真")
+
+    @staticmethod
+    def assert_all(expect):
+        """断言所有{{expect}}结果为真"""
+        if not all(expect):
+            raise AssertionError(f"<{expect}>不均为真")
 
     @staticmethod
     def assert_ocr_exist(
