@@ -1,4 +1,5 @@
 import os
+import re
 import subprocess
 import sys
 
@@ -137,60 +138,6 @@ class Cmd:
             res = list(res)
             res[0] = res[0].lstrip("请输入密码●")
             return res
-
-    GREP_LIST = (
-        "grep",
-        "pytest",
-        "python",
-        "ffmpeg",
-        "youqu",
-    )
-
-    @classmethod
-    def get_process_status(cls, app: str, grep_list: str = None) -> bool:
-        """
-         获取进程状态
-        :param app: 应用包名
-        :return: Boolean
-        """
-        if grep_list:
-            cls.GREP_LIST = grep_list
-        cmd = ""
-        for i in cls.GREP_LIST:
-            cmd += f"grep -v {i} | "
-        cmd_txt = f"ps -aux | grep {app} | {cmd.rstrip('| ')}"
-        logger.debug(cmd_txt)
-        result = cls.run(cmd_txt)
-        if result:
-            logger.debug(result)
-            return True
-        return False
-
-    @classmethod
-    def kill_process(cls, process, grep_list: [list, tuple] = None):
-        """
-         杀进程
-        :param process: 进程名
-        """
-        if grep_list:
-            cls.GREP_LIST = grep_list
-        cmd = ""
-        for i in cls.GREP_LIST:
-            cmd += f"grep -v {i} | "
-        cls.run(f"ps -ef | grep {process} | {cmd}cut -c 9-15 | xargs kill -9 > /dev/null 2>&1")
-
-    @classmethod
-    def sudo_kill_process(cls, process, grep_list: [list, tuple] = None):
-        if grep_list:
-            cls.GREP_LIST = grep_list
-        cmd = ""
-        for i in cls.GREP_LIST:
-            cmd += f"grep -v {i} | "
-        from youqu3 import setting
-        cls.run(
-            f"process=$(ps -ef | grep {process} | {cmd}cut -c 9-15);echo '{setting.PASSWORD}' | sudo -S kill -9 $process > /dev/null 2>&1"
-        )
-
 
 
 class RemoteCmd:

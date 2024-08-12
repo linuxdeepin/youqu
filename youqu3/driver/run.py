@@ -17,6 +17,7 @@ class Run:
 
     def __init__(
             self,
+            workdir=None,
             path=None,
             keywords=None,
             tags=None,
@@ -29,6 +30,7 @@ class Run:
     ):
         logger("INFO")
 
+        self.workdir = workdir
         self.path = path
         self.keywords = keywords
         self.tags = tags
@@ -145,6 +147,11 @@ class Run:
         if not self.setup_plan:
             self.job_start_driver()
         print(" ".join(self.generate_cmd()))
+        if self.workdir:
+            if os.path.exists(self.workdir):
+                os.chdir(self.workdir)
+            else:
+                raise FileNotFoundError(f"workdir not found: {self.workdir}")
         pytest.main(
             [i.strip("'") for i in self.generate_cmd()[1:]]
         )
@@ -155,30 +162,32 @@ class Run:
             from youqu_html import YouQuHtml
             YouQuHtml.gen(str(self.allure_data_path), str(self.allure_html_path), clean=True)
         except ImportError:
-            from youqu3.cmd import Cmd
-            from youqu_html_rpc import YouQuHtmlRpc
-            from youqu_html_rpc.environment import environment
-            from youqu_html_rpc.config import config
-            config.SERVER_IP = setting.REPORT_SERVER_IP
-            if YouQuHtmlRpc.check_connected():
-                rsync = 'rsync -av -e "ssh -o StrictHostKeyChecking=no"'
-                report_dirname = f"{setting.TIME_STRING}_{setting.HOST_IP}_{self.rootdir.name}"
-                report_server_path = f"{setting.REPORT_BASE_PATH}/{report_dirname}"
-                report_server_data_path = f"{report_server_path}/data"
-                report_server_html_path = f"{report_server_path}/html"
-                YouQuHtmlRpc.makedirs(report_server_data_path)
-                environment(self.allure_data_path)
-                Cmd.expect_run(
-                    f"/bin/bash -c '{rsync} {str(self.allure_data_path)}/ {setting.REPORT_SERVER_SSH_USER}@{setting.REPORT_SERVER_IP}:{report_server_data_path}/'",
-                    events={'password': f'{setting.REPORT_SERVER_SSH_PASSWORD}\n'},
-                    return_code=True
-                )
-                YouQuHtmlRpc.gen(report_server_data_path, report_server_html_path, report_dirname)
-                report_server_url = f"http://{setting.REPORT_SERVER_IP}/{report_dirname}"
-                logger.info(f"html_report_url {report_server_url}")
-                with open(f"{self.allure_html_path}/{report_dirname}.txt", "w", encoding="utf-8") as f:
-                    f.write(report_server_url)
-
+            try:
+                from youqu3.cmd import Cmd
+                from youqu_html_rpc import YouQuHtmlRpc
+                from youqu_html_rpc.environment import environment
+                from youqu_html_rpc.config import config
+                config.SERVER_IP = setting.REPORT_SERVER_IP
+                if YouQuHtmlRpc.check_connected():
+                    rsync = 'rsync -av -e "ssh -o StrictHostKeyChecking=no"'
+                    report_dirname = f"{setting.TIME_STRING}_{setting.HOST_IP}_{self.rootdir.name}"
+                    report_server_path = f"{setting.REPORT_BASE_PATH}/{report_dirname}"
+                    report_server_data_path = f"{report_server_path}/data"
+                    report_server_html_path = f"{report_server_path}/html"
+                    YouQuHtmlRpc.makedirs(report_server_data_path)
+                    environment(self.allure_data_path)
+                    Cmd.expect_run(
+                        f"/bin/bash -c '{rsync} {str(self.allure_data_path)}/ {setting.REPORT_SERVER_SSH_USER}@{setting.REPORT_SERVER_IP}:{report_server_data_path}/'",
+                        events={'password': f'{setting.REPORT_SERVER_SSH_PASSWORD}\n'},
+                        return_code=True
+                    )
+                    YouQuHtmlRpc.gen(report_server_data_path, report_server_html_path, report_dirname)
+                    report_server_url = f"http://{setting.REPORT_SERVER_IP}/{report_dirname}"
+                    logger.info(f"html_report_url {report_server_url}")
+                    with open(f"{self.allure_html_path}/{report_dirname}.txt", "w", encoding="utf-8") as f:
+                        f.write(report_server_url)
+            except ImportError:
+                ...
         self.job_end_driver()
 
 

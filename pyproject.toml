@@ -13,6 +13,7 @@ dependencies = [
     "funnylog2",
     "click",
     "pexpect",
+    "fabric",
 ]
 dynamic = ["version"]
 
@@ -34,9 +35,6 @@ webui = [
 http = [
     "requests",
     "youqu-html-rpc",
-]
-remote = [
-    "fabric",
 ]
 html-rpc = [
     "youqu-html-rpc",

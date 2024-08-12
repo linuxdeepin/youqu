@@ -23,6 +23,7 @@ class Remote:
     def __init__(
             self,
             clients=None,
+            workdir=None,
             path=None,
             keywords=None,
             tags=None,
@@ -34,6 +35,7 @@ class Remote:
     ):
         logger("INFO")
 
+        self.workdir = workdir
         self.path = path
         self.keywords = keywords
         self.tags = tags
@@ -199,17 +201,23 @@ class Remote:
                 return keywords_txt
         return None
 
-    def changdir_remote_cmd(self, user):
+    def changedir_remote_cmd(self, user):
         return [
             "export PATH=$PATH:$HOME/.local/bin;",
             "cd",
-            f"{self.client_rootdir(user)}/", "&&"
+            f"{self.client_rootdir(user)}/",
+            "&&",
         ]
 
     @property
     def generate_cmd(self):
         cmd = ["youqu3-cargo", "run"]
 
+        if self.workdir:
+            if os.path.exists(self.workdir):
+                cmd.extend(["--workdir", self.workdir])
+            else:
+                raise FileNotFoundError(f"workdir not found: {self.workdir}")
         if self.path:
             cmd.append(f"'{self.path}'")
         if self.inside_filepath:
@@ -240,7 +248,7 @@ class Remote:
     def run_test(self, user, _ip, password):
         RemoteCmd(user, _ip, password).remote_run(
             " ".join(
-                self.changdir_remote_cmd(user) + self.generate_cmd
+                self.changedir_remote_cmd(user) + self.generate_cmd
             )
         )
 
