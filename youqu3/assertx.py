@@ -130,18 +130,6 @@ class Assert:
             pass
 
     @staticmethod
-    def assert_process_exist(app):
-        """判断{{app}}进程存在"""
-        if True != Cmd.get_process_status(app):
-            raise AssertionError(f"{app}进程状态不存在")
-
-    @staticmethod
-    def assert_process_not_exist(app):
-        """判断{{app}}进程不存在"""
-        if False != Cmd.get_process_status(app):
-            raise AssertionError(f"{app}进程状态存在")
-
-    @staticmethod
     def assert_equal(expect, actual):
         """判断预期值<{{expect}>与实际值<{{actual}>相等"""
         if expect != actual:
