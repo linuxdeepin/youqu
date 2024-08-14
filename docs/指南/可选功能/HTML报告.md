@@ -19,13 +19,13 @@ YouQu3 在所有用例执行完之后，默认使用远程测试报告生成服�
 基础环境并不包含报告生成器，需要指定安装报告插件或测试类型，如：
 
 ```bash
-pip install youqu-html-rpc
+pip3 install youqu-html-rpc
 ```
 
 或
 
 ```bash
-pip install "youqu3[gui]"
+pip3 install "youqu3[gui]"
 ```
 
 ### 本地生成模式 <Badge type="warning" text="youqu-html 插件" />
@@ -35,5 +35,5 @@ pip install "youqu3[gui]"
 #### 插件安装
 
 ```bash
-pip install youqu-html
+pip3 install youqu-html
 ```

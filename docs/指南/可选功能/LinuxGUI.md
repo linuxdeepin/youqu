@@ -5,7 +5,7 @@
 ## 安装
 
 ```bash  
-pip install "youqu3[gui]"
+pip3 install "youqu3[gui]"
 ```
 
 ## 使用说明

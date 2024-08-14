@@ -38,7 +38,7 @@
 基础环境：
 
 ```shell
-pip install youqu3
+pip3 install youqu3
 ```
 
 ![](docs/assets/install.gif)

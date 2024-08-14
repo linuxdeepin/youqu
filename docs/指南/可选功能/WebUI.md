@@ -3,7 +3,7 @@
 ## 安装
 
 ```bash
-pip install "youqu3[webui]"
+pip3 install "youqu3[webui]"
 ```
 
 ## 方法编写

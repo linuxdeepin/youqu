@@ -3,6 +3,7 @@
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
 import os
+from configparser import RawConfigParser
 from copy import deepcopy
 
 from youqu3 import logger
@@ -274,3 +275,39 @@ class File:
                 return name_pic, format_pic
             return None, None
         return None, None
+
+    @staticmethod
+    def read_csv(csv_path):
+        """
+         通过标准库 csv 读取文件
+        :param csv_path: 文件路径
+        :return: 数据列表
+        """
+        import csv
+        if os.path.exists(csv_path):
+            with open(csv_path, newline="") as csvfile:
+                reader = csv.reader(csvfile)
+                return [row for row in reader][1:]
+
+class GetCfg:
+    """Gets the value in the configuration file"""
+
+    def __init__(self, config_file: str, option: [str, None] = None):
+        self.config_file = config_file
+        self.option = option
+        self.conf = RawConfigParser()
+        self.conf.read(self.config_file, encoding="utf-8")
+
+    def get(self, key: str, op: [str, None] = None, default=None) -> str:
+        if op is None and self.option is not None:
+            op = self.option
+        if op is None and self.option is None:
+            raise ValueError("option is None")
+        return self.conf.get(op, key, fallback=default)
+
+    def get_bool(self, key: str, op: [str, None] = None, default=False) -> bool:
+        if op is None and self.option is not None:
+            op = self.option
+        if op is None and self.option is None:
+            raise ValueError("option is None")
+        return self.conf.getboolean(op, key, fallback=default)
