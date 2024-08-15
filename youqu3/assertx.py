@@ -221,7 +221,7 @@ class Assert:
         """
         pic = None
         if picture_abspath is not None:
-            pic = picture_abspath + ".png"
+            pic = picture_abspath
 
         from youqu3.gui import pylinuxauto
 
@@ -275,7 +275,7 @@ class Assert:
         """断言文案不存在"""
         pic = None
         if picture_abspath is not None:
-            pic = picture_abspath + ".png"
+            pic = picture_abspath
         from youqu3.gui import pylinuxauto
 
         res = pylinuxauto.find_element_by_ocr(

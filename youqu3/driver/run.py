@@ -206,8 +206,8 @@ class Run:
                 logger.info(f"html_report_url {report_server_url}")
                 with open(f"{self.allure_html_path}/{report_dirname}.txt", "w", encoding="utf-8") as f:
                     f.write(report_server_url)
-            except ImportError:
-                print("only json report")
+            except ImportError as e:
+                print(f"only json report: {e}")
 
 
 if __name__ == "__main__":
