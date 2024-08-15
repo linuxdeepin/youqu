@@ -27,7 +27,7 @@ def envx(python_version=None):
             timeout=600
         )
     # youqu3
-    Cmd.run(f'pip3 install youqu3 -i {setting.PYPI_MIRROR}')
+    Cmd.run(f'pip3 install youqu3 -i {setting.PYPI_MIRROR} --break-system-packages')
     # youqu3-cargo
     cli_cmd_creator("youqu3-cargo", 'pipenv run youqu3 "$@"')
     # youqu3-shell
@@ -42,10 +42,10 @@ def envx(python_version=None):
         Cmd.run(f"echo '{path_cmd}' >> ~/.bashrc")
         Cmd.run("source ~/.bashrc")
     # pipenv
-    Cmd.run(f'pip3 install pipenv -i {setting.PYPI_MIRROR}')
+    Cmd.run(f'pip3 install pipenv -i {setting.PYPI_MIRROR} --break-system-packages')
     Cmd.run(f"cd {rootdir} && pipenv --python {python_version}")
     os.system(
-        f"cd {rootdir} && pipenv run pip install -r requirements.txt -i {setting.PYPI_MIRROR}",
+        f"cd {rootdir} && pipenv run pip install -r requirements.txt -i {setting.PYPI_MIRROR} --break-system-packages",
     )
 
 

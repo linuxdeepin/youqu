@@ -10,7 +10,6 @@ class _Setting(_DynamicSetting):
 
     PASSWORD: str = os.environ.get("PASSWORD") or "1"
 
-    MAX_FAIL = os.environ.get("MAX_FAIL") or 1
     TIMEOUT = os.environ.get("TIMEOUT") or 300
     LOG_LEVEL = os.environ.get("LOG_LEVEL") or "INFO"
     RERUNS = os.environ.get("RERUNS") or 1

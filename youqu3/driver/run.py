@@ -121,7 +121,6 @@ class Run:
             ])
 
         cmd.extend([
-            f"--maxfail={setting.MAX_FAIL}",
             f"--reruns={setting.RERUNS}",
             f"--timeout={setting.TIMEOUT}",
         ])
@@ -204,7 +203,7 @@ class Run:
                 with open(f"{self.allure_html_path}/{report_dirname}.txt", "w", encoding="utf-8") as f:
                     f.write(report_server_url)
             except ImportError:
-                ...
+                print("only json report")
 
 
 if __name__ == "__main__":
