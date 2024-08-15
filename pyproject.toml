@@ -13,7 +13,6 @@ dependencies = [
     "funnylog2",
     "click",
     "pexpect",
-#    "fabric",
 ]
 dynamic = ["version"]
 

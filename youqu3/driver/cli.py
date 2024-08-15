@@ -3,10 +3,8 @@ import click
 from youqu3 import version
 
 _slaves_help = """\
-附属的测试机，用例步骤中与其他机器进行交互
-       ┌─ slave ${user}@${ip}:${password}
-master ┼─ slave mikigo@192.168.8.11:admin123
-       └─ slave ${user}@${ip}
+用例步骤中与其他机器进行交互 -s/--slaves ${user}@${ip}:${password}
+如：-s mikigo@192.168.8.11:admin123
 如果${password}和前面配置项PASSWORD一样，可以不传：${user}@${ip}
 多个机器之间用斜线分割：${user}@${ip}:${password}/${user}@${ip}
 """
@@ -20,7 +18,7 @@ def cli(): ...
 
 @cli.command()
 @click.help_option("-h", "--help", help="查看帮助信息")
-@click.option("-wd", "--workdir", default=None, type=click.STRING,
+@click.option("-w", "--workdir", default=None, type=click.STRING,
               help="工作目录")
 @click.option("-p", "--path", default=None, type=click.STRING,
               help="指定用例文件或目录路径执行，")
@@ -34,6 +32,7 @@ def cli(): ...
               help="基于txt文件执行用例：youqu-tags.txt or youqu-keywords.txt")
 @click.option("--job-start", default=None, type=click.STRING, help="测试结束之前执行")
 @click.option("--job-end", default=None, type=click.STRING, help="测试结束之后执行")
+@click.option("--pytest-opt", default=None, type=click.STRING, help="pytest命令行参数")
 def run(
         workdir,
         path,
@@ -44,6 +43,7 @@ def run(
         txt,
         job_start,
         job_end,
+        pytest_opt
 ):
     """本地执行"""
     args = {
@@ -56,6 +56,7 @@ def run(
         "txt": txt,
         "job_start": job_start,
         "job_end": job_end,
+        "pytest_opt": pytest_opt,
     }
     from youqu3.driver.run import Run
     Run(**args).run()
@@ -65,7 +66,7 @@ def run(
 @click.help_option("-h", "--help", help="查看帮助信息")
 @click.option("-c", "--clients", default=None, type=click.STRING,
               help="远程机器信息:user@ip:password，多个机器之间用 '/' 连接")
-@click.option("-wd", "--workdir", default=None, type=click.STRING,
+@click.option("-w", "--workdir", default=None, type=click.STRING,
               help="工作目录")
 @click.option("-p", "--path", default=None, type=click.STRING,
               help="指定用例文件路径执行")
@@ -78,6 +79,7 @@ def run(
               help="基于txt文件执行用例：youqu-tags.txt or youqu-keywords.txt")
 @click.option("--job-start", default=None, type=click.STRING, help="测试结束之前执行")
 @click.option("--job-end", default=None, type=click.STRING, help="测试结束之后执行")
+@click.option("--pytest-opt", default=None, type=click.STRING, help="pytest命令行参数")
 def remote(
         clients,
         workdir,
@@ -88,6 +90,7 @@ def remote(
         txt,
         job_start,
         job_end,
+        pytest_opt,
 ):
     """远程控制执行"""
     args = {
@@ -100,6 +103,7 @@ def remote(
         "txt": txt,
         "job_start": job_start,
         "job_end": job_end,
+        "pytest_opt": pytest_opt,
     }
     from youqu3.driver.remote import Remote
     Remote(**args).run()

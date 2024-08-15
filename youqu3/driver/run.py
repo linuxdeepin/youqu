@@ -27,6 +27,7 @@ class Run:
             txt=None,
             job_start=None,
             job_end=None,
+            pytest_opt=None,
             **kwargs,
     ):
         logger("INFO")
@@ -40,6 +41,7 @@ class Run:
         self.txt = txt
         self.job_start = job_start
         self.job_end = job_end
+        self.pytest_opt = pytest_opt
 
         self.rootdir = pathlib.Path(".").absolute()
         self.report_path = self.rootdir / "report"
@@ -105,6 +107,8 @@ class Run:
 
         if self.setup_plan:
             cmd.append("--setup-plan")
+        if self.pytest_opt:
+            cmd.extend([i.strip() for i in self.pytest_opt])
         else:
             cmd.extend([
                 "--json-report",

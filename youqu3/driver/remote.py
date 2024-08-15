@@ -31,6 +31,7 @@ class Remote:
             txt=None,
             job_start=None,
             job_end=None,
+            pytest_opt=None,
             **kwargs
     ):
         logger("INFO")
@@ -44,6 +45,7 @@ class Remote:
         self.txt = txt
         self.job_start = job_start
         self.job_end = job_end
+        self.pytest_opt = pytest_opt
 
         if not self.clients:
             raise ValueError("REMOTE驱动模式, 未传入远程客户端信息：-c/--clients user@ip:pwd")
@@ -97,7 +99,7 @@ class Remote:
     def check_remote_connected(self, user, _ip, password):
         logger.info(f"Checking remote: {user, _ip, password}")
         try:
-            _, return_code = RemoteCmd(user, _ip, password, connect_timeout=1).remote_run("hostname -I", return_code=True)
+            _, return_code = RemoteCmd(user, _ip, password).remote_run("hostname -I", return_code=True, timeout=1)
             if return_code == 0:
                 return True
             return False
@@ -234,15 +236,14 @@ class Remote:
             cmd.extend(["-m", f"'{self.tags}'"])
         elif self.txt and tags_txt is not None:
             cmd.extend(["-m", f"'{tags_txt}'"])
-
         if self.slaves:
             cmd.extend(["--slaves", f"'{self.slaves}'"])
-
         if self.job_start:
             cmd.extend(["--job-start",f"'{self.job_start}'"])
         if self.job_end:
             cmd.extend(["--job-end",f"'{self.job_end}"])
-
+        if self.pytest_opt:
+            cmd.extend([i.strip() for i in self.pytest_opt])
         return cmd
 
     def run_test(self, user, _ip, password):

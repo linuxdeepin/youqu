@@ -1,5 +1,4 @@
 import os
-import re
 import subprocess
 import sys
 
@@ -142,45 +141,29 @@ class Cmd:
 
 class RemoteCmd:
 
-    def __init__(self, user: str, ip: str, password: str, connect_timeout: int = None):
+    def __init__(self, user: str, ip: str, password: str):
         self.user = user
         self.ip = ip
         self.password = password
-        self.connect_timeout = connect_timeout
 
-    def remote_run(self, cmd: str, return_code: bool = False):
-        try:
-            from fabric import Connection
-        except ImportError:
-            raise exceptions.YouQuPluginDependencyError("fabric")
-        c = Connection(
-            host=self.ip,
-            user=self.user,
-            connect_timeout=self.connect_timeout,
-            connect_kwargs={'password': self.password},
+    def remote_run(self, cmd: str, return_code: bool = False, timeout: int = None):
+        res = Cmd.expect_run(
+            f'ssh {self.user}@{self.ip} "{cmd}"',
+            events={'password': f'{self.password}\n'},
+            return_code=return_code,
+            timeout=timeout
         )
-        res = c.run(cmd)
-        if return_code:
-            return res.stdout, res.return_code
-        return res.stdout
+        if return_code is False:
+            return res.decode("utf-8")
+        stdout, return_code = res
+        return stdout.decode("utf-8"), return_code
 
-    def remote_sudo_run(self, cmd: str, return_code: bool = False):
-        try:
-            from fabric import Connection, Config
-        except ImportError:
-            raise exceptions.YouQuPluginDependencyError("fabric")
-        c = Connection(
-            host=self.ip,
-            user=self.user,
-            config=Config(overrides={'sudo': {'password': self.password}}),
-            connect_timeout=self.connect_timeout,
-            connect_kwargs={'password': self.password},
-        )
-        res = c.sudo(cmd)
-        if return_code:
-            return res.stdout, res.return_code
-        return res.stdout
-
-    def remote_expect_run(self):
-        # TODO
-        ...
+    def remote_sudo_run(self, cmd: str, workdir: str = None, return_code: bool = False):
+        wd = ""
+        if workdir is not None:
+            _, code = self.remote_run(f"ls {workdir}", return_code=True)
+            if code == 0:
+                wd = workdir
+            else:
+                raise FileNotFoundError(workdir)
+        return self.remote_run(f"{wd}echo '{self.password}' | sudo -S {cmd}", return_code=return_code)
