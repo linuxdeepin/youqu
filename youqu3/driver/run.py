@@ -108,7 +108,7 @@ class Run:
         if self.slaves:
             cmd.extend(["--slaves", f"'{self.slaves}'"])
         if self.record_failed_num or setting.RECORD_FAILED_NUM:
-            cmd.extend(["--record_failed_num", self.record_failed_num or setting.RECORD_FAILED_NUM])
+            cmd.extend(["--record_failed_num", f"{self.record_failed_num or setting.RECORD_FAILED_NUM}"])
         if self.pytest_opt:
             cmd.extend([i.strip() for i in self.pytest_opt])
 

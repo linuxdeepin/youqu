@@ -251,7 +251,7 @@ class Remote:
         if self.pytest_opt:
             cmd.extend([i.strip() for i in self.pytest_opt])
         if self.record_failed_num or setting.RECORD_FAILED_NUM:
-            cmd.extend(["--record_failed_num", self.record_failed_num or setting.RECORD_FAILED_NUM])
+            cmd.extend(["--record_failed_num", f"{self.record_failed_num or setting.RECORD_FAILED_NUM}"])
         return cmd
 
     def run_test(self, user, _ip, password):
