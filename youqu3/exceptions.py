@@ -14,6 +14,14 @@ class ApplicationStartError(Exception):
         Exception.__init__(self, err)
 
 
+class ElementFound(Exception):
+
+    def __init__(self, name):
+        err = f"找到元素: {name}"
+        logger.error(err)
+        Exception.__init__(self, err)
+
+
 class ElementNotFound(Exception):
 
     def __init__(self, name):

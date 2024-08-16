@@ -3,9 +3,9 @@
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
 import os
+from funnylog2.config import config as funnylog2_config
 from typing import Union
 
-from funnylog2.config import config as funnylog2_config
 from youqu3 import exceptions
 from youqu3 import log, logger, setting
 from youqu3.cmd import Cmd
@@ -43,8 +43,8 @@ class Assert:
                 timeout=timeout,
                 max_match_number=match_number,
             )
-        except exceptions.TemplateElementNotFound as exc:
-            raise AssertionError(exc) from exceptions.TemplateElementNotFound
+        except pylinuxauto.exceptions.TemplateElementNotFound as exc:
+            raise AssertionError(exc) from pylinuxauto.exceptions.TemplateElementNotFound
 
     @staticmethod
     def assert_image_not_exist(
@@ -71,9 +71,9 @@ class Assert:
                 max_match_number=match_number,
             )
             raise exceptions.TemplateElementFound(widget)
-        except exceptions.TemplateElementNotFound:
+        except pylinuxauto.exceptions.TemplateElementNotFound:
             pass
-        except exceptions.TemplateElementFound as exc:
+        except pylinuxauto.exceptions.TemplateElementFound as exc:
             raise AssertionError(exc) from exceptions.TemplateElementFound
 
     @classmethod
@@ -114,10 +114,12 @@ class Assert:
 
     @staticmethod
     def assert_element_exist(expr):
-        """判断元素{{expr}}不存在"""
+        """判断元素{{expr}}存在"""
         from youqu3.gui import pylinuxauto
-        if not pylinuxauto.find_element_by_attr_path(expr):
-            raise AssertionError(f"元素{expr}不存在")
+        try:
+            pylinuxauto.find_element_by_attr_path(expr)
+        except pylinuxauto.exceptions.ElementNotFound:
+            raise exceptions.ElementNotFound(expr)
 
     @staticmethod
     def assert_element_not_exist(expr):
@@ -125,8 +127,8 @@ class Assert:
         from youqu3.gui import pylinuxauto
         try:
             pylinuxauto.find_element_by_attr_path(expr)
-            raise AssertionError(f"元素{expr}存在")
-        except exceptions.ElementNotFound:
+            raise exceptions.ElementFound(expr)
+        except pylinuxauto.exceptions.ElementNotFound:
             pass
 
     @staticmethod

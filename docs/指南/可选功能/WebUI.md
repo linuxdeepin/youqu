@@ -1,5 +1,7 @@
 # WebUI
 
+基于 Playwright 实现。
+
 ## 安装
 
 ```bash
