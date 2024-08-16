@@ -196,14 +196,16 @@ class Run:
                 report_server_html_path = f"{report_server_path}/html"
                 YouQuHtmlRpc.makedirs(report_server_data_path)
                 environment(self.allure_data_path)
+                logger.info(f"send data to report server: {config.SERVER_IP}")
                 Cmd.expect_run(
                     f"/bin/bash -c '{rsync} {str(self.allure_data_path)}/ {setting.REPORT_SERVER_SSH_USER}@{setting.REPORT_SERVER_IP}:{report_server_data_path}/'",
                     events={'password': f'{setting.REPORT_SERVER_SSH_PASSWORD}\n'},
-                    return_code=True
+                    return_code=True,
+                    timeout=6000,
                 )
                 YouQuHtmlRpc.gen(report_server_data_path, report_server_html_path, report_dirname)
                 report_server_url = f"http://{setting.REPORT_SERVER_IP}/{report_dirname}"
-                logger.info(f"html_report_url {report_server_url}")
+                logger.info(f"html report url: {report_server_url}")
                 with open(f"{self.allure_html_path}/{report_dirname}.txt", "w", encoding="utf-8") as f:
                     f.write(report_server_url)
             except ImportError as e:
