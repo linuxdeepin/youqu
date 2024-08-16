@@ -8,12 +8,12 @@ from youqu3._setting._dynamic import _DynamicSetting
 class _Setting(_DynamicSetting):
     """YouQu Config"""
 
-    PASSWORD: str = os.environ.get("PASSWORD") or "1"
+    PASSWORD: str = os.environ.get("YOUQU_PASSWORD") or "1"
 
-    TIMEOUT = os.environ.get("TIMEOUT") or 300
-    LOG_LEVEL = os.environ.get("LOG_LEVEL") or "INFO"
-    RERUNS = os.environ.get("RERUNS") or 1
-    RECORD_FAILED_CASE = os.environ.get("RECORD_FAILED_CASE") or 1
+    TIMEOUT = os.environ.get("YOUQU_TIMEOUT") or 300
+    LOG_LEVEL = os.environ.get("YOUQU_LOG_LEVEL") or "INFO"
+    RERUNS = os.environ.get("YOUQU_RERUNS") or 1
+    RECORD_FAILED_NUM = os.environ.get("YOUQU_RECORD_FAILED_NUM") or 1
 
     # OCR
     OCR_NETWORK_RETRY = 1

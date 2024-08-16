@@ -29,9 +29,11 @@ class Remote:
             tags=None,
             slaves=None,
             txt=None,
+            reruns=None,
             job_start=None,
             job_end=None,
             pytest_opt=None,
+            record_failed_num=None,
             **kwargs
     ):
         logger("INFO")
@@ -43,9 +45,11 @@ class Remote:
         self.clients = clients
         self.slaves = slaves
         self.txt = txt
+        self.reruns = reruns
         self.job_start = job_start
         self.job_end = job_end
         self.pytest_opt = pytest_opt
+        self.record_failed_num = record_failed_num
 
         if not self.clients:
             raise ValueError("REMOTE驱动模式, 未传入远程客户端信息：-c/--clients user@ip:pwd")
@@ -238,12 +242,16 @@ class Remote:
             cmd.extend(["-m", f"'{tags_txt}'"])
         if self.slaves:
             cmd.extend(["--slaves", f"'{self.slaves}'"])
+        if self.reruns:
+            cmd.extend(["--reruns",self.reruns])
         if self.job_start:
             cmd.extend(["--job-start",f"'{self.job_start}'"])
         if self.job_end:
             cmd.extend(["--job-end",f"'{self.job_end}"])
         if self.pytest_opt:
             cmd.extend([i.strip() for i in self.pytest_opt])
+        if self.record_failed_num or setting.RECORD_FAILED_NUM:
+            cmd.extend(["--record_failed_num", self.record_failed_num or setting.RECORD_FAILED_NUM])
         return cmd
 
     def run_test(self, user, _ip, password):

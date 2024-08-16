@@ -30,9 +30,11 @@ def cli(): ...
 @click.option("-s", "--slaves", default=None, type=click.STRING, help=_slaves_help)
 @click.option("--txt", is_flag=True, default=False, type=click.BOOL,
               help="基于txt文件执行用例：youqu-tags.txt or youqu-keywords.txt")
+@click.option("--reruns", default=None, type=click.STRING, help="重跑次数")
 @click.option("--job-start", default=None, type=click.STRING, help="测试结束之前执行")
 @click.option("--job-end", default=None, type=click.STRING, help="测试结束之后执行")
 @click.option("--pytest-opt", default=None, type=click.STRING, help="pytest命令行参数")
+@click.option("--record-failed-num", default=None, type=click.STRING, help="从第几次重跑开始录屏")
 def run(
         workdir,
         path,
@@ -41,9 +43,11 @@ def run(
         setup_plan,
         slaves,
         txt,
+        reruns,
         job_start,
         job_end,
-        pytest_opt
+        pytest_opt,
+        record_failed_num,
 ):
     """本地执行"""
     args = {
@@ -54,9 +58,11 @@ def run(
         "setup_plan": setup_plan,
         "slaves": slaves,
         "txt": txt,
+        "reruns": reruns,
         "job_start": job_start,
         "job_end": job_end,
         "pytest_opt": pytest_opt,
+        "record_failed_num": record_failed_num,
     }
     from youqu3.driver.run import Run
     Run(**args).run()
@@ -77,9 +83,11 @@ def run(
 @click.option("-s", "--slaves", default=None, type=click.STRING, help=_slaves_help)
 @click.option("--txt", is_flag=True, default=False, type=click.BOOL,
               help="基于txt文件执行用例：youqu-tags.txt or youqu-keywords.txt")
+@click.option("--reruns", default=None, type=click.STRING, help="重跑次数")
 @click.option("--job-start", default=None, type=click.STRING, help="测试结束之前执行")
 @click.option("--job-end", default=None, type=click.STRING, help="测试结束之后执行")
 @click.option("--pytest-opt", default=None, type=click.STRING, help="pytest命令行参数")
+@click.option("--record-failed-num", default=None, type=click.STRING, help="从第几次重跑开始录屏")
 def remote(
         clients,
         workdir,
@@ -88,9 +96,11 @@ def remote(
         tags,
         slaves,
         txt,
+        reruns,
         job_start,
         job_end,
         pytest_opt,
+        record_failed_num,
 ):
     """远程控制执行"""
     args = {
@@ -101,9 +111,11 @@ def remote(
         "tags": tags,
         "slaves": slaves,
         "txt": txt,
+        "reruns": reruns,
         "job_start": job_start,
         "job_end": job_end,
         "pytest_opt": pytest_opt,
+        "record_failed_num": record_failed_num,
     }
     from youqu3.driver.remote import Remote
     Remote(**args).run()

@@ -4,11 +4,10 @@
 # SPDX-License-Identifier: GPL-2.0-only
 import os.path
 import pathlib
+import pytest
 import random
 import re
 import sys
-
-import pytest
 
 from youqu3 import logger, setting
 
@@ -25,9 +24,11 @@ class Run:
             setup_plan=None,
             slaves=None,
             txt=None,
+            reruns=None,
             job_start=None,
             job_end=None,
             pytest_opt=None,
+            record_failed_num=None,
             **kwargs,
     ):
         logger("INFO")
@@ -39,9 +40,11 @@ class Run:
         self.setup_plan = setup_plan
         self.slaves = slaves
         self.txt = txt
+        self.reruns = reruns
         self.job_start = job_start
         self.job_end = job_end
         self.pytest_opt = pytest_opt
+        self.record_failed_num = record_failed_num
 
         self.rootdir = pathlib.Path(".").absolute()
         self.report_path = self.rootdir / "report"
@@ -104,11 +107,18 @@ class Run:
 
         if self.slaves:
             cmd.extend(["--slaves", f"'{self.slaves}'"])
+        if self.record_failed_num or setting.RECORD_FAILED_NUM:
+            cmd.extend(["--record_failed_num", self.record_failed_num or setting.RECORD_FAILED_NUM])
+        if self.pytest_opt:
+            cmd.extend([i.strip() for i in self.pytest_opt])
+
+        cmd.extend([
+            f"--reruns={self.reruns or setting.RERUNS}",
+            f"--timeout={setting.TIMEOUT}",
+        ])
 
         if self.setup_plan:
             cmd.append("--setup-plan")
-        if self.pytest_opt:
-            cmd.extend([i.strip() for i in self.pytest_opt])
         else:
             cmd.extend([
                 "--json-report",
@@ -123,11 +133,6 @@ class Run:
                 "-s",
                 "--no-header",
             ])
-
-        cmd.extend([
-            f"--reruns={setting.RERUNS}",
-            f"--timeout={setting.TIMEOUT}",
-        ])
 
         return cmd
 
