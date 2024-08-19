@@ -142,9 +142,9 @@ class Run:
             Cmd.run(self.job_start, timeout=3600)
         for file in os.listdir(self.rootdir):
             if file == "job_start.py":
-                Cmd.run(f"cd {self.rootdir} && {sys.executable} {file}")
+                Cmd.run(f"cd {self.rootdir} && {sys.executable} {file}", timeout=600)
             if file == "job_start.sh":
-                Cmd.run(f"cd {self.rootdir} && /bin/bash {file}")
+                Cmd.run(f"cd {self.rootdir} && /bin/bash {file}", timeout=600)
 
     def job_end_driver(self):
         from youqu3.cmd import Cmd
@@ -152,9 +152,9 @@ class Run:
             Cmd.run(self.job_end, timeout=3600)
         for file in os.listdir(self.rootdir):
             if file == "job_end.py":
-                Cmd.run(f"cd {self.rootdir} && {sys.executable} {file}")
+                Cmd.run(f"cd {self.rootdir} && {sys.executable} {file}", timeout=600)
             if file == "job_end.sh":
-                Cmd.run(f"cd {self.rootdir} && /bin/bash {file}")
+                Cmd.run(f"cd {self.rootdir} && /bin/bash {file}", timeout=600)
 
     def run(self):
         if not self.setup_plan:
