@@ -5,11 +5,13 @@
 :Date  :${DATE} ${TIME}
 """
 
-from funnylog2.conf import setting as log_setting
-log_setting.CLASS_NAME_ENDSWITH = "Method"
+from funnylog2.config import config as funnylog2_config
+
+funnylog2_config.CLASS_NAME_ENDSWITH = ["Method"]
 
 from youqu3 import log
-from youqu3.dogtail import Dogtail
+from youqu3.gui import pylinuxauto
+
 
 from method.base_method import BaseMethod
 
@@ -18,10 +20,6 @@ from method.base_method import BaseMethod
 class ${AppName}Method(BaseMethod):
     """应用方法主类"""
 
-    @property
-    def dock(self):
-        return Dogtail(name="dde-dock")
-
     def click_dde_file_manager_on_dock_by_attr(self):
         """在任务栏点击文件管理器"""
-        self.dock.ele("Btn_文件管理器").click()
+        pylinuxauto.find_element_by_attr_path("/dde-dock/Btn_文件管理器").click()

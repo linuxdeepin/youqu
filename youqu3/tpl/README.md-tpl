@@ -3,7 +3,9 @@
 ## 环境部署
 
 ```bash
-pip install -r requirements.txt
+pip3 install youqu3
+
+youqu3 envx
 ```
 
 ## Ruff
@@ -11,7 +13,7 @@ pip install -r requirements.txt
 ## 安装 Ruff
 
 ```bash
-pip install ruff
+pip3 install ruff
 ```
 
 ### 代码检查

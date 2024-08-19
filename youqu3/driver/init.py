@@ -17,6 +17,7 @@ class Init:
     def copy_template_to_apps():
         os.system(f"cp -r {setting.TPL_PATH}/* .")
         os.system(f"cp {setting.TPL_PATH}/.gitignore-tpl  .")
+        os.system(f"cp {setting.TPL_PATH}/.env-tpl  .")
 
     @classmethod
     def init(cls):
