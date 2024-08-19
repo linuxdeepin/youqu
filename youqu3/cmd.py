@@ -97,12 +97,16 @@ class Cmd:
         如果 return_code=True，返回 (stdout, return_code)
         """
         import pexpect
-        return pexpect.run(
+        res = pexpect.run(
             cmd,
             events=events,
             withexitstatus=return_code,
             timeout=timeout
         )
+        if return_code is False:
+            return res.decode("utf-8")
+        stdout, return_code = res
+        return stdout.decode("utf-8"), return_code
 
     @classmethod
     def sudo_run(
@@ -133,10 +137,9 @@ class Cmd:
         )
         if return_code is False:
             return res.lstrip("请输入密码●")
-        else:
-            res = list(res)
-            res[0] = res[0].lstrip("请输入密码●")
-            return res
+        res = list(res)
+        res[0] = res[0].lstrip("请输入密码●")
+        return res
 
 
 class RemoteCmd:
@@ -153,10 +156,7 @@ class RemoteCmd:
             return_code=return_code,
             timeout=timeout
         )
-        if return_code is False:
-            return res.decode("utf-8")
-        stdout, return_code = res
-        return stdout.decode("utf-8"), return_code
+        return res
 
     def remote_sudo_run(self, cmd: str, workdir: str = None, return_code: bool = False):
         wd = ""
