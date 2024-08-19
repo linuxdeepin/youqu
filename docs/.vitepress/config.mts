@@ -34,7 +34,12 @@ export default defineConfig({
                 text: `v${version}`, items: [
                     {text: "更新日志", link: '/RELEASE'},
                     {text: "参与贡献", link: '/CONTRIBUTING'},
-                    {text: "兴趣小组", link: '/SIG'},
+                ]
+            },
+            {
+                text: "Q&A", items: [
+                    {text: "Q&A", link: '/Q&A/Q&A'},
+                    {text: "兴趣小组", link: '/Q&A/SIG'},
                 ]
             },
         ],
@@ -115,6 +120,10 @@ export default defineConfig({
             ],
             "/插件/": [
                 {text: "插件汇总", link: "/插件/插件列表"},
+            ],
+            "/Q&A/": [
+                {text: "Q&A", link: "/Q&A/Q&A"},
+                {text: "兴趣小组", link: "/Q&A/SIG"},
             ],
         },
         search: {
