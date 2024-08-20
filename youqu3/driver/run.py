@@ -183,16 +183,16 @@ class Run:
                 from youqu3.cmd import Cmd
                 from youqu_html_rpc import YouQuHtmlRpc
                 from youqu_html_rpc.environment import environment
-                from youqu_html_rpc.config import config
+                from youqu_html_rpc.config import config as html_rpc_config
                 log_server = servers = [i.strip() for i in setting.REPORT_SERVER_IP.split("/") if i]
                 while servers:
-                    config.SERVER_IP = random.choice(servers)
+                    html_rpc_config.SERVER_IP = random.choice(servers)
                     if YouQuHtmlRpc.check_connected() is False:
-                        servers.remove(config.SERVER_IP)
-                        config.SERVER_IP = None
+                        servers.remove(html_rpc_config.SERVER_IP)
+                        html_rpc_config.SERVER_IP = None
                     else:
                         break
-                if config.SERVER_IP is None:
+                if html_rpc_config.SERVER_IP is None:
                     raise EnvironmentError(f"所有REPORT服务器不可用: {log_server}")
                 rsync = 'rsync -av -e "ssh -o StrictHostKeyChecking=no"'
                 report_dirname = f"{setting.TIME_STRING}_{setting.HOST_IP}_{self.rootdir.name}"
@@ -201,15 +201,15 @@ class Run:
                 report_server_html_path = f"{report_server_path}/html"
                 YouQuHtmlRpc.makedirs(report_server_data_path)
                 environment(self.allure_data_path)
-                logger.info(f"send data to report server: {config.SERVER_IP}")
+                logger.info(f"send data to report server: {html_rpc_config.SERVER_IP}")
                 Cmd.expect_run(
-                    f"/bin/bash -c '{rsync} {str(self.allure_data_path)}/ {setting.REPORT_SERVER_SSH_USER}@{setting.REPORT_SERVER_IP}:{report_server_data_path}/'",
+                    f"/bin/bash -c '{rsync} {str(self.allure_data_path)}/ {setting.REPORT_SERVER_SSH_USER}@{html_rpc_config.SERVER_IP}:{report_server_data_path}/'",
                     events={'password': f'{setting.REPORT_SERVER_SSH_PASSWORD}\n'},
                     return_code=True,
                     timeout=6000,
                 )
                 YouQuHtmlRpc.gen(report_server_data_path, report_server_html_path, report_dirname)
-                report_server_url = f"http://{setting.REPORT_SERVER_IP}/{report_dirname}"
+                report_server_url = f"http://{html_rpc_config.SERVER_IP}/{report_dirname}"
                 logger.info(f"html report url: {report_server_url}")
                 with open(f"{self.allure_html_path}/{report_dirname}.txt", "w", encoding="utf-8") as f:
                     f.write(report_server_url)
