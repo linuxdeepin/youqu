@@ -151,7 +151,7 @@ class RemoteCmd:
 
     def remote_run(self, cmd: str, return_code: bool = False, timeout: int = None):
         res = Cmd.expect_run(
-            f'ssh {self.user}@{self.ip} "{cmd}"',
+            f'ssh -o StrictHostKeyChecking=no {self.user}@{self.ip} "{cmd}"',
             events={'password': f'{self.password}\n'},
             return_code=return_code,
             timeout=timeout
