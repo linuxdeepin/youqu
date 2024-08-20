@@ -58,8 +58,8 @@ class Assert:
             match_number: int = None,
     ):
         """判断界面不存在{{widget}}模板图片"""
+        from youqu3.gui import pylinuxauto
         try:
-            from youqu3.gui import pylinuxauto
             pylinuxauto.find_element_by_image(
                 widget,
                 rate=rate,
@@ -72,9 +72,7 @@ class Assert:
             )
             raise exceptions.TemplateElementFound(widget)
         except pylinuxauto.exceptions.TemplateElementNotFound:
-            pass
-        except pylinuxauto.exceptions.TemplateElementFound as exc:
-            raise AssertionError(exc) from exceptions.TemplateElementFound
+            ...
 
     @classmethod
     def assert_image_exist_during_time(
