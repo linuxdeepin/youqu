@@ -5,8 +5,6 @@
 import os
 from funnylog2.config import config as funnylog2_config
 from typing import Union
-from youqu3.gui import pylinuxauto
-from youqu3.gui import pylinuxauto_config
 from youqu3 import exceptions
 from youqu3 import log, logger, setting
 from youqu3.cmd import Cmd
@@ -22,17 +20,18 @@ class Assert:
 
     @staticmethod
     def assert_image_exist(
-            widget: str,
-            rate: float = None,
-            multiple: bool = False,
-            picture_abspath: str = None,
-            network_retry: int = None,
-            pause: [int, float] = None,
-            timeout: [int, float] = None,
-            match_number: int = None,
+        widget: str,
+        rate: float = None,
+        multiple: bool = False,
+        picture_abspath: str = None,
+        network_retry: int = None,
+        pause: [int, float] = None,
+        timeout: [int, float] = None,
+        match_number: int = None,
     ):
         """判断界面存在{{widget}}模板图片"""
         from youqu3.gui import pylinuxauto
+
         try:
             pylinuxauto.find_element_by_image(
                 widget,
@@ -45,21 +44,24 @@ class Assert:
                 max_match_number=match_number,
             )
         except pylinuxauto.exceptions.TemplateElementNotFound as exc:
-            raise AssertionError(exc) from pylinuxauto.exceptions.TemplateElementNotFound
+            raise AssertionError(
+                exc
+            ) from pylinuxauto.exceptions.TemplateElementNotFound
 
     @staticmethod
     def assert_image_not_exist(
-            widget: str,
-            rate: float = None,
-            multiple: bool = False,
-            picture_abspath: str = None,
-            network_retry: int = None,
-            pause: [int, float] = None,
-            timeout: [int, float] = None,
-            match_number: int = None,
+        widget: str,
+        rate: float = None,
+        multiple: bool = False,
+        picture_abspath: str = None,
+        network_retry: int = None,
+        pause: [int, float] = None,
+        timeout: [int, float] = None,
+        match_number: int = None,
     ):
         """判断界面不存在{{widget}}模板图片"""
         from youqu3.gui import pylinuxauto
+
         try:
             pylinuxauto.find_element_by_image(
                 widget,
@@ -77,11 +79,11 @@ class Assert:
 
     @classmethod
     def assert_image_exist_during_time(
-            cls,
-            widget: str,
-            screen_time: Union[float, int],
-            rate: float = None,
-            pause: Union[int, float] = None,
+        cls,
+        widget: str,
+        screen_time: Union[float, int],
+        rate: float = None,
+        pause: Union[int, float] = None,
     ):
         """
         在一段时间内截图多张图片进行识别，其中有一张图片识别成功即返回结果;
@@ -91,8 +93,11 @@ class Assert:
         :param rate: 识别率；
         :param pause: 截取屏幕图片的间隔时间，默认不间隔；
         """
-        logger.info(f"屏幕上匹配图片< {f'***{widget[-40:]}' if len(widget) >= 40 else widget} >")
+        logger.info(
+            f"屏幕上匹配图片< {f'***{widget[-40:]}' if len(widget) >= 40 else widget} >"
+        )
         from youqu3.gui import pylinuxauto
+
         try:
             pylinuxauto.get_during(widget, screen_time, rate, pause)
         except exceptions.TemplateElementNotFound as exc:
@@ -115,6 +120,7 @@ class Assert:
     def assert_element_exist(expr):
         """判断元素{{expr}}存在"""
         from youqu3.gui import pylinuxauto
+
         try:
             pylinuxauto.find_element_by_attr_path(expr)
         except pylinuxauto.exceptions.ElementNotFound:
@@ -124,6 +130,7 @@ class Assert:
     def assert_element_not_exist(expr):
         """判断元素{{expr}}不存在"""
         from youqu3.gui import pylinuxauto
+
         try:
             pylinuxauto.find_element_by_attr_path(expr)
             raise exceptions.ElementFound(expr)
@@ -194,17 +201,17 @@ class Assert:
 
     @staticmethod
     def assert_ocr_exist(
-            *args,
-            picture_abspath=None,
-            similarity=0.6,
-            return_first=False,
-            lang="ch",
-            network_retry: int = None,
-            pause: [int, float] = None,
-            timeout: [int, float] = None,
-            max_match_number: int = None,
-            mode: str = "all",
-            bbox: dict = None,
+        *args,
+        picture_abspath=None,
+        similarity=0.6,
+        return_first=False,
+        lang="ch",
+        network_retry: int = None,
+        pause: [int, float] = None,
+        timeout: [int, float] = None,
+        max_match_number: int = None,
+        mode: str = "all",
+        bbox: dict = None,
     ):
         """
         断言文案存在
@@ -244,6 +251,9 @@ class Assert:
         if picture_abspath is not None:
             pic = picture_abspath
 
+        from youqu3.gui import pylinuxauto
+        from youqu3.gui import pylinuxauto_config
+
         res = pylinuxauto.find_element_by_ocr(
             *args,
             picture_abspath=pic,
@@ -258,7 +268,10 @@ class Assert:
         )
         if res.result is False:
             raise AssertionError(
-                (f"通过OCR未识别到：{args}", f"{pic if pic else pylinuxauto_config.SCREEN_CACHE}")
+                (
+                    f"通过OCR未识别到：{args}",
+                    f"{pic if pic else pylinuxauto_config.SCREEN_CACHE}",
+                )
             )
         else:
             if isinstance(res.result, tuple):
@@ -273,7 +286,9 @@ class Assert:
                             f"{pic if pic else pylinuxauto_config.SCREEN_CACHE}",
                         )
                     )
-                elif mode == "any" and len(res.result) == list(res.result.values()).count(False):
+                elif mode == "any" and len(res.result) == list(
+                    res.result.values()
+                ).count(False):
                     raise AssertionError(
                         (
                             f"通过OCR未识别到：{args}中的任意一个",
@@ -285,23 +300,28 @@ class Assert:
                         if bbox.get("return_one") is True:
                             new_res = {}
                             for key, value in res.items():
-                                new_res[key] = (value[0] + bbox.get("start_x"), value[1] + bbox.get("start_y"))
-                            raise AssertionError(f"传入bbox参数，范围内关键词非唯一：{new_res}")
+                                new_res[key] = (
+                                    value[0] + bbox.get("start_x"),
+                                    value[1] + bbox.get("start_y"),
+                                )
+                            raise AssertionError(
+                                f"传入bbox参数，范围内关键词非唯一：{new_res}"
+                            )
                         elif bbox.get("return_one") is False:
                             pass
 
     @staticmethod
     def assert_ocr_not_exist(
-            *args,
-            picture_abspath=None,
-            similarity=0.6,
-            return_first=False,
-            lang="ch",
-            network_retry: int = None,
-            pause: [int, float] = None,
-            timeout: [int, float] = None,
-            max_match_number: int = None,
-            bbox: dict = None,
+        *args,
+        picture_abspath=None,
+        similarity=0.6,
+        return_first=False,
+        lang="ch",
+        network_retry: int = None,
+        pause: [int, float] = None,
+        timeout: [int, float] = None,
+        max_match_number: int = None,
+        bbox: dict = None,
     ):
         """断言文案不存在"""
         if len(args) == 0:
@@ -310,7 +330,9 @@ class Assert:
         pic = None
         if picture_abspath is not None:
             pic = picture_abspath
+
         from youqu3.gui import pylinuxauto
+        from youqu3.gui import pylinuxauto_config
 
         res = pylinuxauto.find_element_by_ocr(
             *args,
@@ -328,7 +350,6 @@ class Assert:
         if res.result is False:
             pass
         elif isinstance(res.result, tuple):
-
             raise AssertionError(
                 (
                     f"通过ocr识别到不应存在的文案 {args} -> {res.result}",
@@ -343,7 +364,10 @@ class Assert:
                     new_res = {}
                     for key, value in res.result.items():
                         if isinstance(value, tuple):
-                            new_res[key] = (value[0] + bbox.get("start_x"), value[1] + bbox.get("start_y"))
+                            new_res[key] = (
+                                value[0] + bbox.get("start_x"),
+                                value[1] + bbox.get("start_y"),
+                            )
                         else:
                             new_res[key] = value
                 else:
