@@ -5,7 +5,8 @@
 import os
 from funnylog2.config import config as funnylog2_config
 from typing import Union
-
+from youqu3.gui import pylinuxauto
+from youqu3.gui import pylinuxauto_config
 from youqu3 import exceptions
 from youqu3 import log, logger, setting
 from youqu3.cmd import Cmd
@@ -203,6 +204,7 @@ class Assert:
             timeout: [int, float] = None,
             max_match_number: int = None,
             mode: str = "all",
+            bbox: dict = None,
     ):
         """
         断言文案存在
@@ -218,12 +220,29 @@ class Assert:
         :param timeout: 最大匹配超时,单位秒
         :param max_match_number: 最大匹配次数
         :param mode: "all" or "any"，all 表示识别所有目标字符，any 表示识别任意一个目标字符，默认值为 all
+        :param bbox:
+            接收一个字典，包含一个区域，在区域内进行识别，用于干扰较大时提升OCR识别精准度
+            字典字段:
+                start_x: 开始 x 坐标（左上角）
+                start_y: 开始 y 坐标（左上角）
+                w: 宽度
+                h: 高度
+                end_x: 结束 x 坐标（右下角）
+                end_y: 结束 y 坐标（右下角）
+                return_one: True/False（默认为True）
+                注意 ：
+                    1、end_x + end_y 与 w + h 为互斥关系, 必须且只能传入其中一组
+                    2、加入此参数后代表范围内只能出现唯一坐标则通过，若必须返回多组坐标可修改'return_one'的值
+                示例：
+                {"start_x": 0, "start_y": 0, "w": 100, "h": 100}
+                {"start_x": 0, "start_y": 0, "end_x": 100, "end_y": 100}
         """
+        if len(args) == 0:
+            raise ValueError("缺少 ocr 断言关键字")
+
         pic = None
         if picture_abspath is not None:
             pic = picture_abspath
-
-        from youqu3.gui import pylinuxauto
 
         res = pylinuxauto.find_element_by_ocr(
             *args,
@@ -235,30 +254,41 @@ class Assert:
             pause=pause,
             timeout=timeout,
             max_match_number=max_match_number,
+            bbox=bbox,
         )
-        if res is False:
+        if res.result is False:
             raise AssertionError(
-                (f"通过OCR未识别到：{args}", f"{pic if pic else setting.SCREEN_CACHE}")
+                (f"通过OCR未识别到：{args}", f"{pic if pic else pylinuxauto_config.SCREEN_CACHE}")
             )
-        if isinstance(res, tuple):
-            pass
-        elif isinstance(res, dict):
-            mode = mode.lower()
-            if mode == "all" and False in res.values():
-                res = filter(lambda x: x[1] is False, res.items())
-                raise AssertionError(
-                    (
-                        f"通过OCR未识别到：{dict(res)}",
-                        f"{pic if pic else setting.SCREEN_CACHE}",
+        else:
+            if isinstance(res.result, tuple):
+                pass
+            elif isinstance(res.result, dict):
+                mode = mode.lower()
+                if mode == "all" and False in res.result.values():
+                    res = filter(lambda x: x[1] is False, res.result.items())
+                    raise AssertionError(
+                        (
+                            f"通过OCR未识别到：{dict(res)} <- {args}",
+                            f"{pic if pic else pylinuxauto_config.SCREEN_CACHE}",
+                        )
                     )
-                )
-            elif mode == "any" and len(res) == list(res.values()).count(False):
-                raise AssertionError(
-                    (
-                        f"通过OCR未识别到：{args}中的任意一个",
-                        f"{pic if pic else setting.SCREEN_CACHE}",
+                elif mode == "any" and len(res.result) == list(res.result.values()).count(False):
+                    raise AssertionError(
+                        (
+                            f"通过OCR未识别到：{args}中的任意一个",
+                            f"{pic if pic else pylinuxauto_config.SCREEN_CACHE}",
+                        )
                     )
-                )
+                else:
+                    if bbox is not None:
+                        if bbox.get("return_one") is True:
+                            new_res = {}
+                            for key, value in res.items():
+                                new_res[key] = (value[0] + bbox.get("start_x"), value[1] + bbox.get("start_y"))
+                            raise AssertionError(f"传入bbox参数，范围内关键词非唯一：{new_res}")
+                        elif bbox.get("return_one") is False:
+                            pass
 
     @staticmethod
     def assert_ocr_not_exist(
@@ -271,8 +301,12 @@ class Assert:
             pause: [int, float] = None,
             timeout: [int, float] = None,
             max_match_number: int = None,
+            bbox: dict = None,
     ):
         """断言文案不存在"""
+        if len(args) == 0:
+            raise ValueError("缺少 ocr 断言关键字")
+
         pic = None
         if picture_abspath is not None:
             pic = picture_abspath
@@ -288,21 +322,35 @@ class Assert:
             pause=pause,
             timeout=timeout,
             max_match_number=max_match_number,
+            bbox=bbox,
         )
-        if res is False:
+        print(res.result)
+        if res.result is False:
             pass
-        elif isinstance(res, tuple):
+        elif isinstance(res.result, tuple):
+
             raise AssertionError(
                 (
-                    f"通过ocr识别到不应存在的文案 {res}",
-                    f"{pic if pic else setting.SCREEN_CACHE}",
+                    f"通过ocr识别到不应存在的文案 {args} -> {res.result}",
+                    f"{pic if pic else pylinuxauto_config.SCREEN_CACHE}",
                 )
             )
-        elif isinstance(res, dict) and True in res.values():
-            res = filter(lambda x: x[1] is not False, res.items())
-            raise AssertionError(
-                (
-                    f"通过OCR识别到不应存在的文案：{dict(res)}",
-                    f"{pic if pic else setting.SCREEN_CACHE}",
+        elif isinstance(res.result, dict):
+            if all(value is False for value in res.result.values()):
+                pass
+            else:
+                if bbox is not None:
+                    new_res = {}
+                    for key, value in res.result.items():
+                        if isinstance(value, tuple):
+                            new_res[key] = (value[0] + bbox.get("start_x"), value[1] + bbox.get("start_y"))
+                        else:
+                            new_res[key] = value
+                else:
+                    new_res = res.result
+                raise AssertionError(
+                    (
+                        f"通过OCR识别到不应存在的文案：{args} -> {dict(new_res)}",
+                        f"{pic if pic else pylinuxauto_config.SCREEN_CACHE}",
+                    )
                 )
-            )
