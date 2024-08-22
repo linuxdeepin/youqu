@@ -1,3 +1,5 @@
+YouQu2 将于 2024 年 12 月 31 日停止维护，希望您能尽快切换到 [YouQu3](https://youqu.uniontech.com/v3) 。
+
 <p align="center">
   <a href="https://linuxdeepin.github.io/youqu">
     <img src="./docs/assets/logo.png" width="100" alt="YouQu">
