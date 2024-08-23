@@ -34,8 +34,6 @@ class _Setting(_DynamicSetting):
     # REPORT SERVER
     REPORT_SERVER_IP = "10.8.12.47/10.8.12.37"
     REPORT_PORT = 5656
-    REPORT_SERVER_SSH_USER = "uos"
-    REPORT_SERVER_SSH_PASSWORD = "1"
     REPORT_BASE_PATH = "~/report"
 
     # REMOTE
