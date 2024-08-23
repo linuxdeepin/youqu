@@ -17,4 +17,4 @@ class TestMyCase(BaseCase):
         # 在关键节点进行断言
         # 等待 2 秒，判断终端是否启动
         sleep(2)
-        check.asset_true(True)
+        check.assert_true(True)
