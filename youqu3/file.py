@@ -20,7 +20,7 @@ class File:
     __author__ = "Mikigo <huangmingqiang@uniontech.com>, Litao <litaoa@uniontech.com>"
 
     @staticmethod
-    def creat_files(path: str, file_name: str = "", file_type: str = "dir"):
+    def create_files(path: str, file_name: str = "", file_type: str = "dir"):
         """
          创建文件或文件夹
         :param path: 用户下目录下的路径
