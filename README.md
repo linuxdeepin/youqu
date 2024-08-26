@@ -1,5 +1,3 @@
-YouQu2 将于 2024 年 12 月 31 日停止维护，希望您能尽快切换到 [YouQu3](https://youqu.uniontech.com/v3) 。
-
 <p align="center">
   <a href="https://linuxdeepin.github.io/youqu">
     <img src="./docs/assets/logo.png" width="100" alt="YouQu">
@@ -14,7 +12,7 @@ YouQu2 将于 2024 年 12 月 31 日停止维护，希望您能尽快切换到 [
 
 [![GitHub issues](https://img.shields.io/github/issues/linuxdeepin/youqu?color=%23F79431)](https://github.com/linuxdeepin/youqu/issues)
 [![PyPI](https://img.shields.io/pypi/v/youqu?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu%2F&color=%23F79431)](https://pypi.org/project/youqu/)
-![Static Badge](https://img.shields.io/badge/UOS%2FDeepin/openEuler-Platform?style=flat&label=OS&color=%23F79431)
+![Static Badge](https://img.shields.io/badge/UOS%2FDeepin/openEuler/openAnolis-Platform?style=flat&label=OS&color=%23F79431)
 
 [![Downloads](https://static.pepy.tech/badge/youqu)](https://pepy.tech/project/youqu)
 [![Hits](https://hits.sh/github.com/linuxdeepin/youqu.svg?style=flat&label=visitors&color=blue)](https://github.com/linuxdeepin/youqu)
@@ -23,7 +21,9 @@ YouQu2 将于 2024 年 12 月 31 日停止维护，希望您能尽快切换到 [
 
 **深度社区：<a href="https://github.com/linuxdeepin/youqu" target="_blank">linuxdeepin</a> | <a href="https://gitee.com/deepin-community/youqu" target="_blank">deepin-community</a>**
 
-**欧拉社区：<a href="https://gitee.com/src-openeuler/youqu" target="_blank">src-openeuler</a>**
+**欧拉社区：<a href="https://gitee.com/src-openeuler/youqu" target="_blank">openEuler</a>**
+
+**龙晰社区：<a href="https://gitee.com/anolis/youqu" target="_blank">openAnolis</a>**
 
 **官方文档：<a href="https://youqu.uniontech.com" target="_blank">https://youqu.uniontech.com</a>**
 
