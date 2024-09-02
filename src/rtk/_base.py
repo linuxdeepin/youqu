@@ -72,6 +72,7 @@ class Args(Enum):
     json_backfill_task_id = "json_backfill_task_id"
     json_backfill_user = "json_backfill_user"
     json_backfill_password = "json_backfill_password"
+    json_backfill_custom_api = "json_backfill_custom_api"
 
 
 def transform_app_name(app_name):
