@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "youqu"
-version = "2.6.9"
+version = "2.7.0"
 authors = [
     { name = "mikigo", email = "huangmingqiang@uniontech.com" },
 ]
@@ -33,4 +33,4 @@ packages = [
 
 [project.urls]
 Source = "https://github.com/linuxdeepin/youqu"
-Documentation = "https://linuxdeepin.github.io/youqu"
+Documentation = "https://github.com/linuxdeepin/youqu"
