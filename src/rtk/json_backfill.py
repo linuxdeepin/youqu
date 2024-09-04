@@ -9,6 +9,7 @@
 import json
 import os
 import re
+from urllib.parse import urljoin
 
 from setting import conf
 from src.rtk.api_client import ApiClient
@@ -17,10 +18,11 @@ from src.rtk.api_client import ApiClient
 class JsonBackfill:
     __author__ = "huangmingqiang@uniontech.com"
 
-    def __init__(self, base_url, username, password):
+    def __init__(self, base_url, username, password, custom_api="api/youqu/yqresult/"):
         self.base_url = base_url
         self.username = username
         self.password = password
+        self.custom_api = custom_api
         self.api = ApiClient(
             base_url=self.base_url,
             username=self.username,
@@ -65,10 +67,10 @@ class JsonBackfill:
                 tpl["longrepr"] = value.get("longrepr")
                 tpl["pm_ip"] = _ip
                 res = self.api.post(
-                    url=f"{self.base_url}/api/youqu/yqresult/",
+                    url=urljoin(self.base_url, self.custom_api),
                     json=tpl
                 )
-                print(res)
+                print(self.custom_api, res)
 
 
 if __name__ == '__main__':

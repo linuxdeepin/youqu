@@ -99,6 +99,7 @@ class RemoteRunner:
             Args.json_backfill_task_id.value: remote_kwargs.get("json_backfill_task_id"),
             Args.json_backfill_user.value: remote_kwargs.get("json_backfill_user"),
             Args.json_backfill_password.value: remote_kwargs.get("json_backfill_password"),
+            Args.json_backfill_custom_api.value: remote_kwargs.get("json_backfill_custom_api") or "api/youqu/yqresult/"
         }
         # 客户端地址
         if "/home/" not in GlobalConfig.ROOT_DIR:
@@ -515,13 +516,15 @@ class RemoteRunner:
             self.default.get(Args.json_backfill_base_url.value),
             self.default.get(Args.json_backfill_task_id.value),
             self.default.get(Args.json_backfill_user.value),
-            self.default.get(Args.json_backfill_password.value)
+            self.default.get(Args.json_backfill_password.value),
+            self.default.get(Args.json_backfill_custom_api.value)
         ]):
             from src.rtk.json_backfill import JsonBackfill
             JsonBackfill(
                 base_url=self.default.get(Args.json_backfill_base_url.value),
                 username=self.default.get(Args.json_backfill_user.value),
                 password=self.default.get(Args.json_backfill_password.value),
+                custom_api=self.default.get(Args.json_backfill_custom_api.value),
             ).remote_backfill(self.server_detail_json_path, self.default.get(Args.json_backfill_task_id.value))
         # 分布式执行的情况下需要汇总结果
         if not self.default.get(Args.parallel.value):

@@ -189,6 +189,9 @@ def remote_runner(parser, sub_parser_remote):
     sub_parser_remote.add_argument(
         "--json_backfill_password", default="", help="json报告回填的密码"
     )
+    sub_parser_remote.add_argument(
+        "--json_backfill_custom_api", default="", help="json报告回填的自定义api，默认是/api/youqu/yqresult/"
+    )
 
     local_kwargs, args = local_runner(parser, sub_parser_remote)
     from src.rtk._base import Args
@@ -208,6 +211,7 @@ def remote_runner(parser, sub_parser_remote):
         Args.json_backfill_task_id.value: args.json_backfill_task_id,
         Args.json_backfill_user.value: args.json_backfill_user,
         Args.json_backfill_password.value: args.json_backfill_password,
+        Args.json_backfill_custom_api.value: args.json_backfill_custom_api,
     }
     _remote_kwargs = {
         "remote_kwargs": remote_kwargs,
