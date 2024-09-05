@@ -246,6 +246,7 @@ class MouseKey:
             interval: [int, float] = 0.2,
             wayland_shift: bool = False,
             _ydotool: bool = False,
+            auto_backspace: bool = True,
     ):
         """
          输入字符串
@@ -279,7 +280,8 @@ class MouseKey:
                     _hk.insert(1, "shift")
                 cls.hot_key(*_hk)
                 # 目前的方案中，粘贴内容后会在末尾会多出一个空格，临时处理：去掉末尾空格
-                cls.press_key("backspace")
+                if auto_backspace:
+                    cls.press_key("backspace")
             else:
                 for key in message:
                     if _ydotool:
