@@ -250,7 +250,6 @@ class MouseKey:
             interval: [int, float] = 0.2,
             wayland_shift: bool = False,
             _ydotool: bool = False,
-            auto_backspace: bool = True,
     ):
         """
          输入字符串
@@ -277,15 +276,12 @@ class MouseKey:
         else:
             if check_chinese():
                 # 复制
-                os.system(f"echo \"{message}\" | wl-copy")
+                os.system(f"wl-copy \"{message}\"")
                 # 有些地方可能不支持ctrl+v粘贴，比如终端，需要使用ctrl+shift+v
                 _hk = ["ctrl", "v"]
                 if wayland_shift:
                     _hk.insert(1, "shift")
                 cls.hot_key(*_hk)
-                # 目前的方案中，粘贴内容后会在末尾会多出一个空格，临时处理：去掉末尾空格
-                if auto_backspace:
-                    cls.press_key("backspace")
             else:
                 for key in message:
                     if _ydotool:
