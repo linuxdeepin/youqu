@@ -180,6 +180,10 @@ class MouseKey:
         :return:
         """
         logger.debug(f"鼠标从当前位置拖拽到坐标 ({_x, _y})")
+        # 默认duration=0.4时，拖拽到_y<=95不生效，将拖拽的时长调整为0.9，
+        # 至于为啥_y<=95且duration<=0.8 时不生效，目前还不清楚，先解决问题
+        if _y <= 95:
+            duration = 0.9
         pyautogui.dragTo(x=int(_x), y=int(_y), duration=duration, mouseDownUp=True)
         sleep(delay)
 
