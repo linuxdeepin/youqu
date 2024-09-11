@@ -66,8 +66,17 @@ class Remote(ShortCut, CmdCtl):
             restart_service=self.restart_service,
         )
 
-    def click_element_by_attr(self, element, button=1):
-        self.rdog.element_click(element, button=button)
+    def click_element_by_attr(self, element, button=1, app=None, **kwargs):
+        self.rdog.remote_element_click(element, button=button, app=app, **kwargs)
+
+    def click_element_by_brother(self, element, app=None):
+        self.rdog.element_click_by_brother(element, app=app)
+
+    def get_element_children_txt(self, element, index, app=None):
+        return self.rdog.get_element_children_txt(element, index, app=app)
+
+    def get_element_location(self, element, app=None, **kwargs):
+        return self.rdog.remote_element_center(element, app=app, **kwargs)
 
     @property
     def rctl(self) -> Src:

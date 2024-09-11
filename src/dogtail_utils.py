@@ -60,6 +60,113 @@ class DogtailUtils(MouseKey):
                 logger.error(search_app)
                 raise ApplicationStartError(self.name) from SearchError
 
+    @staticmethod
+    def __remote_init(app=None, name=None, roleName=None, description=None, label=None, debugName=None,
+                      obj_index=-1, check_start=True):
+        if GlobalConfig.NO_DOGTAIL:
+            raise EnvironmentError("Dogtail 及其相关依赖存在问题,调用相关方法失败~")
+        try:
+            obj = root.application(app)
+            if obj_index > 0:
+                obj = obj.findChildren(predicate.GenericPredicate(
+                    name, roleName, description, label, debugName)
+                )[obj_index]
+            return obj
+        except SearchError:
+            if check_start:
+                search_app = CmdCtl.run_cmd(f"ps -ef | grep {app}")
+                logger.error(search_app)
+                raise ApplicationStartError(app) from SearchError
+
+    def __get_remote_app_element(self, element, **kwargs):
+        """ 远程特有元素获取
+
+        Args:
+            element: 应用的元素
+            **kwargs: app, roleName, description, label, debugName, obj_index, check_start
+
+        Returns: element
+
+        """
+        kwargs["name"] = element
+        if kwargs.get('app'):
+            obj = self.__remote_init(**kwargs)
+            del kwargs['app']
+        else:
+            obj = self.obj
+
+        try:
+            element = obj.child(**kwargs, retry=False)
+            logger.debug(f"{kwargs} 获取元素对象 <{element}>")
+            return element
+        except SearchError:
+            raise ElementNotFound(**kwargs) from SearchError
+
+    def get_element_children_txt(self, element, index, **kwargs):
+        """获取元素的子元素文本
+
+        Args:
+            element: 元素
+            index: 位置
+            kwargs:app, roleName, description, label, debugName, obj_index, check_start
+
+        Returns: 文本
+
+        """
+        kwargs["name"] = element
+        element = self.__get_remote_app_element(element, **kwargs)
+        all_children = element.children
+        return all_children[index].name
+
+    def remote_element_click(self, element, button=1, **kwargs):
+        """ 远程特有元素点击
+
+        Args:
+            element: 应用的元素
+            button: 1>left,2>middle,3>right
+            **kwargs: app, roleName, description, label, debugName, obj_index, check_start
+
+        Returns: None
+
+        """
+        kwargs["name"] = element
+        logger.debug(
+            f"""{"左键" if button == 1 else f"{'右键' if button == 3 else '鼠标中健'}"} 点击元素 {element}"""
+        )
+        mouse_click = (
+            self.click if button == 1 else self.right_click if button == 3 else self.middle_click
+        )
+        mouse_click(self.remote_element_center(element, **kwargs))
+
+    def remote_element_center(self, element, **kwargs):
+        """ 远程特有元素位置获取
+
+        Args:
+            element: 应用的元素
+            **kwargs: app, roleName, description, label, debugName, obj_index, check_start
+
+        Returns: None
+
+        """
+        element = self.__get_remote_app_element(element, **kwargs)
+        _x, _y, _w, _h = element.extents
+        print(f"获取元素中心坐标 ({_x, _y})")
+        return _x + _w / 2, _y + _h / 2
+
+    def element_click_by_brother(self, element, **kwargs):
+        """通过相邻元素点击
+
+        Args:
+            element: 元素
+            kwargs:app, roleName, description, label, debugName, obj_index, check_start
+
+        Returns:
+
+        """
+        kwargs["name"] = element
+        element = self.__get_remote_app_element(element, **kwargs)
+        element.get_parent().click()
+
     def app_element(self, *args, **kwargs) -> Node:
         """
          获取app元素的对象
