@@ -67,7 +67,13 @@ class Remote(ShortCut, CmdCtl):
         )
 
     def click_element_by_attr(self, element, button=1):
-        self.rdog.element_click(element, button=button)
+        self.rdog.element_click(element, button)
+
+    def get_element_children_txt(self, element):
+        return self.rdog.get_element_children_text(element)
+
+    def get_element_center(self, element):
+        return self.rdog.element_center(element)
 
     @property
     def rctl(self) -> Src:

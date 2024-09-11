@@ -72,6 +72,14 @@ class DogtailUtils(MouseKey):
         except SearchError:
             raise ElementNotFound(*args, **kwargs) from SearchError
 
+    def get_element_children_text(self, element):
+        element = self.app_element(element)
+        all_children = element.children
+        text = []
+        for i in range(len(all_children)):
+            text.append(all_children[i].name)
+        return text
+
     def left_upper_corner_position(self, element) -> tuple:
         """
          获取元素左上角的坐标
@@ -170,7 +178,7 @@ class DogtailUtils(MouseKey):
         else:
             return False
         try:
-            next_node = name[node.end() - 1 :]
+            next_node = name[node.end() - 1:]
             if next_node != "/":
                 for i in element:
                     self.__trace(i, result, next_node)
