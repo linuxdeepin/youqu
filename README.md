@@ -2,6 +2,8 @@
 
 请注意，YouQu 版本已圆满完成其历史使命，在 `2024 年 12 月 31 日`之后我们将不再对其进行维护。为了保障您的测试环境和项目的持续发展，我们强烈建议您升级至 YouQu3（[迁移工具](https://gitee.com/deepin-autotest/youqu2-transfer-youqu3)）。在迁移过程中，有任何问题您可以在 [YouQu 官方兴趣小组](https://youqu.uniontech.com/SIG.html)咨询，我们将尽力帮助您顺利完成过渡。
 
+------------------------------------
+
 <p align="center">
   <a href="https://linuxdeepin.github.io/youqu">
     <img src="./docs/assets/logo.png" width="100" alt="YouQu">
