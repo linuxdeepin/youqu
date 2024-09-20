@@ -213,7 +213,6 @@ class MouseKey:
             f"处按住鼠标{['左', '中', '右'][button - 1]}键不放"
         )
         pyautogui.mouseDown(x=_x, y=_y, button=cls.MOUSE.get(button, pyautogui.PRIMARY))
-        sleep(1)
 
     @classmethod
     def mouse_up(cls, button=1):
