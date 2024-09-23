@@ -94,9 +94,11 @@ class Remote(ShortCut, CmdCtl):
             restart_service=self.restart_service,
         )
 
-    def find_image(self, image_path):
-        _image_path = image_path.replace(conf.HOME, "~", 1)
-        return self.rctl_plus.find_image(_image_path)
+    def find_image(self, image_path, rate=None, multiple=False, picture_abspath=None, screen_bbox=None,
+                   log_level='info', network_retry=None, pause=None, timeout=None, max_match_number=None):
+        _image_path = tuple([_path.replace(conf.HOME, "~", 1) for _path in image_path])
+        return self.rctl_plus.find_image_remote(_image_path, rate, multiple, picture_abspath, screen_bbox, log_level,
+                                                network_retry, pause, timeout, max_match_number)
 
 
 if __name__ == '__main__':
