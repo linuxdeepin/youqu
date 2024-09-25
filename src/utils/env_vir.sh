@@ -81,7 +81,7 @@ if [ $? != 0 ]; then
     exit 121
 fi
 python_virtualenv_path=$(pipenv --venv)
-whitelist_path=`echo "${python_virtualenv_path}" | sed "s/\/home\/$USER\//\//"`
+whitelist_path=`echo "${python_virtualenv_path}" | sed "s/$HOME\//\//"`
 if [ -f "${whitelist}" ]; then
     result=`sudo cat ${whitelist} | grep ${whitelist_path}`
     if [ -z "$result" ]; then
