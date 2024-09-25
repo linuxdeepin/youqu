@@ -2,6 +2,8 @@
 # _*_ coding:utf-8 _*_
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
+from typing import Union, List
+
 from funnylog import logger
 
 from setting import conf
@@ -94,10 +96,78 @@ class Remote(ShortCut, CmdCtl):
             restart_service=self.restart_service,
         )
 
-    def find_image(self, image_path):
-        _image_path = image_path.replace(conf.HOME, "~", 1)
-        return self.rctl_plus.find_image(_image_path)
+    def find_image(
+            self,
+            *image,
+            rate: Union[float, int] = None,
+            multiple: bool = False,
+            picture_abspath: str = None,
+            screen_bbox: List[int] = None,
+            log_level: str = "info",
+            network_retry: int = None,
+            pause: [int, float] = None,
+            timeout: [int, float] = None,
+            max_match_number: int = None
+    ):
+        """
+         在屏幕中区寻找小图，返回坐标，
+         如果找不到，根据配置重试次数，每次间隔1秒
+        :param picture_abspath: 原始图片绝对路径，不指定时截全屏
+        :param image: 模板图片路径
+        :param rate: 相似度
+        :param multiple: 是否返回匹配到的多个目标
+        :param screen_bbox: 截取屏幕上指定区域图片（仅支持X11下使用）；
+            [x, y, w, h]
+            x: 左上角横坐标；y: 左上角纵坐标；w: 宽度；h: 高度；根据匹配度返回坐标
+        :param log_level: 日志级别
+        :param network_retry: 连接服务器重试次数
+        :param pause: 图像识别重试的间隔时间
+        :param timeout: 最大匹配超时,单位秒
+        :param max_match_number: 最大匹配次数
+        :return: 坐标元组
+        """
+        _image_path = tuple([_path.replace(conf.HOME, "~", 1) for _path in image])
+        if picture_abspath:
+            picture_abspath = picture_abspath.replace(conf.HOME, "~", 1)
+        return self.rctl_plus.find_image_remote(
+            _image_path, rate, multiple, picture_abspath, screen_bbox, log_level,
+            network_retry, pause, timeout, max_match_number
+        )
 
+    def ocr(
+            self,
+            *target,
+            picture_abspath: str = None,
+            similarity: [int, float] = 0.6,
+            return_default: bool = False,
+            return_first: bool = False,
+            lang: str = "ch",
+            network_retry: int = None,
+            pause: [int, float] = None,
+            timeout: [int, float] = None,
+            max_match_number: int = None
+    ):
+        """
+        通过 OCR 进行识别。
+        :param target:
+            目标字符,识别一个字符串或多个字符串,并返回其在图片中的坐标;
+            如果不传参，返回图片中识别到的所有字符串。
+        :param picture_abspath: 要识别的图片路径，如果不传默认截取全屏识别。
+        :param similarity: 匹配度。
+        :param return_default: 返回识别的原生数据。
+        :param return_first: 只返回第一个,默认为 False,返回识别到的所有数据。
+        :param lang: `ch`, `en`, `fr`, `german`, `korean`, `japan`
+        :param network_retry: 连接服务器重试次数
+        :param pause: 重试间隔时间,单位秒
+        :param timeout: 最大匹配超时,单位秒
+        :param max_match_number: 最大匹配次数
+        :return: 返回的坐标是目标字符串所在行的中心坐标。
+        """
+        if picture_abspath:
+            picture_abspath = picture_abspath.replace(conf.HOME, "~", 1)
+        return self.rctl_plus.ocr_remote(target, picture_abspath, similarity, return_default, return_first, lang,
+                                         network_retry,
+                                         pause, timeout, max_match_number)
 
 if __name__ == '__main__':
     a = Remote(
