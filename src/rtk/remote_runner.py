@@ -359,7 +359,8 @@ class RemoteRunner:
         if self.default.get(Args.debug.value):
             logger.info("DEBUG 模式不执行用例!")
         else:
-            system(cmd_str)
+            status = system(cmd_str)
+            self.set_youqu_run_exitcode(status)
 
     def pytest_co_cmd(self):
         """
@@ -395,7 +396,7 @@ class RemoteRunner:
         cases = re.findall(re_expr, collect_only_log)
         if not cases:
             logger.error("未收集到用例")
-            sys.exit(0)
+            sys.exit(5)
         return cases
 
     def pre_env(self):
@@ -438,31 +439,46 @@ class RemoteRunner:
         if not self.default.get(Args.parallel.value):
             self.nginx_server_allure_path = f"{GlobalConfig.REPORT_PATH}/allure/{self.strf_time}{html_dir_endswith}"
             self.make_dir(self.nginx_server_allure_path)
-            system(
+            status = system(
                 f"{self.scp % password} {user}@{_ip}:{self.client_allure_report_path(user)}/* {self.nginx_server_allure_path}/ {self.empty}"
             )
+            self.set_youqu_run_exitcode(status)
         else:
             server_allure_path = f"{GlobalConfig.REPORT_PATH}/allure/{self.strf_time}_ip{_ip}{html_dir_endswith}"
             self.make_dir(server_allure_path)
-            system(
+            status = system(
                 f"{self.scp % password} {user}@{_ip}:{self.client_allure_report_path(user)}/* {server_allure_path}/ {self.empty}"
             )
-            generate_allure_html = f"{server_allure_path}/html"
-            AllureCustom.gen(server_allure_path, generate_allure_html)
+            self.set_youqu_run_exitcode(status)
+            if status == 0:
+                generate_allure_html = f"{server_allure_path}/html"
+                AllureCustom.gen(server_allure_path, generate_allure_html)
 
         if self.collection_json:
             server_json_path = f"{GlobalConfig.REPORT_PATH}/pms_{self.server_json_dir_id}/{self.strf_time}_ip{_ip}_{self.default.get(Args.app_name.value)}"
             self.make_dir(server_json_path)
-            system(
+            status = system(
                 f"{self.scp % password} {user}@{_ip}:{self.client_pms_json_report_path(user, self.server_json_dir_id)}/* {server_json_path}/ {self.empty}"
             )
+            self.set_youqu_run_exitcode(status)
         self.make_dir(self.server_detail_json_path)
-        system(
+        status = system(
             f"{self.scp % password} {user}@{_ip}:{self.client_json_report_path(user)}/detail_report.json {self.server_detail_json_path}/detail_report_{_ip}.json"
         )
-        system(
+        self.set_youqu_run_exitcode(status)
+        status = system(
             f"{self.scp % password} {user}@{_ip}:{self.client_json_report_path(user)}/summarize.json {self.server_detail_json_path}/summarize_{_ip}.json"
         )
+        self.set_youqu_run_exitcode(status)
+
+    def set_youqu_run_exitcode(self, status):
+        if status != 0:
+            os.environ["YOUQU_RUN_EXIT_CODE"] = str(status)
+
+    def exit_with_youqu_run_exitcode(self):
+        youqu_run_exitcode = os.environ["YOUQU_RUN_EXIT_CODE"]
+        if youqu_run_exitcode is not None and int(youqu_run_exitcode) != 0:
+            sys.exit(int(youqu_run_exitcode))
 
     def remote_finish_send_to_pms(self):
         json_path = f"{GlobalConfig.REPORT_PATH}/pms_{self.server_json_dir_id}"
@@ -641,3 +657,4 @@ class RemoteRunner:
             self.nginx_run(client_list)
         # collect and integrate result data after all tests.
         self.get_report(client_list)
+        self.exit_with_youqu_run_exitcode()
