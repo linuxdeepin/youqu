@@ -130,7 +130,7 @@ class RemoteRunner:
         _pty = "t"
         if len(self.client_list) >= 2:
             _pty = "T"
-        self.ssh = f"sshpass -p '%s' ssh -{_pty}"
+        self.ssh = f"sshpass -p '%s' ssh -{_pty} -o ServerAliveinterval=60"
         self.scp = "sshpass -p '%s' scp -r"
         self.rsync = "sshpass -p '%s' rsync -av -e ssh"
         self.empty = "> /dev/null 2>&1"
@@ -478,7 +478,7 @@ class RemoteRunner:
     def exit_with_youqu_run_exitcode(self):
         youqu_run_exitcode = os.environ["YOUQU_RUN_EXIT_CODE"]
         if youqu_run_exitcode is not None and int(youqu_run_exitcode) != 0:
-            sys.exit(int(youqu_run_exitcode))
+            sys.exit(int(youqu_run_exitcode) >> 8)
 
     def remote_finish_send_to_pms(self):
         json_path = f"{GlobalConfig.REPORT_PATH}/pms_{self.server_json_dir_id}"
