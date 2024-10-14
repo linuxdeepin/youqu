@@ -359,8 +359,7 @@ class RemoteRunner:
         if self.default.get(Args.debug.value):
             logger.info("DEBUG 模式不执行用例!")
         else:
-            status = system(cmd_str)
-            self.set_youqu_run_exitcode(status)
+            system(cmd_str)
 
     def pytest_co_cmd(self):
         """
