@@ -475,7 +475,7 @@ class RemoteRunner:
             os.environ["YOUQU_RUN_EXIT_CODE"] = str(status)
 
     def exit_with_youqu_run_exitcode(self):
-        youqu_run_exitcode = os.environ["YOUQU_RUN_EXIT_CODE"]
+        youqu_run_exitcode = os.environ.get("YOUQU_RUN_EXIT_CODE")
         if youqu_run_exitcode is not None and int(youqu_run_exitcode) != 0:
             sys.exit(int(youqu_run_exitcode) >> 8)
 
