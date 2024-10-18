@@ -1,6 +1,6 @@
 各位开源爱好者，感谢您一直以来对 YouQu 自动化测试框架的信赖与支持。随着技术的不断进步和市场需求的变化，YouQu 现已升级至更加先进、功能更强大的 [YouQu3](https://youqu.uniontech.com/) 版本。为了确保您能够继续享受到高效、稳定的自动化测试服务，我们诚挚地邀请您进行版本升级。
 
-请注意，YouQu 版本已圆满完成其历史使命，在 `2024 年 12 月 31 日`之后我们将不再对其进行维护。为了保障您的测试环境和项目的持续发展，我们强烈建议您升级至 YouQu3（[迁移工具](https://gitee.com/deepin-autotest/youqu2-transfer-youqu3)）。在迁移过程中，有任何问题您可以在 [YouQu 官方兴趣小组](https://youqu.uniontech.com/SIG.html)咨询，我们将尽力帮助您顺利完成过渡。
+请注意，YouQu 版本已圆满完成其历史使命，在 `2025 年 6 月 1 日`之后我们将不再对其进行维护。为了保障您的测试环境和项目的持续发展，我们强烈建议您升级至 YouQu3（[迁移工具](https://gitee.com/deepin-autotest/youqu2-transfer-youqu3)）。在迁移过程中，有任何问题您可以在 [YouQu 官方兴趣小组](https://youqu.uniontech.com/SIG.html)咨询，我们将尽力帮助您顺利完成过渡。
 
 ------------------------------------
 
