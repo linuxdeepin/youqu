@@ -631,6 +631,8 @@ def pytest_runtest_makereport(item, call):
                     logger.info(testcase_url)
                 else:
                     allure.dynamic.tag(mark.name)
+        if report.outcome == "failed":
+            write_case_result(item, report)
     if report.when == "call":
         logger.info(f"运行结果: {str(report.outcome).upper()}")
         if write_json(item.session):
