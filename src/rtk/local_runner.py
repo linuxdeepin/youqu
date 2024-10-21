@@ -128,12 +128,13 @@ class LocalRunner:
             else None,
             Args.pms_info_file.value: pms_info_file,
             Args.autostart.value: autostart or GlobalConfig.AUTOSTART,
+            Args.slaves.value: slaves or GlobalConfig.SLAVES,
         }
         self.lastfailed = lastfailed
         self.project_name = project_name
         self.build_location = build_location
         self.line = line
-        self.slaves = slaves
+        # self.slaves = slaves
         self.collection_only = collection_only
         self.export_csv_file = export_csv_file or GlobalConfig.EXPORT_CSV_FILE
 
@@ -271,8 +272,8 @@ class LocalRunner:
             cmd.extend(["--repeat", default.get(Args.repeat.value)])
         if self.line:
             cmd.extend(["--line", self.line])
-        if self.slaves:
-            cmd.extend(["--slaves", self.slaves])
+        if default.get(Args.slaves.value):
+            cmd.extend(["--slaves", default.get(Args.slaves.value)])
 
         report_formats = default.get(Args.report_formats.value)
         if report_formats:
