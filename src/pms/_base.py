@@ -84,7 +84,7 @@ def write_case_result(item, report):
         with open(abs_json_file_path, "r", encoding="utf-8") as _f:
             case_res_from_json = json.load(_f)
 
-        if item.execution_count >= 2:
+        if hasattr(item, "execution_count")  and item.execution_count >= 2:
             if (
                 case_res_from_json.get("result") == "fail"
                 and case_result_tpl["result"] == "pass"
