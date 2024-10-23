@@ -271,7 +271,7 @@ class CmdCtl:
         cmd = ""
         for i in cls.GREP_LIST:
             cmd += f"grep -v {i} | "
-        os.system(f"ps -ef | grep {process} | {cmd}cut -c 9-15 | xargs kill -9 > /dev/null 2>&1")
+        os.system(f"ps -ef | grep {process} | {cmd}awk '{{print $2}}' | xargs kill -9 > /dev/null 2>&1")
 
     @classmethod
     def sudo_kill_process(cls, process, grep_list: [list, tuple] = None):
