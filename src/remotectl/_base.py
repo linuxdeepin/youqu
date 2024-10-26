@@ -169,6 +169,8 @@ def remote_client(ip, port):
         return c
     except Exception as e:
         raise e
+    finally:
+        c.close()
 
 
 def remote_server(obj, port):
