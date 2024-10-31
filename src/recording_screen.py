@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # _*_ coding:utf-8 _*_
-
+import signal
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 
 # SPDX-License-Identifier: GPL-2.0-only
 # pylint: disable=C0114
 # pylint: disable=C0301,W0702,C0103,C0411,C0412
 import time
-import subprocess as sp
+import subprocess
 import os
 import errno
 
@@ -42,7 +42,7 @@ def recording_screen(name):
         logger.info(f"录屏路径存放  {path}")
 
     with open(os.devnull, "w", encoding="utf-8") as dev_null:
-        with sp.Popen(cmd, stdin=sp.PIPE, stdout=dev_null, stderr=dev_null, close_fds=True) as proc:
+        with subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=dev_null, stderr=dev_null, close_fds=True) as proc:
             time.sleep(0.5)
             if proc.poll() is not None:
                 raise RuntimeError("ffmpeg did not start")
@@ -52,25 +52,16 @@ def recording_screen(name):
             finally:
                 logger.info("停止录屏")
                 try:
-                    with suppress(IOError, errnos=(errno.EINVAL, errno.EPIPE)):
-                        logger.debug(" stop step 1")
-                        proc.communicate(input=b"q", timeout=10)
-                        logger.debug(f"录屏状态 {proc.stdin.closed}")
-                        if not proc.stdin.closed:
-                            proc.stdin.close()
-                            logger.debug("停止录屏 finish")
-                except:
-                    try:
-                        for _ in range(5):
-                            proc.communicate(input=b"q", timeout=10)
-                            proc.stdin.close()
-                            time.sleep(0.5)
-                            if proc.stdin.closed:
-                                break
-                    except:
-                        pass
-
-                logger.info("停止录屏 finish")
+                    os.kill(proc.pid, signal.SIGINT)
+                    proc.wait(timeout=10)
+                except subprocess.TimeoutExpired:
+                    logger.warning("ffmpeg did not stop gracefully, sending SIGKILL")
+                    os.kill(proc.pid, signal.SIGKILL)
+                    proc.wait()
+                finally:
+                    if not proc.stdin.closed:
+                        proc.stdin.close()
+                    logger.info(f"停止录屏 finish {proc.stdin.closed}")
 
 
 def _create_ffmpeg_cmd(width, height, dir_path, file_name, qp=1):

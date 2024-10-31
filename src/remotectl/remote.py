@@ -5,7 +5,6 @@
 from typing import Union, List
 
 from funnylog import logger
-
 from setting import conf
 from src import Src
 from src.cmdctl import CmdCtl
@@ -13,6 +12,28 @@ from src.dogtail_utils import DogtailUtils
 from src.remotectl._remote_dogtail_ctl import remote_dogtail_ctl as remote_dogtail_ctl
 from src.remotectl._remote_other_ctl import remote_other_ctl as remote_other_ctl
 from src.shortcut import ShortCut
+
+
+class AutoCloseRCTLProxy:
+    def __init__(self, client):
+        self._client = client
+
+    def __getattr__(self, name):
+        attr = getattr(self._client, name)
+        if callable(attr):
+            # 方法
+            def wrapper(*args, **kwargs):
+                try:
+                    return attr(*args, **kwargs)
+                finally:
+                    self._client.close()
+
+            return wrapper
+        else:
+            return attr
+
+    def __del__(self):
+        self._client.close()
 
 
 class Remote(ShortCut, CmdCtl):
@@ -23,6 +44,9 @@ class Remote(ShortCut, CmdCtl):
         self.transfer_appname = transfer_appname
         self.restart_service = restart_service
         self.tmp_obj = None
+        self._rdog = None
+        self._rctl = None
+        self._rctl_plus = None
 
     def __getattribute__(self, item):
         if not item.startswith("__") and not item.endswith("__"):
@@ -61,12 +85,35 @@ class Remote(ShortCut, CmdCtl):
 
     @property
     def rdog(self) -> DogtailUtils:
-        return remote_dogtail_ctl(
+        self._rdog = remote_dogtail_ctl(
             user=self.user,
             ip=self.ip,
             password=self.password,
             restart_service=self.restart_service,
         )
+        return AutoCloseRCTLProxy(self._rdog)
+
+    @property
+    def rctl(self) -> Src:
+        self._rctl = remote_other_ctl(
+            user=self.user,
+            ip=self.ip,
+            password=self.password,
+            restart_service=self.restart_service,
+        )
+
+        return AutoCloseRCTLProxy(self._rctl)
+
+    @property
+    def rctl_plus(self) -> Src:
+        self._rctl_plus = remote_other_ctl(
+            user=self.user,
+            ip=self.ip,
+            password=self.password,
+            transfer_appname=self.transfer_appname,
+            restart_service=self.restart_service,
+        )
+        return AutoCloseRCTLProxy(self._rctl_plus)
 
     def click_element_by_attr(self, element, button=1):
         self.rdog.element_click(element, button)
@@ -76,25 +123,6 @@ class Remote(ShortCut, CmdCtl):
 
     def get_element_center(self, element):
         return self.rdog.element_center(element)
-
-    @property
-    def rctl(self) -> Src:
-        return remote_other_ctl(
-            user=self.user,
-            ip=self.ip,
-            password=self.password,
-            restart_service=self.restart_service,
-        )
-
-    @property
-    def rctl_plus(self) -> Src:
-        return remote_other_ctl(
-            user=self.user,
-            ip=self.ip,
-            password=self.password,
-            transfer_appname=self.transfer_appname,
-            restart_service=self.restart_service,
-        )
 
     def find_image(
             self,
@@ -168,12 +196,3 @@ class Remote(ShortCut, CmdCtl):
         return self.rctl_plus.ocr_remote(target, picture_abspath, similarity, return_default, return_first, lang,
                                          network_retry,
                                          pause, timeout, max_match_number)
-
-if __name__ == '__main__':
-    a = Remote(
-        user="uos",
-        ip="10.8.7.55",
-        password="1",
-    ).rcmd.sudo_run_cmd("systemctl restart lightdm.service")
-    # ).run_cmd("ls")
-    print(a)

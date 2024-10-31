@@ -169,8 +169,6 @@ def remote_client(ip, port):
         return c
     except Exception as e:
         raise e
-    finally:
-        c.close()
 
 
 def remote_server(obj, port):
@@ -180,6 +178,7 @@ def remote_server(obj, port):
         raise ImportError("Please install zerorpc")
     server = zerorpc.Server(obj)
     server.bind(f"tcp://0.0.0.0:{port}")
+    print(f"rpc server running: tcp://0.0.0.0:{port}")
     server.run()
 
 
@@ -198,8 +197,3 @@ def _remote_server(obj, port):
             server.register_function(getattr(obj, func), func)
     server.serve_forever()
 
-
-if __name__ == '__main__':
-    from src import Src
-
-    _remote_server(Src(), 4242)
