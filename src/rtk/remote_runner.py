@@ -151,6 +151,10 @@ class RemoteRunner:
         logger.info(f"发送代码到测试机 - < {user}@{_ip} >")
         system(
             f"{self.ssh % password} {user}@{_ip} "
+            f""""echo '{password}' | sudo -S rm -rf ~/Pipfile" {self.empty}"""
+        )
+        system(
+            f"{self.ssh % password} {user}@{_ip} "
             f""""echo '{password}' | sudo -S rm -rf ~/{self.server_project_path}" {self.empty}"""
         )
         system(
