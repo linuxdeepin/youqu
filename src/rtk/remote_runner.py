@@ -10,6 +10,7 @@ import json
 import os
 import re
 import sys
+
 from concurrent.futures import ALL_COMPLETED
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import wait
@@ -539,12 +540,16 @@ class RemoteRunner:
             self.default.get(Args.json_backfill_custom_api.value)
         ]):
             from src.rtk.json_backfill import JsonBackfill
-            JsonBackfill(
-                base_url=self.default.get(Args.json_backfill_base_url.value),
-                username=self.default.get(Args.json_backfill_user.value),
-                password=self.default.get(Args.json_backfill_password.value),
-                custom_api=self.default.get(Args.json_backfill_custom_api.value),
-            ).remote_backfill(self.server_detail_json_path, self.default.get(Args.json_backfill_task_id.value))
+            try:
+                JsonBackfill(
+                    base_url=self.default.get(Args.json_backfill_base_url.value),
+                    username=self.default.get(Args.json_backfill_user.value),
+                    password=self.default.get(Args.json_backfill_password.value),
+                    custom_api=self.default.get(Args.json_backfill_custom_api.value),
+                ).remote_backfill(self.server_detail_json_path, self.default.get(Args.json_backfill_task_id.value))
+            except Exception as e:
+                logger.error(e)
+                sys.exit(1)
         # 分布式执行的情况下需要汇总结果
         if not self.default.get(Args.parallel.value):
             summarize = {
