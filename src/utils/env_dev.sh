@@ -85,8 +85,8 @@ if [ "${ENV_CUT_FLAG}" = "cut" ]; then
 fi
 
 if [ ${debian_platform} == false ]; then
-        pip_array[${#pip_array[@]}]=numpy
-        pip_array[${#pip_array[@]}]="pillow==8.4.0"
+        pip_array[${#pip_array[@]}]="numpy==1.26.4"
+        pip_array[${#pip_array[@]}]=pillow
         pip_array[${#pip_array[@]}]=pexpect
     fi
 
