@@ -85,6 +85,7 @@ class CmdCtl:
             out_debug_flag: bool = True,
             command_log: bool = True,
             password: str = None,
+            return_code=False,
     ):
         if password is None:
             password = conf.PASSWORD
@@ -99,6 +100,7 @@ class CmdCtl:
             timeout=timeout,
             out_debug_flag=out_debug_flag,
             command_log=command_log,
+            return_code=return_code,
         )
 
     @classmethod
@@ -109,7 +111,9 @@ class CmdCtl:
             timeout=25,
             out_debug_flag=True,
             command_log=True,
-            executable="/bin/bash"
+            executable="/bin/bash",
+            return_code=False,
+            workdir: str = None,
     ):
         """
          执行shell命令
@@ -120,13 +124,21 @@ class CmdCtl:
         :param command_log: 执行的命令字符串日志
         :return: 返回终端输出
         """
-        status, out = cls._getstatusoutput(command, timeout=timeout, executable=executable)
+        wd = ""
+        if workdir:
+            workdir = os.path.expanduser(workdir)
+            if not os.path.exists(workdir):
+                raise FileNotFoundError
+            wd = f"cd {workdir} && "
+        status, out = cls._getstatusoutput(wd + command, timeout=timeout, executable=executable)
         if command_log:
             logger.debug(command)
         if status and interrupt:
             raise ShellExecutionFailed(out)
         if out_debug_flag and out:
             logger.debug(out)
+        if return_code:
+            return out, status
         return out
 
     @classmethod

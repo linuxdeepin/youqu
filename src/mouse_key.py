@@ -290,6 +290,8 @@ class MouseKey:
                     else:
                         pyautogui.press(key, interval=interval)
 
+    input = input_message
+
     @classmethod
     def press_key(cls, key: str, interval=0.0, _ydotool: bool = False):
         """

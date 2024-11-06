@@ -190,6 +190,14 @@ class ShortCut(MouseKey):
         cls.hot_key("ctrl", "a")
 
     @classmethod
+    def ctrl_w(cls):
+        """
+         ctrl_w
+        :return:
+        """
+        cls.hot_key("ctrl", "w")
+
+    @classmethod
     def ctrl_l(cls):
         """
          ctrl_l
