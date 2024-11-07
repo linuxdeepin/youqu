@@ -163,7 +163,7 @@ def remote_client(ip, port):
     except ImportError:
         raise ImportError("Please install zerorpc")
 
-    c = zerorpc.Client(timeout=20, heartbeat=None)
+    c = zerorpc.Client(timeout=60, heartbeat=None)
     try:
         c.connect(f"tcp://{ip}:{port}")
         return c
