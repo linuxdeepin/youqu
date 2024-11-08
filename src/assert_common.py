@@ -187,7 +187,7 @@ class AssertCommon:
     def assert_element_exist(expr):
         """
          期望元素存在
-        :param expr: 匹配元素的格式, 例如： $//dde-file-manager//1.txt
+        :param expr: 匹配元素的格式, 例如： $/dde-file-manager//1.txt
         """
         sleep(0.5)
         logger.info(f"断言元素存在<{expr}>")

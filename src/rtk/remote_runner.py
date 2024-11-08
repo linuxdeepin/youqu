@@ -121,12 +121,12 @@ class RemoteRunner:
         )
         self.strf_time = strftime("%m%d%p%I%M%S")
         self.server_detail_json_path = f"{GlobalConfig.REPORT_PATH}/json/{self.strf_time}_remote"
-        self.client_xml_report_path = (
-            lambda
-                x: f"/home/{x}/{self.server_project_path}/{GlobalConfig.report_cfg.get('XML_REPORT_PATH', default='report')}/xml".replace(
-                "//", "/"
-            )
-        )
+        # self.client_xml_report_path = (
+        #     lambda
+        #         x: f"/home/{x}/{self.server_project_path}/{GlobalConfig.report_cfg.get('XML_REPORT_PATH', default='report')}/xml".replace(
+        #         "//", "/"
+        #     )
+        # )
         self.client_list = list(self.default.get(Args.clients.value).keys())
         _pty = "t"
         if len(self.client_list) >= 2:
@@ -195,15 +195,20 @@ class RemoteRunner:
                     continue
                 if app_name.replace("-", "_") != i:
                     exclude += f"--exclude='{i}' "
-        system(
+        status = system(
             f"{self.rsync % (password,)} {exclude} {GlobalConfig.ROOT_DIR}/* "
             f"{user}@{_ip}:~/{self.server_project_path}/ {self.empty}"
         )
-        system(
+        self.set_youqu_run_exitcode(status)
+        status = system(
             f"{self.rsync % (password,)} {exclude} {GlobalConfig.ROOT_DIR}/.env "
             f"{user}@{_ip}:~/{self.server_project_path}/ {self.empty}"
         )
-        logger.info(f"代码发送成功 - < {user}@{_ip} >")
+        self.set_youqu_run_exitcode(status)
+        if status != 0:
+            logger.error(f"代码发送失败 - < {user}@{_ip} >")
+        else:
+            logger.info(f"代码发送成功 - < {user}@{_ip} >")
 
     def build_client_env(self, user, _ip, password):
         """

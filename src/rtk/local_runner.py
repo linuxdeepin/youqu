@@ -34,7 +34,6 @@ al_setting.report_language = GlobalConfig.REPORT_LANGUAGE
 
 from src import logger
 from src.rtk._base import Args, write_json
-from src.requestx import RequestX
 from src.rtk._base import transform_app_name
 
 environ["DISPLAY"] = ":0"
@@ -284,14 +283,14 @@ class LocalRunner:
             ):
                 self.make_allure_report(cmd, GlobalConfig.ReportFormat.ALLURE, proj_path)
             # xml
-            if GlobalConfig.ReportFormat.XML in report_formats:
-                self.make_xml_report(
-                    app_dir,
-                    default.get(Args.case_file.value),
-                    cmd,
-                    GlobalConfig.ReportFormat.XML,
-                    proj_path,
-                )
+            # if GlobalConfig.ReportFormat.XML in report_formats:
+            #     self.make_xml_report(
+            #         app_dir,
+            #         default.get(Args.case_file.value),
+            #         cmd,
+            #         GlobalConfig.ReportFormat.XML,
+            #         proj_path,
+            #     )
             # json
             if (GlobalConfig.ReportFormat.ALLURE not in report_formats) and (
                     GlobalConfig.ReportFormat.JSON in report_formats
