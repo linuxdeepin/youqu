@@ -42,10 +42,6 @@ from setting import conf
 
 
 class RemoteRunner:
-    """
-    远程执行器：控制多台测试机远程执行用例。
-    在 setting/remote.ini 里面配置要执行的测试机信息。
-    """
 
     __author__ = "Mikigo <huangmingqiang@uniontech.com>"
 
@@ -102,7 +98,6 @@ class RemoteRunner:
             Args.json_backfill_password.value: remote_kwargs.get("json_backfill_password"),
             Args.json_backfill_custom_api.value: remote_kwargs.get("json_backfill_custom_api") or "api/youqu/yqresult/"
         }
-        # 客户端地址
         if "/home/" not in GlobalConfig.ROOT_DIR:
             raise EnvironmentError
         self.server_project_path = "/".join(GlobalConfig.ROOT_DIR.split("/")[3:])
@@ -121,12 +116,6 @@ class RemoteRunner:
         )
         self.strf_time = strftime("%m%d%p%I%M%S")
         self.server_detail_json_path = f"{GlobalConfig.REPORT_PATH}/json/{self.strf_time}_remote"
-        # self.client_xml_report_path = (
-        #     lambda
-        #         x: f"/home/{x}/{self.server_project_path}/{GlobalConfig.report_cfg.get('XML_REPORT_PATH', default='report')}/xml".replace(
-        #         "//", "/"
-        #     )
-        # )
         self.client_list = list(self.default.get(Args.clients.value).keys())
         _pty = "t"
         if len(self.client_list) >= 2:
@@ -142,13 +131,6 @@ class RemoteRunner:
         self.pms_password = None
 
     def send_code_to_client(self, user, _ip, password):
-        """
-         发送代码到测试机
-        :param user: 用户名
-        :param _ip: 测试机IP
-        :param password: 测试机密码
-        :return:
-        """
         logger.info(f"发送代码到测试机 - < {user}@{_ip} >")
         system(
             f"{self.ssh % password} {user}@{_ip} "
@@ -161,7 +143,6 @@ class RemoteRunner:
         system(
             f'{self.ssh % password} {user}@{_ip} "mkdir -p ~/{self.server_project_path}" {self.empty}'
         )
-        # 过滤目录
         app_name: str = self.default.get(Args.app_name.value)
         exclude = ""
         for i in [
@@ -195,29 +176,18 @@ class RemoteRunner:
                     continue
                 if app_name.replace("-", "_") != i:
                     exclude += f"--exclude='{i}' "
-        status = system(
+        system(
             f"{self.rsync % (password,)} {exclude} {GlobalConfig.ROOT_DIR}/* "
             f"{user}@{_ip}:~/{self.server_project_path}/ {self.empty}"
         )
-        self.set_youqu_run_exitcode(status)
-        status = system(
+        system(
             f"{self.rsync % (password,)} {exclude} {GlobalConfig.ROOT_DIR}/.env "
             f"{user}@{_ip}:~/{self.server_project_path}/ {self.empty}"
         )
-        self.set_youqu_run_exitcode(status)
-        if status != 0:
-            logger.error(f"代码发送失败 - < {user}@{_ip} >")
-        else:
-            logger.info(f"代码发送成功 - < {user}@{_ip} >")
+
+        logger.info(f"代码发送完成 - < {user}@{_ip} >")
 
     def build_client_env(self, user, _ip, password):
-        """
-         测试机环境安装
-        :param user: 用户名
-        :param _ip: 测试机IP
-        :param password: 测试机密码
-        :return:
-        """
         logger.info(f"安装环境 - < {user}@{_ip} >")
         system(
             f"{self.ssh % password} {user}@{_ip} "
@@ -230,24 +200,10 @@ class RemoteRunner:
         logger.info(f"环境安装完成 - < {user}@{_ip} >")
 
     def send_code_and_env(self, user, _ip, password):
-        """
-         发送代码到测试机并且安装环境
-        :param user: 用户名
-        :param _ip: 测试机IP
-        :param password: 测试机密码
-        :return:
-        """
         self.send_code_to_client(user, _ip, password)
         self.build_client_env(user, _ip, password)
 
     def install_deb(self, user, _ip, password):
-        """
-         安装 deb 包
-        :param user:
-        :param _ip:
-        :param password:
-        :return:
-        """
         logger.info(f"安装deb包 - < {user}@{_ip} >")
         system(
             f"{self.scp % password} {self.default.get(Args.deb_path.value)}/*.deb {user}@{_ip}:{self.default.get(Args.deb_path.value)}/"
@@ -258,12 +214,6 @@ class RemoteRunner:
         logger.info(f"deb包安装完成 - < {user}@{_ip} >")
 
     def mul_do(self, func_obj, client_list):
-        """
-         异步发送代码
-        :param func_obj: 函数对象
-        :param client_list: 测试机列表
-        :return:
-        """
         if len(client_list) >= 2:
             executor = ThreadPoolExecutor()
             _ps = []
@@ -279,13 +229,6 @@ class RemoteRunner:
             func_obj(user, _ip, password)
 
     def get_client_test_status(self, user, _ip, password):
-        """
-         获取测试机是否有用例执行
-        :param user: 用户名
-        :param _ip: 测试机IP
-        :param password: 测试机密码
-        :return:
-        """
         status_test = popen(
             f'{self.ssh % password} {user}@{_ip} "ps -aux | grep pytest | grep -v grep"'
         ).read()
@@ -293,19 +236,10 @@ class RemoteRunner:
 
     @staticmethod
     def make_dir(dirs):
-        """make_dir"""
         if not exists(dirs):
             makedirs(dirs)
 
     def run_pytest_cmd(self, user, _ip, password):
-        """
-         创建 Pytest 命令行参数
-        :param user: 用户名
-        :param _ip: 测试机IP
-        :param password: 测试机密码
-        :return:
-        """
-        # pylint: disable=too-many-branches
         cmd = [
             self.ssh % password,
             f"{user}@{_ip}",
@@ -372,10 +306,6 @@ class RemoteRunner:
             system(cmd_str)
 
     def pytest_co_cmd(self):
-        """
-         创建收集用例的命令行参数
-        :return:
-        """
         app_dir = (
             self.default.get(Args.app_name.value) if self.default.get(Args.app_name.value) else ""
         )
@@ -409,41 +339,25 @@ class RemoteRunner:
         return cases
 
     def pre_env(self):
-        """
-         前置环境处理
-        :return:
-        """
-        # rm hosts
         system(f"rm -rf ~/.ssh/known_hosts {self.empty}")
-        # rm server report
         if self.clean_server_report_dir:
             system(f"rm -rf {GlobalConfig.REPORT_PATH}/* {self.empty}")
-        # rm client report
         if not self.default.get(Args.send_code.value) and self.clean_client_report_dir:
             for client in self.default.get(Args.clients.value):
                 user, _ip, password = self.default.get(Args.clients.value).get(client)
                 system(
                     f"""{self.ssh % password} {user}@{_ip} "rm -rf {self.client_report_path(user)}/*" {self.empty}"""
                 )
-        # delete ssh ask
         sudo = f"echo '{GlobalConfig.PASSWORD}' | sudo -S"
         if "StrictHostKeyChecking no" not in popen("cat /etc/ssh/ssh_config").read():
             system(
                 f"""{sudo} sed -i "s/#   StrictHostKeyChecking ask/ StrictHostKeyChecking no/g" /etc/ssh/ssh_config {self.empty}"""
             )
-        # install sshpass
         if "(C)" not in popen("sshpass -V").read():
             system(f"{sudo} apt update {self.empty}")
             system(f"{sudo} apt install sshpass {self.empty}")
 
     def scp_report(self, user, _ip, password):
-        """
-         远程复制报告
-        :param user:
-        :param _ip:
-        :param password:
-        :return:
-        """
         html_dir_endswith = f"_{self.default.get(Args.app_name.value)}" if self.default.get(Args.app_name.value) else ""
         if not self.default.get(Args.parallel.value):
             self.nginx_server_allure_path = f"{GlobalConfig.REPORT_PATH}/allure/{self.strf_time}{html_dir_endswith}"
@@ -514,12 +428,6 @@ class RemoteRunner:
         ).remote_finish_push(res)
 
     def get_report(self, client_list):
-        """
-         回传测试报告
-        :param client_list: 客户端列表
-        :return:
-        """
-        # mul get report
         if len(self.default.get(Args.clients.value)) >= 2:
             _ps = []
             executor = ThreadPoolExecutor()
@@ -555,7 +463,6 @@ class RemoteRunner:
             except Exception as e:
                 logger.error(e)
                 sys.exit(1)
-        # 分布式执行的情况下需要汇总结果
         if not self.default.get(Args.parallel.value):
             summarize = {
                 "total": 0,
@@ -576,11 +483,6 @@ class RemoteRunner:
             AllureCustom.gen(self.nginx_server_allure_path, generate_allure_html)
 
     def parallel_run(self, client_list):
-        """
-         并行跑
-        :param client_list:
-        :return:
-        """
         _ps = []
         executor = ThreadPoolExecutor()
         for client in client_list[:-1]:
@@ -598,22 +500,14 @@ class RemoteRunner:
         sleep(5)
 
     def nginx_run(self, client_list):
-        """
-         分布式执行
-        :param client_list: 客户端列表
-        :return:
-        """
-        # pylint: disable=too-many-nested-blocks
         case_files = self.pytest_co_cmd()
         logger.info(f"Collected {len(case_files)} case.")
-        # sort case
         case_files.sort(key=lambda x: int(re.findall(r"(\d+)", x)[0]))
         _ps = []
         executor = ThreadPoolExecutor()
         for case in case_files:
             counter = {}
             try:
-                # pylint: disable=unsubscriptable-object
                 for client in cycle(client_list)[::-1]:
                     user, _ip, password = self.default.get(Args.clients.value).get(client)
                     if not self.get_client_test_status(user, _ip, password):
@@ -631,26 +525,19 @@ class RemoteRunner:
                             if self.get_client_test_status(user, _ip, password):
                                 counter[client] = 0
                                 break
-                            # else:
                             sleep(1)
                         else:
                             client_list.remove(client)
                     else:
-                        # relax
                         counter[client] = counter.get(client, 0) + 1
                         if counter.get(client) >= self.scan:
                             client_list.remove(client)
                         sleep(1)
             except ValueError:
                 break
-        # Wait for all child processes to end
         wait(_ps, return_when=ALL_COMPLETED)
 
     def remote_run(self):
-        """
-         远程执行主函数
-        :return:
-        """
         client_list = list(self.default.get(Args.clients.value).keys())
         self.pre_env()
         logger.info(
@@ -668,6 +555,5 @@ class RemoteRunner:
             self.parallel_run(client_list)
         else:
             self.nginx_run(client_list)
-        # collect and integrate result data after all tests.
         self.get_report(client_list)
         self.exit_with_youqu_run_exitcode()

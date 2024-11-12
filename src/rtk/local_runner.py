@@ -40,9 +40,6 @@ environ["DISPLAY"] = ":0"
 
 
 class LocalRunner:
-    """
-    本地执行器
-    """
 
     __author__ = "Mikigo <huangmingqiang@uniontech.com>"
 
@@ -85,16 +82,6 @@ class LocalRunner:
             **kwargs,
     ):
         logger("INFO")
-        # try:
-        #     github_tags = RequestX().open_url(
-        #         f"https://api.github.com/repos/linuxdeepin/youqu/tags", timeout=1
-        #     )
-        #     latest_tag = json.loads(github_tags)[0].get("name")
-        #     if GlobalConfig.current_tag != latest_tag:
-        #         print(f"YouQu最新版本为: {latest_tag}，当前使用版本为: {GlobalConfig.current_tag}")
-        #         print(f"建议使用：sudo pip3 install youqu=={latest_tag} 升级版本")
-        # except Exception:
-        #     pass
         self.default = {
             Args.app_name.value: transform_app_name(
                 app_name if app_name or case_file else GlobalConfig.APP_NAME
@@ -282,15 +269,6 @@ class LocalRunner:
                     GlobalConfig.ReportFormat.JSON not in report_formats
             ):
                 self.make_allure_report(cmd, GlobalConfig.ReportFormat.ALLURE, proj_path)
-            # xml
-            # if GlobalConfig.ReportFormat.XML in report_formats:
-            #     self.make_xml_report(
-            #         app_dir,
-            #         default.get(Args.case_file.value),
-            #         cmd,
-            #         GlobalConfig.ReportFormat.XML,
-            #         proj_path,
-            #     )
             # json
             if (GlobalConfig.ReportFormat.ALLURE not in report_formats) and (
                     GlobalConfig.ReportFormat.JSON in report_formats
