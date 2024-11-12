@@ -33,7 +33,7 @@ export default withMermaid(
                 {
                     text: '规划', items: [
                         {text: "框架设计", link: '/规划/框架设计/AT基础框架设计方案'},
-                        {text: "Deepin Autotest", link: 'https://youqu.uniontech.com/deepin-autotest/'},
+                        {text: "Deepin Autotest", link: 'https://deepin-autotest.uniontech.com/'},
                     ]
                 },
                 {
