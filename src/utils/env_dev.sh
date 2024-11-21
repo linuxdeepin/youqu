@@ -121,7 +121,7 @@ if [ "${remote}" != "" ]; then
     sudo pip3 install zerorpc -i ${pypi_mirror}
 fi
 
-sudo pip3 install -U auto_uos --extra-index-url ${pypi_mirror} -i http://10.20.52.221:8081 --trusted-host=10.20.52.221 \
+sudo pip3 install -U auto_uos --extra-index-url ${pypi_mirror} -i http://10.20.54.182:8081 --trusted-host=10.20.54.182 \
 > /tmp/env.log 2>&1
 check_status auto_uos
 pip_show=$(pip3 show auto_uos | grep Location)
