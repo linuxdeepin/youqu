@@ -113,15 +113,17 @@ def finish_send(session):
         and session.config.option.trigger == ConfStr.AUTO.value
     )
 
-
 def pytest_addoption(parser):
     """pytest_cmdline_main"""
     parser.addoption("--clean", action="store", default="no", help="是否清理环境&杀进程")
     parser.addoption(
         "--log_level", action="store", default=GlobalConfig.LOG_LEVEL, help="终端日志输出级别"
     )
-    parser.addoption("--noskip", action="store", default="", help="skip-xxx标签不生效")
-    parser.addoption("--ifixed", action="store", default="", help="fixed-xxx标签不生效")
+    try:
+        parser.addoption("--noskip", action="store", default="", help="skip-xxx标签不生效")
+        parser.addoption("--ifixed", action="store", default="", help="fixed-xxx标签不生效")
+    except ValueError:
+        ...
     parser.addoption("--max_fail", action="store", default="", help="最大失败次数")
     parser.addoption(
         "--record_failed_case", action="store", default="", help="失败录屏从第几次失败开始录制视频"

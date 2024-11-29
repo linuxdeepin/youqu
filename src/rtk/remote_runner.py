@@ -14,13 +14,7 @@ import sys
 from concurrent.futures import ALL_COMPLETED
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import wait
-from itertools import cycle
-from os import listdir
-from os import makedirs
-from os import popen
-from os import system
-from os.path import exists
-from os.path import splitext
+
 from time import sleep
 from time import strftime
 
@@ -132,15 +126,15 @@ class RemoteRunner:
 
     def send_code_to_client(self, user, _ip, password):
         logger.info(f"发送代码到测试机 - < {user}@{_ip} >")
-        system(
+        os.system(
             f"{self.ssh % password} {user}@{_ip} "
             f""""echo '{password}' | sudo -S rm -rf ~/Pipfile" {self.empty}"""
         )
-        system(
+        os.system(
             f"{self.ssh % password} {user}@{_ip} "
             f""""echo '{password}' | sudo -S rm -rf ~/{self.server_project_path}" {self.empty}"""
         )
-        system(
+        os.system(
             f'{self.ssh % password} {user}@{_ip} "mkdir -p ~/{self.server_project_path}" {self.empty}'
         )
         app_name: str = self.default.get(Args.app_name.value)
@@ -171,16 +165,16 @@ class RemoteRunner:
         ]:
             exclude += f"--exclude='{i}' "
         if app_name:
-            for i in listdir(GlobalConfig.APPS_PATH):
+            for i in os.listdir(GlobalConfig.APPS_PATH):
                 if i == "__init__.py":
                     continue
                 if app_name.replace("-", "_") != i:
                     exclude += f"--exclude='{i}' "
-        system(
+        os.system(
             f"{self.rsync % (password,)} {exclude} {GlobalConfig.ROOT_DIR}/* "
             f"{user}@{_ip}:~/{self.server_project_path}/ {self.empty}"
         )
-        system(
+        os.system(
             f"{self.rsync % (password,)} {exclude} {GlobalConfig.ROOT_DIR}/.env "
             f"{user}@{_ip}:~/{self.server_project_path}/ {self.empty}"
         )
@@ -189,11 +183,11 @@ class RemoteRunner:
 
     def build_client_env(self, user, _ip, password):
         logger.info(f"安装环境 - < {user}@{_ip} >")
-        system(
+        os.system(
             f"{self.ssh % password} {user}@{_ip} "
             f'''"rm -rf ~/.local/share/virtualenvs/{self.server_project_path.split('/')[-1]}*"'''
         )
-        system(
+        os.system(
             f"{self.ssh % password} {user}@{_ip} "
             f'"cd ~/{self.server_project_path}/ && bash env.sh -p {password}"'
         )
@@ -205,10 +199,10 @@ class RemoteRunner:
 
     def install_deb(self, user, _ip, password):
         logger.info(f"安装deb包 - < {user}@{_ip} >")
-        system(
+        os.system(
             f"{self.scp % password} {self.default.get(Args.deb_path.value)}/*.deb {user}@{_ip}:{self.default.get(Args.deb_path.value)}/"
         )
-        system(
+        os.system(
             f'''{self.ssh % password} {user}@{_ip} "cd {self.default.get(Args.deb_path.value)}/ && echo {password} | sudo -S dpkg -i *.deb"'''
         )
         logger.info(f"deb包安装完成 - < {user}@{_ip} >")
@@ -229,17 +223,17 @@ class RemoteRunner:
             func_obj(user, _ip, password)
 
     def get_client_test_status(self, user, _ip, password):
-        status_test = popen(
+        status_test = os.popen(
             f'{self.ssh % password} {user}@{_ip} "ps -aux | grep pytest | grep -v grep"'
         ).read()
         return bool(status_test)
 
     @staticmethod
     def make_dir(dirs):
-        if not exists(dirs):
-            makedirs(dirs)
+        if not os.path.exists(dirs):
+            os.makedirs(dirs)
 
-    def run_pytest_cmd(self, user, _ip, password):
+    def run_pytest_cmd(self, user, _ip, password, outside_keywords=None):
         cmd = [
             self.ssh % password,
             f"{user}@{_ip}",
@@ -294,6 +288,7 @@ class RemoteRunner:
             real_app_name.replace("apps/", ""),
             default=lr_args,
             proj_path=f"/home/{user}/{self.server_project_path}",
+            outside_keywords=outside_keywords,
         )
 
         cmd.extend(pytest_cmd)
@@ -303,9 +298,9 @@ class RemoteRunner:
         if self.default.get(Args.debug.value):
             logger.info("DEBUG 模式不执行用例!")
         else:
-            system(cmd_str)
+            os.system(cmd_str)
 
-    def pytest_co_cmd(self):
+    def collection_only_cmd(self):
         app_dir = (
             self.default.get(Args.app_name.value) if self.default.get(Args.app_name.value) else ""
         )
@@ -328,10 +323,11 @@ class RemoteRunner:
         if self.default.get(Args.trigger.value):
             cmd.extend(["--trigger", "auto"])
         cmd.append("--co")
+
         collect_only_cmd = " ".join(cmd)
         logger.info(f"Collecting: \n{collect_only_cmd}")
         collect_only_log = CmdCtl.run_cmd(collect_only_cmd)
-        re_expr = compile(r"<Module (.*?\.py)>")
+        re_expr = re.compile(r"<Module (.*?)\.py>")
         cases = re.findall(re_expr, collect_only_log)
         if not cases:
             logger.error("未收集到用例")
@@ -339,37 +335,37 @@ class RemoteRunner:
         return cases
 
     def pre_env(self):
-        system(f"rm -rf ~/.ssh/known_hosts {self.empty}")
+        os.system(f"rm -rf ~/.ssh/known_hosts {self.empty}")
         if self.clean_server_report_dir:
-            system(f"rm -rf {GlobalConfig.REPORT_PATH}/* {self.empty}")
+            os.system(f"rm -rf {GlobalConfig.REPORT_PATH}/* {self.empty}")
         if not self.default.get(Args.send_code.value) and self.clean_client_report_dir:
             for client in self.default.get(Args.clients.value):
                 user, _ip, password = self.default.get(Args.clients.value).get(client)
-                system(
+                os.system(
                     f"""{self.ssh % password} {user}@{_ip} "rm -rf {self.client_report_path(user)}/*" {self.empty}"""
                 )
         sudo = f"echo '{GlobalConfig.PASSWORD}' | sudo -S"
-        if "StrictHostKeyChecking no" not in popen("cat /etc/ssh/ssh_config").read():
-            system(
+        if "StrictHostKeyChecking no" not in os.popen("cat /etc/ssh/ssh_config").read():
+            os.system(
                 f"""{sudo} sed -i "s/#   StrictHostKeyChecking ask/ StrictHostKeyChecking no/g" /etc/ssh/ssh_config {self.empty}"""
             )
-        if "(C)" not in popen("sshpass -V").read():
-            system(f"{sudo} apt update {self.empty}")
-            system(f"{sudo} apt install sshpass {self.empty}")
+        if "(C)" not in os.popen("sshpass -V").read():
+            os.system(f"{sudo} apt update {self.empty}")
+            os.system(f"{sudo} apt install sshpass {self.empty}")
 
     def scp_report(self, user, _ip, password):
         html_dir_endswith = f"_{self.default.get(Args.app_name.value)}" if self.default.get(Args.app_name.value) else ""
         if not self.default.get(Args.parallel.value):
             self.nginx_server_allure_path = f"{GlobalConfig.REPORT_PATH}/allure/{self.strf_time}{html_dir_endswith}"
             self.make_dir(self.nginx_server_allure_path)
-            status = system(
+            status = os.system(
                 f"{self.scp % password} {user}@{_ip}:{self.client_allure_report_path(user)}/* {self.nginx_server_allure_path}/ {self.empty}"
             )
             self.set_youqu_run_exitcode(status)
         else:
             server_allure_path = f"{GlobalConfig.REPORT_PATH}/allure/{self.strf_time}_ip{_ip}{html_dir_endswith}"
             self.make_dir(server_allure_path)
-            status = system(
+            status = os.system(
                 f"{self.scp % password} {user}@{_ip}:{self.client_allure_report_path(user)}/* {server_allure_path}/ {self.empty}"
             )
             self.set_youqu_run_exitcode(status)
@@ -380,16 +376,16 @@ class RemoteRunner:
         if self.collection_json:
             server_json_path = f"{GlobalConfig.REPORT_PATH}/pms_{self.server_json_dir_id}/{self.strf_time}_ip{_ip}_{self.default.get(Args.app_name.value)}"
             self.make_dir(server_json_path)
-            status = system(
+            status = os.system(
                 f"{self.scp % password} {user}@{_ip}:{self.client_pms_json_report_path(user, self.server_json_dir_id)}/* {server_json_path}/ {self.empty}"
             )
             self.set_youqu_run_exitcode(status)
         self.make_dir(self.server_detail_json_path)
-        status = system(
+        status = os.system(
             f"{self.scp % password} {user}@{_ip}:{self.client_json_report_path(user)}/detail_report.json {self.server_detail_json_path}/detail_report_{_ip}.json"
         )
         self.set_youqu_run_exitcode(status)
-        status = system(
+        status = os.system(
             f"{self.scp % password} {user}@{_ip}:{self.client_json_report_path(user)}/summarize.json {self.server_detail_json_path}/summarize_{_ip}.json"
         )
         self.set_youqu_run_exitcode(status)
@@ -482,12 +478,12 @@ class RemoteRunner:
             generate_allure_html = f"{self.nginx_server_allure_path}/html"
             AllureCustom.gen(self.nginx_server_allure_path, generate_allure_html)
 
-    def parallel_run(self, client_list):
+    def parallel_run(self, client_list, client_cases_map={}):
         _ps = []
         executor = ThreadPoolExecutor()
         for client in client_list[:-1]:
             user, _ip, password = self.default.get(Args.clients.value).get(client)
-            _p3 = executor.submit(self.run_pytest_cmd, user, _ip, password)
+            _p3 = executor.submit(self.run_pytest_cmd, user, _ip, password, client_cases_map.get(client))
             _ps.append(_p3)
             sleep(1)
         user, _ip, password = self.default.get(Args.clients.value).get(client_list[-1])
@@ -495,47 +491,10 @@ class RemoteRunner:
             user,
             _ip,
             password,
+            client_cases_map.get(client_list[-1])
         )
         wait(_ps, return_when=ALL_COMPLETED)
         sleep(5)
-
-    def nginx_run(self, client_list):
-        case_files = self.pytest_co_cmd()
-        logger.info(f"Collected {len(case_files)} case.")
-        case_files.sort(key=lambda x: int(re.findall(r"(\d+)", x)[0]))
-        _ps = []
-        executor = ThreadPoolExecutor()
-        for case in case_files:
-            counter = {}
-            try:
-                for client in cycle(client_list)[::-1]:
-                    user, _ip, password = self.default.get(Args.clients.value).get(client)
-                    if not self.get_client_test_status(user, _ip, password):
-                        _p2 = executor.submit(
-                            self.run_pytest_cmd,
-                            user,
-                            _ip,
-                            password,
-                            f"{splitext(case)[0]} and ({self.default.get(Args.keywords.value)})",
-                            self.default.get(Args.tags.value),
-                        )
-                        _ps.append(_p2)
-                        # relax and wait for pytest start
-                        for _ in range(self.scan):
-                            if self.get_client_test_status(user, _ip, password):
-                                counter[client] = 0
-                                break
-                            sleep(1)
-                        else:
-                            client_list.remove(client)
-                    else:
-                        counter[client] = counter.get(client, 0) + 1
-                        if counter.get(client) >= self.scan:
-                            client_list.remove(client)
-                        sleep(1)
-            except ValueError:
-                break
-        wait(_ps, return_when=ALL_COMPLETED)
 
     def remote_run(self):
         client_list = list(self.default.get(Args.clients.value).keys())
@@ -551,9 +510,18 @@ class RemoteRunner:
                 self.mul_do(self.send_code_to_client, client_list)
         if self.default.get(Args.deb_path.value):
             self.mul_do(self.install_deb, client_list)
-        if self.default.get(Args.parallel.value):
-            self.parallel_run(client_list)
+        if self.default.get(Args.parallel.value) == "no":
+            case_files = self.collection_only_cmd()
+            logger.info(f"Collected {len(case_files)} case.")
+
+            def split_case(lst, n):
+                k, m = divmod(len(lst), n)
+                return [lst[i * k + min(i, m):(i + 1) * k + min(i + 1, m)] for i in range(n)]
+
+            split_case_files = split_case(case_files, len(client_list))
+            client_cases_map = dict(zip(client_list, split_case_files))
+            self.parallel_run(client_list, client_cases_map)
         else:
-            self.nginx_run(client_list)
+            self.parallel_run(client_list)
         self.get_report(client_list)
         self.exit_with_youqu_run_exitcode()

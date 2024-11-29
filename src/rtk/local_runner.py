@@ -170,7 +170,7 @@ class LocalRunner:
             f"--junit-xml={xml_report_path}/{report_name}{'-' if report_name else ''}{GlobalConfig.TIME_STRING}.xml"
         )
 
-    def create_pytest_cmd(self, app_dir, default=None, proj_path=None):
+    def create_pytest_cmd(self, app_dir, default=None, proj_path=None, outside_keywords=None):
         if default is None:
             default = self.default
         keywords_or_marker = True
@@ -210,9 +210,23 @@ class LocalRunner:
             cmd.extend(taglines)
 
         if keywords_or_marker:
-            if default.get(Args.keywords.value):
-                self.set_recursion_limit(default.get(Args.keywords.value))
-                cmd.extend(["-k", f"'{default.get(Args.keywords.value)}'"])
+            if outside_keywords:
+                outside_keywords = " or ".join(outside_keywords)
+
+            if default.get(Args.keywords.value) and outside_keywords is None:
+                kws = f"'{default.get(Args.keywords.value)}'"
+                self.set_recursion_limit(kws)
+                cmd.extend(["-k", kws])
+
+            elif default.get(Args.keywords.value) and outside_keywords:
+                kws= f"'({outside_keywords}) and ({default.get(Args.keywords.value)})'"
+                self.set_recursion_limit(kws)
+                cmd.extend(["-k", kws])
+
+            elif outside_keywords:
+                self.set_recursion_limit(outside_keywords)
+                cmd.extend(["-k", f"'{outside_keywords}'"])
+
             if default.get(Args.tags.value):
                 self.set_recursion_limit(default.get(Args.tags.value))
                 cmd.extend(["-m", f"'{default.get(Args.tags.value)}'"])
