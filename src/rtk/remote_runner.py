@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 # _*_ coding:utf-8 _*_
-
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
-
 # SPDX-License-Identifier: GPL-2.0-only
-# pylint: disable=C0114
-# pylint: disable=E0401,C0413,R0902,R0913,R0914,W0613,C0301,C0415,C0103
+
 import json
 import os
 import re
@@ -114,7 +111,7 @@ class RemoteRunner:
         _pty = "t"
         if len(self.client_list) >= 2:
             _pty = "T"
-        self.ssh = f"sshpass -p '%s' ssh -{_pty} -o ServerAliveinterval=60"
+        self.ssh = f"sshpass -p '%s' ssh -{_pty}"
         self.scp = "sshpass -p '%s' scp -r"
         self.rsync = "sshpass -p '%s' rsync -av -e ssh"
         self.empty = "> /dev/null 2>&1"
