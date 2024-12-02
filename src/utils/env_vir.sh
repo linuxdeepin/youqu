@@ -186,7 +186,6 @@ sudo chmod -R 777 ${ROOT_DIR}/public
 cd ${ROOT_DIR}
 rm -rf Pipfile
 echo "${python_virtualenv_path}"
-pipenv run pip list
 system_env
 
 echo 'pipenv run python "$@"' | sudo tee /usr/bin/youqu > /dev/null 2>&1

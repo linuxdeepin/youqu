@@ -771,25 +771,25 @@ def pytest_sessionfinish(session):
                         and execute.get(item_name).get("result") == "pass"
                 ):
                     execute[item_name] = default_result
+    if execute:
+        json_report_path = join(GlobalConfig.JSON_REPORT_PATH, "json")
+        if not exists(json_report_path):
+            makedirs(json_report_path)
+        with open(f"{json_report_path}/detail_report.json", "w", encoding="utf-8") as _f:
+            _f.write(dumps(execute, indent=2, ensure_ascii=False))
 
-    json_report_path = join(GlobalConfig.JSON_REPORT_PATH, "json")
-    if not exists(json_report_path):
-        makedirs(json_report_path)
-    with open(f"{json_report_path}/detail_report.json", "w", encoding="utf-8") as _f:
-        _f.write(dumps(execute, indent=2, ensure_ascii=False))
-
-    res = Counter([execute.get(i).get("result") for i in execute])
-    with open(f"{json_report_path}/summarize.json", "w", encoding="utf-8") as _f:
-        _f.write(dumps(
-            {
-                "total": sum(res.values()),
-                "pass": res.get("pass", 0),
-                "fail": res.get("fail", 0),
-                "skip": res.get("skip", 0),
-            },
-            indent=2,
-            ensure_ascii=False
-        ))
+        res = Counter([execute.get(i).get("result") for i in execute])
+        with open(f"{json_report_path}/summarize.json", "w", encoding="utf-8") as _f:
+            _f.write(dumps(
+                {
+                    "total": sum(res.values()),
+                    "pass": res.get("pass", 0),
+                    "fail": res.get("fail", 0),
+                    "skip": res.get("skip", 0),
+                },
+                indent=2,
+                ensure_ascii=False
+            ))
 
     if session.config.option.allure_report_dir:
 

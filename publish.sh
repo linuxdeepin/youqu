@@ -39,5 +39,9 @@ done
 cp youqu/pyproject.toml ${tmp_publish_dir_name}/
 cp youqu/src/startproject.py ${tmp_publish_dir_name}/youqu/
 cd ${tmp_publish_dir_name}/
+
+pip3 install --upgrade pip
+pip3 install --upgrade build
+pip3 install --upgrade twine
 python3 -m build
 twine upload dist/*

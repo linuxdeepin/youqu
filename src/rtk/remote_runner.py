@@ -297,28 +297,34 @@ class RemoteRunner:
         else:
             os.system(cmd_str)
 
-    def collection_only_cmd(self):
+    def collection_only_cmd(self, outside_keywords=None):
         app_dir = (
             self.default.get(Args.app_name.value) if self.default.get(Args.app_name.value) else ""
         )
-        cmd = [
-            "pytest",
-            f"{GlobalConfig.APPS_PATH}/{app_dir}",
-        ]
-        if self.default.get(Args.keywords.value):
-            cmd.extend(["-k", f"'{self.default.get(Args.keywords.value)}'"])
-        if self.default.get(Args.tags.value):
-            cmd.extend(["-m", f"'{self.default.get(Args.tags.value)}'"])
-        if self.default.get(Args.noskip.value):
-            cmd.extend(["--noskip", self.default.get(Args.noskip.value)])
-        if self.default.get(Args.ifixed.value):
-            cmd.extend(["--ifixed", self.default.get(Args.ifixed.value)])
-        if self.default.get(Args.send_pms.value):
-            cmd.extend(["--send_pms", self.default.get(Args.send_pms.value)])
-        if self.default.get(Args.task_id.value):
-            cmd.extend(["--task_id", self.default.get(Args.task_id.value)])
-        if self.default.get(Args.trigger.value):
-            cmd.extend(["--trigger", "auto"])
+        from src.rtk.local_runner import LocalRunner
+
+        lr = LocalRunner(debug=True)
+        lr_args = {k: v for k, v in lr.export_default.items() if v}
+        rr_args = {k: v for k, v in self.local_kwargs.items() if v}
+        lr_args.update(rr_args)
+        if all(
+                [
+                    lr_args.get(Args.task_id.value),
+                    lr_args.get(Args.pms_user.value),
+                    lr_args.get(Args.pms_password.value),
+                    lr_args.get(Args.send_pms.value) == "finish",
+                ]
+        ):
+            lr_args[Args.trigger.value] = "hand"
+            self.collection_json = True
+            self.pms_user = lr_args.get(Args.pms_user.value)
+            self.pms_password = lr_args.get(Args.pms_password.value)
+            self.server_json_dir_id = lr_args.get(Args.task_id.value)
+        cmd = lr.create_pytest_cmd(
+            app_dir,
+            default=lr_args,
+            outside_keywords=outside_keywords,
+        )
         cmd.append("--co")
 
         collect_only_cmd = " ".join(cmd)
@@ -352,7 +358,7 @@ class RemoteRunner:
 
     def scp_report(self, user, _ip, password):
         html_dir_endswith = f"_{self.default.get(Args.app_name.value)}" if self.default.get(Args.app_name.value) else ""
-        if not self.default.get(Args.parallel.value):
+        if self.default.get(Args.parallel.value) == "no":
             self.nginx_server_allure_path = f"{GlobalConfig.REPORT_PATH}/allure/{self.strf_time}{html_dir_endswith}"
             self.make_dir(self.nginx_server_allure_path)
             status = os.system(
@@ -456,7 +462,7 @@ class RemoteRunner:
             except Exception as e:
                 logger.error(e)
                 sys.exit(1)
-        if not self.default.get(Args.parallel.value):
+        if self.default.get(Args.parallel.value) == "no":
             summarize = {
                 "total": 0,
                 "pass": 0,
@@ -475,7 +481,9 @@ class RemoteRunner:
             generate_allure_html = f"{self.nginx_server_allure_path}/html"
             AllureCustom.gen(self.nginx_server_allure_path, generate_allure_html)
 
-    def parallel_run(self, client_list, client_cases_map={}):
+    def parallel_run(self, client_list, client_cases_map=None):
+        if client_cases_map is None:
+            client_cases_map = {}
         _ps = []
         executor = ThreadPoolExecutor()
         for client in client_list[:-1]:
