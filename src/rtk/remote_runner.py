@@ -335,6 +335,7 @@ class RemoteRunner:
         if not cases:
             logger.error("未收集到用例")
             sys.exit(5)
+        cases = [i.split("/")[-1] for i in cases]
         return cases
 
     def pre_env(self):
