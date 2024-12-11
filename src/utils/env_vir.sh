@@ -1,7 +1,5 @@
 #!/bin/bash
-
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
-
 # SPDX-License-Identifier: GPL-2.0-only
 source ${ROOT_DIR}/src/utils/_env_base.sh
 
@@ -17,7 +15,7 @@ echo "
    ╚██╔╝   ██║▄▄ ██║     ██╔══╝   ██║╚██╗██║ ╚██╗ ██╔╝
     ██║    ╚██████╔╝     ███████╗ ██║ ╚████║  ╚████╔╝
     ╚═╝     ╚══▀▀═╝      ╚══════╝ ╚═╝  ╚═══╝   ╚═══╝
-    ${tag}
+    ${tag} ${IP}
 "
 
 env(){

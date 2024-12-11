@@ -6,6 +6,7 @@ ROOT_DIR=$(dirname $(realpath "${BASH_SOURCE[0]}"))
 tag=$(echo "$(cat ${ROOT_DIR}/CURRENT | grep "tag = ")" | cut -d "=" -f2 | python3 -c "s=input();print(s.strip())")
 config_pwd=$(cat ${ROOT_DIR}/setting/globalconfig.ini | grep -v "CLIENT_PASSWORD" | grep "PASSWORD = ")
 PASSWORD=$(echo "${config_pwd}" | cut -d "=" -f2 | python3 -c "s=input();print(s.strip())")
+IP=$(hostname -I)
 DEV=false
 while getopts ":p:D" opt
 do
