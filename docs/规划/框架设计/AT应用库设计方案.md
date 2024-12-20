@@ -272,7 +272,7 @@ class TestDdeFileManager(BaseCase):
 
 在 `BaseWidget` 里面把该写的都写好，你可以参考上面的设计理念来写。
 
-如果你嫌麻烦，你可以参考文件管理器的实际工程代码 [autotest_dde_file_manager](https://gerrit.uniontech.com/admin/repos/autotest_dde_file_manager)
+如果你嫌麻烦，你可以参考文件管理器的实际工程代码 autotest_dde_file_manager
 
 3.2. 操作层
 
