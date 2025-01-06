@@ -3,6 +3,7 @@
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
 import os
+import re
 from time import sleep
 from typing import Union
 
@@ -601,3 +602,46 @@ class AssertCommon:
                         f"{pic if pic else GlobalConfig.SCREEN_CACHE}",
                     )
                 )
+    
+    @staticmethod
+    def assert_text_exist(src, det):
+        """
+        断言 {{src}} 中的所有字符串在 {{det}} 中都存在
+        """
+        if not isinstance(det, str):
+            raise TypeError("det 必须是字符串")
+        if isinstance(src, str):
+            if src not in det:
+                raise AssertionError(f"字符串 '{src}' 不在 '{det}' 中")
+        elif isinstance(src, list):
+            for s in src:
+                if not isinstance(s, str):
+                    raise TypeError("src 中的所有元素必须是字符串")
+                if s not in det:
+                    raise AssertionError(f"字符串数组{src}中的字符串 '{s}' 不在 '{det}' 中")
+        else:
+            raise TypeError("src 必须是字符串或字符串列表")
+    
+    def assert_file_exists_enable_wildcards(self, input_string):
+        """
+            断言是否存在与正则表达式{{input_string}}所匹配的文件
+        """
+        # 解析输入字符串
+        folder_path, file_name_pattern = os.path.split(input_string)
+        if not folder_path:
+            folder_path = '.'
+        # 定义正则表达式模式
+        pattern = re.compile(file_name_pattern)
+        # 初始化匹配的文件列表
+        matching_files = []
+        # 遍历指定目录及其子目录
+        for root , dirs, files in os.walk(folder_path):
+            for file in files:
+                if pattern.match(file):
+                    matching_files.append(os.path.join(root, file))
+        if matching_files :
+            for matching_file in matching_files:
+                logger.info(f"存在{input_string}文件")
+                self.assert_file_exist(matching_file)
+        else :
+            raise AssertionError(f"失败，不存在{input_string}文件")
