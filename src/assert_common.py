@@ -606,13 +606,12 @@ class AssertCommon:
     @staticmethod
     def assert_text_exist(src, det):
         """
-        断言 {{src}} 中的所有字符串在 {{det}} 中都存在
+        断言源字符串中的所有字符串在目标字符串中都存在
         """
         if not isinstance(det, str):
             raise TypeError("det 必须是字符串")
-        if isinstance(src, str):
-            if src not in det:
-                raise AssertionError(f"字符串 '{src}' 不在 '{det}' 中")
+        if (isinstance(src, str)) and (src not in det):
+            raise AssertionError(f"字符串 '{src}' 不在 '{det}' 中")
         elif isinstance(src, list):
             for s in src:
                 if not isinstance(s, str):
@@ -621,13 +620,32 @@ class AssertCommon:
                     raise AssertionError(f"字符串数组{src}中的字符串 '{s}' 不在 '{det}' 中")
         else:
             raise TypeError("src 必须是字符串或字符串列表")
-    
-    def assert_file_exists_enable_wildcards(self, input_string):
+    @staticmethod
+    def assert_text_exist_with_wildcards(src, det):
         """
-            断言是否存在与正则表达式{{input_string}}所匹配的文件
+            断言目标字符串中是否存在于与正则表达式(数组)所匹配的字符串
+            :param src : 正则表达式字符串 or 正则表达式字符串数组
+            :param det : 目标字符串
         """
+        if not isinstance(det, str):
+            raise TypeError("det 必须是字符串")
+        if isinstance(src, str):
+            src = [src]
+        for pattern in src:
+            if not isinstance(src, str):
+                raise TypeError("src 的所有元素必须是字符串")
+            if not re.search(pattern, det):
+                raise AssertionError(f"正则表达式 '{pattern}' 在字符串 '{det}' 中没有匹配项")
+        logger.info(f"{src}中的所有正则表达式均可匹配{det}")
+    def assert_file_exists_with_wildcards(self, path_wildcards):
+        """
+            断言是否存在与正则表达式所匹配的路径的文件
+            仅文件名能使用正则表达式,文件路径使用全匹配方式
+            :param path_wildcards : 例如 /home/luobeichen/(my|your|his)lovestory.txt
+        """
+        logger.info(f"查找与'{path_wildcards}'所匹配的文件")
         # 解析输入字符串
-        folder_path, file_name_pattern = os.path.split(input_string)
+        folder_path, file_name_pattern = os.path.split(path_wildcards)
         if not folder_path:
             folder_path = '.'
         # 定义正则表达式模式
@@ -641,7 +659,7 @@ class AssertCommon:
                     matching_files.append(os.path.join(root, file))
         if matching_files :
             for matching_file in matching_files:
-                logger.info(f"存在{input_string}文件")
                 self.assert_file_exist(matching_file)
+                logger.info(f"找到{matching_file}文件")
         else :
-            raise AssertionError(f"失败，不存在{input_string}文件")
+            raise AssertionError(f"失败，不存在与{path_wildcards}所匹配的文件")
