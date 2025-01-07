@@ -3,6 +3,7 @@
 # SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 # SPDX-License-Identifier: GPL-2.0-only
 import os
+import re
 from time import sleep
 from typing import Union
 
@@ -601,3 +602,167 @@ class AssertCommon:
                         f"{pic if pic else GlobalConfig.SCREEN_CACHE}",
                     )
                 )
+    @staticmethod
+    def assert_ocr_not_exist(
+        *args,
+        picture_abspath=None,
+        similarity=0.6,
+        return_first=False,
+        lang="ch",
+        network_retry: int = None,
+        pause: [int, float] = None,
+        timeout: [int, float] = None,
+        max_match_number: int = None,
+        bbox: dict = None,
+    ):
+        """
+        断言文案不存在
+        :param args: 目标字符,识别一个字符串或多个字符串。
+        :param picture_abspath: 要识别的图片路径，如果不传默认截取全屏识别。
+        :param similarity: 匹配度。
+        :param return_first: 只返回第一个,默认为 False,返回识别到的所有数据。
+        :param lang: `ch`, `en`, `fr`, `german`, `korean`, `japan`
+        :param network_retry: 连接服务器重试次数
+        :param pause: 重试间隔时间,单位秒
+        :param timeout: 最大匹配超时,单位秒
+        :param max_match_number: 最大匹配次数
+        :param bbox:
+            接收一个字典，包含一个区域，在区域内进行识别，用于干扰较大时提升OCR识别精准度
+            字典字段:
+                start_x: 开始 x 坐标（左上角）
+                start_y: 开始 y 坐标（左上角）
+                w: 宽度
+                h: 高度
+                end_x: 结束 x 坐标（右下角）
+                end_y: 结束 y 坐标（右下角）
+                注意 ： end_x + end_y 与 w + h 为互斥关系, 必须且只能传入其中一组
+            示例：
+                {start_x=0， start_y=0， w=100， h=100}
+                {start_x=0， start_y=0， end_x=100， end_y=100}
+        """
+
+        if len(args) == 0:
+            raise ValueError("缺少 ocr 断言关键字")
+
+        pic = None
+        if picture_abspath is not None:
+            pic = picture_abspath + ".png"
+
+        resolution = MouseKey.screen_size()
+        if bbox is not None:
+            start_x = bbox.get("start_x") if bbox.get("start_x") is not None else None
+            start_y = bbox.get("start_y") if bbox.get("start_y") is not None else None
+            w = bbox.get("w") if bbox.get("w") is not None else None
+            h = bbox.get("h") if bbox.get("h") is not None else None
+            end_x = bbox.get("end_x") if bbox.get("end_x") is not None else None
+            end_y = bbox.get("end_y") if bbox.get("end_y") is not None else None
+
+            if start_x is None or start_y is None:
+                raise ValueError("缺失 start_x 或 start_y 坐标")
+
+            wh_provided = w is not None and h is not None
+            end_xy_provided = end_x is not None and end_y is not None
+
+            if not (wh_provided ^ end_xy_provided):
+                raise ValueError("end_x + end_y 与 w + h 为互斥关系, 必须且只能传入其中一组")
+
+            if end_xy_provided:
+                w = end_x - start_x
+                h = end_y - start_y
+            picture_abspath = ImageUtils.save_temporary_picture(start_x, start_y, w, h)
+            pic = picture_abspath + ".png"
+
+            resolution = f"{start_x, start_y} -> {w, h}"
+
+        res = OCR.ocr(
+            *args,
+            picture_abspath=pic,
+            similarity=similarity,
+            return_first=return_first,
+            lang=lang,
+            network_retry=network_retry,
+            pause=pause,
+            timeout=timeout,
+            max_match_number=max_match_number,
+        )
+        if res is False:
+            pass
+        elif isinstance(res, tuple):
+            raise AssertionError(
+                (
+                    f"通过ocr在范围[{resolution}]识别到不应存在的文案 {res}",
+                    f"{pic if pic else GlobalConfig.SCREEN_CACHE}",
+                )
+            )
+        elif isinstance(res, dict):
+            if all(value is False for value in res.values()):
+                pass
+            else:
+                res = filter(lambda x: x[1] is not False, res.items())
+                raise AssertionError(
+                    (
+                        f"通过OCR在范围[{resolution}]识别到不应存在的文案：{dict(res)}",
+                        f"{pic if pic else GlobalConfig.SCREEN_CACHE}",
+                    )
+                )
+    
+    @staticmethod
+    def assert_text_exist(src, det):
+        """
+        断言源字符串中的所有字符串在目标字符串中都存在
+        """
+        if not isinstance(det, str):
+            raise TypeError("det 必须是字符串")
+        if (isinstance(src, str)) and (src not in det):
+            raise AssertionError(f"字符串 '{src}' 不在 '{det}' 中")
+        elif isinstance(src, list):
+            for s in src:
+                if not isinstance(s, str):
+                    raise TypeError("src 中的所有元素必须是字符串")
+                if s not in det:
+                    raise AssertionError(f"字符串数组{src}中的字符串 '{s}' 不在 '{det}' 中")
+        else:
+            raise TypeError("src 必须是字符串或字符串列表")
+    @staticmethod
+    def assert_text_exist_with_wildcards(src, det):
+        """
+            断言目标字符串中是否存在于与正则表达式(数组)所匹配的字符串
+            :param src : 正则表达式字符串 or 正则表达式字符串数组
+            :param det : 目标字符串
+        """
+        if not isinstance(det, str):
+            raise TypeError("det 必须是字符串")
+        if isinstance(src, str):
+            src = [src]
+        for pattern in src:
+            if not isinstance(src, str):
+                raise TypeError("src 的所有元素必须是字符串")
+            if not re.search(pattern, det):
+                raise AssertionError(f"正则表达式 '{pattern}' 在字符串 '{det}' 中没有匹配项")
+        logger.info(f"{src}中的所有正则表达式均可匹配{det}")
+    def assert_file_exists_with_wildcards(self, path_wildcards):
+        """
+            断言是否存在与正则表达式所匹配的路径的文件
+            仅文件名能使用正则表达式,文件路径使用全匹配方式
+            :param path_wildcards : 例如 /home/luobeichen/(my|your|his)lovestory.txt
+        """
+        logger.info(f"查找与'{path_wildcards}'所匹配的文件")
+        # 解析输入字符串
+        folder_path, file_name_pattern = os.path.split(path_wildcards)
+        if not folder_path:
+            folder_path = '.'
+        # 定义正则表达式模式
+        pattern = re.compile(file_name_pattern)
+        # 初始化匹配的文件列表
+        matching_files = []
+        # 遍历指定目录及其子目录
+        for root , dirs, files in os.walk(folder_path):
+            for file in files:
+                if pattern.match(file):
+                    matching_files.append(os.path.join(root, file))
+        if matching_files :
+            for matching_file in matching_files:
+                self.assert_file_exist(matching_file)
+                logger.info(f"找到{matching_file}文件")
+        else :
+            raise AssertionError(f"失败，不存在与{path_wildcards}所匹配的文件")
