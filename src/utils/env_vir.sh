@@ -172,14 +172,14 @@ if [ "${remote}" != "" ]; then
     pipenv run pip install zerorpc -i ${pypi_mirror}
 fi
 
-# pipenv run pip install -U auto_uos --extra-index-url ${pypi_mirror} -i http://10.20.54.182:8081 --trusted-host=10.20.54.182 \
-# > /tmp/env.log 2>&1
-# check_status auto_uos
-# pip_show=$(pipenv run pip show auto_uos | grep Location)
-# public_location=$(echo "${pip_show}" | cut -d ":" -f2 | python3 -c "s=input();print(s.strip())")
-# sudo rm -rf ${ROOT_DIR}/public
-# sudo cp -r ${public_location}/auto_uos ${ROOT_DIR}/public
-# sudo chmod -R 777 ${ROOT_DIR}/public
+pipenv run pip install -U auto_uos --extra-index-url ${pypi_mirror} -i http://10.20.54.182:8081 --trusted-host=10.20.54.182 \
+> /tmp/env.log 2>&1
+check_status auto_uos
+pip_show=$(pipenv run pip show auto_uos | grep Location)
+public_location=$(echo "${pip_show}" | cut -d ":" -f2 | python3 -c "s=input();print(s.strip())")
+sudo rm -rf ${ROOT_DIR}/public
+sudo cp -r ${public_location}/auto_uos ${ROOT_DIR}/public
+sudo chmod -R 777 ${ROOT_DIR}/public
 
 cd ${ROOT_DIR}
 rm -rf Pipfile
