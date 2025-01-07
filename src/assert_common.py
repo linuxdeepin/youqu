@@ -710,6 +710,8 @@ class AssertCommon:
     def assert_text_exist(src, det):
         """
         断言源字符串中的所有字符串在目标字符串中都存在
+        :param src : 字符串 or 字符串数组
+        :param det : 目标字符串
         """
         if not isinstance(det, str):
             raise TypeError("det 必须是字符串")
