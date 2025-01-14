@@ -3,10 +3,10 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "youqu"
-version = "2.14.0"
+name = "youqu-framework"
+version = "2.14.1"
 authors = [
-    { name = "mikigo", email = "huangmingqiang@uniontech.com" },
+    { name = "wangpeng", email = "781757836@qq.com" },
 ]
 
 description = "youqu"

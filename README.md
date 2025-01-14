@@ -7,9 +7,6 @@
     <em>YouQu（有趣），一个使用简单且功能强大的自动化测试框架。</em>
 </p>
 
-
-
-
 [![GitHub issues](https://img.shields.io/github/issues/linuxdeepin/youqu?color=%23F79431)](https://github.com/linuxdeepin/youqu/issues)
 [![PyPI](https://img.shields.io/pypi/v/youqu?style=flat&logo=github&link=https%3A%2F%2Fpypi.org%2Fproject%2Fyouqu%2F&color=%23F79431)](https://pypi.org/project/youqu/)
 ![Static Badge](https://img.shields.io/badge/UOS%2FDeepin/openEuler/openAnolis-Platform?style=flat&label=OS&color=%23F79431)
@@ -35,30 +32,29 @@ YouQu（有趣）是统信公司（Deepin/UOS）开源的一个 Linux 操作系�
 
 ## [YouQu（有趣）能做什么]()
 
-- [x] 💻 Linux 桌面应用 UI 自动化测试
-- [x] 🌏 Web UI 自动化测试
-- [x] 🚌 Linux DBus 接口自动化测试
-- [x] 🚀 命令行自动化测试
-- [x] 🕷️ HTTP 接口自动化测试
+- [X]  💻 Linux 桌面应用 UI 自动化测试
+- [X]  🌏 Web UI 自动化测试
+- [X]  🚌 Linux DBus 接口自动化测试
+- [X]  🚀 命令行自动化测试
+- [X]  🕷️ HTTP 接口自动化测试
 
 ## [安装]()
 
 从 PyPI 安装:
 
-
 ```shell
-$ sudo pip3 install youqu
+$ sudo pip3 install youqu-framework
 ```
 
 <details> 
-    <summary><b>不加 sudo ?</b></summary> 
+    <summary><b>不加 sudo ?</b></summary>
 
------------------------
+---
 
 不加 sudo 也可以：
 
 ```shell
-pip3 install youqu
+pip3 install youqu-framework
 ```
 
 但可能出现 `youqu-startproject` 命令无法使用；
@@ -71,10 +67,9 @@ pip3 install youqu
 export PATH=$PATH:$HOME/.local/bin
 ```
 
------------------------
+---
 
 </details>
-
 
 ## [创建项目]()
 
@@ -92,7 +87,7 @@ $ youqu-startproject my_project
 
 ## [安装依赖]()
 
-安装部署 YouQu 执行所需环境： 
+安装部署 YouQu 执行所需环境：
 
 ```shell
 $ cd my_project
@@ -128,14 +123,13 @@ my_project
 `apps` 目录下可以存在任意多个 APP 工程。
 
 [运行]()
--------
+--------
 
 ### [1. 执行管理器]()
 
 在项目根目录下有一个 `manage.py` ，它是一个执行器入口，提供了本地执行、远程执行等的功能。
 
 ### [2. 本地执行]()
-
 
 ```shell
 $ youqu manage.py run
@@ -144,7 +138,6 @@ $ youqu manage.py run
 #### [2.1. 命令行参数]()
 
 在一些 CI 环境下使用命令行参数会更加方便：
-
 
 ```shell
 $ youqu manage.py run -a apps/autotest_deepin_some -k "xxx" -t "yyy"
@@ -164,15 +157,13 @@ $ youqu manage.py run -a apps/autotest_deepin_some -k "xxx" -t "yyy"
 
 使用 `remote` 命令：
 
-
 ```shell
 $ youqu manage.py remote
 ```
 
 ## [贡献]()
 
-[贡献文档](https://youqu.uniontech.com/CONTRIBUTING.html) 
-
+[贡献文档](https://youqu.uniontech.com/CONTRIBUTING.html)
 
 ## [开源许可证]()
 
