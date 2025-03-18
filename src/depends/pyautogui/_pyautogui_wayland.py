@@ -10,7 +10,7 @@ from PIL import Image
 
 from src.cmdctl import CmdCtl
 
-if sys.version_info[0] == 2 or sys.version_info[0:2] in ((3, 1), (3, 7)):
+if sys.version_info[0] == 2 or sys.version_info[0:2] in ((3, 1), (3, 7), (3, 11)):
     # Python 2 and 3.1 and 3.2 uses collections.Sequence
     import collections
 
