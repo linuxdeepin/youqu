@@ -6,6 +6,7 @@
 # pylint: disable=C0114,W0621,C0411,C0412,R1706,E0401
 import re
 import sys
+import csv
 from os import environ
 
 from setting.globalconfig import GlobalConfig
@@ -314,7 +315,8 @@ def pytest_collection_modifyitems(session):
                 if not txt_list:
                     continue
                 # 通过csv的表头找到对应的索引（排除ID列的索引）
-                for index, title in enumerate(txt_list[0].strip().split(",")):
+                headers = txt_list[0].strip().split(",")
+                for index, title in enumerate(headers):
                     if title.strip() == FixedCsvTitle.skip_reason.value:
                         skip_index = index - 1
                     elif title.strip() == FixedCsvTitle.fixed.value:
@@ -324,7 +326,13 @@ def pytest_collection_modifyitems(session):
                     elif title.strip().strip("*") == FixedCsvTitle.pms_case_id.value.strip("*"):
                         pms_id_index = index - 1
 
-                taglines = [txt.strip().split(",") for txt in txt_list[1:]]
+                taglines = []
+                with open(csv_path, "r", encoding="utf-8") as _f:
+                    reader = csv.reader(_f)
+                    next(reader)  # 跳过表头
+                    for row in reader:
+                        row = row + [""] * (len(headers) - len(row))
+                        taglines.append(row)
                 id_tags_dict = {f"{int(i[0]):0>3}": i[1:] for i in taglines if i[0]}
                 # 每个csv文件单独管理一套index
                 containers[csv_path] = id_tags_dict
