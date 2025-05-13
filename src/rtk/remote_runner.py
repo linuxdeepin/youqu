@@ -450,7 +450,7 @@ class RemoteRunner:
             self.default.get(Args.json_backfill_task_id.value),
             self.default.get(Args.json_backfill_user.value),
             self.default.get(Args.json_backfill_password.value),
-            self.default.get(Args.json_backfill_custom_api.value)
+            # self.default.get(Args.json_backfill_custom_api.value) # 暂时不使用，使用默认值
         ]):
             from src.rtk.json_backfill import JsonBackfill
             try:
@@ -458,7 +458,7 @@ class RemoteRunner:
                     base_url=self.default.get(Args.json_backfill_base_url.value),
                     username=self.default.get(Args.json_backfill_user.value),
                     password=self.default.get(Args.json_backfill_password.value),
-                    custom_api=self.default.get(Args.json_backfill_custom_api.value),
+                    # custom_api=self.default.get(Args.json_backfill_custom_api.value), # 暂时不使用，使用默认值
                 ).remote_backfill(self.server_detail_json_path, self.default.get(Args.json_backfill_task_id.value))
             except Exception as e:
                 logger.error(e)

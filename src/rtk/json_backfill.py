@@ -70,12 +70,12 @@ class JsonBackfill:
                     url=urljoin(self.base_url, self.custom_api),
                     json=tpl
                 )
-                print(self.custom_api, res)
+                print(urljoin(self.base_url, self.custom_api), res)
 
 
 if __name__ == '__main__':
     JsonBackfill(
-        base_url="http://10.7.55.191:8000",
-        username="",
-        password="",
-    ).remote_backfill(f"{conf.REPORT_PATH}/json/0524上午113458_remote/", "d3439082af374a94b95e1d3c0613f513")
+        base_url="http://10.7.60.15:8082",
+        username="AT",
+        password="123456",
+    ).remote_backfill(f"{conf.REPORT_PATH}/json/0513上午082850_remote/", "44f85642e1364fc2ad8df58b5b4e8785")
